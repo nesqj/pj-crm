@@ -73,7 +73,7 @@ chmod +x "$WORK/bin/docker"
 PATH="$WORK/bin:$PATH"
 
 # Uma instalação single-server falsa: os três tipos de arquivo saem num backup só.
-PROJ="$WORK/root/DeskcommCRM"
+PROJ="$WORK/root/pj-crm"
 mkdir -p "$PROJ/.runtime/supabase/volumes/storage/stub"
 printf 'foto' > "$PROJ/.runtime/supabase/volumes/storage/stub/anexo.jpg"
 : > "$PROJ/docker-compose.prod.yml"
@@ -129,8 +129,8 @@ chmod +x "$WORK/bin-pg/pg_dump"
 check "o backup termina bem" test "$rc" -eq 0
 [ "$rc" -eq 0 ] || sed 's/^/    | /' "$WORK/saida-db.txt"
 check "a pasta nova é 700" modo_e "$WORK/dumps" 700
-arq="$(ls "$WORK"/dumps/deskcomm-*.dump 2>/dev/null | head -1 || true)"
-if [ -n "$arq" ]; then check "o dump é 600" modo_e "$arq" 600; else check "deskcomm-*.dump existe" false; fi
+arq="$(ls "$WORK"/dumps/pjcrm-*.dump 2>/dev/null | head -1 || true)"
+if [ -n "$arq" ]; then check "o dump é 600" modo_e "$arq" 600; else check "pjcrm-*.dump existe" false; fi
 
 [ "$FAILS" -eq 0 ] || { echo "✖ $FAILS falha(s)" >&2; exit 1; }
 echo 'ok: backup.sh e backup-db.sh guardam banco, sessão do WhatsApp e anexos só para o dono, qualquer que seja o umask'

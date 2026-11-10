@@ -14,7 +14,7 @@ name: e2e
 # mesmo 127.0.0.1. Ver o comentário do passo "E2E — parte N de M".
 #
 # É CHECK OBRIGATÓRIO. A régua, para reconferir em vez de acreditar nesta linha:
-#   $ gh api repos/melgarafael/DeskcommCRM/branches/main/protection \
+#   $ gh api repos/nesqj/pj-crm/branches/main/protection \
 #       --jq '.required_status_checks.contexts|join(", ")'
 #   verify, build-and-size, invariants, e2e, imagens-ok   # medido em 2026-08-14
 #
@@ -228,7 +228,7 @@ jobs:
     # só para quem não a edita — a guarda que vale contra fork mora na máquina
     # (infra/executor-proprio/so-o-que-e-nosso.sh). Vigiado por
     # tests/unit/executor-proprio-so-roda-o-que-e-nosso.test.ts.
-    runs-on: ${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'deskcomm-proprio' || 'ubuntu-latest' }}
+    runs-on: ${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'pjcrm-proprio' || 'ubuntu-latest' }}
     # O teto FICA EM 30, e essa foi uma correção de rumo desta branch.
     #
     # Eu tinha subido para 45, com o argumento de que o teto acumula dois papéis
@@ -1056,7 +1056,7 @@ jobs:
       #      depois do baseline, `next build` de produção, os mesmos seeds),
       #      revertendo SÓ `lib/supabase/browser.ts` para a versão anterior ao
       #      #327 — e conferindo no bundle que o conserto saiu (`grep -rc
-      #      realtime-token .next/static` → 0, controle positivo `sb-deskcomm-auth`
+      #      realtime-token .next/static` → 0, controle positivo `sb-pjcrm-auth`
       #      → 1):
       #
       #          com o conserto  → 1 passed
@@ -1099,7 +1099,7 @@ jobs:
       #    (`a3588c160^`), com as duas exportações que o código de hoje importa
       #    mantidas como no-op só para o build subir — nenhuma delas busca nem
       #    devolve token. Bundle conferido NA perna vermelha: `grep -ro
-      #    realtime-token .next/static` → 0, `sb-deskcomm-auth` → 1 (grep vivo).
+      #    realtime-token .next/static` → 0, `sb-pjcrm-auth` → 1 (grep vivo).
       #
       #    E o vermelho veio do produto, não do instrumento: a falha foi na
       #    asserção "nenhum canal assinou com o token do USUÁRIO — o socket está

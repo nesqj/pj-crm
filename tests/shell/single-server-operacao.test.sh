@@ -101,17 +101,17 @@ dump_de_mentira() {
 }
 
 # Uma instalação single-server falsa, com o que o install-single-server.sh deixa.
-PROJ="$WORK/root/DeskcommCRM"
+PROJ="$WORK/root/pj-crm"
 SB="$PROJ/.runtime/supabase"
 mkdir -p "$SB/volumes/storage" "$PROJ/backups"
 touch "$PROJ/docker-compose.prod.yml" "$SB/docker-compose.yml"
 env_sb_inicial() {
-  printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.deskcomm.yml' \
+  printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.pjcrm.yml' \
     'SMTP_HOST=supabase-mail' 'SMTP_PORT=2500' 'SMTP_PASS=fake_mail_password' > "$SB/.env"
 }
 env_sb_inicial
 printf '%s\n' 'SINGLE_SERVER="1"' 'SUPABASE_DB_URL="postgresql://postgres:x@supabase-db:5432/postgres"' \
-  'PSQL_DOCKER_NETWORK="deskcommcrm_supabase"' 'NEXT_PUBLIC_SUPABASE_URL="https://crm.exemplo.com"' > "$PROJ/.env"
+  'PSQL_DOCKER_NETWORK="pjcrm_supabase"' 'NEXT_PUBLIC_SUPABASE_URL="https://crm.exemplo.com"' > "$PROJ/.env"
 
 # ════════════════════════════════════════════════════════════════════════════
 echo "quem já instalou (modo comum) não muda:"
@@ -132,7 +132,7 @@ check "pausa do banco segue achando o Supabase próprio pelos nomes de sempre" \
   igual "$(PS_NOMES='supabase-rest\nsupabase-db\nrealtime-dev.supabase-realtime\nsupabase-studio\noutro\n' \
     kit 'supabase_local_containers' | tr '\n' ' ')" 'supabase-rest realtime-dev.supabase-realtime supabase-studio '
 
-APROJ="$WORK/root/comum/DeskcommCRM"
+APROJ="$WORK/root/comum/pj-crm"
 mkdir -p "$APROJ"; touch "$APROJ/docker-compose.prod.yml"
 printf '%s\n' 'SUPABASE_DB_URL="postgresql://postgres:x@db.exemplo.supabase.co:5432/postgres"' \
   'NEXT_PUBLIC_SUPABASE_URL="https://exemplo.supabase.co"' > "$APROJ/.env"
@@ -194,11 +194,11 @@ check "restore.sh comum não mexe em Storage local" nao_contem "$LOG" 'volumes/s
 # ════════════════════════════════════════════════════════════════════════════
 echo "(a) nome do projeto e dono:"
 check "o Supabase leva o nome do projeto do CRM" \
-  igual "$(PROJECT_DIR="$PROJ" kit 'projeto_do_supabase')" 'deskcommcrm-supabase'
+  igual "$(PROJECT_DIR="$PROJ" kit 'projeto_do_supabase')" 'pjcrm-supabase'
 check "COMPOSE_PROJECT_NAME do CRM chega ao Supabase" \
-  igual "$(COMPOSE_PROJECT_NAME=deskcomm-prod PROJECT_DIR="$PROJ" kit 'projeto_do_supabase')" 'deskcomm-prod-supabase'
+  igual "$(COMPOSE_PROJECT_NAME=pjcrm-prod PROJECT_DIR="$PROJ" kit 'projeto_do_supabase')" 'pjcrm-prod-supabase'
 
-IRMA="$WORK/root/apagar6/DeskcommCRM"
+IRMA="$WORK/root/apagar6/pj-crm"
 mkdir -p "$IRMA/.runtime/supabase"; touch "$IRMA/.runtime/supabase/docker-compose.yml"
 guarda_sb() { DONOS="$*" PROJECT_DIR="$PROJ" kit 'recusar_supabase_de_outra_arvore' 2>&1; }
 guarda_sb >/dev/null; rc=$?
@@ -207,21 +207,21 @@ guarda_sb "$SB" >/dev/null; rc=$?
 check "Supabase criado por ESTA árvore segue" test "$rc" -eq 0
 saida="$(guarda_sb "$IRMA/.runtime/supabase")"; rc=$?
 check "Supabase de OUTRA árvore viva é recusado" test "$rc" -ne 0
-check "a recusa nomeia o projeto do Supabase" grep -q "deskcommcrm-supabase" <<<"$saida"
+check "a recusa nomeia o projeto do Supabase" grep -q "pjcrm-supabase" <<<"$saida"
 guarda_sb "$WORK/root/sumiu/.runtime/supabase" >/dev/null; rc=$?
 check "árvore que já não está no disco não conta como rival" test "$rc" -eq 0
 
 : > "$LOG"
 SMTP_HOST=smtp.do-crm.com PROJECT_DIR="$PROJ" kit 'dc_supabase up -d --wait' >/dev/null
 check "dc_supabase roda na pasta do Supabase" contem "$LOG" "COMPOSE pwd=$SB "
-check "dc_supabase passa o projeto próprio" contem "$LOG" 'projeto=deskcommcrm-supabase'
+check "dc_supabase passa o projeto próprio" contem "$LOG" 'projeto=pjcrm-supabase'
 check "dc_supabase não vaza o .env do CRM (SMTP_HOST)" contem "$LOG" 'smtp_host=<ausente>'
 
 check "pausa do banco acha as 3 peças pelo PROJETO, nunca as de outro Supabase" \
-  igual "$(SINGLE_SERVER=1 PROJECT_DIR="$PROJ" ESPERA_PROJETO=deskcommcrm-supabase \
-    PS_SERVICOS='deskcommcrm-supabase-rest-1 rest\ndeskcommcrm-supabase-db-1 db\ndeskcommcrm-supabase-studio-1 studio\ndeskcommcrm-supabase-realtime-1 realtime\n' \
+  igual "$(SINGLE_SERVER=1 PROJECT_DIR="$PROJ" ESPERA_PROJETO=pjcrm-supabase \
+    PS_SERVICOS='pjcrm-supabase-rest-1 rest\npjcrm-supabase-db-1 db\npjcrm-supabase-studio-1 studio\npjcrm-supabase-realtime-1 realtime\n' \
     PS_NOMES='supabase-rest\n' kit 'supabase_local_containers' | tr '\n' ' ')" \
-  'deskcommcrm-supabase-rest-1 deskcommcrm-supabase-studio-1 deskcommcrm-supabase-realtime-1 '
+  'pjcrm-supabase-rest-1 pjcrm-supabase-studio-1 pjcrm-supabase-realtime-1 '
 
 if [ -n "$DOCKER_REAL" ] && "$DOCKER_REAL" compose version >/dev/null 2>&1; then
   # O compose oficial, reduzido ao que importa: `name:` fixo, container_name
@@ -234,16 +234,16 @@ if [ -n "$DOCKER_REAL" ] && "$DOCKER_REAL" compose version >/dev/null 2>&1; then
     done
     printf '    ports:\n      - 5432:5432\n      - 6543:6543\n'   # do supavisor, o último
   } > "$CFG/docker-compose.yml"
-  cp "$KIT_DIR/supabase-single-server.override.yml" "$CFG/docker-compose.deskcomm.yml"
-  printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.deskcomm.yml' \
-    'COMPOSE_PROJECT_NAME=deskcommcrm-supabase' 'SINGLE_SERVER_NETWORK=deskcommcrm_supabase' > "$CFG/.env"
+  cp "$KIT_DIR/supabase-single-server.override.yml" "$CFG/docker-compose.pjcrm.yml"
+  printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.pjcrm.yml' \
+    'COMPOSE_PROJECT_NAME=pjcrm-supabase' 'SINGLE_SERVER_NETWORK=pjcrm_supabase' > "$CFG/.env"
   resolvido="$(cd "$CFG" && env -i PATH="$PATH" HOME="$HOME" "$DOCKER_REAL" compose config 2>&1)"; rc=$?
   check "compose aceita o override (docker compose config)" test "$rc" -eq 0
-  check "o projeto é o nosso, não 'supabase'" grep -qx 'name: deskcommcrm-supabase' <<<"$resolvido"
+  check "o projeto é o nosso, não 'supabase'" grep -qx 'name: pjcrm-supabase' <<<"$resolvido"
   check "nenhum container_name fixo sobra" bash -c '! grep -q container_name <<<"$1"' _ "$resolvido"
   check "a única porta no host é a do gateway, em loopback" \
     test "$(grep -c 'published:' <<<"$resolvido")" -eq 1 -a "$(grep -c 'host_ip: 127.0.0.1' <<<"$resolvido")" -eq 1
-  check "a rede privada é a desta instalação" grep -q 'name: deskcommcrm_supabase' <<<"$resolvido"
+  check "a rede privada é a desta instalação" grep -q 'name: pjcrm_supabase' <<<"$resolvido"
 else
   echo "  - pulado: docker compose ausente (a prova do override roda onde ele existe)"
 fi
@@ -257,7 +257,7 @@ if [ -n "$DOCKER_REAL" ] && "$DOCKER_REAL" compose version >/dev/null 2>&1; then
   CRM="$WORK/crm"; mkdir -p "$CRM"
   cp "$ROOT/docker-compose.prod.yml" "$ROOT/docker-compose.single-server.yml" "$CRM/"
   printf '%s\n' 'SUPABASE_DB_URL=postgresql://postgres:x@supabase-db:5432/postgres' \
-    'DOMAIN=crm.exemplo.com' 'SINGLE_SERVER_NETWORK=deskcommcrm_supabase' > "$CRM/.env"
+    'DOMAIN=crm.exemplo.com' 'SINGLE_SERVER_NETWORK=pjcrm_supabase' > "$CRM/.env"
   sem_rede="$(cd "$CRM" && env -i PATH="$PATH" HOME="$HOME" "$DOCKER_REAL" compose \
       -f docker-compose.prod.yml -f docker-compose.single-server.yml --profile '*' config --format json 2>/dev/null \
     | python3 -c '
@@ -326,7 +326,7 @@ env_sb_inicial
 SMTP_HOST=smtp.env.com SMTP_PORT=587 SMTP_USERNAME=u SMTP_PASSWORD=s SMTP_FROM_EMAIL=a@env.com PSQL_SMTP='' smtp; rc=$?
 check "sem linha no banco, cai no .env do CRM (como lib/email/config.ts)" \
   bash -c '[ "$1" -eq 0 ] && grep -qx "SMTP_HOST=\"smtp.env.com\"" "$2"' _ "$rc" "$SB/.env"
-check "sem nome de remetente, usa o nome da instalação" grep -qx 'SMTP_SENDER_NAME="DeskcommCRM"' "$SB/.env"
+check "sem nome de remetente, usa o nome da instalação" grep -qx 'SMTP_SENDER_NAME="PJ CRM"' "$SB/.env"
 
 env_sb_inicial
 SMTP_HOST=smtp.env.com SMTP_FROM_EMAIL=a@env.com PSQL_SMTP='\x1f587\x1f\x1f\x1f\x1f\n' smtp; rc=$?
@@ -395,13 +395,13 @@ UP
 atualiza() { PROJECT_DIR="$PROJ" kit 'atualizar_supabase_single_server' 2>&1; }
 
 env_sb_inicial; printf 'ref=self-hosted/v0.8.0\n' > "$SB/.supabase-version"; : > "$UPSTREAM_LOG"; : > "$LOG"
-rm -f "$SB/docker-compose.deskcomm.yml"
+rm -f "$SB/docker-compose.pjcrm.yml"
 SMTP_HOST=smtp.do-crm.com atualiza >/dev/null; rc=$?
 check "versão antiga: atualiza e termina bem" test "$rc" -eq 0
 check "chama o update.sh oficial rumo à versão pinada, sem perguntar" contem "$UPSTREAM_LOG" "args=--to $pinada --yes"
 check "o update.sh oficial roda sem o .env do CRM no ambiente" contem "$UPSTREAM_LOG" 'smtp_host=<ausente>'
-check "o override do kit chega à instalação" cmp -s "$KIT_DIR/supabase-single-server.override.yml" "$SB/docker-compose.deskcomm.yml"
-check "o nome do projeto fica gravado no .env do Supabase" grep -qx 'COMPOSE_PROJECT_NAME=deskcommcrm-supabase' "$SB/.env"
+check "o override do kit chega à instalação" cmp -s "$KIT_DIR/supabase-single-server.override.yml" "$SB/docker-compose.pjcrm.yml"
+check "o nome do projeto fica gravado no .env do Supabase" grep -qx 'COMPOSE_PROJECT_NAME=pjcrm-supabase' "$SB/.env"
 check "sobe o Supabase e espera ficar saudável" contem "$LOG" 'compose up -d --wait'
 
 : > "$UPSTREAM_LOG"; : > "$LOG"

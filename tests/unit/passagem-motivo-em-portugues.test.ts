@@ -173,8 +173,8 @@ describe("o motivo da passagem tem frase em português", () => {
     // um par que não casa vira FALSO VAZAMENTO — o caso reprova acusando código
     // cru em tela onde o uso é legítimo. `win32.relative` monta o formato do
     // Windows aqui, no CI do Linux, para que isso seja medido e não suposto.
-    const raizWindows = "C:\\deskcomm";
-    const raizLinux = "/srv/deskcomm";
+    const raizWindows = "C:\\pjcrm";
+    const raizLinux = "/srv/pjcrm";
     const esperado = "components/connections/ChannelAiAccess.tsx";
 
     const parWindows = separadorPosix(

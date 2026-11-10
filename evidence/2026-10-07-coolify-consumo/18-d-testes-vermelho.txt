@@ -1,7 +1,7 @@
 exit=1
 pulados=0 ok=49 falhas=26
   ✗ o kit traz o arquivo do Traefik em bridge
-    esperado [default,deskcomm_private,deskcomm_proxy], veio []
+    esperado [default,pjcrm_private,pjcrm_proxy], veio []
   ✗ bridge: o Envoy entra também na rede do proxy
     esperado [coolify], veio []
   ✗ bridge: a rede do proxy é a exportada (TRAEFIK_NETWORK)

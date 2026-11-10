@@ -28,7 +28,7 @@
  * conserto do token**. Com Supabase local e build de produção, revertendo SÓ
  * `lib/supabase/browser.ts` para a versão da `main` (e conferindo no bundle:
  * `grep -rc realtime-token .next/static` → 0, com controle positivo em
- * `sb-deskcomm-auth` → 1):
+ * `sb-pjcrm-auth` → 1):
  *
  *   com o conserto      → 1 passed
  *   sem o conserto      → 1 passed   ← aqui estava o problema
@@ -73,7 +73,7 @@
  * vermelha foi conferido com os MESMOS greps da issue:
  *
  *   grep -ro "realtime-token"   .next/static → 0   (o conserto saiu)
- *   grep -ro "sb-deskcomm-auth" .next/static → 1   (controle: o grep vive)
+ *   grep -ro "sb-pjcrm-auth" .next/static → 1   (controle: o grep vive)
  *
  * E o vermelho veio do produto, não do instrumento: a falha foi na asserção
  * "nenhum canal assinou com o token do USUÁRIO — o socket está anônimo, que é o

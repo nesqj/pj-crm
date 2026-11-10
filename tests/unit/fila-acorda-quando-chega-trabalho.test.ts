@@ -1,7 +1,7 @@
 /**
  * A fila ACORDA quando chega trabalho (#3688) — a prova que o revisor pediu.
  *
- * O defeito, medido pelo @melgarafael com relógio falso e `dormir` de verdade:
+ * O defeito, medido pelo @nesqj com relógio falso e `dormir` de verdade:
  * com o recuo exponencial da fila vazia (#3688), a instalação parada dorme até o
  * teto de 60 s. Um inbound que chega NO MEIO dessa soneca vira job no mesmo
  * worker (o `runDrainLoop` o enfileira), mas o laço da fila só o via quando a

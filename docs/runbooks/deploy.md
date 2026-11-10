@@ -21,7 +21,7 @@ A VPS (Hostinger) vem com um **Traefik próprio** ocupando as portas 80/443.
 `docker-compose.traefik.yml` é o ÚNICO lugar que:
 
 - coloca no contêiner `app` as labels de roteamento
-  (`traefik.http.routers.deskcomm.rule=Host(...)`);
+  (`traefik.http.routers.pjcrm.rule=Host(...)`);
 - associa o contêiner à rede que o Traefik enxerga (`TRAEFIK_DOCKER_NETWORK`);
 - desliga o `caddy` do compose base por profile (senão dois processos brigam
   pela mesma porta).
@@ -78,8 +78,8 @@ commit → push → PR → merge na main → CI publica imagem → VPS puxa
    VPS não existe: o CI não o vê, some se a VPS for reconstruída, e é invisível
    pra qualquer outra pessoa.
 2. **PR e merge na `main`.** `publish-image.yml` dispara em push na `main` (ou
-   tag `v*`) e publica **quatro** imagens — `deskcommcrm`, `deskcomm-worker`,
-   `deskcomm-scheduler` e `deskcomm-voice-agent` — sempre na mesma versão. O build pesado roda nos
+   tag `v*`) e publica **quatro** imagens — `pjcrm`, `pjcrm-worker`,
+   `pjcrm-scheduler` e `pjcrm-voice-agent` — sempre na mesma versão. O build pesado roda nos
    runners do GitHub, nunca na VPS do usuário.
 3. **Deploy na VPS.** Numa instalação real isto é `bash hostgator-setup-kit/update.sh`,
    não um `up -d` na mão: ele puxa a tag publicada, re-aplica o `baseline.sql`,
@@ -103,7 +103,7 @@ numérica** que será instalada. Substitua `vX.Y.Z` pela release publicada e
 
 ```bash
 CHECK_DIR="$(mktemp -d)"
-git clone --depth 1 --branch vX.Y.Z https://github.com/melgarafael/DeskcommCRM.git "$CHECK_DIR"
+git clone --depth 1 --branch vX.Y.Z https://github.com/nesqj/pj-crm.git "$CHECK_DIR"
 bash "$CHECK_DIR/hostgator-setup-kit/preflight-upgrade.sh" \
   --installation /var/www/crm --to vX.Y.Z
 cd /var/www/crm
@@ -132,10 +132,10 @@ Só quando é preciso validar algo em produção **antes** de a imagem oficial
 existir (ex.: CI ainda rodando e um bug bloqueando o usuário).
 
 ```bash
-APP_IMAGE=deskcomm-app:local docker compose \
+APP_IMAGE=pjcrm-app:local docker compose \
   -f docker-compose.prod.yml -f docker-compose.build.yml --env-file .env build app
 
-APP_IMAGE=deskcomm-app:local APP_PULL_POLICY=never docker compose \
+APP_IMAGE=pjcrm-app:local APP_PULL_POLICY=never docker compose \
   -f docker-compose.prod.yml -f docker-compose.traefik.yml --env-file .env up -d app
 ```
 

@@ -4,7 +4,7 @@
 #
 # ## O caso, medido nesta máquina em 19/09/2026
 #
-#   core.hooksPath ............. /Users/…/DeskcommCRM/loop/hooks   (ABSOLUTO)
+#   core.hooksPath ............. /Users/…/pj-crm/loop/hooks   (ABSOLUTO)
 #   loop/hooks/pre-commit:6 .... top="$(git rev-parse --show-toplevel)"
 #   checkout principal ......... branch 3026 commits atrás, árvore suja
 #   freeze-invariants.sh ali ... 26 linhas (não trata merge)
@@ -36,7 +36,7 @@
 # o não-medido visível em vez de silencioso.
 set -uo pipefail
 
-[ "${DESKCOMM_GOV_HOOKS_ATRASADOS_OK:-0}" = "1" ] && exit 0
+[ "${PJCRM_GOV_HOOKS_ATRASADOS_OK:-0}" = "1" ] && exit 0
 
 top="$(git rev-parse --show-toplevel)"
 base_remota="origin/main"
@@ -77,7 +77,7 @@ if [ -n "$atrasados" ]; then
   echo "Esta branch não os tocou — eles só envelheceram, e guard velho é guard mais fraco:" >&2
   echo "o freeze-invariants de antes de 20796abf7, por exemplo, não tratava merge e acusava resolução legítima." >&2
   echo "Conserto: git merge ${base_remota}   (ou 'git fetch origin main' antes, se a cópia local estiver velha)" >&2
-  echo "Se você PRECISA commitar sem atualizar: DESKCOMM_GOV_HOOKS_ATRASADOS_OK=1, e diga no commit por quê." >&2
+  echo "Se você PRECISA commitar sem atualizar: PJCRM_GOV_HOOKS_ATRASADOS_OK=1, e diga no commit por quê." >&2
   exit 1
 fi
 

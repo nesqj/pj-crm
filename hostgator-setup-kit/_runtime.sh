@@ -22,7 +22,7 @@ runtime_service() { # role; all strings emitted below are validated or escaped
         # APP_VERSION only locates a release. The tag must come from origin,
         # and its commit must really be an ancestor of the image's revision.
         if [[ "$version" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]] && [[ "$revision" =~ ^[a-f0-9]{40,64}$ ]] && [ "$RUNTIME_TAGS_OK" = true ]; then
-          base="$(git rev-parse --verify "refs/deskcomm-runtime-tags/v${version#v}^{commit}" 2>/dev/null)" || base=""
+          base="$(git rev-parse --verify "refs/pjcrm-runtime-tags/v${version#v}^{commit}" 2>/dev/null)" || base=""
           if [[ "$base" =~ ^[a-f0-9]{40,64}$ ]] && git merge-base --is-ancestor "$base" "$revision" 2>/dev/null; then verified=true; fi
         fi
       fi
@@ -54,7 +54,7 @@ collect_runtime_confirmation() {
   RUNTIME_TAGS_OK=false; RUNTIME_CONFIRMED=true; RUNTIME_CHANGED=false
   RUNTIME_REVISION=""; RUNTIME_VERSION=""; RUNTIME_BASE=""; RUNTIME_SELECTIONS=""
   # An isolated ref namespace: no checkout, existing tags or branches change.
-  git fetch --quiet origin '+refs/tags/v*:refs/deskcomm-runtime-tags/v*' 2>/dev/null && RUNTIME_TAGS_OK=true
+  git fetch --quiet origin '+refs/tags/v*:refs/pjcrm-runtime-tags/v*' 2>/dev/null && RUNTIME_TAGS_OK=true
   local role services="" issues="" voice_ids published="${LATEST_TAG:-}"
   [[ "$published" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]] || published=""
   for role in app worker scheduler; do

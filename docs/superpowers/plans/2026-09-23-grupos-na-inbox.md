@@ -68,7 +68,7 @@ mede, e o resultado vira fixture dos testes da Task 3.
 
 ```bash
 grep -E '^WAHA_API_KEY=' .env.local | cut -d= -f1   # só confere que existe; não imprima o valor
-docker exec deskcommcrm-waha-1 sh -c 'wget -qO- --header "X-Api-Key: $WAHA_API_KEY_PLAIN" http://127.0.0.1:3000/api/sessions' | head -c 600
+docker exec pjcrm-waha-1 sh -c 'wget -qO- --header "X-Api-Key: $WAHA_API_KEY_PLAIN" http://127.0.0.1:3000/api/sessions' | head -c 600
 ```
 
 Se `WAHA_API_KEY_PLAIN` não existir no contêiner, use a chave em texto do `.env.local` numa variável de shell, sem ecoá-la.
@@ -639,7 +639,7 @@ export const CHAVES_DO_FILTRO_FIXAS = Object.fromEntries(
   /**
    * Liga ou desliga o recebimento de grupos NESTA sessão. Só devolve `true` quando o GET
    * seguinte confirma a troca: o WAHA já respondeu 200 para operação que não aconteceu
-   * (medido na issue melgarafael/DeskcommCRM#1428).
+   * (medido na issue nesqj/pj-crm#1428).
    */
   async definirRecebimentoDeGrupos(name: string, receber: boolean): Promise<boolean> {
     const url = `${this.baseUrl}/api/sessions/${encodeURIComponent(name)}`;

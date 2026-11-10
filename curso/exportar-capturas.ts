@@ -6,7 +6,7 @@ const AJUDA = `Exporta o conjunto completo de capturas reais ES para um clone lo
 Uso: pnpm exec tsx curso/exportar-capturas.ts --idioma es --saida <pasta> --site <clone>
   --idioma es          Idioma suportado pelo manifesto do site.
   --saida <pasta>      Origem com capturas.json e capturas/<id>.jpg.
-  --site <clone>       Clone local do deskcomm-site, com o catálogo PT sincronizado.
+  --site <clone>       Clone local do pjcrm-site, com o catálogo PT sincronizado.
   --help              Mostra esta ajuda sem abrir arquivos.
 
 Exige conjunto completo sem falhas, procedência e JPEGs regulares. Preserva as

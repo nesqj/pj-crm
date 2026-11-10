@@ -90,7 +90,7 @@ lib/agent-engine/golden-candidates/stage-divergence_*.json
 !.claude/skills/
 .claude/skills/*
 !.claude/skills/sistema-vivo/
-!.claude/skills/deskcomm-*/
+!.claude/skills/pjcrm-*/
 
 # Local docker volumes (WAHA)
 .waha-data/
@@ -105,7 +105,7 @@ inbox-with-real-msgs.png
 test-results/
 playwright-report/
 .vercel
-deskcommcrm-setup-kit.zip
+pjcrm-setup-kit.zip
 
 # gov-loop — estado operacional fica FORA do git (a resposta do humano na inbox
 # e a linha 'started' do sessions.log não podem sujar o working tree; a guarda de
@@ -153,16 +153,16 @@ backups/
 
 # Marcas de execução do kit (agent.sh / update.sh)
 .update.lock
-.deskcomm-site-url-avisado
+.pjcrm-site-url-avisado
 # Marcador que o install.sh grava quando a instalação termina com o app no ar,
 # e que a guarda de arquitetura (#1042/#1266) lê para distinguir instalação NOVA
 # de instalação existente numa VPS ARM (#1778). É estado da máquina de quem
 # instalou, nunca entra no repositório — igual ao `.env` que mora ao lado dele.
-.deskcomm-instalado
+.pjcrm-instalado
 # Diagnóstico de toda execução do update.sh e o snapshot dos pins de versão
 # que o rollback devolve (#1955). Estado da VPS, como o marcador acima.
-.deskcomm-update-diagnostico.log
-.deskcomm-env-antes-do-update
+.pjcrm-update-diagnostico.log
+.pjcrm-env-antes-do-update
 # A vigência do app DEPOIS de uma atualização (#2757): a marca (epoch + a
 # versão de onde se saiu) e o contador de healthchecks seguidos que faltam
 # para o agente voltar sozinho. Mesmo estado da VPS das marcas acima.
@@ -181,7 +181,7 @@ docker-compose.override.yml
 .prova/
 
 # Marca do kit: a senha das rotinas que vazou no log já foi trocada (#1054)
-.deskcomm-segredo-do-cron-trocado
+.pjcrm-segredo-do-cron-trocado
 
 # Bytecode do Python: a suíte roda scripts em experiments/ e regrava o .pyc a cada
 # rodada. Versionado, ele sujava a árvore de quem rodava os testes.

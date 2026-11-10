@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# DeskcommCRM - Instalador Automático (Local Ubuntu VM)
+# PJ CRM - Instalador Automático (Local Ubuntu VM)
 # Este script prepara a VM, sobe o Supabase local (PostgreSQL + Auth +
 # PostgREST + Storage + Realtime), inicializa os serviços da aplicação e cria
 # o usuário Admin.
@@ -36,9 +36,9 @@ fi
 
 # Se não estivermos na raiz do projeto, clona e entra nele.
 if [ ! -f "package.json" ]; then
-  step "Clonando o repositório DeskcommCRM..."
-  git clone https://github.com/melgarafael/DeskcommCRM.git
-  cd DeskcommCRM
+  step "Clonando o repositório PJ CRM..."
+  git clone https://github.com/nesqj/pj-crm.git
+  cd pj-crm
 fi
 
 if ! command -v pnpm >/dev/null 2>&1; then
@@ -110,7 +110,7 @@ step "Configurando .env.local (credenciais locais, não versionadas)..."
 # esse ambiente em silêncio — e este instalador roda DENTRO de um clone
 # existente quando acha o package.json. `scripts/local-env.sh` já tinha esta
 # guarda; aqui faltava.
-if [[ -s .env.local ]] && ! grep -q '^DESKCOMM_ENV_MODE=local$' .env.local; then
+if [[ -s .env.local ]] && ! grep -q '^PJCRM_ENV_MODE=local$' .env.local; then
   BACKUP=".env.local.cloud-backup"
   if [[ ! -e "$BACKUP" ]]; then
     # `cp -p` e não `cp --preserve=mode`: a segunda é do GNU e falha no macOS,
@@ -122,7 +122,7 @@ if [[ -s .env.local ]] && ! grep -q '^DESKCOMM_ENV_MODE=local$' .env.local; then
 fi
 umask 077
 cat <<EOF > .env.local
-DESKCOMM_ENV_MODE=local
+PJCRM_ENV_MODE=local
 NODE_ENV=production
 NEXT_PUBLIC_SUPABASE_URL=$API_URL
 NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY
@@ -148,8 +148,8 @@ WAHA_WEBHOOK_REQUIRE_SIGNATURE=false
 WHATSAPP_RESTART_ALL_SESSIONS=True
 
 UPSTASH_REDIS_REST_URL=http://srh:80
-UPSTASH_REDIS_REST_TOKEN=deskcomm-local-redis
-SRH_TOKEN=deskcomm-local-redis
+UPSTASH_REDIS_REST_TOKEN=pjcrm-local-redis
+SRH_TOKEN=pjcrm-local-redis
 INTERNAL_CRON_SECRET=$INTERNAL_SEC
 LGPD_SIGNING_KEY=$INTERNAL_SEC
 APP_PORT=$APP_PORT
@@ -157,7 +157,7 @@ APP_PORT=$APP_PORT
 SENTRY_DSN=
 EOF
 
-step "Subindo os serviços do DeskcommCRM (App, Worker, WAHA, Redis)..."
+step "Subindo os serviços do PJ CRM (App, Worker, WAHA, Redis)..."
 ./scripts/local-stack.sh up
 
 step "Criando usuário Administrador..."
@@ -170,7 +170,7 @@ export OWNER_EMAIL="${OWNER_EMAIL:-admin@admin.com}"
 # o CRM com uma credencial que está no GitHub. Quem quiser escolher a senha
 # exporta OWNER_PASSWORD antes de chamar o script.
 export OWNER_PASSWORD="${OWNER_PASSWORD:-$(openssl rand -base64 18)}"
-export OWNER_ORG_NAME="Deskcomm Local"
+export OWNER_ORG_NAME="PJ CRM Local"
 export APP_LOCALE="pt-BR"
 
 # Instala a dependência para rodar o bootstrap e executa

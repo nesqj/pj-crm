@@ -12,10 +12,10 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
  *
  * A guarda perguntava ao git quem escreveu o commit:
  *
- *     [ "$(git log -1 --format=%an "$sha")" = "deskcomm-release[bot]" ]
+ *     [ "$(git log -1 --format=%an "$sha")" = "pjcrm-release[bot]" ]
  *
  * `%an` é NOME DE AUTOR — campo de texto que quem commita escolhe, e que
- *       git -c user.name='deskcomm-release[bot]' commit
+ *       git -c user.name='pjcrm-release[bot]' commit
  * devolve exatamente como pedido. Pior: a string procurada é LITERAL no próprio
  * release.yml (o `git config user.name` do ato 1), então a guarda comparava o
  * commit com uma constante escrita no repositório que ela vigia. Nome não é
@@ -24,9 +24,9 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
  * ═══ A medida (2026-09-18, nesta `main`) ════════════════════════════════════
  *
  *   commit    o que o git diz (%an)   o que a API diz do PR de origem
- *   3a4df3cb  deskcomm-release[bot]   deskcommcrm-release[bot], Bot, PR #1160, head release/1.34.0, melgarafael/DeskcommCRM
- *   577c46e9  deskcomm-release[bot]   deskcommcrm-release[bot], Bot, PR #1136, head release/1.33.0, melgarafael/DeskcommCRM
- *   d73c32cc  Rafael Melgaço          deskcommopp4s-cmd,       User, PR #1112, head fix/EPIC-13-credencial-editavel, deskcommopp4s-cmd/deskcomm-fixes
+ *   3a4df3cb  pjcrm-release[bot]   pjcrm-release[bot], Bot, PR #1160, head release/1.34.0, nesqj/pj-crm
+ *   577c46e9  pjcrm-release[bot]   pjcrm-release[bot], Bot, PR #1136, head release/1.33.0, nesqj/pj-crm
+ *   d73c32cc  Rafael Melgaço          pjcrmopp4s-cmd,       User, PR #1112, head fix/EPIC-13-credencial-editavel, pjcrmopp4s-cmd/pjcrm-fixes
  *
  * O nome no git NEM é o login da identidade: `%an` é um rótulo. A identidade é
  * `user.login` + `user.type` + `head.ref`/`head.repo`, que o commit não escolhe.
@@ -60,11 +60,11 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 const RAIZ = process.cwd();
 
 /** O nome de autor que o ato 1 do release.yml grava: literal, e por isso forjável. */
-const NOME_DE_AUTOR_QUE_O_APP_GRAVA = "deskcomm-release[bot]";
+const NOME_DE_AUTOR_QUE_O_APP_GRAVA = "pjcrm-release[bot]";
 
 /** O login com que a API apresenta o App — o e-mail do corte real confirma o slug. */
-const LOGIN_DO_APP = "deskcommcrm-release[bot]";
-const REPO_DE_CIMA = "melgarafael/DeskcommCRM";
+const LOGIN_DO_APP = "pjcrm-release[bot]";
+const REPO_DE_CIMA = "nesqj/pj-crm";
 
 /** Uma linha no formato que o `--jq` da guarda produz: cinco campos por TAB. */
 function linhaDaApi(login: string, tipo: string, ref: string, repo: string, numero: number): string {
@@ -76,10 +76,10 @@ const RESPOSTA_DO_APP = linhaDaApi(LOGIN_DO_APP, "Bot", "release/9.9.9", REPO_DE
 
 /** PR real de gente (PR #1112, d73c32cc): usuário, head de fork — nada de release. */
 const RESPOSTA_DE_GENTE = linhaDaApi(
-  "deskcommopp4s-cmd",
+  "pjcrmopp4s-cmd",
   "User",
   "fix/EPIC-13-credencial-editavel",
-  "deskcommopp4s-cmd/deskcomm-fixes",
+  "pjcrmopp4s-cmd/pjcrm-fixes",
   1112,
 );
 
@@ -245,7 +245,7 @@ function rodarGuarda(sha: string, respostaDaApi: string, opts: { apiFalha?: bool
     GITHUB_OUTPUT: saidaDoGithub,
     GITHUB_REPOSITORY: REPO_DE_CIMA,
     GITHUB_SHA: sha,
-    APP_SLUG: "deskcommcrm-release",
+    APP_SLUG: "pjcrm-release",
   };
 
   try {
@@ -301,7 +301,7 @@ describe("a guarda confere IDENTIDADE pelo PR de origem, não pelo nome do autor
     expect(r.status, "a guarda tem de sair com 1, e não morrer por outro motivo").toBe(1);
     expect(r.saida).toMatch(/não foi aberto pelo App da release/);
     // A recusa cita o dado de FORA do git: quem a API diz que abriu o PR.
-    expect(r.saida).toMatch(/deskcommopp4s-cmd/);
+    expect(r.saida).toMatch(/pjcrmopp4s-cmd/);
   });
 
   it("o nome do autor não manda: PR do App com nome de autor QUALQUER corta (controle positivo)", () => {
@@ -318,7 +318,7 @@ describe("a guarda confere IDENTIDADE pelo PR de origem, não pelo nome do autor
 describe("a alternativa que a issue cita: head `release/*` do repositório de cima", () => {
   it("PR aberto por gente, com head release/9.9.9 DESTE repositório, corta", () => {
     const corte = corteDeMentira("release/9.9.9", "Fulano de Tal");
-    const r = rodarGuarda(corte, linhaDaApi("deskcommopp4s-cmd", "User", "release/9.9.9", REPO_DE_CIMA, 1112));
+    const r = rodarGuarda(corte, linhaDaApi("pjcrmopp4s-cmd", "User", "release/9.9.9", REPO_DE_CIMA, 1112));
     expect(r.status, `a guarda derrubou o passo: ${r.saida}`).toBe(0);
     expect(r.decisao).toBe("sim");
   });
@@ -327,10 +327,10 @@ describe("a alternativa que a issue cita: head `release/*` do repositório de ci
     const corte = corteDeMentira("release/9.9.9", NOME_DE_AUTOR_QUE_O_APP_GRAVA);
     const r = rodarGuarda(
       corte,
-      linhaDaApi("deskcommopp4s-cmd", "User", "release/9.9.9", "deskcommopp4s-cmd/deskcomm-fixes", 1112),
+      linhaDaApi("pjcrmopp4s-cmd", "User", "release/9.9.9", "pjcrmopp4s-cmd/pjcrm-fixes", 1112),
     );
     expect(r.status, "a guarda tem de sair com 1, e não morrer por outro motivo").toBe(1);
-    expect(r.saida).toMatch(/deskcommopp4s-cmd/);
+    expect(r.saida).toMatch(/pjcrmopp4s-cmd/);
   });
 
   it("commit sem PR de origem nenhum não corta, nem com o nome de autor do App", () => {

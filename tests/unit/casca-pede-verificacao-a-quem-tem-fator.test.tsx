@@ -80,7 +80,7 @@ vi.mock("@/lib/instalacao/modulos", () => ({ modulosLigados: async () => [] }));
 vi.mock("@/lib/auth/vinculo-revogado", () => ({ acessoFoiRevogado: async () => false }));
 vi.mock("@/lib/branding/instalacao", () => ({ marcaDaInstalacao: async () => null }));
 vi.mock("@/lib/branding/saida", () => ({
-  marcaDaSaida: async () => ({ nome: "Deskcomm", logoUrl: null }),
+  marcaDaSaida: async () => ({ nome: "PJ CRM", logoUrl: null }),
 }));
 vi.mock("@/lib/branding/organizacao", () => ({
   resolverMarcaDaOrganizacao: () => ({

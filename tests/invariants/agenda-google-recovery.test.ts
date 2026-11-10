@@ -626,7 +626,7 @@ async function pessoaDaEquipe(apelido: string) {
 const convidados = (http: { remote: Event | null }) =>
   (http.remote?.attendees ?? []).map((p) => p.email).sort();
 
-// `deskcomm_guests` e o checkpoint só existem depois do POST; por isso a publicação
+// `pjcrm_guests` e o checkpoint só existem depois do POST; por isso a publicação
 // real, e não um evento montado à mão. Com 2 ou mais convidados o hash do checkpoint
 // é o da lista inteira e não reconhece ninguém individualmente: é o caso que importa.
 async function publicadoComEquipe(ids: string[]) {
@@ -709,7 +709,7 @@ it.each([
   const { f, http, run } = await publicadoComEquipe([bruna.id, caio.id]);
   try {
     const privadas = (http.remote!.extendedProperties as { private: Record<string, string> }).private;
-    privadas.deskcomm_guests = [...invalidas, bruna.id, caio.id].join(",");
+    privadas.pjcrm_guests = [...invalidas, bruna.id, caio.id].join(",");
     await pool.query("update calendar_appointments set team_guest_user_ids=$2::uuid[] where id=$1", [
       f.id,
       [bruna.id],
@@ -717,7 +717,7 @@ it.each([
     expect(await run()).toBe("processed");
     expect(convidados(http)).toEqual([bruna.email]);
     expect((await row(f)).google_conflict).toBeNull();
-    expect((http.remote!.extendedProperties as { private: Record<string, string> }).private.deskcomm_guests).toBe(
+    expect((http.remote!.extendedProperties as { private: Record<string, string> }).private.pjcrm_guests).toBe(
       bruna.id,
     );
   } finally {
@@ -742,7 +742,7 @@ it("I-equipe-6: a lista publicada só é lida em evento associado a este comprom
         });
       },
     } as unknown as SupabaseClient;
-    (http.remote!.extendedProperties as { private: Record<string, string> }).private.deskcomm_org =
+    (http.remote!.extendedProperties as { private: Record<string, string> }).private.pjcrm_org =
       randomUUID();
     await pool.query("update calendar_appointments set team_guest_user_ids=$2::uuid[] where id=$1", [
       f.id,
@@ -761,7 +761,7 @@ it("I-equipe-4: sem conseguir ler quem saiu, nada é escrito e a lista publicada
   const { f, http, db, run } = await publicadoComEquipe([bruna.id, caio.id]);
   try {
     const publicada = (http.remote!.extendedProperties as { private: Record<string, string> }).private
-      .deskcomm_guests;
+      .pjcrm_guests;
     await pool.query("update calendar_appointments set team_guest_user_ids=$2::uuid[] where id=$1", [
       f.id,
       [bruna.id],
@@ -795,7 +795,7 @@ it("I-equipe-4: sem conseguir ler quem saiu, nada é escrito e a lista publicada
       }),
     ).toBe("failed");
     expect(http.requests.filter((r) => r.method === "PATCH")).toHaveLength(patchesAntes);
-    expect((http.remote!.extendedProperties as { private: Record<string, string> }).private.deskcomm_guests).toBe(
+    expect((http.remote!.extendedProperties as { private: Record<string, string> }).private.pjcrm_guests).toBe(
       publicada,
     );
     expect(await run()).toBe("processed");

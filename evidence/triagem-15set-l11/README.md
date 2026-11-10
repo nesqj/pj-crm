@@ -219,7 +219,7 @@ Medido no Postgres do stack, sem aplicar migration nenhuma:
   com o e-mail **já preenchido e travado** pelo convite; nome e senha digitados.
 - `897-05-conta-criada-confirme-o-email.png` — "Confirme seu e-mail".
 - `897-06-atendente-dentro-do-sistema.png` — o link de confirmação lido **na caixa
-  local** (Mailpit do stack, assunto "Confirme seu e-mail — DeskcommCRM") leva ao
+  local** (Mailpit do stack, assunto "Confirme seu e-mail — PJ CRM") leva ao
   Inbox. Banco: `atendente.l11@qa.local | agent | confirmado=true`. **Nenhum passo
   por script ou SQL.**
 

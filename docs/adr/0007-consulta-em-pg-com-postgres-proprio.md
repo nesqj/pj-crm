@@ -1,6 +1,6 @@
 # ADR-0007 — A consulta sai do PostgREST para `pg`, sobre um Postgres nosso; Auth, Storage e Realtime ficam
 
-- **Status:** aceito em 2026-11-03 pelo mantenedor (@melgarafael), na resposta ao documento de decisão do PR #3867; proposta pela @webtecnica em 2026-11-02, na issue #3715 (comentário 6587649631)
+- **Status:** aceito em 2026-11-03 pelo mantenedor (@nesqj), na resposta ao documento de decisão do PR #3867; proposta pela @webtecnica em 2026-11-02, na issue #3715 (comentário 6587649631)
 - **Data:** 2026-11-02
 - **Contexto medido em:** `9a1467d02` (topo de `origin/main` em 02/11/2026); as contagens de arquivo citadas abaixo foram refeitas nesse sha, não herdadas do plano
 - **Plano que a detalha:** issue #3715 — https://github.com/melgarafael/DeskcommCRM/issues/3715 (passo a passo, fase a fase; esta ADR registra só a decisão e o porquê)

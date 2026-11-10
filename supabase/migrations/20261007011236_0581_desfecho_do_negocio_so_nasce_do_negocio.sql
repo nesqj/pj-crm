@@ -1,4 +1,4 @@
--- manifest: **Desfecho e responsável do negócio só nascem do próprio negócio.** `lead.won`, `lead.lost`, `lead.reopened` e `lead.assigned` têm uma fonte — o gatilho de `crm_leads` (`fn_emit_event_on_lead_change`), quando o status ou o responsável muda de fato — e passam para a lista de tipos que o `emit_event` recusa a quem chama com sessão (42501, `reserved_message_received`), como `message.received` e `contact.birthday`. O gatilho roda dentro da sessão de quem moveu o card, então ele se anuncia com uma chave de transação (`deskcomm.desfecho_pelo_negocio`, mesmo desenho da `deskcomm.cliente_pela_agenda`) e a devolve ao valor anterior antes de sair. O servidor (sem sessão) segue emitindo; `lead.stage_changed` segue aberto, porque a rota de mover o emite pela sessão. Idempotente: `create or replace`; apêndice igual no fim do `baseline.sql`.
+-- manifest: **Desfecho e responsável do negócio só nascem do próprio negócio.** `lead.won`, `lead.lost`, `lead.reopened` e `lead.assigned` têm uma fonte — o gatilho de `crm_leads` (`fn_emit_event_on_lead_change`), quando o status ou o responsável muda de fato — e passam para a lista de tipos que o `emit_event` recusa a quem chama com sessão (42501, `reserved_message_received`), como `message.received` e `contact.birthday`. O gatilho roda dentro da sessão de quem moveu o card, então ele se anuncia com uma chave de transação (`pjcrm.desfecho_pelo_negocio`, mesmo desenho da `pjcrm.cliente_pela_agenda`) e a devolve ao valor anterior antes de sair. O servidor (sem sessão) segue emitindo; `lead.stage_changed` segue aberto, porque a rota de mover o emite pela sessão. Idempotente: `create or replace`; apêndice igual no fim do `baseline.sql`.
 
 -- ============================================================================
 -- 0581 — O DESFECHO DO NEGÓCIO SÓ NASCE DO NEGÓCIO
@@ -37,8 +37,8 @@ begin
   -- sessão de quem moveu o card), e sem este sinal a reserva do `emit_event`
   -- calaria o próprio gatilho. A chave é de transação e volta ao valor anterior
   -- antes do `return` — a janela é este corpo, não o resto da transação.
-  v_antes := current_setting('deskcomm.desfecho_pelo_negocio', true);
-  perform set_config('deskcomm.desfecho_pelo_negocio', 'on', true);
+  v_antes := current_setting('pjcrm.desfecho_pelo_negocio', true);
+  perform set_config('pjcrm.desfecho_pelo_negocio', 'on', true);
 
   if new.status is distinct from old.status then
     if new.status = 'won' then
@@ -63,7 +63,7 @@ begin
         'owner_kind', new.owner_kind));
   end if;
 
-  perform set_config('deskcomm.desfecho_pelo_negocio', coalesce(v_antes, ''), true);
+  perform set_config('pjcrm.desfecho_pelo_negocio', coalesce(v_antes, ''), true);
   return new;
 end$$;
 
@@ -100,7 +100,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.

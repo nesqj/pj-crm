@@ -106,7 +106,7 @@ export PATH="$WORK/bin:$PATH"
 # ── Fixture ──────────────────────────────────────────────────────────────────
 # Uma pasta que parece uma instalação: compose + `.env`. O que muda entre os
 # casos é o resto — o marcador, os contêineres, e se o `.env` existe. O nome do
-# projeto que o Compose derivaria da pasta é `deskcommcrm` (basename), e é por
+# projeto que o Compose derivaria da pasta é `pjcrm` (basename), e é por
 # ele que o dublê do `docker` responde.
 montar_pasta() {  # montar_pasta <diretório> [1=com .env]
   local d="$1" sem_env="${2:-0}"
@@ -166,7 +166,7 @@ echo '      NOVA, e riscv64 é recusada com a recusa do #1042'
 # rodada que parou no meio). Compose e `.env` estão lá — que era o que bastava.
 # O resultado tem de ser a RECUSA, com o texto do #1042, e sem a palavra do
 # aviso de instalação existente.
-R1="$WORK/caso1"; mkdir -p "$R1"; montar_pasta "$R1/deskcommcrm" 0
+R1="$WORK/caso1"; mkdir -p "$R1"; montar_pasta "$R1/pjcrm" 0
 guarda "$R1" riscv64
 check ".env + compose e NADA instalado → a instalação NÃO é real" \
   test "$VEREDITO" = NOVA
@@ -183,17 +183,17 @@ echo
 echo '── 2. OS TRÊS SINAIS DE INSTALAÇÃO REAL CONTINUAM PASSANDO (#1775 intacto)'
 # O contrapeso obrigatório: o que o #1775 consertou não pode ser desfeito. Sem
 # esta seção, um conserto que recusasse TUDO em arquitetura sem suporte também ficaria verde.
-R2="$WORK/caso2"; mkdir -p "$R2"; montar_pasta "$R2/deskcommcrm" 0
+R2="$WORK/caso2"; mkdir -p "$R2"; montar_pasta "$R2/pjcrm" 0
 marcar_instalacao() {  # marcar_instalacao <diretório> [versão]
   printf 'instalado_em=2026-09-27T00:00:00Z\nversao=%s\n' "${2:-0.9.0}" \
-    > "$1/.deskcomm-instalado"
-  chmod 600 "$1/.deskcomm-instalado"
+    > "$1/.pjcrm-instalado"
+  chmod 600 "$1/.pjcrm-instalado"
 }
 # 2a. O marcador, que o install.sh grava com a stack no ar. É o sinal mais
 # forte: a instalação em si escreveu que terminou.
-marcar_instalacao "$R2/deskcommcrm"
+marcar_instalacao "$R2/pjcrm"
 guarda "$R2" riscv64
-check "o marcador .deskcomm-instalado → a instalação é real" test "$VEREDITO" = REAL
+check "o marcador .pjcrm-instalado → a instalação é real" test "$VEREDITO" = REAL
 check "e riscv64 passa pela guarda (rc=$RC, e == 0)" test "$RC" -eq 0
 check "com o aviso de que a instalação já existe, e não com a recusa" \
   grep -q 'JÁ EXISTE' "$WORK/guarda.out"
@@ -203,8 +203,8 @@ check "e a recusa do #1042 NÃO aparece" \
 # 2b. O contêiner do projeto, que é o caso de quem instalou numa versão
 # anterior e por isso não tem marcador. Precisa ser o contêiner do projeto
 # DESTA instalação — daí o nome derivado da pasta, e não um nome qualquer.
-R2B="$WORK/caso2b"; mkdir -p "$R2B"; montar_pasta "$R2B/deskcommcrm" 0
-guarda "$R2B" riscv64 "$(nome_derivado "$R2B/deskcommcrm")"
+R2B="$WORK/caso2b"; mkdir -p "$R2B"; montar_pasta "$R2B/pjcrm" 0
+guarda "$R2B" riscv64 "$(nome_derivado "$R2B/pjcrm")"
 check "contêiner do projeto DESTA instalação → é real" test "$VEREDITO" = REAL
 check "e riscv64 passa pela guarda (rc=$RC, e == 0)" test "$RC" -eq 0
 check "com o aviso de instalação existente" grep -q 'JÁ EXISTE' "$WORK/guarda.out"
@@ -212,8 +212,8 @@ check "com o aviso de instalação existente" grep -q 'JÁ EXISTE' "$WORK/guarda
 # 2c. O contêiner do Supabase single-server, que o modo single-server cria com
 # o sufixo `-supabase` no nome do projeto. Sem este sinal, quem instalou em
 # single-server passaria a ser recusado numa VPS com arquitetura sem suporte — uma regressão nova.
-R2C="$WORK/caso2c"; mkdir -p "$R2C"; montar_pasta "$R2C/deskcommcrm" 0
-guarda "$R2C" riscv64 "$(nome_derivado "$R2C/deskcommcrm")-supabase"
+R2C="$WORK/caso2c"; mkdir -p "$R2C"; montar_pasta "$R2C/pjcrm" 0
+guarda "$R2C" riscv64 "$(nome_derivado "$R2C/pjcrm")-supabase"
 check "contêiner do Supabase single-server → é real" test "$VEREDITO" = REAL
 check "e riscv64 passa pela guarda (rc=$RC, e == 0)" test "$RC" -eq 0
 
@@ -221,9 +221,9 @@ check "e riscv64 passa pela guarda (rc=$RC, e == 0)" test "$RC" -eq 0
 # o guard tem de procurar pelo que os contêineres carregam de verdade. Uma
 # segunda instalação na mesma VPS (a receita do próprio kit para quem quer duas)
 # nomeia o projeto no `.env` justamente para não disputar o parque com a outra.
-R2D="$WORK/caso2d"; mkdir -p "$R2D"; montar_pasta "$R2D/deskcommcrm" 0
-printf 'COMPOSE_PROJECT_NAME=deskcommcrm-2\n' >> "$R2D/deskcommcrm/.env"
-guarda "$R2D" riscv64 "deskcommcrm-2"
+R2D="$WORK/caso2d"; mkdir -p "$R2D"; montar_pasta "$R2D/pjcrm" 0
+printf 'COMPOSE_PROJECT_NAME=pjcrm-2\n' >> "$R2D/pjcrm/.env"
+guarda "$R2D" riscv64 "pjcrm-2"
 check "COMPOSE_PROJECT_NAME do .env manda sobre o nome da pasta → é real" \
   test "$VEREDITO" = REAL
 check "e riscv64 passa pela guarda (rc=$RC, e == 0)" test "$RC" -eq 0
@@ -237,7 +237,7 @@ echo '      que não respondeu'
 # VPS de quem já tem um WordPress é a regra, não a exceção. Sem o filtro por
 # projeto, qualquer VPS com Docker vira "instalação existente" e a recusa do
 # #1042 deixa de existir em cima de um `docker ps` qualquer.
-R3="$WORK/caso3"; mkdir -p "$R3"; montar_pasta "$R3/deskcommcrm" 0
+R3="$WORK/caso3"; mkdir -p "$R3"; montar_pasta "$R3/pjcrm" 0
 guarda "$R3" riscv64 "wordpress_app_pljr imobplus-server-app-1 traefik"
 check "contêiner de OUTRO programa na mesma VPS → a instalação NÃO é real" \
   test "$VEREDITO" = NOVA
@@ -249,11 +249,11 @@ check "a recusa é a do #1042" grep -q 'Use uma VPS x86_64/amd64 ou ARM64/aarch6
 # indisponível: em hosts com Docker instalado em /usr/bin, PATH=/usr/bin:/bin
 # sozinho não o remove e este teste poderia perguntar ao daemon real.
 # O contrário seria adivinhar instalação a partir de um Docker que não falou.
-R3B="$WORK/caso3b"; mkdir -p "$R3B"; montar_pasta "$R3B/deskcommcrm" 0
+R3B="$WORK/caso3b"; mkdir -p "$R3B"; montar_pasta "$R3B/pjcrm" 0
 guarda "$R3B" riscv64
 : > "$DOCKER_LOG"
 ( cd "$R3B" && env -i PATH="/usr/bin:/bin" HOME="${HOME:-/root}" FAKE_ARCH=riscv64 \
-    DOCKER_HOST=unix:///tmp/deskcomm-teste-socket-inexistente.sock \
+    DOCKER_HOST=unix:///tmp/pjcrm-teste-socket-inexistente.sock \
     bash -c '. "$0"
              if instalacao_real_do_kit_aqui; then echo REAL; else echo NOVA; fi' "$COMMON" \
 ) > "$WORK/sem-docker.txt" 2>&1
@@ -262,8 +262,8 @@ check "sem daemon Docker, a instalação NÃO é inventada" \
 
 # Sem `.env` não há nem nome de projeto para procurar — e a pasta nem é uma
 # instalação. O guard nem deve chamar o docker aqui.
-R3C="$WORK/caso3c"; mkdir -p "$R3C"; montar_pasta "$R3C/deskcommcrm" 1
-guarda "$R3C" riscv64 "$(nome_derivado "$R3C/deskcommcrm")"
+R3C="$WORK/caso3c"; mkdir -p "$R3C"; montar_pasta "$R3C/pjcrm" 1
+guarda "$R3C" riscv64 "$(nome_derivado "$R3C/pjcrm")"
 check "sem .env (e com contêiner do projeto lá) → a instalação NÃO é real" \
   test "$VEREDITO" = NOVA
 check "e riscv64 é recusada (rc=$RC, e != 0)" test "$RC" -ne 0
@@ -276,7 +276,7 @@ echo '── 4. x86_64: A GUARDA CONTINUA NÃO PERGUNTANDO NADA'
 # tocar no Docker para descobrir isso. O `test:shell` roda num Mac Apple
 # Silicon, então este caso é o que impede a suíte de depender do processador de
 # quem a roda.
-R4="$WORK/caso4"; mkdir -p "$R4"; montar_pasta "$R4/deskcommcrm" 0
+R4="$WORK/caso4"; mkdir -p "$R4"; montar_pasta "$R4/pjcrm" 0
 guarda "$R4" x86_64
 check "em x86_64 a guarda atravessa (rc=$RC, e == 0)" test "$RC" -eq 0
 check "em x86_64 a guarda NÃO chama o docker (nem disco, nem contêiner)" \
@@ -294,7 +294,7 @@ echo '── 5. A FÓRMULA DO NOME: a cópia do guard bate com nome_do_projeto_c
 # lado a lado, com as pastas que o próprio kit já usa de exemplo.
 (
   . "$COMMON" 2>/dev/null
-  for pasta in deskcommcrm _deskcomm -deskcomm _-_crm _123 CRM-production meu_crm-2; do
+  for pasta in pjcrm _pjcrm -pjcrm _-_crm _123 CRM-production meu_crm-2; do
     dir="$WORK/nome/$pasta"; mkdir -p "$dir"
     printf 'x\n' > "$dir/docker-compose.prod.yml"; : > "$dir/.env"
     printf '%s %s %s\n' "$pasta" "$(nome_do_projeto_compose "$dir")" \
@@ -309,14 +309,14 @@ done < "$WORK/nomes.txt"
 # Um COMPOSE_PROJECT_NAME fora do que o Compose aceita é ignorado, e o derivado
 # da pasta segue na lista: um nome inválido não pode fazer a guarda procurar
 # por algo que o Docker nunca chamará.
-R5="$WORK/caso5"; mkdir -p "$R5"; montar_pasta "$R5/deskcommcrm" 0
-printf 'COMPOSE_PROJECT_NAME=CRM Inválido/Não\n' >> "$R5/deskcommcrm/.env"
+R5="$WORK/caso5"; mkdir -p "$R5"; montar_pasta "$R5/pjcrm" 0
+printf 'COMPOSE_PROJECT_NAME=CRM Inválido/Não\n' >> "$R5/pjcrm/.env"
 N5="$(
   . "$COMMON" 2>/dev/null
-  nomes_do_projeto_da_instalacao "$R5/deskcommcrm" | tr '\n' ','
+  nomes_do_projeto_da_instalacao "$R5/pjcrm" | tr '\n' ','
 )"
 check "um COMPOSE_PROJECT_NAME inválido é ignorado (resta o nome derivado: $N5)" \
-  test "$N5" = "$(nome_derivado "$R5/deskcommcrm"),"
+  test "$N5" = "$(nome_derivado "$R5/pjcrm"),"
 
 # ─────────────────────────────────────────────────────────────────────────────
 echo
@@ -326,19 +326,19 @@ echo '── 6. O MARCADOR: o install.sh grava, e a guarda lê o que ele diz'
 # respondeu), e que a guarda reconhece o arquivo.
 # A escrita é medida pela FUNÇÃO, isolada do resto do instalador (que exige
 # root, Docker e um banco): o que muda de um lado para o outro é o diretório.
-R6="$WORK/caso6"; mkdir -p "$R6"; montar_pasta "$R6/deskcommcrm" 0
+R6="$WORK/caso6"; mkdir -p "$R6"; montar_pasta "$R6/pjcrm" 0
 (
-  PROJECT_DIR="$R6/deskcommcrm" bash -c '. "$0"; marcar_instalacao_feita 0.9.0' "$COMMON"
+  PROJECT_DIR="$R6/pjcrm" bash -c '. "$0"; marcar_instalacao_feita 0.9.0' "$COMMON"
 ) >/dev/null 2>&1
 check "marcar_instalacao_feita grava o arquivo na raiz da instalação" \
-  test -f "$R6/deskcommcrm/.deskcomm-instalado"
+  test -f "$R6/pjcrm/.pjcrm-instalado"
 check "e o arquivo registra a versão que subiu" \
-  grep -q '^versao=0.9.0$' "$R6/deskcommcrm/.deskcomm-instalado"
+  grep -q '^versao=0.9.0$' "$R6/pjcrm/.pjcrm-instalado"
 check "e registra quando (ISO-8601 em UTC, para o log do dono)" \
   grep -qE '^instalado_em=[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$' \
-    "$R6/deskcommcrm/.deskcomm-instalado"
+    "$R6/pjcrm/.pjcrm-instalado"
 check "e nasce com o mesmo rigor do .env (600), que é onde ele mora" \
-  test "$(stat -c '%a' "$R6/deskcommcrm/.deskcomm-instalado" 2>/dev/null || stat -f '%Lp' "$R6/deskcommcrm/.deskcomm-instalado" 2>/dev/null)" = 600
+  test "$(stat -c '%a' "$R6/pjcrm/.pjcrm-instalado" 2>/dev/null || stat -f '%Lp' "$R6/pjcrm/.pjcrm-instalado" 2>/dev/null)" = 600
 # E a guarda o reconhece pelo arquivo, sem perguntar nada ao Docker.
 : > "$DOCKER_LOG"
 (
@@ -360,7 +360,7 @@ check "e a receita de 'recomeçar' apaga o marcador junto com o .env" \
 check "e o painel de recuperação do install.sh também o apaga" \
   grep -q 'rm -f \${MARCA_INSTALACAO_NOME' "$REPO_ROOT/hostgator-setup-kit/install.sh"
 check "e o marcador está no .gitignore (estado da VPS, não do repositório)" \
-  grep -qx '.deskcomm-instalado' "$REPO_ROOT/.gitignore"
+  grep -qx '.pjcrm-instalado' "$REPO_ROOT/.gitignore"
 # O update.sh também grava, com o app saudável. Depois deste conserto, uma
 # instalação NOVA numa arquitetura sem suporte é recusada — então toda instalação nessa arquitetura que existe veio
 # de antes e NÃO tem marcador; o único sinal dela seria o contêiner, e um

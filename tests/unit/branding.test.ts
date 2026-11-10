@@ -12,7 +12,7 @@ describe("resolveBranding", () => {
     expect(resolveBranding(undefined, undefined)).toEqual({
       name: DEFAULT_APP_NAME,
       logoUrl: null,
-      initial: "D",
+      initial: "P",
     });
   });
 
@@ -131,7 +131,7 @@ describe("nome do arquivo de códigos de recuperação", () => {
   it("deriva o prefixo da marca, sem acento e sem espaço", () => {
     expect(prefixoDoArquivo("Vendas Turbo")).toBe("vendas-turbo");
     expect(prefixoDoArquivo("Ótima Gestão")).toBe("otima-gestao");
-    expect(prefixoDoArquivo(DEFAULT_APP_NAME)).toBe("deskcommcrm");
+    expect(prefixoDoArquivo(DEFAULT_APP_NAME)).toBe("pj-crm");
   });
 
   it("não devolve hífen pendurado nem repetido", () => {
@@ -153,9 +153,9 @@ describe("nome do arquivo de códigos de recuperação", () => {
  * A versão anterior deste gate ficava VERDE enquanto a marca vazava, por dois
  * furos independentes, e os dois só apareceram quando alguém foi olhar:
  *
- *  1. o padrão era `/Deskcomm/` — **case-sensitive**. Passavam
- *     `support@deskcomm.com.br` (tela de conta suspensa), `suporte@deskcomm.app`
- *     (tela de cobrança) e `deskcommcrm-recovery-codes.txt` (o arquivo que o
+ *  1. o padrão era `/PJ CRM/` — **case-sensitive**. Passavam
+ *     `support@deskcomm.com.br` (tela de conta suspensa), `suporte@pjcrm.app`
+ *     (tela de cobrança) e `pjcrm-recovery-codes.txt` (o arquivo que o
  *     usuário baixa e guarda por anos). Endereço e nome de arquivo são
  *     minúsculos por natureza — ou seja, o gate era cego justamente na forma em
  *     que a marca de fato aparece;
@@ -165,7 +165,7 @@ describe("nome do arquivo de códigos de recuperação", () => {
  *     DENTRO de `app/` e escapava pela extensão. Esse é o pior deles: o nome vai
  *     para o app autenticador e fica no celular do usuário para sempre.
  *
- * MECANISMO. A varredura é `/deskcomm/i` sobre `.ts` e `.tsx` de `app/`,
+ * MECANISMO. A varredura é `/pjcrm/i` sobre `.ts` e `.tsx` de `app/`,
  * `components/`, `lib/` e `workers/`. Cada arquivo com ocorrência precisa de uma
  * entrada em `MARCA_CONGELADA` com categoria, motivo escrito e o conjunto EXATO
  * de marcas encontradas. Arquivo novo reprova; marca nova em arquivo já
@@ -174,8 +174,8 @@ describe("nome do arquivo de códigos de recuperação", () => {
  *
  * MARCA ≠ PROTOCOLO — a distinção que precisa estar escrita, não subentendida.
  * Boa parte das ocorrências abaixo NÃO é marca: é identificador técnico.
- * `X-Deskcomm-Signature` é contrato de fio com receptores de terceiros, o cookie
- * `sb-deskcomm-auth` é a sessão de quem já está logado. Quem "completar o
+ * `X-PJCRM-Signature` é contrato de fio com receptores de terceiros, o cookie
+ * `sb-pjcrm-auth` é a sessão de quem já está logado. Quem "completar o
  * whitelabel" renomeando isso derruba integração de cliente em produção — em
  * silêncio, porque o receptor não erra: ele apenas deixa de reconhecer. Por isso
  * a categoria é campo obrigatório: sem ela, a lista viraria uma pilha de
@@ -213,75 +213,75 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "PROTOCOLO",
     motivo:
       "`agent_name_hint` identifica o aplicativo auto-hospedado durante a autorização SIWC da OpenAI; não é o nome apresentado nas telas do CRM. O fluxo de login depende deste identificador de produto.",
-    marcas: ["deskcommcrm"],
+    marcas: ["pjcrm"],
   },
   "lib/webhooks/assinatura.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "header que o webhook de ENTRADA exige de quem envia. Renomear invalida a assinatura de todo integrador já configurado, e o sintoma para ele é 401 sem explicação. A rota que confere e a tela que ensina importam ESTA constante — o literal não se repete mais em nenhuma das duas",
-    marcas: ["x-deskcomm-signature"],
+    marcas: ["x-pjcrm-signature"],
   },
   "lib/automation/actions/call-webhook.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "headers do webhook de SAÍDA. O receptor do cliente lê o nome exato para rotear e para conferir o HMAC; renomear faz o payload chegar e ser descartado calado",
-    marcas: ["x-deskcomm-event", "x-deskcomm-signature"],
+    marcas: ["x-pjcrm-event", "x-pjcrm-signature"],
   },
   "lib/automation/actions/call-webhook.test.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "é a guarda do contrato acima: este teste é o que reprova quem renomear o header. Trocar a string aqui para 'limpar a marca' desarmaria a única proteção que o contrato tem",
-    marcas: ["x-deskcomm-event", "x-deskcomm-signature", "x-deskcomm-signature", "x-deskcomm-signature"],
+    marcas: ["x-pjcrm-event", "x-pjcrm-signature", "x-pjcrm-signature", "x-pjcrm-signature"],
   },
   "lib/mcp/server.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "nome do servidor MCP, que o cliente (Claude Desktop e afins) grava na própria configuração. Renomear derruba as conexões já configuradas de quem usa",
-    marcas: ["deskcomm-crm"],
+    marcas: ["pjcrm"],
   },
   "lib/mcp/servidor-externo/chamada.ts": {
     categoria: "PROTOCOLO",
     motivo:
-      "clientInfo do handshake `initialize` do MCP que este cliente manda ao servidor REMOTO: ele registra quem conectou e é comum haver regra de acesso por identificação do cliente lá do lado. Não é texto de interface — a tela nunca mostra — e renomear muda a identidade reportada no fio do protocolo. E os cabeçalhos `X-Deskcomm-Contato-*`/`X-Deskcomm-Canal` (#2147): o servidor externo FILTRA os dados do cliente da conversa por esses nomes exatos; renomear faz o servidor deixar de achar a identidade e, conforme a implementação dele, responder sem filtro",
-    marcas: ["deskcomm-crm", "x-deskcomm-canal", "x-deskcomm-contato-id", "x-deskcomm-contato-telefone"],
+      "clientInfo do handshake `initialize` do MCP que este cliente manda ao servidor REMOTO: ele registra quem conectou e é comum haver regra de acesso por identificação do cliente lá do lado. Não é texto de interface — a tela nunca mostra — e renomear muda a identidade reportada no fio do protocolo. E os cabeçalhos `X-PJCRM-Contato-*`/`X-PJCRM-Canal` (#2147): o servidor externo FILTRA os dados do cliente da conversa por esses nomes exatos; renomear faz o servidor deixar de achar a identidade e, conforme a implementação dele, responder sem filtro",
+    marcas: ["pjcrm", "x-pjcrm-canal", "x-pjcrm-contato-id", "x-pjcrm-contato-telefone"],
   },
   "lib/mcp/servidor-externo/externo.test.ts": {
     categoria: "PROTOCOLO",
     motivo:
-      "é a guarda do contrato acima (#2147): o teste de não-forjamento tenta passar os nomes `X-Deskcomm-*` por argumento de ferramenta, em caixas diferentes, e confere o que chega no fio. Trocar a string aqui desarmaria a prova de que o argumento não alcança o cabeçalho",
+      "é a guarda do contrato acima (#2147): o teste de não-forjamento tenta passar os nomes `X-PJCRM-*` por argumento de ferramenta, em caixas diferentes, e confere o que chega no fio. Trocar a string aqui desarmaria a prova de que o argumento não alcança o cabeçalho",
     marcas: [
-      "x-deskcomm-canal",
-      "x-deskcomm-contato-id",
-      "x-deskcomm-contato-id",
-      "x-deskcomm-contato-telefone",
-      "x-deskcomm-contato-telefone",
-      "x-deskcomm-extra",
-      "x-deskcomm-extra",
+      "x-pjcrm-canal",
+      "x-pjcrm-contato-id",
+      "x-pjcrm-contato-id",
+      "x-pjcrm-contato-telefone",
+      "x-pjcrm-contato-telefone",
+      "x-pjcrm-extra",
+      "x-pjcrm-extra",
     ],
   },
   "lib/supabase/admin.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "`X-Client-Info` enviado ao Supabase — identifica o cliente nos logs e na telemetria DELES. Não é texto de interface e nunca chega ao usuário",
-    marcas: ["deskcomm-crm"],
+    marcas: ["pjcrm"],
   },
   "lib/wacalls/events-bridge.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "X-Client-Id enviado ao processo WaCalls (spec 18) — identifica o worker como o operador dono da conexão SSE nos logs e na lógica de exclusividade de chamada dele. Não é texto de interface e nunca chega ao usuário",
-    marcas: ["deskcomm-worker"],
+    marcas: ["pjcrm-worker"],
   },
   "lib/nuvemshop/config.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "User-Agent exigido pela Nuvemshop, que identifica a aplicação registrada na plataforma deles. Trocar pelo nome do revendedor descreveria uma aplicação que não existe lá",
-    marcas: ["deskcommcrm"],
+    marcas: ["pjcrm"],
   },
   "lib/agenda/google/evento.ts": {
     categoria: "PROTOCOLO",
     motivo:
       "sufixo do `iCalUID` e prefixo das `extendedProperties` que GRAVAMOS dentro do Google Calendar do cliente. É por essa string que reconhecemos, meses depois, quais eventos daquela agenda vieram do CRM — e é o que impede o laço de eco. Trocar pela marca do revendedor faz todo evento já criado deixar de ser reconhecido, e o sintoma é compromisso fantasma ocupando horário, sem erro nenhum",
-    marcas: ["deskcomm", "deskcomm.app"],
+    marcas: ["pjcrm", "pjcrm.app"],
   },
 
   // ─── INFRA — cookie/storage/contêiner. Renomear desloga ou perde estado. ───
@@ -289,41 +289,41 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "INFRA",
     motivo:
       "chave de localStorage do tema, lida no script anti-flash. Renomear faz todo mundo voltar ao tema claro no próximo acesso — e o par com lib/theme.tsx tem de mudar junto",
-    marcas: ["deskcomm-theme"],
+    marcas: ["pjcrm-theme"],
   },
   "lib/theme.tsx": {
     categoria: "INFRA",
     motivo: "a mesma chave de localStorage do script do layout; as duas são um par só",
-    marcas: ["deskcomm-theme"],
+    marcas: ["pjcrm-theme"],
   },
   "lib/supabase/browser.ts": {
     categoria: "INFRA",
     motivo:
       "nome do cookie de sessão. Renomear invalida a sessão de todo usuário logado no momento da atualização — o `update.sh` do clone viraria um logout em massa",
-    marcas: ["sb-deskcomm-auth"],
+    marcas: ["sb-pjcrm-auth"],
   },
   "lib/supabase/server.ts": {
     categoria: "INFRA",
     motivo: "o mesmo cookie de sessão, lido no servidor; tem de casar com o do browser",
-    marcas: ["sb-deskcomm-auth"],
+    marcas: ["sb-pjcrm-auth"],
   },
   "lib/impersonate/cookie.ts": {
     categoria: "INFRA",
     motivo:
       "nome do cookie de impersonação. Renomear deixa órfã a sessão de suporte já aberta, e o operador fica preso na conta do tenant sem o cookie que o traz de volta",
-    marcas: ["deskcomm-impersonate"],
+    marcas: ["pjcrm-impersonate"],
   },
   "lib/impersonate/cookie-edge.ts": {
     categoria: "INFRA",
     motivo: "o mesmo cookie de impersonação, na cópia que o middleware edge consegue importar",
-    marcas: ["deskcomm-impersonate"],
+    marcas: ["pjcrm-impersonate"],
   },
 
   "hooks/ai/useDebugToggle.ts": {
     categoria: "INFRA",
     motivo:
-      "chave de localStorage do modo de depuração das citações da IA — irmã de `deskcomm-theme` em lib/theme.tsx. Não é texto de interface: renomear só faz quem já tinha o modo ligado perdê-lo, e o par leitura/escrita teria de mudar junto",
-    marcas: ["deskcomm.show_ai_citations"],
+      "chave de localStorage do modo de depuração das citações da IA — irmã de `pjcrm-theme` em lib/theme.tsx. Não é texto de interface: renomear só faz quem já tinha o modo ligado perdê-lo, e o par leitura/escrita teria de mudar junto",
+    marcas: ["pjcrm.show_ai_citations"],
   },
 
   // ─── DIVIDA — vazamento real. Cada linha declara a fase que a apaga. ───
@@ -332,7 +332,7 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     fase: 7,
     motivo:
       "template sem caminho de produção: sem rota em app/api/v1/cron/, sem linha no docker/scheduler/entrypoint.sh e, desde a limpeza do teto de orçamento (0159), sem chamador NENHUM — o único era workers/ai-budget-checker.cron.ts, que foi apagado por nunca ter tido agendador. Marcar isto não muda nada que um usuário veja, e a única 'prova' possível seria invocar a função à mão — o que prova a função, não o produto. Sai quando o alarme ganhar cron de verdade (ou quando o template for apagado junto)",
-    marcas: ["deskcommcrm"],
+    marcas: ["pjcrm"],
   },
 
   // ─── DEV — fixture de teste; não embarca. ───
@@ -340,18 +340,18 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "DEV",
     motivo:
       "o caso medido da issue #2804 usa o nome do contêiner da stack local (que carrega a marca do produto) para provar que o `_` do nome de contêiner é ACEITO e chega à escrita; é fixture de teste e não embarca na imagem",
-    marcas: ["supabase_inbucket_deskcomm-crm"],
+    marcas: ["supabase_inbucket_pjcrm"],
   },
   "lib/agent-engine/agent/draft-reply.test.ts": {
     categoria: "DEV",
-    motivo: "nome de agente numa fixture de teste ('Bot Deskcomm'); não sai da suíte",
-    marcas: ["deskcomm"],
+    motivo: "nome de agente numa fixture de teste ('Bot PJ CRM'); não sai da suíte",
+    marcas: ["pjcrm"],
   },
   "lib/system/changelog.test.ts": {
     categoria: "DEV",
     motivo:
       "fixture que reproduz o CHANGELOG real, incluindo as URLs do repositório no GitHub. A marca aqui é o nome do repositório upstream, que o clone não renomeia",
-    marcas: ["deskcommcrm", "deskcommcrm", "deskcommcrm"],
+    marcas: ["pjcrm"],
   },
 
   // ─── PADRAO — a marca padrão precisa existir em algum lugar. ───
@@ -359,7 +359,7 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "PADRAO",
     motivo:
       "é a DEFINIÇÃO de DEFAULT_APP_NAME — o valor que aparece quando o operador não configurou marca nenhuma. Se esta linha sumir, some o padrão",
-    marcas: ["deskcommcrm"],
+    marcas: ["pjcrm"],
   },
   // `lib/video/jitsi.ts` ficou DE FORA por decisão do review do #2441: ele
   // prefixa a sala do Jitsi com `sala-`, neutro. O link é repassado no chat e
@@ -393,14 +393,14 @@ const RAIZES_VARRIDAS = ["app", "components", "hooks", "lib", "workers"] as cons
 /**
  * Extrai as marcas de um texto, uma por ocorrência.
  *
- * Casa `deskcomm` em qualquer caixa e leva junto o identificador inteiro em volta
- * (`x-deskcomm-signature`, `support@deskcomm.com.br`), porque é o identificador —
+ * Casa `pjcrm` em qualquer caixa e leva junto o identificador inteiro em volta
+ * (`x-pjcrm-signature`, `support@deskcomm.com.br`), porque é o identificador —
  * não a palavra solta — que distingue contrato de fio de vazamento de marca.
  *
  * Linha que ABRE com `//`, `*` ou `/*` é comentário e não conta: comentário não
  * chega ao usuário, e contá-lo encheria a lista de entradas inertes até ninguém
  * mais ler as que importam. O teste olha só o início da linha DE PROPÓSITO —
- * procurar `//` em qualquer posição descartaria `"https://deskcomm.app"`, que é
+ * procurar `//` em qualquer posição descartaria `"https://pjcrm.app"`, que é
  * exatamente um vazamento de verdade.
  */
 /**
@@ -409,7 +409,7 @@ const RAIZES_VARRIDAS = ["app", "components", "hooks", "lib", "workers"] as cons
  * Linha que ABRE com `//`, `*` ou `/*` é comentário e não conta: comentário não
  * chega ao usuário, e contá-lo encheria a lista de entradas inertes até ninguém
  * mais ler as que importam. O teste olha só o início da linha DE PROPÓSITO —
- * procurar `//` em qualquer posição descartaria `"https://deskcomm.app"`, que é
+ * procurar `//` em qualquer posição descartaria `"https://pjcrm.app"`, que é
  * exatamente um vazamento de verdade.
  *
  * NÃO se reaproveita onde a fonte não é TypeScript: o comentário de HTML
@@ -430,17 +430,17 @@ function linhasQueContam(fonte: string): string[] {
 /**
  * Extrai as marcas de um texto, uma por ocorrência.
  *
- * Casa `deskcomm` em qualquer caixa e leva junto o identificador inteiro em volta
- * (`x-deskcomm-signature`, `support@deskcomm.com.br`), porque é o identificador —
+ * Casa `pjcrm` em qualquer caixa e leva junto o identificador inteiro em volta
+ * (`x-pjcrm-signature`, `support@deskcomm.com.br`), porque é o identificador —
  * não a palavra solta — que distingue contrato de fio de vazamento de marca.
  */
 function marcasNoTexto(fonte: string): string[] {
   const achadas: string[] = [];
   for (const linha of linhasQueContam(fonte)) {
-    for (const casada of linha.matchAll(/[\w@.-]*deskcomm[\w@.-]*/gi)) {
-      // Pontuação encostada (o ponto final de "no DeskcommCRM.") não faz parte
+    for (const casada of linha.matchAll(/[\w@.-]*pj[ -]?crm[\w@.-]*/gi)) {
+      // Pontuação encostada (o ponto final de "no PJ CRM.") não faz parte
       // do identificador e faria a lista mudar por causa de uma vírgula.
-      achadas.push(casada[0].toLowerCase().replace(/^[.-]+/, "").replace(/[.-]+$/, ""));
+      achadas.push(casada[0].toLowerCase().replace(/pj[ -]?crm/g, "pjcrm").replace(/^[.-]+/, "").replace(/[.-]+$/, ""));
     }
   }
   return achadas.sort();
@@ -575,22 +575,22 @@ describe("catraca de marca hardcoded", () => {
   });
 
   it("pega a marca em qualquer caixa e dentro de identificador", () => {
-    // O furo nº 1 do gate antigo, agora com asserção: `/Deskcomm/` deixava passar
+    // O furo nº 1 do gate antigo, agora com asserção: `/PJ CRM/` deixava passar
     // as três formas de baixo, que são as formas em que a marca de fato aparece.
-    expect(marcasNoTexto(`a.download = "deskcommcrm-recovery-codes.txt";`)).toEqual([
-      "deskcommcrm-recovery-codes.txt",
+    expect(marcasNoTexto(`a.download = "pjcrm-recovery-codes.txt";`)).toEqual([
+      "pjcrm-recovery-codes.txt",
     ]);
-    expect(marcasNoTexto(`href="mailto:suporte@deskcomm.app"`)).toEqual(["suporte@deskcomm.app"]);
-    expect(marcasNoTexto(`const k = "sb-DESKCOMM-auth";`)).toEqual(["sb-deskcomm-auth"]);
+    expect(marcasNoTexto(`href="mailto:suporte@pjcrm.app"`)).toEqual(["suporte@pjcrm.app"]);
+    expect(marcasNoTexto(`const k = "sb-PJCRM-auth";`)).toEqual(["sb-pjcrm-auth"]);
   });
 
   it("ignora comentário, mas não confunde `//` de URL com comentário", () => {
     // A regra de comentário é uma exceção, e exceção sem guarda vira buraco:
     // procurar `//` em qualquer posição da linha esconderia justamente a URL.
-    expect(marcasNoTexto(`  // fala do DeskcommCRM`)).toEqual([]);
-    expect(marcasNoTexto(` * fala do DeskcommCRM`)).toEqual([]);
-    expect(marcasNoTexto(`const u = "https://deskcomm.app/x";`)).toEqual(["deskcomm.app"]);
-    expect(marcasNoTexto(`fetch(url); // manda pro DeskcommCRM`)).toEqual(["deskcommcrm"]);
+    expect(marcasNoTexto(`  // fala do PJ CRM`)).toEqual([]);
+    expect(marcasNoTexto(` * fala do PJ CRM`)).toEqual([]);
+    expect(marcasNoTexto(`const u = "https://pjcrm.app/x";`)).toEqual(["pjcrm.app"]);
+    expect(marcasNoTexto(`fetch(url); // manda pro PJ CRM`)).toEqual(["pjcrm"]);
   });
 
   it("nenhum arquivo fora da lista fixa a marca", () => {
@@ -675,7 +675,7 @@ describe("catraca de marca hardcoded", () => {
  * o código que embarca na imagem. Ela é cega para `supabase/templates/*.html` e
  * `supabase/config.toml`, e essa cegueira tinha consequência medida: dava para
  * zerar a lista de dívidas, ver a suíte inteira verde, e o cliente do
- * revendedor continuar recebendo "Confirme seu e-mail — DeskcommCRM" no
+ * revendedor continuar recebendo "Confirme seu e-mail — PJ CRM" no
  * PRIMEIRO e-mail que ele abre na vida.
  *
  * Estes arquivos não são renderizados por nenhum TypeScript nosso: quem os
@@ -719,8 +719,8 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
     "supabase/config.toml": {
       categoria: "DEV",
       motivo:
-        "config do Supabase LOCAL (o `supabase start` de dev e do CI). NÃO embarca na imagem e NÃO alcança clone nenhum: um self-hoster usa um projeto na nuvem do Supabase, cuja config de auth vem do marca-emails.sh, ou um GoTrue próprio, que lê env. `project_id` ainda nomeia os contêineres locais (supabase_auth_deskcomm-crm) e os assuntos são o que a suíte local envia",
-      marcas: ["deskcomm-crm", "deskcommcrm", "deskcommcrm"],
+        "config do Supabase LOCAL (o `supabase start` de dev e do CI). NÃO embarca na imagem e NÃO alcança clone nenhum: um self-hoster usa um projeto na nuvem do Supabase, cuja config de auth vem do marca-emails.sh, ou um GoTrue próprio, que lê env. `project_id` ainda nomeia os contêineres locais (supabase_auth_pj-crm) e os assuntos são o que a suíte local envia",
+      marcas: ["pjcrm", "pjcrm", "pjcrm"],
     },
   };
 
@@ -746,22 +746,22 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
   });
 
   it("comentário de HTML não conta, e `-->` no meio da linha não engole o resto", () => {
-    expect(marcasNoTexto(semComentariosHtml("<!-- fala do DeskcommCRM -->"))).toEqual([]);
-    expect(marcasNoTexto(semComentariosHtml("<!--\n  DeskcommCRM\n  em várias linhas\n-->"))).toEqual([]);
+    expect(marcasNoTexto(semComentariosHtml("<!-- fala do PJ CRM -->"))).toEqual([]);
+    expect(marcasNoTexto(semComentariosHtml("<!--\n  PJ CRM\n  em várias linhas\n-->"))).toEqual([]);
     // O caso que a regra de `//` erraria: marca REAL depois do fecho.
-    expect(marcasNoTexto(semComentariosHtml("<!-- nota --> Sua conta no DeskcommCRM"))).toEqual([
-      "deskcommcrm",
+    expect(marcasNoTexto(semComentariosHtml("<!-- nota --> Sua conta no PJ CRM"))).toEqual([
+      "pjcrm",
     ]);
     // E a marca fora de comentário nenhum continua contando.
-    expect(marcasNoTexto(semComentariosHtml("<p>conta no DeskcommCRM</p>"))).toEqual(["deskcommcrm"]);
+    expect(marcasNoTexto(semComentariosHtml("<p>conta no PJ CRM</p>"))).toEqual(["pjcrm"]);
   });
 
   it("comentário de TOML não conta, mas `#` dentro de string não vira comentário", () => {
-    expect(marcasNoTexto(semComentariosToml("# Supabase CLI config — DeskcommCRM"))).toEqual([]);
-    expect(marcasNoTexto(semComentariosToml('cor = "#506d48"  # DeskcommCRM'))).toEqual([
-      "deskcommcrm",
+    expect(marcasNoTexto(semComentariosToml("# Supabase CLI config — PJ CRM"))).toEqual([]);
+    expect(marcasNoTexto(semComentariosToml('cor = "#506d48"  # PJ CRM'))).toEqual([
+      "pjcrm",
     ]);
-    expect(marcasNoTexto(semComentariosToml('subject = "Olá — DeskcommCRM"'))).toEqual(["deskcommcrm"]);
+    expect(marcasNoTexto(semComentariosToml('subject = "Olá — PJ CRM"'))).toEqual(["pjcrm"]);
   });
 
   it("nenhum arquivo do GoTrue fixa a marca fora da lista", () => {
@@ -787,7 +787,7 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
 
   it("os dois modelos de e-mail não têm marca nenhuma — é o estado que se defende", () => {
     // Explícito, e não só implícito na ausência de linha na allowlist: é ESTE
-    // caso que falha quando alguém reescreve "no DeskcommCRM" num template.
+    // caso que falha quando alguém reescreve "no PJ CRM" num template.
     expect(encontradoAqui.has("supabase/templates/confirmation.html")).toBe(false);
     expect(encontradoAqui.has("supabase/templates/recovery.html")).toBe(false);
   });
@@ -798,7 +798,7 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
  *
  * A catraca acima é cega para URL sem a marca. O caso medido é o #266: um
  * `HTTP-Referer` com o domínio pessoal do contribuidor foi parar na chamada de
- * TODO self-hoster, e a varredura da época só olhava `deskcomm` — o `X-Title`
+ * TODO self-hoster, e a varredura da época só olhava `pjcrm` — o `X-Title`
  * ficava coberto pela marca, o domínio sozinho passava verde. Host de terceiro
  * no código que embarca é a mesma falha por outro nome: o domínio de alguém
  * viaja na imagem que o cliente instala, e ninguém vê.
@@ -1119,7 +1119,7 @@ const HOSTS_DECLARADOS: Record<string, EntradaDeHost> = {
     motivo:
       "site oficial da Comissão Nacional de Proteção de Dados, a autoridade de controlo portuguesa (`autoridadeDeSupervisao` do perfil PT em lib/legal/perfil-do-pais.ts). Sai impresso no relatório de acesso do titular, alínea f) do art. 15.º, n.º 1 (#2354). O código nunca chama o host — quem o visita é o titular que vai reclamar —, e trocá-lo pelo domínio do revendedor mandaria a reclamação para quem é reclamado.",
   },
-  "deskcomm.app": {
+  "pjcrm.app": {
     categoria: "PROTOCOLO",
     motivo:
       "sufixo do iCalUID gravado no Google Calendar do cliente (lib/agenda/google/evento.ts). Identificador de fio que reconhecemos meses depois — já congelado como PROTOCOLO pela catraca de marca.",
@@ -1257,7 +1257,7 @@ describe("catraca de host de terceiro no código que embarca", () => {
     expect(hostsNoTexto("logger.info(evento);")).toEqual([]);
     expect(hostsNoTexto('audit("auth.organization_id", { org });')).toEqual([]);
     expect(hostsNoTexto('emit("message.received", payload);')).toEqual([]);
-    expect(hostsNoTexto('localStorage.getItem("deskcomm.show_ai_citations")')).toEqual([]);
+    expect(hostsNoTexto('localStorage.getItem("pjcrm.show_ai_citations")')).toEqual([]);
     // Os 6 falsos que a PRIMEIRA versão da régua produziu na `main`: nomes de
     // evento de auditoria cujo prefixo termina num "TLD" (`ai`, `org`, `app`,
     // `store`) seguido de `_`. Nenhum deles é host, e é o `_` no lookahead que
@@ -1379,7 +1379,6 @@ describe("catraca de host de terceiro no código que embarca", () => {
       // Decisão escrita: é o painel de chaves do Jev, o mesmo caso dos outros
       // CONSOLE — o link "Onde pegar a chave" da tela de Credenciais.
       "console.typesafe.ai",
-      "deskcomm.app",
       // Decisão escrita: painel de chaves do ElevenLabs, o mesmo caso dos outros
       // CONSOLE — o link "Onde pegar a chave" da tela de Credenciais.
       "elevenlabs.io",
@@ -1421,6 +1420,7 @@ describe("catraca de host de terceiro no código que embarca", () => {
       // — e o endereço é do Google, não nosso. Crescimento escrito, como a regra pede.
       "myaccount.google.com",
       "partners.tiendanube.com",
+      "pjcrm.app",
       "platform.deepseek.com",
       "platform.openai.com",
       // Decisão escrita, que é o que esta lista cobra: `s.whatsapp.net` é o

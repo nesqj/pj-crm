@@ -62,7 +62,7 @@ import {
 import { updateSmtp } from "./smtp";
 
 /** O caso da issue, ipsis litteris. */
-const ENDERECO_DO_RELATO = "supabase_inbucket_deskcomm-crm";
+const ENDERECO_DO_RELATO = "supabase_inbucket_pj-crm";
 
 type EntradaDoFormulario = {
   host: string;

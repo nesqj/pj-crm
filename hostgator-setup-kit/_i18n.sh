@@ -5,10 +5,10 @@
 # continua todo em português por padrão, escolhido pela pessoa na tela).
 #
 # Quem decide o idioma é `perguntar_idioma_cli` (só o install.sh a chama), e ela
-# consulta, nesta ordem: DESKCOMM_IDIOMA_CLI no ambiente, a linha guardada no
+# consulta, nesta ordem: PJCRM_IDIOMA_CLI no ambiente, a linha guardada no
 # .env de uma execução anterior e, por último, a pergunta interativa. Este
 # arquivo NÃO lê o ambiente ao ser carregado: `update.sh` e os demais scripts o
-# recarregam DEPOIS de `load_env` (que traz DESKCOMM_IDIOMA_CLI do .env), e ler
+# recarregam DEPOIS de `load_env` (que traz PJCRM_IDIOMA_CLI do .env), e ler
 # lá misturaria mensagens em espanhol de `_common.sh` com as em português do
 # próprio script. Sem `perguntar_idioma_cli`, o idioma é pt-BR — o original de
 # todo texto deste kit, e o que qualquer instalação existente continua vendo.
@@ -33,9 +33,9 @@ _I18N_TABELA=0
 if [ $((BASH_VERSINFO[0] * 100 + BASH_VERSINFO[1])) -ge "${I18N_BASH_MINIMO:-404}" ]; then
 _I18N_TABELA=1
 declare -A _ES=(
-  ["Este servidor usa arquitetura '{1}', mas o DeskcommCRM não publica imagens para ela (linux/amd64 e linux/arm64 estão disponíveis)."]="Este servidor usa arquitectura '{1}', pero DeskcommCRM no publica imágenes para ella (linux/amd64 y linux/arm64 están disponibles)."
+  ["Este servidor usa arquitetura '{1}', mas o PJ CRM não publica imagens para ela (linux/amd64 e linux/arm64 estão disponíveis)."]="Este servidor usa arquitectura '{1}', pero PJ CRM no publica imágenes para ella (linux/amd64 y linux/arm64 están disponibles)."
   ["  Use uma VPS x86_64/amd64 ou ARM64/aarch64. Repetir o download não resolve."]="  Usa una VPS x86_64/amd64 o ARM64/aarch64. Repetir la descarga no soluciona nada."
-  ["Este servidor usa arquitetura '{1}', e as imagens publicadas do DeskcommCRM são linux/amd64 e linux/arm64."]="Este servidor usa arquitectura '{1}', y las imágenes publicadas de DeskcommCRM son linux/amd64 y linux/arm64."
+  ["Este servidor usa arquitetura '{1}', e as imagens publicadas do PJ CRM são linux/amd64 e linux/arm64."]="Este servidor usa arquitectura '{1}', y las imágenes publicadas de PJ CRM son linux/amd64 y linux/arm64."
   ["  (WAHA trocado para a variante oficial ARM64: {1})"]="  (WAHA cambiado a la variante oficial ARM64: {1})"
   ["  ⚠ Só uma das duas chaves dos avisos com o app fechado (VAPID_PUBLIC_KEY e VAPID_PRIVATE_KEY) está no .env. Não gerei a outra, para não quebrar o par."]="  ⚠ Solo una de las dos claves de los avisos con la app cerrada (VAPID_PUBLIC_KEY y VAPID_PRIVATE_KEY) está en el .env. No generé la otra, para no romper el par."
   ["  ⚠ Não criei as chaves dos avisos com o app fechado: não consigo escrever no .env. Confira a permissão do arquivo e rode a atualização de novo."]="  ⚠ No creé las claves de los avisos con la app cerrada: no puedo escribir en el .env. Revisa el permiso del archivo y ejecuta la actualización de nuevo."
@@ -139,7 +139,7 @@ y vuelve a ejecutar. En Public Hostnames, apunta tu dominio a http://app:3000."
   ["derruba o que subiu"]="derriba lo que se levantó"
   ["começa de novo"]="empieza de nuevo"
   ["apaga o marcador desta instalação"]="borra el marcador de esta instalación"
-  ["⚠ Não consegui gravar o marcador desta instalação (arquivo .deskcomm-instalado). O CRM está no ar; numa arquitetura sem imagens publicadas, a atualização pode pedir uma VPS suportada até o marcador existir."]="⚠ No pude escribir el marcador de esta instalación (archivo .deskcomm-instalado). El CRM está en línea; en una arquitectura sin imágenes publicadas, la actualización puede pedir una VPS compatible hasta que exista el marcador."
+  ["⚠ Não consegui gravar o marcador desta instalação (arquivo .pjcrm-instalado). O CRM está no ar; numa arquitetura sem imagens publicadas, a atualização pode pedir uma VPS suportada até o marcador existir."]="⚠ No pude escribir el marcador de esta instalación (archivo .pjcrm-instalado). El CRM está en línea; en una arquitectura sin imágenes publicadas, la actualización puede pedir una VPS compatible hasta que exista el marcador."
   ["Se o schema chegou a ser aplicado e você quer o banco limpo de novo,"]="Si el esquema llegó a aplicarse y quieres la base de datos limpia de nuevo,"
   ["abra o Supabase > SQL Editor e rode (ATENÇÃO: apaga todos os dados):"]="abre Supabase > SQL Editor y ejecuta (ATENCIÓN: borra todos los datos):"
 
@@ -244,22 +244,22 @@ y, si de verdad es un Traefik, pon REVERSE_PROXY=traefik en el .env y vuelve a e
   ["⚠ Detectei um Traefik já rodando neste VPS (contêiner '{1}', ocupando 80/443)."]="⚠ Detecté un Traefik ya corriendo en esta VPS (contenedor '{1}', ocupando 80/443)."
   ["  Vou publicar o CRM através dele em vez de subir um proxy próprio —"]="  Voy a publicar el CRM a través de él en vez de levantar un proxy propio —"
   ["  desligar o Traefik quebraria o que a sua hospedagem instalou."]="  apagar el Traefik rompería lo que tu hosting instaló."
-  ["✖ Já existe um DeskcommCRM NO AR nesta VPS, instalado em {1}."]="✖ Ya existe un DeskcommCRM ACTIVO en esta VPS, instalado en {1}."
+  ["✖ Já existe um PJ CRM NO AR nesta VPS, instalado em {1}."]="✖ Ya existe un PJ CRM ACTIVO en esta VPS, instalado en {1}."
   ["  Esta pasta ({1}) é outra cópia do repo. As duas se chamam"]="  Esta carpeta ({1}) es otra copia del repo. Las dos se llaman"
-  ["  DeskcommCRM, então o Docker dá às duas o MESMO nome de projeto"]="  DeskcommCRM, así que Docker les da a ambas el MISMO nombre de proyecto"
+  ["  PJ CRM, então o Docker dá às duas o MESMO nome de projeto"]="  PJ CRM, así que Docker les da a ambas el MISMO nombre de proyecto"
   ["  ('{1}') — e instalar aqui recriaria os contêineres daquela."]="  ('{1}') — e instalar aquí recrearía los contenedores de aquella."
   ["  Na prática: o CRM que está no ar passaria a rodar com o .env DESTA pasta"]="  En la práctica: el CRM que está activo pasaría a correr con el .env de ESTA carpeta"
   ["  (outro banco, outras chaves), e as conexões de WhatsApp cairiam."]="  (otra base de datos, otras claves), y las conexiones de WhatsApp se caerían."
   ["  Quer atualizar o que já existe? Use aquela pasta:"]="  ¿Quieres actualizar lo que ya existe? Usa aquella carpeta:"
   ["  Quer mesmo uma SEGUNDA instalação nesta VPS? Ela precisa de nome de"]="  ¿De verdad quieres una SEGUNDA instalación en esta VPS? Necesita nombre de"
   ["  projeto e domínio próprios — ponha no .env desta pasta, antes de rodar:"]="  proyecto y dominio propios — ponlos en el .env de esta carpeta, antes de ejecutar:"
-  ["Instalação interrompida para não derrubar o DeskcommCRM que está no ar em {1}."]="Instalación interrumpida para no derribar el DeskcommCRM que está activo en {1}."
+  ["Instalação interrompida para não derrubar o PJ CRM que está no ar em {1}."]="Instalación interrumpida para no derribar el PJ CRM que está activo en {1}."
   ["✖ As portas {1} já estão ocupadas {2}."]="✖ Los puertos {1} ya están ocupados {2}."
   ["✖ A porta {1} já está ocupada {2}."]="✖ El puerto {1} ya está ocupado {2}."
   ["  O CRM precisa dessas duas portas para publicar o site com HTTPS. Subir um"]="  El CRM necesita esos dos puertos para publicar el sitio con HTTPS. Levantar un"
   ["  segundo proxy nelas não funciona: o Docker recusa e a instalação para."]="  segundo proxy en ellos no funciona: Docker lo rechaza y la instalación se detiene."
   ["  Como resolver, na ordem do mais provável:"]="  Cómo resolverlo, en orden de lo más probable:"
-  ["  1. Já é outro DeskcommCRM neste servidor? Então use aquele — entre na"]="  1. ¿Ya es otro DeskcommCRM en este servidor? Entonces usa aquel — entra en"
+  ["  1. Já é outro PJ CRM neste servidor? Então use aquele — entre na"]="  1. ¿Ya es otro PJ CRM en este servidor? Entonces usa aquel — entra en"
   ["     pasta dele e rode: bash hostgator-setup-kit/update.sh"]="     su carpeta y ejecuta: bash hostgator-setup-kit/update.sh"
   ["  2. Não usa mais o que está ocupando? Desligue e rode este instalador de novo:"]="  2. ¿Ya no usas lo que lo está ocupando? Apágalo y vuelve a ejecutar este instalador:"
   ["       docker stop {1}"]="       docker stop {1}"
@@ -455,7 +455,7 @@ identifica su red y pon TRAEFIK_NETWORK=<nombre> en el .env antes de volver a in
   ["⚠ Não consegui puxar todas as imagens do registro."]="⚠ No pude descargar todas las imágenes del registro."
   ["  Sigo assim mesmo: o que faltar é construído aqui (mais lento, mesmo resultado)."]="  Continúo de todas formas: lo que falte se construye aquí (más lento, mismo resultado)."
   ["Não coloquei o CRM no ar: {1} A construção local segue fechada por padrão, e numa instalação não há versão anterior para onde voltar. Para construir as imagens aqui DE PROPÓSITO (mais lento, exige memória): {2}"]="No pude poner el CRM en línea: {1} La construcción local sigue cerrada por defecto, y en una instalación no hay versión anterior a la que volver. Para construir las imágenes AQUÍ A PROPÓSITO (más lento, requiere memoria): {2}"
-  ["a construção local foi desligada por você mesmo nesta execução (DESKCOMM_BUILD_LOCAL={1}), e o portão obedece — tire a variável ou troque o valor por 1 para construir de propósito."]="la construcción local la desactivaste tú mismo en esta ejecución (DESKCOMM_BUILD_LOCAL={1}), y el portón obedece — quita la variable o cambia el valor a 1 para construir a propósito."
+  ["a construção local foi desligada por você mesmo nesta execução (PJCRM_BUILD_LOCAL={1}), e o portão obedece — tire a variável ou troque o valor por 1 para construir de propósito."]="la construcción local la desactivaste tú mismo en esta ejecución (PJCRM_BUILD_LOCAL={1}), y el portón obedece — quita la variable o cambia el valor a 1 para construir a propósito."
   ["o plugin buildx do Docker não está instalado nesta VPS, e é com ele que confiro se a versão {1} está publicada — sem ele a sonda falha nas quatro imagens e o veredito sai como 'registro fora', o diagnóstico errado para uma VPS cuja rede está boa. Instale o pacote {2} e rode este install.sh de novo."]="el plugin buildx de Docker no está instalado en esta VPS, y con él verifico si la versión {1} está publicada — sin él la sonda falla en las cuatro imágenes y el veredicto sale como 'registro fuera', el diagnóstico equivocado para una VPS cuya red funciona bien. Instala el paquete {2} y ejecuta este install.sh de nuevo."
   ["o registro de imagens não respondeu para a versão {1} (DNS/rede, ou a tag ainda sem nenhuma imagem publicada — de fora os dois se parecem, e o kit não adivinha pelo texto do erro). Sem resposta do registro a construção aqui gastaria a memória desta VPS à toa, que é o defeito da #1955. Rode este install.sh de novo em alguns minutos."]="el registro de imágenes no respondió para la versión {1} (DNS/red, o la tag todavía sin ninguna imagen publicada — desde afuera los dos se parecen, y el kit no adivina por el texto del error). Sin respuesta del registro la construcción aquí gastaría la memoria de esta VPS sin motivo, que es el defecto de la #1955. Ejecuta este install.sh de nuevo en unos minutos."
   ["Não coloquei o CRM no ar: nem as imagens prontas desta versão nem a construção aqui funcionaram. O erro está logo acima; para reproduzir só a construção: {1}"]="No pude poner el CRM en línea: ni las imágenes listas de esta versión ni la construcción local funcionaron. El error está justo arriba; para reproducir solo la construcción: {1}"
@@ -577,16 +577,16 @@ t() {
   printf '%s' "$texto"
 }
 
-# Lê DESKCOMM_IDIOMA_CLI de um .env SEM executá-lo (nunca `source`): só a linha
+# Lê PJCRM_IDIOMA_CLI de um .env SEM executá-lo (nunca `source`): só a linha
 # exata da chave e só os dois valores válidos. Devolve 1 se não achar.
 _i18n_idioma_do_env() {
   local arq="$1" linha val
   [ -f "$arq" ] || return 1
   # A ÚLTIMA ocorrência vence (é o que `load_env` faz) e um fim de linha CRLF não
   # invalida o valor.
-  linha="$(grep -E '^DESKCOMM_IDIOMA_CLI=' "$arq" 2>/dev/null | tail -n 1)" || return 1
+  linha="$(grep -E '^PJCRM_IDIOMA_CLI=' "$arq" 2>/dev/null | tail -n 1)" || return 1
   [ -n "$linha" ] || return 1
-  val="${linha#DESKCOMM_IDIOMA_CLI=}"; val="${val%$'\r'}"
+  val="${linha#PJCRM_IDIOMA_CLI=}"; val="${val%$'\r'}"
   val="${val#\"}"; val="${val%\"}"; val="${val#\'}"; val="${val%\'}"
   case "$val" in
     pt-BR | es) printf '%s' "$val" ;;
@@ -599,8 +599,8 @@ _i18n_idioma_do_env() {
 # perguntado; quem não pediu nada segue em português sem ruído novo.
 _i18n_avisar_bash_antigo() {
   local pediu=0
-  [ "${DESKCOMM_IDIOMA_CLI:-}" = "es" ] && pediu=1
-  [ "$(_i18n_idioma_do_env ./.env || _i18n_idioma_do_env "${REPO_DIR:-deskcommcrm}/.env" || true)" = "es" ] && pediu=1
+  [ "${PJCRM_IDIOMA_CLI:-}" = "es" ] && pediu=1
+  [ "$(_i18n_idioma_do_env ./.env || _i18n_idioma_do_env "${REPO_DIR:-pjcrm}/.env" || true)" = "es" ] && pediu=1
   if [ "${NONINTERACTIVE:-0}" != "1" ] && [ -t 0 ]; then pediu=1; fi
   [ "$pediu" = "1" ] || return 0
   printf '%s\n' "Aviso: bash ${BASH_VERSION%%[( ]*} — o espanhol exige bash 4.4 ou superior; a instalação segue em português." >&2
@@ -610,7 +610,7 @@ _i18n_avisar_bash_antigo() {
 # Decide o idioma da CLI — o primeiro passo do install.sh, antes de qualquer
 # outra saída, para o resto da instalação já nascer no idioma escolhido.
 # Ordem, e a primeira que responder vence:
-#   1. DESKCOMM_IDIOMA_CLI (pt-BR ou es) no ambiente — escolha explícita, também
+#   1. PJCRM_IDIOMA_CLI (pt-BR ou es) no ambiente — escolha explícita, também
 #      para quem roda com --yes ou fora de terminal;
 #   2. a linha guardada no .env de uma execução anterior (o da pasta atual ou o
 #      de $REPO_DIR): a instalação NÃO pergunta de novo, e uma reexecução com
@@ -623,12 +623,12 @@ perguntar_idioma_cli() {
     IDIOMA_CLI=pt-BR
     return 0
   fi
-  case "${DESKCOMM_IDIOMA_CLI:-}" in
-    pt-BR | es) IDIOMA_CLI="$DESKCOMM_IDIOMA_CLI"; return 0 ;;
+  case "${PJCRM_IDIOMA_CLI:-}" in
+    pt-BR | es) IDIOMA_CLI="$PJCRM_IDIOMA_CLI"; return 0 ;;
   esac
-  salvo="$(_i18n_idioma_do_env ./.env || _i18n_idioma_do_env "${REPO_DIR:-deskcommcrm}/.env" || true)"
+  salvo="$(_i18n_idioma_do_env ./.env || _i18n_idioma_do_env "${REPO_DIR:-pjcrm}/.env" || true)"
   if [ -n "$salvo" ]; then
-    IDIOMA_CLI="$salvo"; export DESKCOMM_IDIOMA_CLI="$salvo"; return 0
+    IDIOMA_CLI="$salvo"; export PJCRM_IDIOMA_CLI="$salvo"; return 0
   fi
   [ "${NONINTERACTIVE:-0}" = "1" ] && return 0
   [ -t 0 ] || return 0
@@ -642,5 +642,5 @@ perguntar_idioma_cli() {
     2 | es | Es | ES | español | Español) IDIOMA_CLI=es ;;
     *) IDIOMA_CLI=pt-BR ;;
   esac
-  export DESKCOMM_IDIOMA_CLI="$IDIOMA_CLI"
+  export PJCRM_IDIOMA_CLI="$IDIOMA_CLI"
 }

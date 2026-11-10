@@ -92,9 +92,9 @@ print('env_file?', 'env_file' in b, '| environment:', re.findall(r'^      ([A-Z_
 
 | serviço | como nasce | o que roda | de onde vêm as variáveis |
 |---|---|---|---|
-| `app` | `image: ghcr.io/…/deskcommcrm:stable` | `node server.js` (Next standalone) | `.env` inteiro (`env_file`) |
-| `worker` | `image: ghcr.io/…/deskcomm-worker:stable` | `pnpm exec tsx workers/agent-worker/main.ts` (`Dockerfile.worker:27`) | `.env` inteiro + override `WAHA_API_BASE_URL` |
-| `scheduler` | `image: ghcr.io/…/deskcomm-scheduler:stable` | `docker/scheduler/entrypoint.sh` → `crond` | **só `TZ` e `INTERNAL_SECRET`** |
+| `app` | `image: ghcr.io/…/pjcrm:stable` | `node server.js` (Next standalone) | `.env` inteiro (`env_file`) |
+| `worker` | `image: ghcr.io/…/pjcrm-worker:stable` | `pnpm exec tsx workers/agent-worker/main.ts` (`Dockerfile.worker:27`) | `.env` inteiro + override `WAHA_API_BASE_URL` |
+| `scheduler` | `image: ghcr.io/…/pjcrm-scheduler:stable` | `docker/scheduler/entrypoint.sh` → `crond` | **só `TZ` e `INTERNAL_SECRET`** |
 
 **O `scheduler` não é um terceiro leitor de configuração.** Ele escreve um crontab e
 bate `curl` em `http://app:3000/api/v1/cron/*` com `Bearer $INTERNAL_SECRET`. Todo cron

@@ -104,7 +104,7 @@ verdade na porta que o `.env.e2e` declara como transporte.
 que chegou no receptor:
 
 ```
-🔔 DeskcommCRM: novo caso esperando você
+🔔 PJ CRM: novo caso esperando você
 
 Tipo: Outro
 Assunto: Desconto fora da alçada lote mejiut

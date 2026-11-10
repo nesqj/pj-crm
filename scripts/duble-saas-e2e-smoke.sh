@@ -62,11 +62,11 @@ curl -s -X DELETE "$BASE/__duble/recebidos" >/dev/null
 # Sem chave o SaaS real devolve 401: dublê permissivo esconderia do teste que o
 # produto parou de mandar o `Authorization`.
 checar "resend: sem chave → 401"   401 'missing_api_key' \
-  -X POST "$BASE/emails" -H 'content-type: application/json' -d '{"to":"qa@deskcomm.test"}'
+  -X POST "$BASE/emails" -H 'content-type: application/json' -d '{"to":"qa@pjcrm.test"}'
 checar "resend: POST /emails"      200 '"id"' \
   -X POST "$BASE/emails" \
   -H "authorization: Bearer $CHAVE_RESEND" -H 'content-type: application/json' \
-  -d '{"from":"qa@deskcomm.test","to":"dono@qa.local","subject":"convite","html":"<p>oi</p>"}'
+  -d '{"from":"qa@pjcrm.test","to":"dono@qa.local","subject":"convite","html":"<p>oi</p>"}'
 ID_EMAIL="$(sed -n 's/.*"id":"\([^"]*\)".*/\1/p' "$CORPO")"
 checar "resend: GET /emails/:id"   200 '"last_event"' \
   "$BASE/emails/$ID_EMAIL"

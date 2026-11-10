@@ -45,7 +45,7 @@ describe("o update.sh guarda a evidência e confere o resultado", () => {
     // atualização (Docker e reinício). O banco acontece antes, e sua saída
     // morria numa variável de shell. Quando as regras sumiram, não havia o que
     // ler: a única evidência que importava tinha sido descartada.
-    expect(UPDATE).toMatch(/\.deskcomm-banco\.log/);
+    expect(UPDATE).toMatch(/\.pjcrm-banco\.log/);
   });
 
   it("⛔ confere as regras de isolamento depois de aplicar o banco", () => {

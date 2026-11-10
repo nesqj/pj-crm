@@ -5,11 +5,11 @@
   "checkout_sha": "111bbf7581aeedca43a5525692683a9259b51b81",
   "run": {
     "id": 40400799649,
-    "url": "https://github.com/melgarafael/DeskcommCRM/actions/runs/40400799649"
+    "url": "https://github.com/nesqj/pj-crm/actions/runs/40400799649"
   },
   "job": {
     "id": 121847899398,
-    "url": "https://github.com/melgarafael/DeskcommCRM/actions/runs/40400799649/job/121847899398",
+    "url": "https://github.com/nesqj/pj-crm/actions/runs/40400799649/job/121847899398",
     "conclusion": "success",
     "tests_passed_total": 42,
     "test_summary": "42 passed (16.5m)"

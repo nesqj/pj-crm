@@ -60,10 +60,10 @@ function interpolar(modelo: string, c: Contexto): string {
 
 const WORKFLOW = "Publicar imagem Docker (GHCR)";
 const EVENTOS = {
-  pr: { event_name: "pull_request", ref: "refs/pull/42/merge", workflow: WORKFLOW, pr: 42, matriz: "deskcommcrm", arquitetura: "amd64" },
-  main: { event_name: "push", ref: "refs/heads/main", workflow: WORKFLOW, matriz: "deskcommcrm", arquitetura: "amd64" },
-  tag: { event_name: "push", ref: "refs/tags/v1.35.0", workflow: WORKFLOW, matriz: "deskcommcrm", arquitetura: "amd64" },
-  dispatch: { event_name: "workflow_dispatch", ref: "refs/heads/main", workflow: WORKFLOW, matriz: "deskcommcrm", arquitetura: "amd64" },
+  pr: { event_name: "pull_request", ref: "refs/pull/42/merge", workflow: WORKFLOW, pr: 42, matriz: "pjcrm", arquitetura: "amd64" },
+  main: { event_name: "push", ref: "refs/heads/main", workflow: WORKFLOW, matriz: "pjcrm", arquitetura: "amd64" },
+  tag: { event_name: "push", ref: "refs/tags/v1.35.0", workflow: WORKFLOW, matriz: "pjcrm", arquitetura: "amd64" },
+  dispatch: { event_name: "workflow_dispatch", ref: "refs/heads/main", workflow: WORKFLOW, matriz: "pjcrm", arquitetura: "amd64" },
 } satisfies Record<string, Contexto>;
 
 describe("publish-image: cancela só o que se supera", () => {
@@ -85,7 +85,7 @@ describe("publish-image: cancela só o que se supera", () => {
     expect(g(EVENTOS.tag)).toContain("refs/tags/v1.35.0");
     expect(g({ ...EVENTOS.tag, ref: "refs/tags/v1.36.0" })).not.toBe(g(EVENTOS.tag));
     // E a matriz entra no grupo: sem ela, o build do worker cancelaria o do app.
-    expect(g({ ...EVENTOS.pr, matriz: "deskcomm-worker" })).not.toBe(g(EVENTOS.pr));
+    expect(g({ ...EVENTOS.pr, matriz: "pjcrm-worker" })).not.toBe(g(EVENTOS.pr));
     // A arquitetura também entra no grupo: os jobs ARM e AMD64 devem rodar juntos.
     expect(g({ ...EVENTOS.main, arquitetura: "arm64" })).not.toBe(g(EVENTOS.main));
   });

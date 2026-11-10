@@ -240,7 +240,7 @@ describe("LeadSubmitted: prova causal no banco", () => {
     expect(() =>
       sql(`begin; ${fixture()} select ${nascer()};
       set local role authenticated; ${claims}
-      select set_config('deskcomm.meta_capi_birth_lead_id',
+      select set_config('pjcrm.meta_capi_birth_lead_id',
         (select id::text from public.crm_leads where contact_id='${CONTACT}'),true);
       update public.crm_leads set source_metadata = source_metadata ||
         '{"meta_capi_lead_birth_v1":{"ctwa_clid":"forjado"}}'::jsonb

@@ -152,7 +152,7 @@ preparar_vps() {
 
 # Uma instalação que JÁ está no ar na 0.8.0, com a 0.9.0 publicada no git.
 montar_instalacao() {  # montar_instalacao <raiz>
-  local raiz="$1" proj="$1/deskcommcrm"
+  local raiz="$1" proj="$1/pjcrm"
   mkdir -p "$proj/supabase"
   cp -RL "$RAIZ/hostgator-setup-kit" "$proj/"
   case "$proj/hostgator-setup-kit/backup.sh" in
@@ -164,13 +164,13 @@ montar_instalacao() {  # montar_instalacao <raiz>
   printf 'services:\n  app:\n    image: ${APP_IMAGE:-x}\n' > "$proj/docker-compose.prod.yml"
   cp "$RAIZ/docker-compose.build.yml" "$proj/"
   cat > "$proj/.env" <<ENV
-APP_IMAGE=${NS}/deskcommcrm:0.8.0
+APP_IMAGE=${NS}/pjcrm:0.8.0
 APP_PULL_POLICY=missing
-WORKER_IMAGE=${NS}/deskcomm-worker:0.8.0
+WORKER_IMAGE=${NS}/pjcrm-worker:0.8.0
 WORKER_PULL_POLICY=missing
-SCHEDULER_IMAGE=${NS}/deskcomm-scheduler:0.8.0
+SCHEDULER_IMAGE=${NS}/pjcrm-scheduler:0.8.0
 SCHEDULER_PULL_POLICY=missing
-VOICE_AGENT_IMAGE=${NS}/deskcomm-voice-agent:0.8.0
+VOICE_AGENT_IMAGE=${NS}/pjcrm-voice-agent:0.8.0
 VOICE_AGENT_PULL_POLICY=missing
 WAHA_IMAGE=devlikeapro/waha:latest-2026.7.2
 SUPABASE_DB_URL=postgresql://x/y
@@ -197,10 +197,10 @@ ENV
 echo "── 1. o update.sh ARMA a marca com a versão de ORIGEM"
 preparar_vps
 R1="$WORK/inst1"; mkdir -p "$R1"; montar_instalacao "$R1"
-PROJ1="$R1/deskcommcrm"
+PROJ1="$R1/pjcrm"
 OUT1="$WORK/saida1.txt"
 RC=0
-( cd "$R1" && bash deskcommcrm/hostgator-setup-kit/update.sh --to v0.9.0 --force ) \
+( cd "$R1" && bash pjcrm/hostgator-setup-kit/update.sh --to v0.9.0 --force ) \
   > "$OUT1" 2>&1 < /dev/null || RC=$?
 MARCA1="$PROJ1/.update-vigia"
 
@@ -232,7 +232,7 @@ echo "── 2. uma volta (--to mais antigo) NÃO re-arma a marca"
 rm -f "$MARCA1" "$PROJ1/.update-vigia-falhas"
 preparar_vps
 RC=0
-( cd "$R1" && bash deskcommcrm/hostgator-setup-kit/update.sh --to v0.8.0 --force ) \
+( cd "$R1" && bash pjcrm/hostgator-setup-kit/update.sh --to v0.8.0 --force ) \
   > "$WORK/saida2.txt" 2>&1 < /dev/null || RC=$?
 if [ -f "$MARCA1" ]; then
   nao "volta não arma a marca" ".update-vigia ausente" "marca criada por uma volta: $(sed -n '2p' "$MARCA1")"
@@ -248,9 +248,9 @@ mkdir -p "$AG"
 cp -RL "$RAIZ/hostgator-setup-kit" "$AG/"
 printf 'services:\n  app:\n    image: ${APP_IMAGE:-x}\n' > "$AG/docker-compose.prod.yml"
 cat > "$AG/.env" <<ENV
-APP_IMAGE=${NS}/deskcommcrm:0.9.0
-WORKER_IMAGE=${NS}/deskcomm-worker:0.9.0
-SCHEDULER_IMAGE=${NS}/deskcomm-scheduler:0.9.0
+APP_IMAGE=${NS}/pjcrm:0.9.0
+WORKER_IMAGE=${NS}/pjcrm-worker:0.9.0
+SCHEDULER_IMAGE=${NS}/pjcrm-scheduler:0.9.0
 WAHA_IMAGE=devlikeapro/waha:latest-2026.7.2
 SUPABASE_DB_URL=postgresql://x/y
 NEXT_PUBLIC_APP_URL=https://crm.exemplo.com.br

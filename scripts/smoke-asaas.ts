@@ -8,7 +8,7 @@
  * dublê do e2e inventou: o `somarCiclo` e quantas cobranças nascem logo de saída.
  * Recusa chave de produção — sempre.
  *
- * Uso: ASAAS_SANDBOX_API_KEY="$(cat ~/.config/deskcomm/asaas-sandbox.key)" pnpm exec tsx scripts/smoke-asaas.ts
+ * Uso: ASAAS_SANDBOX_API_KEY="$(cat ~/.config/pjcrm/asaas-sandbox.key)" pnpm exec tsx scripts/smoke-asaas.ts
  *
  * Efeito no sandbox: cria e remove clientes, uma assinatura (e as cobranças dela)
  * e um webhook de example.com com uma URL própria do smoke, removido no fim.

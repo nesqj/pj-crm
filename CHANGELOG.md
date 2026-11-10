@@ -4,7 +4,7 @@ Todas as mudanças relevantes deste projeto são documentadas aqui.
 
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o versionamento segue [SemVer](https://semver.org/lang/pt-BR/).
 
-Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual está atualizando antes de rodar `bash update.sh`**. Mudanças que exigem ação manual aparecem sob **⚠️ Requer atenção**.
+Se você roda o PJ CRM numa VPS, **leia a seção da versão para a qual está atualizando antes de rodar `bash update.sh`**. Mudanças que exigem ação manual aparecem sob **⚠️ Requer atenção**.
 
 ## [Não lançado]
 
@@ -1529,7 +1529,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
   O menu lateral só pede a tela antecipadamente quando o ponteiro passa sobre o item ou o teclado o foca, e não mais todas as telas visíveis de uma vez. Crédito: @webtecnica (#3712, #3613), com a medição de @DPalmercs (#3696).
 
-- **Curso em espanhol e manutenção com IA** O curso público ganha capturas em espanhol e manutenção com IA pelo guia deskcomm-curso; captura com falha bloqueia a publicação. Nada muda na VPS.
+- **Curso em espanhol e manutenção com IA** O curso público ganha capturas em espanhol e manutenção com IA pelo guia pjcrm-curso; captura com falha bloqueia a publicação. Nada muda na VPS.
 
 - **Log do turno do agente com as durações** O log `turno do agente concluído` ganha `duracao_do_turno_ms` (o turno inteiro, com a pausa humana e o intervalo entre envios) e `classificadores_ms` (os classificadores auxiliares, em paralelo). O agente não muda. Crédito: @webtecnica (#3685).
 
@@ -1993,7 +1993,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
   Se algum agente seu tem esse campo preenchido, agora não é mais preciso ficar atento às respostas no meio da conversa: basta a mensagem de entrada trazer uma das palavras. Nada a fazer na atualização.
 
-  Corrigido por @webtecnica (#3240) para a issue #3142, aberta por @melgarafael.
+  Corrigido por @webtecnica (#3240) para a issue #3142, aberta por @nesqj.
 
 - **A importação do histórico confere a conversa inteira antes de gravar a primeira mensagem dela** A importação do histórico passa a ler cada conversa duas vezes: a primeira só confere a regra de quem foi apagado a pedido, do começo ao fim da conversa, e só a segunda grava. Uma conversa barrada pela regra não deixa nenhuma mensagem, contato ou conversa no CRM.
 
@@ -2820,7 +2820,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
   Você não precisa fazer nada.
 
-  Contribuição de @webtecnica, a partir do PR #2365 de @melgarafael.
+  Contribuição de @webtecnica, a partir do PR #2365 de @nesqj.
 
 - **Negócio em que o vendedor responde não aparece mais como frio no radar de risco** Responder o cliente pelo Inbox ou pelo celular conectado não contava como atividade do negócio. Por isso, um negócio trabalhado todo dia aparecia como parado no radar de risco. Agora a mensagem do vendedor atualiza a última atividade do negócio aberto mais recente do contato. Mensagens da IA, de automação, reações, avisos do sistema e as mensagens do próprio cliente continuam fora da conta. Quando o contato tem dois negócios abertos empatados, nenhum é atualizado, para não escolher o card errado. A atualização aplica a mudança de banco sozinha.
 
@@ -2878,7 +2878,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
   Contribuição de @webtecnica (#2849), a partir da issue #2591.
 
-- **O agente de IA pode usar o servidor de ferramentas externo também durante o atendimento, com a identidade do cliente enviada pelo sistema** Na tela do agente, quem é admin encontra a opção "Usar o servidor de ferramentas externo durante o atendimento". Ligada, o servidor MCP externo registrado pela organização (um ERP, por exemplo) passa a valer também nas conversas com clientes, e cada pedido a ele leva três cabeçalhos montados pelo sistema a partir do cadastro: `X-Deskcomm-Contato-Id`, `X-Deskcomm-Contato-Telefone` e `X-Deskcomm-Canal`. O servidor externo deve filtrar os dados por esses cabeçalhos e ignorar qualquer identificador que venha da conversa. Cada chamada feita em atendimento fica registrada com o contato da conversa.
+- **O agente de IA pode usar o servidor de ferramentas externo também durante o atendimento, com a identidade do cliente enviada pelo sistema** Na tela do agente, quem é admin encontra a opção "Usar o servidor de ferramentas externo durante o atendimento". Ligada, o servidor MCP externo registrado pela organização (um ERP, por exemplo) passa a valer também nas conversas com clientes, e cada pedido a ele leva três cabeçalhos montados pelo sistema a partir do cadastro: `X-PJCRM-Contato-Id`, `X-PJCRM-Contato-Telefone` e `X-PJCRM-Canal`. O servidor externo deve filtrar os dados por esses cabeçalhos e ignorar qualquer identificador que venha da conversa. Cada chamada feita em atendimento fica registrada com o contato da conversa.
 
   A opção vem desligada em todo agente: sem ligá-la, nada muda. Detalhes em `docs/features/servidor-mcp-externo.md`.
 
@@ -2927,7 +2927,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
   Agora quem soma as etiquetas é o próprio banco: numa única instrução, a lista gravada recebe as etiquetas que faltavam e devolve o resultado, e a segunda execução recalcula sobre o que a primeira gravou em vez de sobrescrever com a foto antiga. A automação passa a anunciar exatamente o que ficou gravado — e só anuncia quando alguma etiqueta entrou de verdade. Nenhuma configuração nova, nenhum passo manual: instalações existentes recebem a correção na atualização.
 
-- **Agente criado pelo corpo legado nasce com o modelo do provedor da instalação** Ao criar um agente sem informar o modelo, o DeskcommCRM gravava `anthropic/claude-sonnet-5` — o padrão histórico do produto — mesmo numa instalação configurada em OpenAI, OpenRouter ou Google. O agente nascia com um modelo que o provedor configurado não executa, e o desencontro só aparecia no primeiro atendimento. A escolha agora sai de um ponto único de resolução, na ordem: o modelo informado, o padrão da instalação quando ele se sustenta, a compatibilidade histórica da própria Anthropic e, por fim, o catálogo do provedor efetivo; sem um par válido, a criação é recusada com um erro claro em vez de gravar um modelo que aquele provedor não executa. O provedor, o modelo, a finalidade e a origem da configuração passam a ficar registrados no log estruturado, sem chave nem conteúdo de conversa. Contribuição de @webtecnica (#2955).
+- **Agente criado pelo corpo legado nasce com o modelo do provedor da instalação** Ao criar um agente sem informar o modelo, o PJ CRM gravava `anthropic/claude-sonnet-5` — o padrão histórico do produto — mesmo numa instalação configurada em OpenAI, OpenRouter ou Google. O agente nascia com um modelo que o provedor configurado não executa, e o desencontro só aparecia no primeiro atendimento. A escolha agora sai de um ponto único de resolução, na ordem: o modelo informado, o padrão da instalação quando ele se sustenta, a compatibilidade histórica da própria Anthropic e, por fim, o catálogo do provedor efetivo; sem um par válido, a criação é recusada com um erro claro em vez de gravar um modelo que aquele provedor não executa. O provedor, o modelo, a finalidade e a origem da configuração passam a ficar registrados no log estruturado, sem chave nem conteúdo de conversa. Contribuição de @webtecnica (#2955).
 
 - **Resposta cortada ou vazia da IA vira caso para o time, e silêncio deliberado não abre caso à toa** Quando a resposta do agente terminava cortada no limite de tamanho — ou o turno terminava sem mensagem nenhuma para o cliente — o cliente ficava sem resposta e o time nem ficava sabendo. Agora essas falhas viram um caso humano para o time retomar a conversa, mas só quando há sinal de falha: a resposta que veio cortada, ou a correção automática que o motor faz no turno mudo e que também veio cortada. Silêncio deliberado (a IA escolheu não responder, como o pedido de correção autoriza) continua sendo resposta, não defeito, e não abre caso. O caso abre somente nas organizações com casos humanos ligados na versão do agente, com o tipo "problema" e a explicação em português simples para o time ver o que travou e o que o cliente precisa. Crédito: @guptasp82-jpg (#2938).
 
@@ -3034,7 +3034,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
   ARM64. Isso evita começar uma atualização que não poderá subir. Há também uma
   sonda somente-leitura para a primeira transição de kit antigo. Em AMD64 nada muda.
   Uma instalação existente continua exigindo atualização deliberada e backup, e
-  quem pede construção local (`DESKCOMM_BUILD_LOCAL=1`) não passa por esta conferência.
+  quem pede construção local (`PJCRM_BUILD_LOCAL=1`) não passa por esta conferência.
 
   Crédito: @Tanderakkkj.
 
@@ -3222,13 +3222,13 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
 - **GPT-6 Luna, GPT-6.1 Sol e GPT-6 Astra entram na lista de modelos** Aparecem em Provedores de IA e no seletor do agente, com o custo contado em Uso e orçamento. O modelo padrão não muda. Se o seu `.env` tem `OPENAI_REASONING_EFFORT` em `none` ou `minimal`: o GPT-6.1 Sol e o GPT-6 Astra passam a receber `low` (antes recusavam a resposta), e o GPT-6 Luna com `minimal` passa a usar `none`. Crédito: @rafaelcesardev.
 
-- **O guia de uso diário do CRM passa a conhecer todas as telas e todos os recursos lançados** O guia (a skill `deskcomm-operacao`) passa a conhecer os recursos da 1.79.0. Nada precisa ser feito ao atualizar. Contribuição de @paulolimajr77.
+- **O guia de uso diário do CRM passa a conhecer todas as telas e todos os recursos lançados** O guia (a skill `pjcrm-operacao`) passa a conhecer os recursos da 1.79.0. Nada precisa ser feito ao atualizar. Contribuição de @paulolimajr77.
 
 - **O Inbox ganha o botão Iniciar conversa, para número novo ou contato existente** No topo da lista do Inbox, o botão abre um painel: digite o telefone ou busque o contato, escolha o número de saída e escreva a primeira mensagem ou use um modelo. A conversa abre atribuída a quem a iniciou, e a IA não assume. Se ela já está com outro atendente, o painel diz com quem e a primeira mensagem não é enviada. Aparece para atendente ou acima. Você não precisa fazer nada.
 
   Contribuição de @webtecnica (#2838), a partir da issue #2813 de @aerosuiteapp.
 
-- **Guias para revender o CRM como SaaS, com cobrança, contrato e roteiros de aula, e o guia de assistente deskcomm-saas** `docs/saas/` ganha guias da jornada do dono, da cobrança (Stripe × Asaas), do contrato e da LGPD, e roteiros de aula; o guia de assistente `deskcomm-saas` conduz esse caminho pela conversa. Nada muda no sistema instalado.
+- **Guias para revender o CRM como SaaS, com cobrança, contrato e roteiros de aula, e o guia de assistente pjcrm-saas** `docs/saas/` ganha guias da jornada do dono, da cobrança (Stripe × Asaas), do contrato e da LGPD, e roteiros de aula; o guia de assistente `pjcrm-saas` conduz esse caminho pela conversa. Nada muda no sistema instalado.
 
 - **Opção por organização para criar o Google Meet da reunião já com acesso aberto** Nova opção na Agenda, desligada por padrão: ligada, qualquer pessoa com o link entra sem pedir. Requer a API do Meet habilitada e o escopo de criação de espaços concedido na conexão do Google; no self-host, os passos estão na tela da opção. Desligada, nada muda.
 
@@ -3316,7 +3316,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
 - **Duas regras do mesmo evento que adicionam etiquetas não apagam mais a etiqueta uma da outra** A ação passa a ler as etiquetas atuais do negócio antes de juntar as novas. Dois eventos diferentes ao mesmo tempo ainda podem disputar a mesma lista. Nenhuma mudança de banco.
 
-  Contribuição de @andersontomazi-ctrl (#2864), adaptada de jmpo/DeskcommCRM#89, de @jmpo.
+  Contribuição de @andersontomazi-ctrl (#2864), adaptada de jmpo/pj-crm#89, de @jmpo.
 
 - **Excluir uma etiqueta não apaga mais as outras etiquetas dos contatos, negócios e conversas** Agora sai só a etiqueta excluída. O que já foi apagado antes desta versão não volta sozinho; as etiquetas perdidas precisam ser colocadas de novo. Nada a fazer para atualizar.
 
@@ -3338,11 +3338,11 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
 - **Quando o cadeado do domínio ainda não saiu, o fim da instalação diz isso, e não manda procurar erro no .env** A tela final passa a ser "Quase lá — falta o cadeado (HTTPS) do seu domínio": confira com `curl -sSI https://SEU_DOMINIO/app | head -1` e, quando der `307`, rode de novo o mesmo comando de instalação.
 
-- **A instalação nova deixa de construir o CRM na VPS quando o registro de imagens não responde** Com o registro fora do ar, a instalação para e pede para rodar de novo em alguns minutos, em vez de construir na VPS e gastar a memória da máquina; para construir de propósito, use `DESKCOMM_BUILD_LOCAL=1`. Quem já tem o CRM instalado não precisa fazer nada ao atualizar.
+- **A instalação nova deixa de construir o CRM na VPS quando o registro de imagens não responde** Com o registro fora do ar, a instalação para e pede para rodar de novo em alguns minutos, em vez de construir na VPS e gastar a memória da máquina; para construir de propósito, use `PJCRM_BUILD_LOCAL=1`. Quem já tem o CRM instalado não precisa fazer nada ao atualizar.
 
   Contribuição de @webtecnica (#2644, fecha #2631).
 
-- **A instalação nova diz por que não construiu o CRM na VPS, em vez de culpar sempre o registro de imagens** A mensagem separa três casos: falta o buildx (com o pacote que esta VPS tem), o registro não respondeu, ou a construção foi desligada com `DESKCOMM_BUILD_LOCAL=0`. Quem já tem o CRM instalado não precisa fazer nada ao atualizar.
+- **A instalação nova diz por que não construiu o CRM na VPS, em vez de culpar sempre o registro de imagens** A mensagem separa três casos: falta o buildx (com o pacote que esta VPS tem), o registro não respondeu, ou a construção foi desligada com `PJCRM_BUILD_LOCAL=0`. Quem já tem o CRM instalado não precisa fazer nada ao atualizar.
 
   Contribuição de @webtecnica (#2693, fecha #2648).
 
@@ -4147,7 +4147,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
   Contribuição de @jmpo (#2455).
 
-- **Ajustar o invariante que a própria branch criou deixa de pedir a válvula** Para quem desenvolve no repositório: a catraca de `tests/invariants/` passa a aceitar, sem `DESKCOMM_GOV_INVARIANTS_EDIT=1`, a modificação de um invariante que a própria branch criou e que a `main` ainda não tem. Invariante da `main` editado, apagado, renomeado ou revertido continua barrado, e sem a ref `origin/main` a guarda falha fechada. Rodar `git fetch` antes de trabalhar mantém a guarda exata. Não exige ação de ninguém.
+- **Ajustar o invariante que a própria branch criou deixa de pedir a válvula** Para quem desenvolve no repositório: a catraca de `tests/invariants/` passa a aceitar, sem `PJCRM_GOV_INVARIANTS_EDIT=1`, a modificação de um invariante que a própria branch criou e que a `main` ainda não tem. Invariante da `main` editado, apagado, renomeado ou revertido continua barrado, e sem a ref `origin/main` a guarda falha fechada. Rodar `git fetch` antes de trabalhar mantém a guarda exata. Não exige ação de ninguém.
 
 - **Etiqueta posta pelo agente de IA ou por integração (MCP) agora dispara a automação "ganhou uma etiqueta"** A ferramenta `crm_manage_tags` gravava a etiqueta no contato ou no negócio, mas não emitia o evento que a tela emite. Resultado: a regra "Quando um contato ganhar uma tag" (ou "Quando um lead ganhar uma tag") disparava quando a pessoa punha a etiqueta pela tela e ficava muda quando a mesma etiqueta chegava pela MCP — seja de um sistema de fora, como o n8n, seja do próprio agente de IA do CRM, que usa essa ferramenta para etiquetar durante a conversa. Regras de "ganhou etiqueta" que antes ficavam caladas quando a IA etiquetava passam a disparar.
 
@@ -4183,7 +4183,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
 - **Admin › Sistema mostra se as entregas do WhatsApp já chegam assinadas** Ao lado do interruptor **"Exigir assinatura nas entregas do canal"**, em **Admin › Sistema**, a tela passa a dizer se as últimas entregas do WhatsApp chegaram assinadas (sim ou não), com a data da última assinada e da última sem assinatura, olhando os últimos 7 dias. Quando a resposta é sim e o interruptor está desligado, ela sugere: _"Pode ligar: o WhatsApp já assina."_
 
-  O "sim" só aparece quando **nenhuma** entrega chegou sem assinatura desde a primeira assinada: se algum número chegou sem assinatura depois disso, a resposta é não e a tela não sugere ligar. Um número que não entregou nada nesse intervalo não entra na conta — com o WAHA do compose do Deskcomm todas as sessões assinam juntas, mas se você usa mais de um servidor de WhatsApp, confira cada número antes de ligar.
+  O "sim" só aparece quando **nenhuma** entrega chegou sem assinatura desde a primeira assinada: se algum número chegou sem assinatura depois disso, a resposta é não e a tela não sugere ligar. Um número que não entregou nada nesse intervalo não entra na conta — com o WAHA do compose do PJ CRM todas as sessões assinam juntas, mas se você usa mais de um servidor de WhatsApp, confira cada número antes de ligar.
 
   **O padrão não muda:** o interruptor continua desligado, e nada é ligado sozinho. O conserto do nome da variável do segredo no compose saiu na v1.73.0, e com ele o WAHA do compose deve passar a assinar as entregas (ainda não medido numa VPS atualizada); a tela é justamente o jeito de conferir isso na sua instalação antes de ligar a exigência. Só quem administra a plataforma vê esta informação. Construído sobre o conserto de @paulolimajr77 (#2268).
 
@@ -4388,7 +4388,7 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
 - **O roteador volta a escolher qual agente atende cada mensagem** Em empresas que usam a OpenRouter, o roteador de agentes falhava a cada mensagem com o erro "claude-haiku-4-5 is not a valid model ID" e nenhuma escolha de agente acontecia — toda conversa caía no mesmo agente, ou em nenhum, como se os roteadores configurados não existissem. A mensagem nunca aparecia no painel de erro: era o aviso que a própria tela do classificador mostrava.
 
-  O modelo do classificador vinha gravado pelo próprio Deskcomm ao criar o roteador, com um nome que a OpenRouter não reconhece. Ninguém escolheu esse modelo, e a empresa podia ter configurado Claude como modelo de atendimento — o roteador é que insistia no dele. Agora o roteador nasce em "Automático": quem decide o modelo do classificador é o painel de provedores ou, na falta dele, o modelo de atendimento da empresa, e nenhuma escolha é sobrescrita por baixo dos panos.
+  O modelo do classificador vinha gravado pelo próprio PJ CRM ao criar o roteador, com um nome que a OpenRouter não reconhece. Ninguém escolheu esse modelo, e a empresa podia ter configurado Claude como modelo de atendimento — o roteador é que insistia no dele. Agora o roteador nasce em "Automático": quem decide o modelo do classificador é o painel de provedores ou, na falta dele, o modelo de atendimento da empresa, e nenhuma escolha é sobrescrita por baixo dos panos.
 
   Quem já tinha um roteador com esse modelo gravado de fábrica, numa empresa que não usa a Anthropic diretamente, passa para "Automático" ao atualizar. Se quiser um classificador mais barato e rápido do que o modelo de atendimento, basta escolhê-lo na tela do roteador. Empresas que usam a Anthropic diretamente não mudam nada: lá esse modelo funciona, e o roteador continua com ele. Também não muda nada para quem escolheu o modelo do classificador na tela, inclusive o Claude Haiku 4.5 pela Requesty, nem para quem não usa roteador de agentes. Não é preciso fazer nada na instalação.
 
@@ -4812,9 +4812,9 @@ Se você roda o DeskcommCRM numa VPS, **leia a seção da versão para a qual es
 
 - **Atualização com o registro de imagens fora do ar não derruba mais a instalação** Clicar em **Atualizar** num momento em que a VPS não alcançava o registro de imagens (DNS saturado, rede instável) podia deixar o CRM fora do ar: o update parava os serviços, não conseguia baixar a versão nova, tentava construir as imagens na própria VPS, gastava a memória inteira dela e terminava com app, worker e proxy parados — 502 para todo mundo até alguém reiniciar o Docker à mão.
 
-  Agora, antes de parar qualquer coisa, o update confere se as quatro imagens da versão nova existem no registro. Se não existem, ou se o registro não responde, ele recusa sem começar (código 3) e a versão atual segue no ar, intocada. A construção local deixa de acontecer sozinha quando quem falhou é o registro; continua disponível de propósito, com `DESKCOMM_BUILD_LOCAL=1`.
+  Agora, antes de parar qualquer coisa, o update confere se as quatro imagens da versão nova existem no registro. Se não existem, ou se o registro não responde, ele recusa sem começar (código 3) e a versão atual segue no ar, intocada. A construção local deixa de acontecer sozinha quando quem falhou é o registro; continua disponível de propósito, com `PJCRM_BUILD_LOCAL=1`.
 
-  Se a atualização falhar depois de trocar a versão — inclusive quando o app responde mas o worker, o agendador ou o proxy não sobem —, os pins de versão do `.env` voltam sozinhos para a versão anterior e os serviços sobem nela. O banco nunca é revertido. Toda execução deixa um resumo em `.deskcomm-update-diagnostico.log`, e o healthcheck passou a ter prazo, em vez de ficar preso em "▶ Containers" quando o Docker não responde.
+  Se a atualização falhar depois de trocar a versão — inclusive quando o app responde mas o worker, o agendador ou o proxy não sobem —, os pins de versão do `.env` voltam sozinhos para a versão anterior e os serviços sobem nela. O banco nunca é revertido. Toda execução deixa um resumo em `.pjcrm-update-diagnostico.log`, e o healthcheck passou a ter prazo, em vez de ficar preso em "▶ Containers" quando o Docker não responde.
 
   Nada é preciso fazer na instalação: a mudança chega com a próxima atualização.
 
@@ -5176,7 +5176,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 ### Adicionado
 
-- **Instalação em VPS ARM64** O instalador agora atende VPS ARM64/aarch64, como Oracle Ampere A1, AWS Graviton e Hetzner CAX, inclusive no modo com Supabase na mesma VPS. As imagens do DeskcommCRM são construídas em máquina ARM nativa e publicadas na mesma tag das de amd64, e o WAHA usa a variante oficial NOWEB ARM64 (`devlikeapro/waha:noweb-arm-2026.7.2`). Nada é compilado na VPS. Quem já roda em ARM passa a atualizar pelas imagens publicadas, e o `update.sh` troca no `.env` o WAHA amd64 antigo pela variante ARM (um valor escolhido à mão fica intacto). Em amd64 nada muda.
+- **Instalação em VPS ARM64** O instalador agora atende VPS ARM64/aarch64, como Oracle Ampere A1, AWS Graviton e Hetzner CAX, inclusive no modo com Supabase na mesma VPS. As imagens do PJ CRM são construídas em máquina ARM nativa e publicadas na mesma tag das de amd64, e o WAHA usa a variante oficial NOWEB ARM64 (`devlikeapro/waha:noweb-arm-2026.7.2`). Nada é compilado na VPS. Quem já roda em ARM passa a atualizar pelas imagens publicadas, e o `update.sh` troca no `.env` o WAHA amd64 antigo pela variante ARM (um valor escolhido à mão fica intacto). Em amd64 nada muda.
 
   Contribuição de @mauriciobera1990-droid (#1938).
 
@@ -5753,7 +5753,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **O lint da suíte passa a rodar o ESLint 10, e sai a versão que o registro do npm aposentou** O `pnpm lint`, executado pelo check obrigatório `verify`, rodava o ESLint 9.39.5, marcado como sem suporte pelo registro do npm. Agora roda o 10.11.0, que produz as mesmas mensagens, arquivo por arquivo, sem nenhuma regra mudada; o `AGENTS.md` declara a major nova e um teste passa a conferi-la. O ESLint não roda no produto: nada muda na imagem nem para quem opera a instalação.
 
-  Levantamento de @melgarafael (#297). Contribuição de @in100tiva (#1840).
+  Levantamento de @nesqj (#297). Contribuição de @in100tiva (#1840).
 
 ### Corrigido
 
@@ -5823,7 +5823,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @Draven9 (#1826).
 
-- **O webhook de saída passa a levar id de entrega, número da tentativa e assinatura com carimbo de tempo** A ação "Avisar outro sistema (webhook)" das automações passa a mandar, em toda chamada, quatro cabeçalhos novos: X-Webhook-Delivery, um id que é o mesmo em todas as tentativas da mesma entrega e também no botão Reenviar; X-Webhook-Attempt, o número da tentativa, que no Reenviar continua a contagem; X-Webhook-Timestamp, a hora do envio; e X-Webhook-Signature, uma assinatura que cobre a hora e o id da entrega além do corpo. Com eles, o sistema que recebe consegue recusar uma requisição capturada e repetida e reconhecer uma retentativa como a mesma entrega. O cabeçalho X-Deskcomm-Signature continua saindo exatamente como antes, então quem confere a assinatura não precisa mudar a conferência. Quem passar a conferir o X-Webhook-Signature deve, a partir daí, recusar a requisição que chega sem ele, em vez de cair para o legado: o legado só cobre o corpo, e uma requisição capturada com a assinatura nova apagada seria aceita a qualquer tempo. No corpo entram dois campos: delivery_id, o mesmo id do cabeçalho, e happened_at, a hora em que o fato aconteceu, que é a mesma no Reenviar. O occurred_at não muda: segue sendo a hora em que o sistema montou a entrega, como antes. Para medir a idade da requisição, a medida certa é o t de dentro do X-Webhook-Signature, que é a hora de cada tentativa e é coberto pela assinatura. O X-Webhook-Timestamp leva o mesmo número mas é só informativo: nenhuma assinatura o cobre, assim como o X-Deskcomm-Event e o X-Webhook-Attempt, e medir a idade por ele deixa passar uma requisição velha repetida com esse cabeçalho trocado. O guia de verificação, com exemplos em Node e Python, está em docs/integracao/webhooks-de-saida.md. Proposta de @franceschini-lucas (#1529).
+- **O webhook de saída passa a levar id de entrega, número da tentativa e assinatura com carimbo de tempo** A ação "Avisar outro sistema (webhook)" das automações passa a mandar, em toda chamada, quatro cabeçalhos novos: X-Webhook-Delivery, um id que é o mesmo em todas as tentativas da mesma entrega e também no botão Reenviar; X-Webhook-Attempt, o número da tentativa, que no Reenviar continua a contagem; X-Webhook-Timestamp, a hora do envio; e X-Webhook-Signature, uma assinatura que cobre a hora e o id da entrega além do corpo. Com eles, o sistema que recebe consegue recusar uma requisição capturada e repetida e reconhecer uma retentativa como a mesma entrega. O cabeçalho X-PJCRM-Signature continua saindo exatamente como antes, então quem confere a assinatura não precisa mudar a conferência. Quem passar a conferir o X-Webhook-Signature deve, a partir daí, recusar a requisição que chega sem ele, em vez de cair para o legado: o legado só cobre o corpo, e uma requisição capturada com a assinatura nova apagada seria aceita a qualquer tempo. No corpo entram dois campos: delivery_id, o mesmo id do cabeçalho, e happened_at, a hora em que o fato aconteceu, que é a mesma no Reenviar. O occurred_at não muda: segue sendo a hora em que o sistema montou a entrega, como antes. Para medir a idade da requisição, a medida certa é o t de dentro do X-Webhook-Signature, que é a hora de cada tentativa e é coberto pela assinatura. O X-Webhook-Timestamp leva o mesmo número mas é só informativo: nenhuma assinatura o cobre, assim como o X-PJCRM-Event e o X-Webhook-Attempt, e medir a idade por ele deixa passar uma requisição velha repetida com esse cabeçalho trocado. O guia de verificação, com exemplos em Node e Python, está em docs/integracao/webhooks-de-saida.md. Proposta de @franceschini-lucas (#1529).
 
   Contribuição de @in100tiva (#1830).
 
@@ -6007,7 +6007,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   brinde, "me tira da lista de espera", que é paciente pedindo para ser chamado,
   deixou de bloquear.
 
-  Contribuição de @deskcommopp4s-cmd (#1607, trazida no #1805).
+  Contribuição de @pjcrmopp4s-cmd (#1607, trazida no #1805).
 
 ## [1.56.0] — 2026-09-27
 
@@ -6177,7 +6177,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @webtecnica (#1770, issue #533).
 
-- **Quem já tinha o DeskcommCRM rodando em ARM (VPS aarch64) volta a conseguir atualizar** Quem já tinha o DeskcommCRM instalado numa VPS ARM (Oracle Ampere, aarch64)
+- **Quem já tinha o PJ CRM rodando em ARM (VPS aarch64) volta a conseguir atualizar** Quem já tinha o PJ CRM instalado numa VPS ARM (Oracle Ampere, aarch64)
   volta a conseguir rodar `update.sh`. Desde a v1.35.0 a atualização era recusada
   logo na primeira linha, dizendo que só existe VPS x86_64, mesmo onde o CRM já
   estava funcionando. Agora, onde já existe instalação, a recusa vira um aviso e
@@ -6203,7 +6203,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @webtecnica (#1775).
 
-- **Instalar pela primeira vez numa VPS ARM volta a ser recusado, mesmo com o .env já preenchido** Se você começou a instalar o DeskcommCRM numa VPS ARM (Oracle Ampere,
+- **Instalar pela primeira vez numa VPS ARM volta a ser recusado, mesmo com o .env já preenchido** Se você começou a instalar o PJ CRM numa VPS ARM (Oracle Ampere,
   aarch64) com o `.env` já preenchido — copiado de outra máquina, gerado por
   automação, ou deixado por uma instalação que parou no meio —, o `install.sh`
   não recusava como devia: confundia a pasta com uma instalação que já estava no
@@ -6211,8 +6211,8 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   recusa logo no começo e orienta a usar uma VPS x86_64/amd64.
 
   A instalação passa a ser reconhecida pelo que ela deixou de verdade: os
-  contêineres do DeskcommCRM (ou do seu Supabase) no Docker, parados ou
-  rodando, ou o arquivo `.deskcomm-instalado` que o próprio instalador grava
+  contêineres do PJ CRM (ou do seu Supabase) no Docker, parados ou
+  rodando, ou o arquivo `.pjcrm-instalado` que o próprio instalador grava
   quando termina. Quem já tem o CRM numa VPS ARM continua atualizando
   normalmente, com o aviso e o build local de sempre. Para quem instalou antes
   desta versão e ainda não tem o arquivo, o `update.sh` desta versão em diante
@@ -6581,7 +6581,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **Instale o rastreio de origem nos botões de WhatsApp do site** Conversões oferece um script para copiar e instalar no site. Ele preserva os identificadores da visita durante a navegação na mesma aba e ajusta os links dos números configurados, incluindo botões adicionados depois. O CRM gera o código curto no clique e associa a mensagem à origem quando o visitante o envia. A instalação é opcional e tem instruções e limites na própria tela. Contribuição de @gustavorodcruz96 (#1566).
 
-- **O instalador pergunta em que idioma ele mesmo fala — português ou español** O `install.sh` estava inteiramente em português, mesmo permitindo escolher espanhol como idioma da aplicação web instalada: um operador hispanohablante precisava entender português para concluir a própria instalação. Agora a primeira pergunta interativa, antes de qualquer outra saída, é o idioma da instalação (Português/Español), e as mensagens do instalador saem nesse idioma; a saída de outros programas, como `docker` e `git`, continua como vem deles. A escolha é gravada em `DESKCOMM_IDIOMA_CLI` no `.env` e, nas reexecuções, o `install.sh` a lê de lá e não pergunta de novo, nem com `--yes`. Quem prefere fixá-la sem perguntar pode rodar com `DESKCOMM_IDIOMA_CLI=es` (ou `pt-BR`) no ambiente. Sem escolha e sem terminal, o instalador fala português, como sempre falou. O espanhol exige bash 4.4 ou superior (o CentOS 7 traz o 4.2): em um bash mais antigo o instalador avisa, em português e em espanhol, e segue em português. Fora do escopo desta passada: `update.sh`, `backup.sh`, `diagnostico.sh` e os demais scripts do kit seguem só em português, mesmo com a chave no `.env`; ficam para uma próxima passada. Contribuição de @JowaniOrantes (#1689).
+- **O instalador pergunta em que idioma ele mesmo fala — português ou español** O `install.sh` estava inteiramente em português, mesmo permitindo escolher espanhol como idioma da aplicação web instalada: um operador hispanohablante precisava entender português para concluir a própria instalação. Agora a primeira pergunta interativa, antes de qualquer outra saída, é o idioma da instalação (Português/Español), e as mensagens do instalador saem nesse idioma; a saída de outros programas, como `docker` e `git`, continua como vem deles. A escolha é gravada em `PJCRM_IDIOMA_CLI` no `.env` e, nas reexecuções, o `install.sh` a lê de lá e não pergunta de novo, nem com `--yes`. Quem prefere fixá-la sem perguntar pode rodar com `PJCRM_IDIOMA_CLI=es` (ou `pt-BR`) no ambiente. Sem escolha e sem terminal, o instalador fala português, como sempre falou. O espanhol exige bash 4.4 ou superior (o CentOS 7 traz o 4.2): em um bash mais antigo o instalador avisa, em português e em espanhol, e segue em português. Fora do escopo desta passada: `update.sh`, `backup.sh`, `diagnostico.sh` e os demais scripts do kit seguem só em português, mesmo com a chave no `.env`; ficam para uma próxima passada. Contribuição de @JowaniOrantes (#1689).
 
 - **O Jev passa a observar qual agente deve atender, ao lado do seu roteador de intenção** O Jev ganha a terceira tarefa: **Escolher qual agente atende**. Onde há um roteador de intenção ativo (**IA › Roteadores**), a cada mensagem nova do cliente a sua IA de sempre escolhe a intenção — e, com ela, o agente que atende. O Jev responde a mesma pergunta, entre as mesmas intenções, ao mesmo tempo. Enquanto ele só observa, a resposta ao cliente **não espera por ele**: a resposta dele é guardada quando chega.
 
@@ -6823,7 +6823,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **O agente espera a foto ficar legível quando o cliente manda a foto e depois escreve** Quando o cliente mandava uma foto (um comprovante, por exemplo) e logo depois escrevia a pergunta em outra mensagem, o turno do agente saía pela mensagem de texto sem esperar a leitura da foto, e o agente pedia ao cliente que descrevesse uma imagem que o sistema terminava de ler segundos depois. Agora a espera olha a conversa inteira: se há mídia recebida ainda sendo lida, o turno aguarda até o mesmo teto de antes, contado a partir da hora em que a mídia chegou. Mídia que o sistema não vai ler (vídeo com leitura desligada, arquivo que não chegou ao storage) não segura a resposta.
 
-  Contribuição de @deskcommopp4s-cmd (#1594).
+  Contribuição de @pjcrmopp4s-cmd (#1594).
 
 ## [1.48.0] — 2026-09-24
 
@@ -6861,7 +6861,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **Quem administra pode desfazer o descadastro de um contato** Quando um cliente pede para sair ("parar de me mandar", "sair da lista"), o contato fica bloqueado e nada automático volta a escrever para ele: campanha, follow-up, lembrete e IA param. Até aqui o bloqueio não tinha volta, nem para quem mudou de ideia nem para quem caiu num falso positivo. Agora quem tem papel de administrador vê o botão **Desbloquear** na tela do contato bloqueado. A ação pede confirmação e fica registrada na auditoria (`contact.unblocked`), ao lado do registro do pedido original, que continua lá. Desbloquear devolve o direito de enviar, mas não retoma follow-up nem campanha cancelados, e um novo pedido de descadastro do cliente volta a bloquear o contato.
 
-  Contribuição de @deskcommopp4s-cmd (#1604).
+  Contribuição de @pjcrmopp4s-cmd (#1604).
 
 - **Editar e apagar mensagens enviadas pela Inbox** O atendente pode editar uma mensagem de texto própria recente ou apagar uma mensagem enviada para todos diretamente na Inbox quando o canal usa WAHA. O CRM confirma a ação no WhatsApp antes de atualizar o histórico e registra quem a executou.
 
@@ -7415,7 +7415,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @betoarts (recorte do #714, entrou pelo #1464).
 
-- **Um comando sobe o DeskcommCRM inteiro na sua própria máquina** Até aqui, rodar o DeskcommCRM fora de um servidor exigia montar tudo à mão: banco, autenticação, WhatsApp e fila, cada um com a sua configuração. O instalador da VPS não serve para isso, porque ele assume domínio próprio e proxy na frente.
+- **Um comando sobe o PJ CRM inteiro na sua própria máquina** Até aqui, rodar o PJ CRM fora de um servidor exigia montar tudo à mão: banco, autenticação, WhatsApp e fila, cada um com a sua configuração. O instalador da VPS não serve para isso, porque ele assume domínio próprio e proxy na frente.
 
   Agora existe um caminho local: `./ubuntu-local-installer.sh` prepara a máquina, sobe o banco com a estrutura oficial do produto, gera as chaves, levanta a aplicação, o worker, o WhatsApp e a fila, e cria o usuário administrador — imprimindo no fim o endereço e a senha. Depois disso, `pnpm local:up`, `local:status`, `local:logs` e `local:down` cuidam do dia a dia. O passo a passo está em `docs/SETUP.md`.
 
@@ -7770,7 +7770,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   O link da mídia também pode ficar salvo no modelo: marque "Salvar este link no modelo" e
   ele vem preenchido nos próximos envios. Crédito: @rafaelbatistazz.
 
-- **Conectar o Google funciona quando você abre a instalação por localhost** Quem instala o DeskcommCRM no próprio computador e abre o sistema por `http://localhost:3000` não conseguia terminar a conexão com o Google Agenda: o endereço de retorno oferecido era sempre o que ficou gravado na instalação (o IP da máquina na rede, por exemplo), e o Google compara esse endereço letra por letra. A conexão voltava para outro endereço e nunca se completava.
+- **Conectar o Google funciona quando você abre a instalação por localhost** Quem instala o PJ CRM no próprio computador e abre o sistema por `http://localhost:3000` não conseguia terminar a conexão com o Google Agenda: o endereço de retorno oferecido era sempre o que ficou gravado na instalação (o IP da máquina na rede, por exemplo), e o Google compara esse endereço letra por letra. A conexão voltava para outro endereço e nunca se completava.
 
   Agora, **quando e só quando** o navegador abre o sistema por `localhost` (ou `127.0.0.1`), o endereço de retorno acompanha — e é o mesmo que a tela mostra para você colar no painel do Google. Qualquer outro endereço continua perdendo para o endereço oficial da instalação, então nada muda para quem roda em servidor com domínio próprio.
 
@@ -8093,7 +8093,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   o mesmo painel do quadro — foco preso, papel de diálogo de alerta —, o botão que abre a gaveta diz
   qual lista ele controla, e a recusa da exclusão tem endereço próprio. Crédito: @webtecnica.
 
-- **A imagem do módulo de telefonia voltou a construir** A imagem `deskcomm-voice-agent`, que o módulo opcional de telefonia usa, não
+- **A imagem do módulo de telefonia voltou a construir** A imagem `pjcrm-voice-agent`, que o módulo opcional de telefonia usa, não
   chegava a ser criada: a receita dela não copiava o diretório `patches/`, e o
   `pnpm install` morria antes de instalar qualquer dependência.
 
@@ -8220,7 +8220,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   raciocínio continua ligado. A mudança vale só para a DeepSeek — Anthropic, OpenAI, Google
   e OpenRouter não são afetadas.
 
-  Contribuição de @deskcommopp4s-cmd (#1275).
+  Contribuição de @pjcrmopp4s-cmd (#1275).
 
 - **Um comando tira esta instalação do Docker sem encostar no resto do servidor** Tirar o CRM de uma VPS era trabalho manual, e o atalho que todo mundo conhece — `docker system
   prune -a` — é o errado: numa VPS que hospeda mais de uma coisa, ele leva junto containers, volumes
@@ -8263,7 +8263,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   você deixa em branco. Nada muda nas instalações que já usam outro provedor: a opção nasce
   disponível, não ligada.
 
-  Contribuição de @deskcommopp4s-cmd (#1275).
+  Contribuição de @pjcrmopp4s-cmd (#1275).
 
 - **Um sistema externo pode criar empresas no CRM, se o dono da instalação ligar** Nova rota `POST /api/v1/tenants/provision`: um sistema de fora cria uma empresa no CRM, com a pessoa dona e uma chave de API para operá-la (com permissão de atendente), sem passar pela tela de cadastro. Repetir o pedido para a mesma empresa não cria outra: devolve a mesma empresa e uma chave nova, e a anterior deixa de valer. Se o e-mail da pessoa dona já tem conta nesta instalação, o pedido é recusado e nada é criado — quem quer essa pessoa numa empresa a convida pela tela da empresa (decisão do dono, 19/09). E se um pedido falhar no meio (o banco fora do ar por um instante, por exemplo), basta o sistema de fora repetir: ele retoma de onde parou e conclui o cadastro — a empresa criada **e** a pessoa dona com acesso a ela —, em vez de ficar dizendo para sempre que aquele e-mail já tem conta, ou de responder "está tudo certo" sobre uma empresa em que ninguém consegue entrar.
 
@@ -8924,7 +8924,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Com a trava enxergando essas frases, o agente que promete olhar a agenda é obrigado a consultá-la no mesmo turno — e responde com os horários reais (ou explica o que impediu), em vez de deixar o cliente esperando. Conversa comum que só menciona o atendimento ("o atendimento de vocês é ótimo") continua passando normalmente.
 
-- **A guarda da release confere a identidade do PR de origem, e não o nome do autor do commit** O passo que decide se um push para a `main` corta tag de release conferia o NOME de autor do commit — campo de texto que quem commita escolhe, e que era um literal dentro do próprio `release.yml`. Agora ele pergunta à API do GitHub quem abriu o PR de origem daquele merge, e só corta a tag quando o PR foi aberto pelo bot do App da release ou quando o head do PR é um branch `release/*` do repositório de cima, que é o caminho por onde um corte legítimo passa. Um commit que se apresente com o nome do bot num PR de outra pessoa passa a ser recusado, e o passo da guarda fica vermelho em vez de criar a tag em silêncio. A contagem de fragmentos apagados também passou a pedir `--find-renames`, para que renomear um fragmento não seja lido como fragmento consumido. Nada muda na operação de quem já roda o DeskcommCRM numa VPS.
+- **A guarda da release confere a identidade do PR de origem, e não o nome do autor do commit** O passo que decide se um push para a `main` corta tag de release conferia o NOME de autor do commit — campo de texto que quem commita escolhe, e que era um literal dentro do próprio `release.yml`. Agora ele pergunta à API do GitHub quem abriu o PR de origem daquele merge, e só corta a tag quando o PR foi aberto pelo bot do App da release ou quando o head do PR é um branch `release/*` do repositório de cima, que é o caminho por onde um corte legítimo passa. Um commit que se apresente com o nome do bot num PR de outra pessoa passa a ser recusado, e o passo da guarda fica vermelho em vez de criar a tag em silêncio. A contagem de fragmentos apagados também passou a pedir `--find-renames`, para que renomear um fragmento não seja lido como fragmento consumido. Nada muda na operação de quem já roda o PJ CRM numa VPS.
 
 - **Repetir a mesma criação pela API não cria o registro duas vezes** Quem integra com a API e manda o cabeçalho `Idempotency-Key` ao criar um modelo de mensagem (`POST /api/v1/message-templates`) tinha duas falhas. Repetir o mesmo pedido devolvia 409 `idempotency_conflict` em vez da resposta gravada, porque o resumo do pedido era gravado num formato que a comparação nunca reconhecia. E dois pedidos iguais chegando ao MESMO tempo criavam o modelo duas vezes. Agora a chave é reservada antes da criação: a repetição devolve a resposta original, e o pedido simultâneo recebe 409 `idempotency_in_progress`, que pode ser repetido em instantes. Se a criação falhar, a chave é liberada na hora e a nova tentativa executa normalmente.
 
@@ -9328,7 +9328,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **Instalador volta a pedir consentimento antes de ligar a telemetria** O template self-host não pré-define mais `SENTRY_DSN` vazio antes da primeira execução. Assim, o instalador volta a perguntar pelo envio de relatórios de erro; em modo `--yes`, mantém a telemetria desligada, e uma escolha anterior continua preservada nas reexecuções. Crédito: @joaopaulomirandamatias.
 
-- **O kit explica quando a VPS usa uma arquitetura sem imagem publicada** Instalação e atualização agora recusam ARM64/aarch64 antes de consultar ou baixar as imagens do DeskcommCRM, explicando que as imagens oficiais atuais são `linux/amd64` e orientando usar uma VPS x86_64/amd64. Crédito: @joaopaulomirandamatias.
+- **O kit explica quando a VPS usa uma arquitetura sem imagem publicada** Instalação e atualização agora recusam ARM64/aarch64 antes de consultar ou baixar as imagens do PJ CRM, explicando que as imagens oficiais atuais são `linux/amd64` e orientando usar uma VPS x86_64/amd64. Crédito: @joaopaulomirandamatias.
 
 - **O funil passa a falar a moeda que a empresa escolheu, em vez de real sempre** Em Configurações › Organização dá para escolher a moeda da empresa, e o funil
   ignorava a escolha em dois pontos. O total no topo de cada coluna do quadro
@@ -9647,7 +9647,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **O editor do agente diz na tela por que o Publicar está desabilitado** No editor do agente, o motivo de o botão Publicar estar desabilitado existia só no `title` do botão: aparecia com o ponteiro parado em cima dele. Em celular e tablet não existe hover, e um botão desabilitado não recebe foco do teclado — quem mais precisava da explicação era exatamente quem não a recebia. Agora o motivo aparece como texto na própria tela, logo abaixo do cabeçalho do editor, e o botão aponta para ele por `aria-describedby`, então o leitor de tela anuncia a explicação junto do rótulo. As frases do motivo não mudaram e continuam traduzidas em espanhol. Nada muda na sua VPS: nenhuma migration, nenhuma variável, nenhum comando. Crédito: @webtecnica.
 
-- **Campos de lista fechada voltam a aceitar mais de uma opção** No editor de campos do funil, em Configurações, digitar a vírgula entre as opções de um campo de seleção apagava o separador e colava a palavra seguinte na anterior — na prática só dava para salvar uma opção. Agora a lista aceita quantas opções você digitar. Crédito: @deskcommopp4s-cmd.
+- **Campos de lista fechada voltam a aceitar mais de uma opção** No editor de campos do funil, em Configurações, digitar a vírgula entre as opções de um campo de seleção apagava o separador e colava a palavra seguinte na anterior — na prática só dava para salvar uma opção. Agora a lista aceita quantas opções você digitar. Crédito: @pjcrmopp4s-cmd.
 
 - **A recusa do Google passa a dizer o que aconteceu** Quando o Google recusava uma alteração da Agenda, o erro gravado no compromisso dizia apenas "Google HTTP 400". O Google já tinha dito o motivo na resposta (`invalid`, `insufficientPermissions`, `rateLimitExceeded`…), mas ele era descartado antes de virar a frase. Agora a frase diz o tipo da recusa (sem permissão no calendário, limite de uso do Google, evento que não existe mais, recusa que repetir não resolve), o código HTTP e o motivo que o Google mandou — por exemplo: "o Google recusou e repetir não muda o resultado — HTTP 400 (invalid)".
 
@@ -9821,7 +9821,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Quem pode arquivar é quem já podia encerrar: atendente para cima. O que passa a ficar registrado é o motivo da mudança: arquivar deixa o evento próprio `conversation.archived` na auditoria, em vez de se confundir com "devolvida" ou com o fechamento do atendimento. Fechar continua sendo fechar, e o número da aba "Fechadas" passa a contar só as fechadas — antes ele somava as arquivadas e mostrava mais do que a lista.
 
-- **Os guias do assistente passam a funcionar em qualquer pasta, e dois deixam de ser descartados** Um comando só (`curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/scripts/instalar-guias.sh | bash`) liga os guias `deskcomm-instalar`, `deskcomm-cliente-novo`, `deskcomm-metricas`, `deskcomm-prompt`, `deskcomm-contribuir` e `deskcomm-doutrina` nas pastas globais do Claude Code, Codex, Cursor, OpenCode e Antigravity — antes eles só existiam com o assistente aberto dentro de um clone atualizado, o que deixava de fora justamente quem ainda não instalou. Pedir o assunto em português aciona o guia em qualquer um deles. Os guias não se atualizam sozinhos: rodar o comando de novo traz a versão nova, e `curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/scripts/instalar-guias.sh | bash -s -- --remover` desfaz. O cabeçalho de dois guias trazia um erro de formato que assistentes mais rigorosos descartavam sem avisar, e foi corrigido.
+- **Os guias do assistente passam a funcionar em qualquer pasta, e dois deixam de ser descartados** Um comando só (`curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/scripts/instalar-guias.sh | bash`) liga os guias `pjcrm-instalar`, `pjcrm-cliente-novo`, `pjcrm-metricas`, `pjcrm-prompt`, `pjcrm-contribuir` e `pjcrm-doutrina` nas pastas globais do Claude Code, Codex, Cursor, OpenCode e Antigravity — antes eles só existiam com o assistente aberto dentro de um clone atualizado, o que deixava de fora justamente quem ainda não instalou. Pedir o assunto em português aciona o guia em qualquer um deles. Os guias não se atualizam sozinhos: rodar o comando de novo traz a versão nova, e `curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/scripts/instalar-guias.sh | bash -s -- --remover` desfaz. O cabeçalho de dois guias trazia um erro de formato que assistentes mais rigorosos descartavam sem avisar, e foi corrigido.
 
 - **Quem ainda não tem conta já vê login, cadastro, convite e páginas legais em espanhol** O idioma da interface sempre dependeu de uma sessão: `preferência da pessoa → idioma da
   organização → padrão`. Fora dessa cadeia — login, cadastro, aceite de convite, política de
@@ -9851,7 +9851,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **O domínio de quem manda o PR não viaja mais dentro da imagem** Nada muda na sua VPS: nenhum endereço de terceiro foi encontrado no código que
   embarca hoje, e nada foi trocado em produção. O que muda é o portão do
-  repositório. A catraca que já barrava o nome antigo do produto — "DeskcommCRM"
+  repositório. A catraca que já barrava o nome antigo do produto — "PJ CRM"
   escrito na tela de quem instalou com a marca dele — passou a barrar também
   domínio de terceiro: site pessoal, endereço de teste ou visão de alguém
   enterrado numa parte do código que vai para a imagem. Quando isso acontece, o PR
@@ -11318,7 +11318,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 ### Alterado
 
 - **A marca do produto ganha símbolo e logotipo** Instalação que não configurou marca própria passa a mostrar o logotipo do
-  Deskcomm no menu lateral, na tela de entrada e no ícone da aba do navegador —
+  PJ CRM no menu lateral, na tela de entrada e no ícone da aba do navegador —
   no lugar do nome em texto e da letra "D" sobre a cor de destaque. Quem já
   definiu nome ou logo próprio em Marca não vê nenhuma diferença: a marca
   configurada continua valendo em todos esses lugares.
@@ -12459,7 +12459,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   **Se você já tinha instalado antes desta versão**, a próxima atualização mostra
   esse mesmo passo uma vez, com o seu domínio preenchido, e não repete depois.
 
-- **Sete alertas de segurança em bibliotecas de terceiros foram fechados** O GitHub apontava sete alertas de segurança em bibliotecas que o DeskcommCRM não
+- **Sete alertas de segurança em bibliotecas de terceiros foram fechados** O GitHub apontava sete alertas de segurança em bibliotecas que o PJ CRM não
   usa diretamente — elas chegam junto com outras que ele usa. São quatro em
   `fast-uri` (confusão de endereço ao normalizar uma URL malformada), dois em `qs`
   (contorno do limite de tamanho de lista e travamento por entrada preparada) e um
@@ -12641,7 +12641,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   O achado é de @prevprocesso-maker, que percebeu o furo instalando o sistema para
   um cliente.
 
-- **Instalar pelo canal padrão não mistura mais versões entre os serviços** O DeskcommCRM roda três serviços que saem do mesmo código — o aplicativo, o
+- **Instalar pelo canal padrão não mistura mais versões entre os serviços** O PJ CRM roda três serviços que saem do mesmo código — o aplicativo, o
   trabalhador de fundo e o agendador. Quem instala pelo canal padrão espera os
   três na mesma versão.
 
@@ -13688,7 +13688,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   **Você não precisa fazer nada.** A opção de Push continua podendo ser ligada dos
   dois jeitos: mesmo sem as chaves, o aviso na bandeja do sistema já funciona
-  enquanto o DeskcommCRM está aberto numa aba.
+  enquanto o PJ CRM está aberto numa aba.
 
 - **A Agenda passa a mostrar só a organização que está selecionada** Quem administra mais de uma empresa na mesma instalação via a Agenda somando as
   duas: os tipos de agendamento apareciam repetidos, e clicar em metade deles
@@ -14505,7 +14505,7 @@ servidor continuaria onde está. A segunda execução fixa tudo na mesma versão
 Para saber em que pé você está, sem mexer em nada:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/hostgator-setup-kit/diagnostico.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/hostgator-setup-kit/diagnostico.sh | bash
 ```
 
 Ele só lê e explica — não escreve, não reinicia, não atualiza. Se disser que está afetada,
@@ -14516,7 +14516,7 @@ novas têm valor padrão e o próprio `update.sh` as acrescenta.
 
 ## [1.2.1] — 2026-08-12
 
-**Versão de segurança. Se você roda o DeskcommCRM numa VPS, atualize.**
+**Versão de segurança. Se você roda o PJ CRM numa VPS, atualize.**
 
 Um usuário da comunidade auditou o código e mandou um relatório. Parte do que ele apontou já
 tinha sido corrigida nas versões seguintes à que ele analisou — mas **seis** problemas estavam
@@ -14724,7 +14724,7 @@ Depois disso, nunca mais é preciso o terminal.
 
 ## [1.0.0] — 2026-07-27
 
-Primeira versão marcada do DeskcommCRM. O projeto vinha sendo desenvolvido publicamente desde abril de 2026 sem tags; esta release estabelece o ponto a partir do qual toda mudança passa a ser versionada e descrita — porque quem hospeda o próprio sistema precisa saber o que muda antes de atualizar.
+Primeira versão marcada do PJ CRM. O projeto vinha sendo desenvolvido publicamente desde abril de 2026 sem tags; esta release estabelece o ponto a partir do qual toda mudança passa a ser versionada e descrita — porque quem hospeda o próprio sistema precisa saber o que muda antes de atualizar.
 
 ### Plataforma
 
@@ -14779,7 +14779,7 @@ Primeira versão marcada do DeskcommCRM. O projeto vinha sendo desenvolvido publ
 - `hostgator-setup-kit`: instalação completa (app + WAHA + banco) com um comando.
 - `baseline.sql` idempotente e auto-curativo — atualização não quebra clone com dados legados.
 - 8 scripts de operação: `install`, `update`, `backup`, `restore`, `reset-password`, `reset-mfa`, `healthcheck` e o assistente de instalação em IA.
-- Imagem publicada em `ghcr.io/melgarafael/deskcommcrm` — a VPS não compila nada.
+- Imagem publicada em `ghcr.io/nesqj/pjcrm` — a VPS não compila nada.
 
 ### Qualidade
 

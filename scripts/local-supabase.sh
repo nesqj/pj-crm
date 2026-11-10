@@ -20,21 +20,21 @@ json_value() {
 
 start_without_legacy_migrations() {
   local backup_dir
-  backup_dir="$(mktemp -d "${TMPDIR:-/tmp}/deskcomm-migrations.XXXXXX")"
+  backup_dir="$(mktemp -d "${TMPDIR:-/tmp}/pjcrm-migrations.XXXXXX")"
   restore() {
     # O EXIT trap pode executar depois que esta função saiu do escopo. Não
     # dependa de uma variável local no trap: com `set -u`, isso mascara o erro
     # real do `supabase start` como "backup: unbound variable".
-    if [[ -d "${DESKCOMM_MIGRATIONS_BACKUP_DIR:-}/migrations" ]]; then
+    if [[ -d "${PJCRM_MIGRATIONS_BACKUP_DIR:-}/migrations" ]]; then
       rm -rf supabase/migrations
-      mv "$DESKCOMM_MIGRATIONS_BACKUP_DIR/migrations" supabase/migrations
+      mv "$PJCRM_MIGRATIONS_BACKUP_DIR/migrations" supabase/migrations
     fi
-    if [[ -n "${DESKCOMM_MIGRATIONS_BACKUP_DIR:-}" ]]; then
-      rmdir "$DESKCOMM_MIGRATIONS_BACKUP_DIR" 2>/dev/null || true
+    if [[ -n "${PJCRM_MIGRATIONS_BACKUP_DIR:-}" ]]; then
+      rmdir "$PJCRM_MIGRATIONS_BACKUP_DIR" 2>/dev/null || true
     fi
-    DESKCOMM_MIGRATIONS_BACKUP_DIR=""
+    PJCRM_MIGRATIONS_BACKUP_DIR=""
   }
-  DESKCOMM_MIGRATIONS_BACKUP_DIR="$backup_dir"
+  PJCRM_MIGRATIONS_BACKUP_DIR="$backup_dir"
   trap restore EXIT
 
   # A cadeia histórica contém migrations fora de ordem e dependências que só
@@ -63,9 +63,9 @@ apply_baseline() {
      create extension if not exists citext;
      create extension if not exists pg_trgm;'
   docker run --rm --network host \
-    -v "$ROOT_DIR/supabase/baseline.sql:/tmp/deskcomm-baseline.sql:ro" \
+    -v "$ROOT_DIR/supabase/baseline.sql:/tmp/pjcrm-baseline.sql:ro" \
     postgres:15-alpine \
-    psql "$db_url" -v ON_ERROR_STOP=1 -f /tmp/deskcomm-baseline.sql
+    psql "$db_url" -v ON_ERROR_STOP=1 -f /tmp/pjcrm-baseline.sql
 }
 
 case "${1:-}" in

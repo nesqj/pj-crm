@@ -8,7 +8,7 @@ O failover APT já aprovado na main corrige o preparo que falhou antes do Playwr
 
 A coleta real encontrou honorários não instalado. O reparo aprovado aceita somente `42P01`/`PGRST205` na tabela inicial opcional. Permissão, coluna ausente, erro desconhecido, tabela CTWA obrigatória e parcelas ausentes com contratos presentes continuam impedindo export incompleto. Os controles dirigidos passaram. O log antigo preservou mensagem, sem código bruto; não é apresentado como observação de `PGRST205`.
 
-A sonda nova usa SDK real separado sem generic core somente para a tabela opcional, mantendo orgfilter, auth sem persistência e captura de `status/error`. Core segue tipado. O typecheck integral de `71aabc3b1577c29d520f787495fece4902dd97be` passou no [verify1](https://github.com/melgarafael/DeskcommCRM/actions/runs/40428084893/job/121938763347). Resposta bruta HTTP e duas PNGs ainda dependem do E2E8; não são alegadas aqui.
+A sonda nova usa SDK real separado sem generic core somente para a tabela opcional, mantendo orgfilter, auth sem persistência e captura de `status/error`. Core segue tipado. O typecheck integral de `71aabc3b1577c29d520f787495fece4902dd97be` passou no [verify1](https://github.com/nesqj/pj-crm/actions/runs/40428084893/job/121938763347). Resposta bruta HTTP e duas PNGs ainda dependem do E2E8; não são alegadas aqui.
 
 ## Composição LGPD e fixture central
 

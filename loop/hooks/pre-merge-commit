@@ -12,7 +12,7 @@
 # A peça nova é só a ROTA DE ENTRADA. A lista de guards e o que cada um exige
 # continuam num lugar só: este hook executa o MESMO dispatcher que o commit usa
 # (`loop/hooks/pre-commit`), com as mesmas variáveis de escape
-# (DESKCOMM_GOV_INVARIANTS_EDIT, DESKCOMM_GOV_MIGRATION_EDIT, DESKCOMM_GOV_PLAN_EDIT).
+# (PJCRM_GOV_INVARIANTS_EDIT, PJCRM_GOV_MIGRATION_EDIT, PJCRM_GOV_PLAN_EDIT).
 # Não há segunda cópia de lógica aqui.
 #
 # Quando o git chama isto: antes de criar o commit de merge AUTOMÁTICO. Merge

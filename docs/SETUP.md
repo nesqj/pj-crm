@@ -1,4 +1,4 @@
-# Guia de Setup — DeskcommCRM
+# Guia de Setup — PJ CRM
 
 > **Pra quem é este doc?** Você acabou de clonar o repo, copiou `.env.example` pra `.env.local`, abriu o arquivo e bateu o desespero: "o que é cada uma dessas chaves e onde eu pego?". Este guia resolve isso. Sem pular etapas, sem assumir que você já configurou nada antes.
 >
@@ -98,7 +98,7 @@ fica em `http://127.0.0.1:54323` e o WAHA em `http://127.0.0.1:3030`.
 - **Cartão de crédito** 💳 — alguns serviços pedem só pra "comprovar identidade" mesmo no plano grátis (Supabase, Sentry). Se ficar dentro do free tier, **não cobram nada**.
 
 **Como o `.env.local` funciona:**
-- Fica na **raiz do projeto**: `/seu-caminho/DeskcommCRM/.env.local`.
+- Fica na **raiz do projeto**: `/seu-caminho/pj-crm/.env.local`.
 - Cada linha é `NOME_DA_VARIAVEL=valor` — sem espaço antes/depois do `=`.
 - Strings com caracteres especiais: envolva em aspas duplas (`"valor com espaço"`).
 - Variáveis com `NEXT_PUBLIC_` no nome são **expostas no browser** — nunca coloque secret aí.
@@ -139,7 +139,7 @@ Se você quer rodar o app o mais rápido possível com o mínimo viável:
 
 1. Acesse <https://supabase.com> → **Start your project** → faça login com GitHub.
 2. No dashboard, clique **New project**.
-   - **Name:** `deskcomm-dev` (ou o que quiser).
+   - **Name:** `pjcrm-dev` (ou o que quiser).
    - **Database password:** clique no ícone de dado pra gerar. **Salve essa senha num gerenciador (1Password, Bitwarden)** — você vai precisar pra rodar migrations e nunca verá ela de novo no dashboard.
    - **Region:** a **mais próxima da VPS onde o CRM roda** — VPS no Brasil → `South America (São Paulo)`; VPS nos EUA ou na Europa → a região do Supabase mais perto dela (`us-east-1`, `eu-central-1`). Cada tela e cada turno do agente fazem várias consultas ao banco, e cada ida e volta atravessa a distância entre os dois: banco num continente e app em outro somam dezenas de milissegundos por consulta, em toda página. **A região não muda depois de criado o projeto** — trocar exige criar outro projeto e migrar os dados.
    - **Pricing plan:** Free.
@@ -213,7 +213,7 @@ No menu lateral → **Storage** → **New bucket**:
 
 1. Acesse <https://upstash.com> → **Sign up** com GitHub.
 2. No dashboard, clique **Create Database**.
-   - **Name:** `deskcomm-dev`
+   - **Name:** `pjcrm-dev`
    - **Type:** Regional (mais barato que Global pra dev)
    - **Region:** `sa-east-1` (São Paulo) — ou `us-east-1` se SP não estiver disponível no free tier.
    - **Eviction:** habilitado (default).
@@ -316,7 +316,7 @@ Confira em <http://localhost:3030/dashboard/> que o WAHA está respondendo (pain
 
 1. Acesse <https://vercel.com> → faça login.
 2. No dashboard → **AI** (no menu lateral) → **Get started with AI Gateway**.
-3. Clique **Create API Key** → nome `deskcomm-dev` → copie a chave.
+3. Clique **Create API Key** → nome `pjcrm-dev` → copie a chave.
 
 ```env
 AI_GATEWAY_API_KEY=<chave-do-gateway>
@@ -330,7 +330,7 @@ VERCEL_AI_GATEWAY_URL=https://ai-gateway.vercel.sh/v1
 
 1. Acesse <https://console.anthropic.com> → **Sign Up**. 💳
 2. Adicione método de pagamento (eles dão $5 de crédito grátis).
-3. **Settings → API Keys → Create Key** → nome `deskcomm-dev` → copie.
+3. **Settings → API Keys → Create Key** → nome `pjcrm-dev` → copie.
 
 ```env
 ANTHROPIC_API_KEY=sk-ant-api03-...
@@ -356,7 +356,7 @@ Cadastre a chave em **IA → Credenciais** ou no próprio acervo, escolhendo o p
 2. Crie um workspace (ou use o pessoal) → **Create Project**.
    - **Platform:** `Next.js`
    - **Alert frequency:** "Alert me on every new issue"
-   - **Project name:** `deskcomm-dev`
+   - **Project name:** `pjcrm-dev`
 3. Após criar, o Sentry mostra o **DSN** numa tela de quickstart. É uma URL tipo `https://abc123@o456.ingest.sentry.io/789`.
 4. Se você fechou a tela: **Project Settings → Client Keys (DSN)** → copie o "DSN" público.
 
@@ -425,7 +425,7 @@ SMTP_FROM_NAME=Minha Empresa
 
 1. Acesse <https://resend.com> → **Sign up** com GitHub.
 2. **API Keys → Create API Key**:
-   - **Name:** `deskcomm-dev`
+   - **Name:** `pjcrm-dev`
    - **Permission:** `Sending access` (não `Full access`).
    - **Domain:** `All domains` (em dev) — em prod, restrinja ao domínio verificado.
 3. Copie a chave (começa com `re_...`). **Ela só aparece uma vez.**
@@ -451,7 +451,7 @@ RESEND_FROM_EMAIL=onboarding@resend.dev
 
 1. Acesse <https://partners.tiendanube.com/> → **Sign up** como parceiro (gratuito).
 2. No dashboard de parceiro → **Apps → Create new app**.
-   - **App name:** `DeskcommCRM Dev`.
+   - **App name:** `PJ CRM Dev`.
    - **Redirect URI:** `https://<sua-url-ngrok>.ngrok-free.app/api/v1/integrations/nuvemshop/callback` (o callback da Nuvemshop precisa de URL pública: instale o [ngrok](https://ngrok.com), rode `ngrok http 3000` e use a URL `https://` que ele mostra).
    - **Scopes:** marque tudo relacionado a `read_orders`, `read_customers`, `read_products`, `write_orders` (pra atualizar status).
 3. Após criar, a tela do app mostra:
@@ -600,7 +600,7 @@ Provável: você botou o **hash** em `WAHA_API_KEY` em vez do **plaintext**. Con
 ### Webhook do WAHA não chega
 - O `WAHA_HOOK_BASE_URL` com que você subiu o WAHA aponta para a porta do `pnpm dev`? (ver Passo 4 do WAHA).
 - Você reiniciou o `pnpm dev` depois de mudar o `.env.local`? Variáveis de ambiente são lidas no boot.
-- Confira logs do container: `docker logs deskcomm-waha`.
+- Confira logs do container: `docker logs pjcrm-waha`.
 
 ### Porta 3000 já em uso
 Algum outro processo rodando. Mata com `lsof -ti:3000 | xargs kill -9` ou roda o Next em outra porta: `pnpm dev -- -p 3001` (e suba o WAHA com `WAHA_HOOK_BASE_URL` apontando pra nova porta).
@@ -629,8 +629,8 @@ Com tudo verde no `/api/v1/health`:
 3. Leia [`CLAUDE.md`](../CLAUDE.md) pra convenções do projeto.
 4. Veja [`tasks/todo.md`](../tasks/todo.md) pra entender o backlog atual.
 
-Bem-vindo ao DeskcommCRM. 🛠️
+Bem-vindo ao PJ CRM. 🛠️
 
 ---
 
-> **Achou um erro neste guia?** Abra uma [issue](https://github.com/melgarafael/DeskcommCRM/issues) ou mande um PR — esse doc vive da contribuição da comunidade.
+> **Achou um erro neste guia?** Abra uma [issue](https://github.com/nesqj/pj-crm/issues) ou mande um PR — esse doc vive da contribuição da comunidade.

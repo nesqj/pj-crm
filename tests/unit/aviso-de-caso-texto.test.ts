@@ -171,7 +171,7 @@ describe("montarAvisoDeCaso", () => {
 
   it("a marca vem de fora — o texto não conhece nome de produto nenhum", () => {
     // O resolvedor de marca (`marcaDaSaida`) é async e lê o banco; este módulo é
-    // puro de propósito, e `tests/unit/branding.test.ts` varre /deskcomm/i aqui.
+    // puro de propósito, e `tests/unit/branding.test.ts` varre /pjcrm/i aqui.
     expect(montarAvisoDeCaso({ ...BASE, marca: "Zap do João" })).toContain("Zap do João");
   });
 });

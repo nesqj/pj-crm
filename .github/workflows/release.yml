@@ -78,7 +78,7 @@ jobs:
           VERSAO: ${{ steps.corte.outputs.versao }}
         run: |
           set -euo pipefail
-          git config user.name  'deskcomm-release[bot]'
+          git config user.name  'pjcrm-release[bot]'
           git config user.email '${{ steps.token.outputs.app-slug }}[bot]@users.noreply.github.com'
           git checkout -b "release/${VERSAO}"
           git add CHANGELOG.md .changes
@@ -172,9 +172,9 @@ jobs:
           # ⚠️ A TERCEIRA CONDIÇÃO É IDENTIDADE, NÃO NOME — issue #478.
           #
           # A versão anterior desta guarda procurava `%an` igual a
-          # `deskcomm-release[bot]`, e isso não é identidade: `%an` é o NOME DO
+          # `pjcrm-release[bot]`, e isso não é identidade: `%an` é o NOME DO
           # AUTOR, campo de texto que qualquer um define.
-          # `git -c user.name='deskcomm-release[bot]' commit` devolve exatamente
+          # `git -c user.name='pjcrm-release[bot]' commit` devolve exatamente
           # a string procurada. A versão anterior deste comentário ainda dizia
           # que a identidade do App "vive em secrets" — isso também é FALSO.
           #
@@ -185,10 +185,10 @@ jobs:
           # origem a este commit e quem o abriu. Medido em 2026-09-18 nos dois
           # cortes reais mais recentes da main: o PR #1160 (`release/1.34.0`,
           # commit 3a4df3cb) e o PR #1136 (`release/1.33.0`, 577c46e9) respondem
-          # `login=deskcommcrm-release[bot]`, `user.type=Bot`, head `release/*`
+          # `login=pjcrm-release[bot]`, `user.type=Bot`, head `release/*`
           # no próprio repositório. É o App — e o autor do commit não escolhe
           # esse dado. (O `user.name` que o ato 1 grava no git é
-          # `deskcomm-release[bot]`, sem o "crm": nome de exibição e login vivem
+          # `pjcrm-release[bot]`, sem o "crm": nome de exibição e login vivem
           # separados, e é o login que a API devolve.)
           #
           # A guarda aceita duas provas, as duas fora do git: (1) o PR de origem
@@ -233,10 +233,10 @@ jobs:
           # O login com que a API apresenta o App é `<slug>[bot]`, e o slug é o
           # mesmo dado que o passo do token já usa no e-mail do commit lá
           # embaixo. Medido em 2026-09-18 nos dois cortes reais da main: o `%an`
-          # do git diz `deskcomm-release[bot]` e a API diz
-          # `deskcommcrm-release[bot]` — o nome que a guarda antiga procurava nem
+          # do git diz `pjcrm-release[bot]` e a API diz
+          # `pjcrm-release[bot]` — o nome que a guarda antiga procurava nem
           # é o login da identidade. (O e-mail do commit confirma o slug:
-          # `deskcommcrm-release[bot]@users.noreply.github.com`.)
+          # `pjcrm-release[bot]@users.noreply.github.com`.)
           #
           # Slug vazio NÃO derruba a guarda: ela segue com a Prova 2, que cobre
           # todo corte legítimo (o ato 1 sempre empurra `release/<versão>` deste
@@ -358,7 +358,7 @@ jobs:
           VERSAO: ${{ steps.pendente.outputs.versao }}
         run: |
           set -euo pipefail
-          git config user.name  'deskcomm-release[bot]'
+          git config user.name  'pjcrm-release[bot]'
           git config user.email '${{ steps.token.outputs.app-slug }}[bot]@users.noreply.github.com'
           # Tag ANOTADA: guarda autor e data, e é o que `git describe
           # --exact-match` do agent.sh espera encontrar na VPS.
@@ -426,7 +426,7 @@ jobs:
           echo "esperando a publicação de v${VERSAO}…"
           for _ in $(seq 1 60); do
             faltando=""
-            for img in deskcommcrm deskcomm-worker deskcomm-scheduler deskcomm-voice-agent; do
+            for img in pjcrm pjcrm-worker pjcrm-scheduler pjcrm-voice-agent; do
               [ -n "$(ghcr_digest "$img" "${VERSAO}")" ] || faltando="${faltando} ${img}"
             done
             if [ -z "$faltando" ]; then
@@ -452,7 +452,7 @@ jobs:
           divergentes=""
           for _ in $(seq 1 20); do
             divergentes=""
-            for img in deskcommcrm deskcomm-worker deskcomm-scheduler deskcomm-voice-agent; do
+            for img in pjcrm pjcrm-worker pjcrm-scheduler pjcrm-voice-agent; do
               d_versao=$(ghcr_digest "$img" "${VERSAO}")
               d_stable=$(ghcr_digest "$img" stable)
               echo "  ${img}: ${VERSAO}=${d_versao:-ausente} stable=${d_stable:-ausente}"
@@ -473,7 +473,7 @@ jobs:
       # ─── A VERSÃO CHEGOU À VITRINE? ───────────────────────────────────────
       #
       # Lei em docs/doctrine/versionamento.md, seção "A vitrine". A página de
-      # changelog da LP (deskcomm-site) lê o CHANGELOG.md da `main` e revalida a
+      # changelog da LP (pjcrm-site) lê o CHANGELOG.md da `main` e revalida a
       # cada 10 min; somando o cache de 5 min do raw.githubusercontent.com, a
       # versão aparece em até ~15 min. Ninguém escreve release no site — por isso
       # o que se confere aqui é a CONSEQUÊNCIA, nos três idiomas, e não um passo
@@ -487,7 +487,7 @@ jobs:
       # a nossa. A release em si já saiu quando este passo roda — vermelho aqui
       # quer dizer "a vitrine não mostra", não "a versão não existe".
       - name: A versão aparece na página de changelog da LP?
-        if: steps.pendente.outputs.cortar == 'sim' && github.repository == 'melgarafael/DeskcommCRM'
+        if: steps.pendente.outputs.cortar == 'sim' && github.repository == 'nesqj/pj-crm'
         # O teto cobre o pior caso, para o diagnóstico rodar antes de o GitHub matar o passo:
         # 35 tentativas × (3 páginas × 10 s de curl + 50 s de espera) ≈ 47 min, mais o
         # diagnóstico e as páginas das versões. Com 40 min e curl de 30 s, um site que aceita a
@@ -575,7 +575,7 @@ jobs:
             done
             echo "::error::v${VERSAO} saiu (tag, release e imagens conferidas), mas a LP não a lista em:${faltando}"
             echo "::error::Confira se ${LP}/changelog responde e se o CHANGELOG.md da main tem a seção '## [${VERSAO}] — AAAA-MM-DD'."
-            echo "::error::Se o formato do cabeçalho mudou, o leitor da LP (lib/changelog.ts em deskcomm-site) precisa mudar junto."
+            echo "::error::Se o formato do cabeçalho mudou, o leitor da LP (lib/changelog.ts em pjcrm-site) precisa mudar junto."
             exit 1
           fi
           # A página da própria versão é gerada no primeiro acesso: confirma que ela abre.

@@ -7,7 +7,7 @@
 
 ## O que deste documento está EM CÓDIGO
 
-Em 05/10/2026 o produto tinha **uma** animação (`deskcomm-card-pulse`), **uma**
+Em 05/10/2026 o produto tinha **uma** animação (`pjcrm-card-pulse`), **uma**
 transição (`.agenda-coluna-horarios`) e **~24 classes de animação que não geravam
 CSS nenhum** — `animate-in`, `fade-in-0`, `zoom-in-95`, `slide-in-from-*` vêm do
 plugin `tailwindcss-animate`, que nunca foi instalado aqui, e classe que o
@@ -41,7 +41,7 @@ de layout, não de movimento.
 
 ## Filosofia
 
-Motion no DeskcommCRM **comunica continuidade espacial** — a interface não "aparece", ela "se desloca" da posição anterior pra atual. Não é decoração, não é celebração, não é "modernidade". Cada animação tem propósito; o que não tem, sai.
+Motion no PJ CRM **comunica continuidade espacial** — a interface não "aparece", ela "se desloca" da posição anterior pra atual. Não é decoração, não é celebração, não é "modernidade". Cada animação tem propósito; o que não tem, sai.
 
 Quatro testes pra cada animação:
 

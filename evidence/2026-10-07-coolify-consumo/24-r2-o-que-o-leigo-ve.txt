@@ -1,10 +1,10 @@
 inicio=2026-10-07T17:15:39Z
 ▶ Preparando o Supabase self-hosted self-hosted/v0.8.1
-===> Setup starting in /root/pr4/deskcommcrm
+===> Setup starting in /root/pr4/pjcrm
 ===> This may take several minutes...
 ===> Skipping system-package installation (--skip-deps)
 ===> Sparse-cloning supabase repo at self-hosted/v0.8.1
-===> Creating project at /root/pr4/deskcommcrm/.runtime/supabase
+===> Creating project at /root/pr4/pjcrm/.runtime/supabase
 ===> Non-interactive: using default URLs (edit .env to change)
 ===> Setting CERTBOT_EMAIL=admin@example.com
 ===> Generating secrets and legacy API keys
@@ -23,7 +23,7 @@ inicio=2026-10-07T17:15:39Z
   SMTP do CRM. Depois de salvar na tela, rode:
 Credenciais iniciais (arquivo protegido com permissao 600):
   usuario: dono-teste@exemplo.com.br
-  arquivo: /root/pr4/deskcommcrm/.runtime/admin-credentials
+  arquivo: /root/pr4/pjcrm/.runtime/admin-credentials
 A IA inicia desativada; configure um provedor depois em Agente de IA.
 ATENCAO: sem SMTP, 'esqueci a senha' e a confirmacao de cadastro NAO enviam e-mail.
 exit=0

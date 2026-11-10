@@ -43,11 +43,11 @@ const LEI = "docs/doctrine/prova-em-par.md";
  * exigem os dois.
  */
 const GUIAS_DE_ACEITE = [
-  ".agents/skills/deskcomm-contribuir/SKILL.md",
-  ".agents/skills/deskcomm-contribuir/references/pre-voo.md",
+  ".agents/skills/pjcrm-contribuir/SKILL.md",
+  ".agents/skills/pjcrm-contribuir/references/pre-voo.md",
   // Espelho do Claude Code: o mesmo texto, lido por outro CLI.
-  ".claude/skills/deskcomm-contribuir/SKILL.md",
-  ".claude/skills/deskcomm-contribuir/references/pre-voo.md",
+  ".claude/skills/pjcrm-contribuir/SKILL.md",
+  ".claude/skills/pjcrm-contribuir/references/pre-voo.md",
 ] as const;
 
 function ler(caminho: string): string {

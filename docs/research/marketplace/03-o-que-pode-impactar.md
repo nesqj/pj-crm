@@ -167,8 +167,8 @@ publicação", "teste verde não é selo". A pergunta é o que sobra para a revi
 1. **Typosquatting de publicador. Nada impede.** `publisher` é
    `z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).min(2).max(64)` (`manifest.ts:89-93`) — só forma.
    Não existe registro de publicador, prova de posse de nome, nem lista de nomes reservados:
-   `grep -rn -i "reserv\|oficial\|deskcomm" lib/extensions/*.ts` (fora de teste) devolve **1 linha**,
-   e ela é um comentário sobre outra coisa (`instalada.ts:81`). `deskcomm`, `deskcomm-oficial` e
+   `grep -rn -i "reserv\|oficial\|pjcrm" lib/extensions/*.ts` (fora de teste) devolve **1 linha**,
+   e ela é um comentário sobre outra coisa (`instalada.ts:81`). `pjcrm`, `pjcrm-oficial` e
    `deskcornm` estão livres.
 2. **"Parecer oficial" pelo texto. Nada impede.** `display.title` é texto livre de até 100
    caracteres e `summary` de até 400 (`manifest.ts:16-18, 117-124`). O conjunto de ícones é fechado
@@ -190,7 +190,7 @@ publicação", "teste verde não é selo". A pergunta é o que sobra para a revi
 
 **Mecanismos que barram (1) e (2), em ordem de custo:**
 
-- **Namespace reservado, verificado por teste.** Uma lista de prefixos (`deskcomm*`, `oficial*`,
+- **Namespace reservado, verificado por teste.** Uma lista de prefixos (`pjcrm*`, `oficial*`,
   `official*`) recusada em `slugSchema` e na regex do SQL, e uma varredura de similaridade
   (distância de Damerau-Levenshtein ≤ 1 contra a lista) no lado da vitrine. Custo: ~meio dia no
   contrato + migration + apêndice no baseline. **Barra typosquatting de nome exato e de 1 caractere;
@@ -500,7 +500,7 @@ A fala que a vitrine **não pode** ter — cada linha contradiz o código medido
 13. ⚠️ **"Marketplace oficial"** — a palavra *oficial* só é honesta se houver namespace reservado e
     a origem do catálogo aparecer na tela ao lado de cada nome. Hoje não há nem uma coisa nem outra.
 
-**O que a vitrine PODE dizer hoje, sem mentir:** que o DeskcommCRM tem um **contrato de extensão
+**O que a vitrine PODE dizer hoje, sem mentir:** que o PJ CRM tem um **contrato de extensão
 declarativa v1**, aberto e documentado; que o núcleo funciona inteiro com zero extensões; que
 instalar é uma decisão de quem administra a instalação, e ativar é de quem administra a organização;
 e que a distribuição pública **está em construção**. Isso é menos empolgante e é verdade — e o

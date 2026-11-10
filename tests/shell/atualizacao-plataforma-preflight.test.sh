@@ -20,8 +20,8 @@ reject() { local name="$1"; shift; if "$@" >"$TMP/out" 2>&1; then echo "✗ $nam
 
 WAHA_IMAGE=devlikeapro/waha:latest-2026.7.2
 ok 'release completa em AMD64' preflight_plataforma_atualizacao v1.66.1 linux/amd64
-grep -q 'deskcomm-voice-agent:1.66.1 linux/amd64' "$TMP/probes"
-TEST_MISSING=deskcomm-voice-agent
+grep -q 'pjcrm-voice-agent:1.66.1 linux/amd64' "$TMP/probes"
+TEST_MISSING=pjcrm-voice-agent
 reject 'a quarta imagem ausente recusa update' preflight_plataforma_atualizacao v1.66.2 linux/arm64
 unset TEST_MISSING
 TEST_OFFLINE=1
@@ -62,7 +62,7 @@ case "$after" in
 esac
 echo '✓ update real em ARM64 consulta plataformas antes de efeitos'
 
-# O escape da #1955 (DESKCOMM_BUILD_LOCAL) não pode sumir no ARM64: com o
+# O escape da #1955 (PJCRM_BUILD_LOCAL) não pode sumir no ARM64: com o
 # registro fora, é justamente ele que deixa atualizar. Roda o `if` REAL do
 # update.sh, com `refuse` trocado por uma saída que o teste enxerga.
 guarda="$(sed -n '/^if \[ "\$PLATAFORMA_HOST" = linux\/arm64 \]/,/^fi$/p' "$ROOT/hostgator-setup-kit/update.sh")"
@@ -70,7 +70,7 @@ guarda="$(sed -n '/^if \[ "\$PLATAFORMA_HOST" = linux\/arm64 \]/,/^fi$/p' "$ROOT
 roda_guarda() ( refuse() { exit 3; }; PLATAFORMA_HOST=linux/arm64 TARGET_TAG=v1.66.1; eval "$guarda" )
 TEST_OFFLINE=1
 reject 'ARM64 com registro fora e sem construção local recusa' roda_guarda
-DESKCOMM_BUILD_LOCAL=1 ok 'ARM64 com registro fora e DESKCOMM_BUILD_LOCAL=1 não recusa' roda_guarda
+PJCRM_BUILD_LOCAL=1 ok 'ARM64 com registro fora e PJCRM_BUILD_LOCAL=1 não recusa' roda_guarda
 unset TEST_OFFLINE
 
 test -f "$ROOT/hostgator-setup-kit/preflight-upgrade.sh" || { echo '✗ falta bootstrap legado'; exit 1; }

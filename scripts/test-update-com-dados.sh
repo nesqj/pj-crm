@@ -62,7 +62,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 BASELINE="$ROOT/supabase/baseline.sql"
-CONTAINER="deskcomm-update-dados-$$"
+CONTAINER="pjcrm-update-dados-$$"
 # A major, pelo mesmo mecanismo do `scripts/test-db.sh` (o comentário longo
 # está lá): quem PEDE escolhe, quem não pede fica no PISO. Assim o mesmo script
 # serve às duas pontas — a versão que prometemos suportar (pg15, padrão) e a que
@@ -76,7 +76,7 @@ trap cleanup EXIT
 
 echo "==> subindo $IMAGE como $CONTAINER (porta escolhida pelo daemon)"
 docker run -d --rm --name "$CONTAINER" -p "127.0.0.1::5432" \
-  --label "deskcomm.harness=update-com-dados" \
+  --label "pjcrm.harness=update-com-dados" \
   -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres "$IMAGE" >/dev/null
 
 # `pg_isready` e `psql` sem `-h` mentem aqui: o initdb sobe um servidor

@@ -66,7 +66,7 @@
 #
 set -euo pipefail
 
-NOME_DA_MANUTENCAO="deskcomm-manutencao"
+NOME_DA_MANUTENCAO="pjcrm-manutencao"
 
 manutencao_sobe() {
   local html="$KIT_DIR/manutencao"
@@ -98,19 +98,19 @@ manutencao_sobe() {
       # Prioridade 500: acima de qualquer regra `Host(...)` (a prioridade padrao
       # do Traefik e o TAMANHO da regra) e abaixo do 1000 do bloqueio do webhook
       # global do WAHA, que continua tendo de barrar durante a atualizacao.
-      --label "traefik.http.routers.deskcomm-manutencao.rule=Host(\`$dom\`)"
-      --label "traefik.http.routers.deskcomm-manutencao.entrypoints=$ep"
-      --label "traefik.http.routers.deskcomm-manutencao.tls.certresolver=$cr"
-      --label "traefik.http.routers.deskcomm-manutencao.priority=500"
-      --label "traefik.http.routers.deskcomm-manutencao.service=deskcomm-manutencao"
+      --label "traefik.http.routers.pjcrm-manutencao.rule=Host(\`$dom\`)"
+      --label "traefik.http.routers.pjcrm-manutencao.entrypoints=$ep"
+      --label "traefik.http.routers.pjcrm-manutencao.tls.certresolver=$cr"
+      --label "traefik.http.routers.pjcrm-manutencao.priority=500"
+      --label "traefik.http.routers.pjcrm-manutencao.service=pjcrm-manutencao"
       # O redirecionamento http→https vive nos labels do APP, e o app esta
       # parado — o Traefik so enxerga conteiner em execucao, entao aquela regra
       # some junto. Por isso o aviso atende nas duas portas em vez de redirecionar.
-      --label "traefik.http.routers.deskcomm-manutencao-http.rule=Host(\`$dom\`)"
-      --label "traefik.http.routers.deskcomm-manutencao-http.entrypoints=$ep_http"
-      --label "traefik.http.routers.deskcomm-manutencao-http.priority=500"
-      --label "traefik.http.routers.deskcomm-manutencao-http.service=deskcomm-manutencao"
-      --label "traefik.http.services.deskcomm-manutencao.loadbalancer.server.port=3000"
+      --label "traefik.http.routers.pjcrm-manutencao-http.rule=Host(\`$dom\`)"
+      --label "traefik.http.routers.pjcrm-manutencao-http.entrypoints=$ep_http"
+      --label "traefik.http.routers.pjcrm-manutencao-http.priority=500"
+      --label "traefik.http.routers.pjcrm-manutencao-http.service=pjcrm-manutencao"
+      --label "traefik.http.services.pjcrm-manutencao.loadbalancer.server.port=3000"
     )
   else
     args+=(--network "$(nome_do_projeto_atual)_internal")

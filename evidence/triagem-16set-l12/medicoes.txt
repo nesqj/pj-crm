@@ -81,12 +81,12 @@ L12.G2.1 · GET /api/v1/contact-tags = 200 · corpo = {"data":["obra","obra83691
 #946 · chips oferecidos = ["+ obra","+ obra8369178-renomeada","+ reforma8369178"]
 L12.G2.2 · 400px tema escuro · documento: scrollWidth=400 clientWidth=400 transborda=false
 #955 J24.3 · porta em /app/settings = "Tags |  | O vocabulário de etiquetas da empresa: onde cada uma é usada e como renomear, juntar ou excluir."
-[ambiente] login de e2e-manager@deskcomm.test: tentativa 1 falhou (http://localhost:3052/login)
+[ambiente] login de e2e-manager@pjcrm.test: tentativa 1 falhou (http://localhost:3052/login)
 #955 J24.3 · linha de obra8419015 = ["obra8419015em uso, fora do vocabulário","2","0","0","1","Renomear\nJuntar\nExcluir"]
 #955 renomear · POST = 200 · {"data":{"tag":"obra8419015","acao":"renomear","leads":0,"regras":1,"alterou":true,"destino":"obra8419015-renomeada","contatos":2,"conversas":0}}
 #955 renomear · contatos = [{"id":"390acc1a-0990-443f-9528-3c24cc261969","tags":["obra8419015-renomeada"]},{"id":"32b9848c-c8c6-4502-95cd-a3afb074c6e2","tags":["obra8419015-renomeada","orcamento8419015"]},{"id":"cfc04580-94b8-4ffc-9649-cb434a38535e","tags":["reforma8419015"]}]
 #955 renomear · regra = {"actions":[{"type":"add_tag","config":{"tags":["obra8419015-renomeada"]}}]}
-[ambiente] login de e2e-manager@deskcomm.test só entrou na tentativa 2
+[ambiente] login de e2e-manager@pjcrm.test só entrou na tentativa 2
 #955 excluir · aviso na tela = "Excluir obra8369178-renomeada de 2 contato(s), 0 lead(s) e 0 conversa(s).\n\nAtenção: 1 regra(s) de agente continuam escrevendo esta etiqueta. Excluir aqui não apaga a regra — o agente vai recriar a etiqueta no próximo atendimento.\n\nConfirmar\nCancelar"
 #955 excluir · POST = 200
 #955 excluir · a REGRA continua = {"id":"33654914-dcbf-4c7d-96e0-ad85edbb8435","actions":[{"type":"add_tag","config":{"tags":["obra8369178-renomeada"]}}]}

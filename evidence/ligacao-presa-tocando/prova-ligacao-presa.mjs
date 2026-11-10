@@ -17,7 +17,7 @@ const SENHA = process.env.OWNER_PASSWORD;
 fs.mkdirSync(out, { recursive: true });
 
 const psql = (sql) =>
-  execFileSync("docker", ["exec", "supabase_db_deskcomm-crm", "psql", "-U", "postgres", "-Atc", sql]).toString().trim();
+  execFileSync("docker", ["exec", "supabase_db_pj-crm", "psql", "-U", "postgres", "-Atc", sql]).toString().trim();
 
 (async () => {
   const org = psql("select id from organizations limit 1");

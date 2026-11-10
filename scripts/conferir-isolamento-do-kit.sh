@@ -94,7 +94,7 @@ esac
 # rasa também. Numa árvore completa, busca sem --depth — com ele o git marcaria o
 # repositório de quem roda como raso.
 ANTES_DO_FILTRO="v1.63.0"
-TMP="$(mktemp -d "${TMPDIR:-/tmp}/deskcomm-update-sh.XXXXXX")"
+TMP="$(mktemp -d "${TMPDIR:-/tmp}/pjcrm-update-sh.XXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 update_sh_da() {  # update_sh_da <tag> — caminho de uma cópia do update.sh da tag
   if ! git -C "$ROOT" rev-parse -q --verify "refs/tags/$1^{commit}" >/dev/null; then

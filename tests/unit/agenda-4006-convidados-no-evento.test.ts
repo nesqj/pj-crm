@@ -31,8 +31,8 @@ const SDR = "33333333-3333-4333-8333-333333333333";
 const CLOSER = "44444444-4444-4444-8444-444444444444";
 
 const EQUIPE = [
-  { email: "sdr@deskcomm.test", nome: "SDR" },
-  { email: "closer@deskcomm.test", nome: null },
+  { email: "sdr@pjcrm.test", nome: "SDR" },
+  { email: "closer@pjcrm.test", nome: null },
 ];
 
 function agendamento(sobrescreve: Partial<AgendamentoParaGoogle> = {}): AgendamentoParaGoogle {
@@ -65,16 +65,16 @@ describe("#4006 · convidados da equipe no evento", () => {
     expect(participantes.map((p) => p.email)).toEqual([
       "rosa@clinica.test",
       "acompanhante@clinica.test",
-      "sdr@deskcomm.test",
-      "closer@deskcomm.test",
+      "sdr@pjcrm.test",
+      "closer@pjcrm.test",
     ]);
 
     const corpo = paraEventoDoGoogle(agendamento({ participantes }));
     expect((corpo.attendees ?? []).map((p) => p.email)).toEqual([
       "rosa@clinica.test",
       "acompanhante@clinica.test",
-      "sdr@deskcomm.test",
-      "closer@deskcomm.test",
+      "sdr@pjcrm.test",
+      "closer@pjcrm.test",
     ]);
     // Todo convidado pede resposta: o convite existe para a pessoa aceitar.
     expect((corpo.attendees ?? []).every((p) => p.responseStatus === "needsAction")).toBe(true);
@@ -83,14 +83,14 @@ describe("#4006 · convidados da equipe no evento", () => {
   it("o e-mail manual continua entrando, e o mesmo endereço duas vezes não duplica attendee", () => {
     const participantes = participantesDoAgendamento({
       contactEmail: null,
-      guestEmail: "closer@deskcomm.test",
+      guestEmail: "closer@pjcrm.test",
       // O closer está na equipe E foi digitado à mão: é o caso comum, não o
       // exótico — e o Google recusa o evento INTEIRO com e-mail repetido.
       teamGuests: EQUIPE,
     });
     expect(participantes.map((p) => p.email)).toEqual([
-      "closer@deskcomm.test",
-      "sdr@deskcomm.test",
+      "closer@pjcrm.test",
+      "sdr@pjcrm.test",
     ]);
   });
 
@@ -98,9 +98,9 @@ describe("#4006 · convidados da equipe no evento", () => {
     const participantes = participantesDoAgendamento({
       contactEmail: null,
       guestEmail: "   ",
-      teamGuests: [{ email: "  ", nome: null }, { email: "sdr@deskcomm.test" }],
+      teamGuests: [{ email: "  ", nome: null }, { email: "sdr@pjcrm.test" }],
     });
-    expect(participantes.map((p) => p.email)).toEqual(["sdr@deskcomm.test"]);
+    expect(participantes.map((p) => p.email)).toEqual(["sdr@pjcrm.test"]);
   });
 
   it("a descrição leva o bloco do negócio DEPOIS do texto que a pessoa escreveu", () => {
@@ -125,23 +125,23 @@ describe("#4006 · convidados da equipe no evento", () => {
     expect(comEquipe.outbound.guest).not.toBe(semEquipe.outbound.guest);
   });
 
-  it("a lista publicada em deskcomm_guests é o que permite desconvidar depois", () => {
+  it("a lista publicada em pjcrm_guests é o que permite desconvidar depois", () => {
     const corpo = paraEventoDoGoogle(
       agendamento({
         convidados_equipe_ids: [SDR, CLOSER],
       } as Partial<AgendamentoParaGoogle>),
     );
-    expect(corpo.extendedProperties?.private?.deskcomm_guests).toBe(`${SDR},${CLOSER}`);
+    expect(corpo.extendedProperties?.private?.pjcrm_guests).toBe(`${SDR},${CLOSER}`);
     // As chaves de identidade continuam lá: sem elas o evento deixa de ser nosso.
-    expect(corpo.extendedProperties?.private?.deskcomm_appointment).toBe(AGENDAMENTO);
+    expect(corpo.extendedProperties?.private?.pjcrm_appointment).toBe(AGENDAMENTO);
   });
 });
 
 describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto", () => {
   const evento = {
     attendees: [
-      { email: "sdr@deskcomm.test", responseStatus: "accepted" },
-      { email: "especialista@deskcomm.test", responseStatus: "needsAction" },
+      { email: "sdr@pjcrm.test", responseStatus: "accepted" },
+      { email: "especialista@pjcrm.test", responseStatus: "needsAction" },
       { email: "acompanhante@clinica.test", responseStatus: "declined" },
       // Posto direto no Google por uma pessoa: NÃO é nosso, não se toca.
       { email: "convidado-do-google@externo.test" },
@@ -153,7 +153,7 @@ describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto",
       contact_email: null,
       contact_nome: null,
       guest_email: "acompanhante@clinica.test",
-      convidados_da_equipe: [{ email: "sdr@deskcomm.test", nome: "SDR" }],
+      convidados_da_equipe: [{ email: "sdr@pjcrm.test", nome: "SDR" }],
       convidados_equipe_ids: [SDR],
       team_guest_user_ids: [SDR],
     } as Partial<AgendamentoParaGoogle>);
@@ -165,11 +165,11 @@ describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto",
       null,
       ["guest"],
       false,
-      { convidadosAnteriores: ["especialista@deskcomm.test"] },
+      { convidadosAnteriores: ["especialista@pjcrm.test"] },
     ) as { attendees?: Array<{ email: string; responseStatus?: string }> };
 
     expect(patch.attendees?.map((p) => p.email)).toEqual([
-      "sdr@deskcomm.test",
+      "sdr@pjcrm.test",
       "acompanhante@clinica.test",
       "convidado-do-google@externo.test",
     ]);
@@ -185,7 +185,7 @@ describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto",
       null,
       ["guest"],
       false,
-      { convidadosAnteriores: ["especialista@deskcomm.test"] },
+      { convidadosAnteriores: ["especialista@pjcrm.test"] },
     ) as { attendees?: Array<{ email: string; responseStatus?: string }> };
 
     const segundo = delta(
@@ -210,8 +210,8 @@ describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto",
       { convidadosAnteriores: [] },
     ) as { extendedProperties?: { private?: Record<string, string> } };
 
-    expect(patch.extendedProperties?.private?.deskcomm_org).toBe(ORG);
-    expect(patch.extendedProperties?.private?.deskcomm_appointment).toBe(AGENDAMENTO);
+    expect(patch.extendedProperties?.private?.pjcrm_org).toBe(ORG);
+    expect(patch.extendedProperties?.private?.pjcrm_appointment).toBe(AGENDAMENTO);
   });
 
   /**
@@ -224,7 +224,7 @@ describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto",
     ({
       ...evento,
       extendedProperties: {
-        private: { deskcomm_org: ORG, deskcomm_appointment: AGENDAMENTO, ...privadas },
+        private: { pjcrm_org: ORG, pjcrm_appointment: AGENDAMENTO, ...privadas },
       },
     }) as unknown as EventoDoGoogle;
 
@@ -248,14 +248,14 @@ describe("#4006 · editar o compromisso mexe em attendees sem estragar o resto",
   it("evento com lista publicada e equipe esvaziada: apaga a lista no Google", () => {
     const patch = delta(
       semEquipe() as never,
-      eventoPublicado({ deskcomm_guests: SDR }),
+      eventoPublicado({ pjcrm_guests: SDR }),
       null,
       ["guest"],
       false,
-      { convidadosAnteriores: ["sdr@deskcomm.test"] },
+      { convidadosAnteriores: ["sdr@pjcrm.test"] },
     ) as { extendedProperties?: { private?: Record<string, string | null> } };
 
-    expect(patch.extendedProperties?.private?.deskcomm_guests).toBeNull();
-    expect(patch.extendedProperties?.private?.deskcomm_org).toBe(ORG);
+    expect(patch.extendedProperties?.private?.pjcrm_guests).toBeNull();
+    expect(patch.extendedProperties?.private?.pjcrm_org).toBe(ORG);
   });
 });

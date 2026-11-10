@@ -35,7 +35,7 @@ Get-Content rank.sql | ssh appfin-staging "docker exec -i supabase-db psql -U po
 Get-Content sites.sql | ssh appfin-staging "docker exec -i supabase-db psql -U postgres -d postgres -tA"
 ```
 
-Spike de fetch executado **de dentro da VPS** (`docker exec -i deskcomm-worker-1 node --input-type=module`, Node v22.23.3, timeout 8s, redirects seguidos):
+Spike de fetch executado **de dentro da VPS** (`docker exec -i pjcrm-worker-1 node --input-type=module`, Node v22.23.3, timeout 8s, redirects seguidos):
 
 | Classe | Qtd/20 | Detalhe medido |
 |---|---|---|

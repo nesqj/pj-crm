@@ -12,7 +12,7 @@
  *   1. cloudflared tunnel --url http://localhost:3001   (anote a https://….trycloudflare.com)
  *   2. no .env.e2e: NEXT_PUBLIC_APP_URL=<essa URL> e COBRANCA_API_BASE_URL_TESTE= (vazio)
  *   3. pnpm e2e:build
- *   4. STRIPE_TEST_SECRET_KEY="${STRIPE_TEST_SECRET_KEY:-$(cat ~/.config/deskcomm/stripe-teste.key)}" pnpm exec playwright test tests/e2e/cobranca-stripe-teste.spec.ts
+ *   4. STRIPE_TEST_SECRET_KEY="${STRIPE_TEST_SECRET_KEY:-$(cat ~/.config/pjcrm/stripe-teste.key)}" pnpm exec playwright test tests/e2e/cobranca-stripe-teste.spec.ts
  *   5. pnpm e2e:env && pnpm e2e:build   (a suíte volta ao dublê)
  */
 import { randomUUID } from "node:crypto";

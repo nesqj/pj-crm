@@ -18,10 +18,10 @@ O host do kit não tem Node, e o WAHA só é alcançável dentro da rede do
 compose. A receita roda o programa num contêiner `node` descartável que
 **compartilha a rede do WAHA** (`--network container:`) e **monta o volume do
 store só-leitura** (`--volumes-from ...:ro`). Rode como root, na pasta onde o kit
-instalou (`/opt/deskcommcrm` por padrão):
+instalou (`/opt/pjcrm` por padrão):
 
 ```bash
-cd /opt/deskcommcrm
+cd /opt/pjcrm
 W=$(docker ps -q --filter label=com.docker.compose.service=waha)
 
 # 1) memória do WAHA agora (uso / teto do mem_limit)

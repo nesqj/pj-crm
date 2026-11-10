@@ -1,7 +1,7 @@
 # Ref curto para a UTM da landing page
 
 Data: 2026-09-20
-Status: TODAS as fatias em PR e com CI VERDE — mecanismo em melgarafael/DeskcommCRM#1405 (19/19), tela em #1409 (19/19, empilhado).
+Status: TODAS as fatias em PR e com CI VERDE — mecanismo em nesqj/pj-crm#1405 (19/19), tela em #1409 (19/19, empilhado).
 Antecessor: `2026-09-18-trackeamento-de-campanha-conjunto-anuncio.md`
 
 ## Diário de execução
@@ -13,7 +13,7 @@ Desvio sem registro vira plano que mente.
 
 | Fatia | Estado |
 |-------|--------|
-| F1 migration + invariantes de RLS | **feito** — migration `0381`, PR melgarafael/DeskcommCRM#1405 |
+| F1 migration + invariantes de RLS | **feito** — migration `0381`, PR nesqj/pj-crm#1405 |
 | F2 captura e casamento | **feito** — no mesmo PR #1405, com a regra de desempate declarada |
 | F3 rota pública | **feito** — no mesmo PR #1405 |
 | F4 tela de configuração | **feito** — PR #1409, empilhado no #1405 |
@@ -342,8 +342,8 @@ segunda forma dá dois PRs revisáveis em vez de cinco.
    escrita antes do código, não durante.
 3. **Rota pública nova é superfície de abuso.** O rate limit não é opcional; a do
    Google já trata isso e a razão está escrita no cabeçalho dela.
-4. **Trabalhar em `DeskcommCRM-contrib`.** Nunca na instalação de produção
-   (`DeskcommCRM-crm-advanx`) — ver o incidente registrado no plano antecessor.
+4. **Trabalhar em `pj-crm-contrib`.** Nunca na instalação de produção
+   (`pj-crm-crm-advanx`) — ver o incidente registrado no plano antecessor.
 
 ## Fora do escopo
 

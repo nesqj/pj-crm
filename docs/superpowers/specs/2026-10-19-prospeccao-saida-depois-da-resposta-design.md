@@ -363,7 +363,7 @@ oferecida). Repetir para a 3ª (**[removido por decisão do mantenedor (doc 170 
 8. **[não implementado neste PR; depende de decisão do mantenedor]** **Commit separado do modo `off`**: refine, `store.ts` (aceite pelo ator),
    `prospecting.exit_offer_disabled`, caixa de aviso na tela, testes.
 9. **Docs + mapa + fragmento.**
-10. **Pré-voo** (`bash .agents/skills/deskcomm-contribuir/scripts/pre-voo.sh`) e os gates do CI pelo
+10. **Pré-voo** (`bash .agents/skills/pjcrm-contribuir/scripts/pre-voo.sh`) e os gates do CI pelo
     PR interno do fork (nesta máquina não se roda Docker de teste).
 11. **Prova em tela** numa instalação de teste — abertura sem PARAR; resposta; 2ª (ou 3ª — **[removido por decisão do mantenedor (doc 170 = B, 20/10): só 1ª e 2ª]**) com
     PARAR; "PARAR" respondido à abertura bloqueando; "Não oferecer" exigindo o aceite (**[não implementado neste PR; depende de decisão do mantenedor]**) — com

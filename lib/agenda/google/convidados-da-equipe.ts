@@ -98,7 +98,7 @@ export async function emailsDosConvidadosDaEquipe(
 }
 
 /**
- * Os e-mails de quem está em `deskcomm_guests` e não fica no evento: saiu da
+ * Os e-mails de quem está em `pjcrm_guests` e não fica no evento: saiu da
  * lista, ou segue nela sem vínculo ativo com a organização.
  *
  * ⚠️ Não usa o filtro de membro ativo de `emailsDosConvidadosDaEquipe`: é para
@@ -107,7 +107,7 @@ export async function emailsDosConvidadosDaEquipe(
  * para ela, e por isso vão TODOS os e-mails conhecidos da pessoa.
  *
  * ⚠️ Falha de leitura LANÇA, ao contrário da função acima. O PATCH reescreve
- * `deskcomm_guests`, então seguir sem saber o e-mail apagaria o único registro de
+ * `pjcrm_guests`, então seguir sem saber o e-mail apagaria o único registro de
  * quem ainda tem de sair. A passada falha e o worker tenta de novo. Com vínculo
  * lido, a pessoa existe (`on delete cascade`), logo erro do GoTrue é transitório.
  */

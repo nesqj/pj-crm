@@ -1254,7 +1254,7 @@
         {
           "origem": "cetico--admin-marca.json",
           "indice": 1,
-          "texto": "app/admin/(protected)/marca/_form.tsx:294 e :340: 'Deixe em branco para voltar ao nome padrão' e 'voltar à cor padrão do sistema' são imprecisos. Em branco, o valor cai primeiro para o arquivo de instalação (APP_NAME/APP_ACCENT_HEX, lib/branding/resolve.ts:599-614), e o install.sh grava APP_NAME=DeskcommCRM por padrão (hostgator-setup-kit/install.sh:1467)."
+          "texto": "app/admin/(protected)/marca/_form.tsx:294 e :340: 'Deixe em branco para voltar ao nome padrão' e 'voltar à cor padrão do sistema' são imprecisos. Em branco, o valor cai primeiro para o arquivo de instalação (APP_NAME/APP_ACCENT_HEX, lib/branding/resolve.ts:599-614), e o install.sh grava APP_NAME=PJ CRM por padrão (hostgator-setup-kit/install.sh:1467)."
         }
       ],
       "anterior": null,
@@ -1680,7 +1680,7 @@
         {
           "origem": "visual--admin-tenants.json",
           "indice": 0,
-          "texto": "DeskComm: a faixa de empresa suspensa diz 'Sem razão registrada' mesmo quando o admin escreveu o motivo, que fica gravado no Audit (visto em suspender-reativar-excluir/p3; a dica do curso contorna, mas é defeito de produto)."
+          "texto": "PJ CRM: a faixa de empresa suspensa diz 'Sem razão registrada' mesmo quando o admin escreveu o motivo, que fica gravado no Audit (visto em suspender-reativar-excluir/p3; a dica do curso contorna, mas é defeito de produto)."
         }
       ],
       "anterior": null,
@@ -5189,7 +5189,7 @@
           "modulo": "plano-e-cobranca",
           "origem": "visual--plano-e-cobranca.json",
           "indice": 0,
-          "texto": "Os quadros \"Trocar de plano\" e \"Cancelar assinatura\" não têm botão de fechar ou voltar. Quando um deles abre, o botão que o abriu some, porque é renderizado só com !trocando / !cancelando. A única forma de desistir é sair da tela ou recarregar. Os dois quadros também podem ficar abertos ao mesmo tempo. Fonte: /Users/rafaelmelgaco/DeskcommCRM-curso/components/cobranca/AcoesDaAssinatura.tsx, linhas 308-405.",
+          "texto": "Os quadros \"Trocar de plano\" e \"Cancelar assinatura\" não têm botão de fechar ou voltar. Quando um deles abre, o botão que o abriu some, porque é renderizado só com !trocando / !cancelando. A única forma de desistir é sair da tela ou recarregar. Os dois quadros também podem ficar abertos ao mesmo tempo. Fonte: /Users/rafaelmelgaco/pj-crm-curso/components/cobranca/AcoesDaAssinatura.tsx, linhas 308-405.",
           "conferencia": "observacao_visual_relata_pelo_revisor; pendente de triagem/reproducao"
         }
       ]
@@ -5376,7 +5376,7 @@
       "modulo": "app-no-celular",
       "origem": "visual--app-no-celular.json",
       "indice": 2,
-      "texto": "Ferramenta do curso, não do DeskComm: quando o alvo é um título (role heading), a caixa de destaque pega a largura inteira e cobre metade da linha de subtítulo logo abaixo (conhecendo-a-tela p2 e ligar-os-avisos p3). Falta o montador recortar a caixa pela altura do texto do título.",
+      "texto": "Ferramenta do curso, não do PJ CRM: quando o alvo é um título (role heading), a caixa de destaque pega a largura inteira e cobre metade da linha de subtítulo logo abaixo (conhecendo-a-tela p2 e ligar-os-avisos p3). Falta o montador recortar a caixa pela altura do texto do título.",
       "conferencia": "observacao_visual_relata_pelo_revisor; pendente de triagem/reproducao",
       "classificacao": "curso/ambiente; não é defeito do produto"
     },
@@ -5408,7 +5408,7 @@
       "modulo": "distribuicao-de-atendimento",
       "origem": "visual--distribuicao-de-atendimento.json",
       "indice": 2,
-      "texto": "Montador do curso (não é o DeskComm): quando a esquerda de uma caixa já está ocupada, o selo vai para cima e cobre texto. Medido em quem-recebe p2 (cobre '(segundos)'), responsaveis p3 (cobre a ajuda do destino) e responsaveis p5 (cobre 'Salvar responsáveis'). Pede uma checagem de colisão com texto antes de escolher onde pôr o selo.",
+      "texto": "Montador do curso (não é o PJ CRM): quando a esquerda de uma caixa já está ocupada, o selo vai para cima e cobre texto. Medido em quem-recebe p2 (cobre '(segundos)'), responsaveis p3 (cobre a ajuda do destino) e responsaveis p5 (cobre 'Salvar responsáveis'). Pede uma checagem de colisão com texto antes de escolher onde pôr o selo.",
       "conferencia": "observacao_visual_relata_pelo_revisor; pendente de triagem/reproducao",
       "classificacao": "curso/ambiente; não é defeito do produto"
     },
@@ -5472,7 +5472,7 @@
       "modulo": "plano-e-cobranca",
       "origem": "visual--plano-e-cobranca.json",
       "indice": 1,
-      "texto": "Do montador de imagens, não do DeskComm: quando o alvo é um botão no meio de uma fileira (tipos caixa e numero), o selo vai para a esquerda do alvo e cobre o texto do botão vizinho. Isso aparece em trocar-de-plano p1 (\"Gerenciar pagar...\"), cancelar-assinatura p1 (\"Trocar de...\") e cancelar-assinatura p3 (\"Gerenciar pagar...\"). Não há campo no JSON da lição para mudar a posição do selo.",
+      "texto": "Do montador de imagens, não do PJ CRM: quando o alvo é um botão no meio de uma fileira (tipos caixa e numero), o selo vai para a esquerda do alvo e cobre o texto do botão vizinho. Isso aparece em trocar-de-plano p1 (\"Gerenciar pagar...\"), cancelar-assinatura p1 (\"Trocar de...\") e cancelar-assinatura p3 (\"Gerenciar pagar...\"). Não há campo no JSON da lição para mudar a posição do selo.",
       "conferencia": "observacao_visual_relata_pelo_revisor; pendente de triagem/reproducao",
       "classificacao": "curso/ambiente; não é defeito do produto"
     },

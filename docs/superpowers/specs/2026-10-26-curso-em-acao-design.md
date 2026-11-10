@@ -1,4 +1,4 @@
-# Deskcomm em ação — jornadas visuais no curso
+# PJ CRM em ação — jornadas visuais no curso
 
 **Estado:** aprovado pelo dono em 26/10/2026 ("Pode seguir com isso"). As decisões de apresentação abaixo seguem a recomendação aprovada. Destino: infraestrutura de ensino; não altera o núcleo nem instala extensão nas organizações.
 
@@ -8,7 +8,7 @@ Quem já instalou consegue mostrar a um cliente como um atendimento caminha da p
 
 ## Decisões adotadas
 
-- Entrada permanente **Deskcomm em ação** no menu e na abertura do curso existente.
+- Entrada permanente **PJ CRM em ação** no menu e na abertura do curso existente.
 - Dez nichos: clínicas, e-commerce, imobiliárias, seguros, consórcio, infoprodutos, advocacia, contabilidade, escolas/cursos e oficinas/assistência técnica. Três histórias específicas por nicho.
 - Dois modos: **Apresentar ao cliente** (uma cena de cada vez, linha do tempo, avançar/voltar, teclado, tela cheia e link direto) e **Entender a montagem** (recursos, requisitos e links para lições existentes).
 - O curso continua estático, sem login, sem depender da VPS ou de uma chamada de IA ao ser apresentado. Apresentação por cenas, sem reprodução automática nem duração comercial prometida.
@@ -28,7 +28,7 @@ O montador carrega e valida os nichos, referências às lições, unicidade dos 
 - Não adicionar dependências de runtime nem rotas/tabelas ao produto.
 - Conteúdo privado, contas, sessões, tokens e dados de clientes nunca entram nos assets públicos.
 - Nunca executar a semente destrutiva contra hg-vps. Ela só aceita banco local na bancada vps-teste.
-- hg-vps / organização Deskcomm Admin foi autorizada para acesso à configuração de IA; chaves ficam opacas e nenhum cliente real recebe mensagem.
+- hg-vps / organização PJ CRM Admin foi autorizada para acesso à configuração de IA; chaves ficam opacas e nenhum cliente real recebe mensagem.
 - Foto real não prova uma ação de IA. Roteiros e integrações externas devem ser nomeados com precisão.
 - Usar PT-BR claro e identidade visual do curso, com contraste, foco visível, celular e redução de movimento.
 

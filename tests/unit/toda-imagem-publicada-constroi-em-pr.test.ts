@@ -1,7 +1,7 @@
 /**
  * TODA IMAGEM QUE O PRODUTO PUBLICA TEM DE SER CONSTRUÍDA EM PR.
  *
- * Em 20/09/2026 a quarta imagem do produto (`deskcomm-voice-agent`, do #677)
+ * Em 20/09/2026 a quarta imagem do produto (`pjcrm-voice-agent`, do #677)
  * entrou na `main` sem NUNCA ter sido construída — e o `imagens-ok`, que é
  * check obrigatório, ficou VERDE. Só no primeiro build de verdade, já na
  * `main`, apareceu o defeito: a receita dela não copiava `patches/`, e o
@@ -142,7 +142,7 @@ describe("toda imagem publicada é construída em PR", () => {
     const fundo = recorteDoJob(yml, "imagens-de-fundo-sobem").job;
     expect(fundo).toContain("arch: amd64");
     expect(fundo).toContain("arch: arm64");
-    expect(fundo).toContain("bash scripts/sonda-voice-agent-na-imagem.sh deskcomm-voice-agent:pr");
+    expect(fundo).toContain("bash scripts/sonda-voice-agent-na-imagem.sh pjcrm-voice-agent:pr");
   });
 
   it("cada índice montado é verificado antes de promover stable", () => {
@@ -171,7 +171,7 @@ describe("toda imagem publicada é construída em PR", () => {
     // Uma receita na matriz que nenhum job de PR nomeia tem de ser pega.
     const sabotado = yml.replace(
       /(matrix:\s*\n\s*include:\s*\n)/,
-      "$1          - name: deskcomm-inventada\n            dockerfile: Dockerfile.inventada\n",
+      "$1          - name: pjcrm-inventada\n            dockerfile: Dockerfile.inventada\n",
     );
     const emPr = new Set(receitasConstruidasEmPr(sabotado));
     expect(receitasPublicadas(sabotado).filter((r) => !emPr.has(r))).toContain("Dockerfile.inventada");

@@ -28,4 +28,4 @@ A faxina do Coolify com Unused volumes marcado: mostre a tela e explique o que e
 ## Tarefa do aluno
 
 Um backup rodado à mão, o agendamento conferido no dia seguinte
-(`ls -lt ~/deskcommcrm/backups | head`) e a planilha de custo por cliente preenchida.
+(`ls -lt ~/pjcrm/backups | head`) e a planilha de custo por cliente preenchida.

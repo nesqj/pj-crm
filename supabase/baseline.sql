@@ -19,7 +19,7 @@ CREATE SCHEMA IF NOT EXISTS "public";
 ALTER SCHEMA "public" OWNER TO "pg_database_owner";
 
 
-COMMENT ON SCHEMA "public" IS 'DeskcommCRM v0.1 - Migration 0001 platform_base applied 2026-04-28';
+COMMENT ON SCHEMA "public" IS 'PJ CRM v0.1 - Migration 0001 platform_base applied 2026-04-28';
 
 
 
@@ -1785,7 +1785,7 @@ CREATE TABLE IF NOT EXISTS "public"."organizations" (
 ALTER TABLE "public"."organizations" OWNER TO "postgres";
 
 
-COMMENT ON TABLE "public"."organizations" IS 'Tenants do DeskcommCRM. Cada linha = 1 e-commerce cliente.';
+COMMENT ON TABLE "public"."organizations" IS 'Tenants do PJ CRM. Cada linha = 1 e-commerce cliente.';
 
 
 
@@ -21549,7 +21549,7 @@ begin
    if not c.available or c.access_role not in ('owner','writer') then
     update public.calendar_appointments set google_sync_error='A agenda de destino não permite publicação. Confira o acesso nas configurações.',google_next_attempt_at=now()+interval '15 minutes' where organization_id=p_org and id=p_id;return null;end if;
    update public.calendar_appointments set google_connection_id=c.connection_id,google_calendar_id=c.external_calendar_id,
-    google_event_id='deskcommapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
+    google_event_id='pjcrmapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
   end if;
   update public.calendar_appointments set google_claim_token=gen_random_uuid(),google_claim_epoch=google_claim_epoch+1,
    google_claim_until=clock_timestamp()+interval '90 seconds' where organization_id=p_org and id=p_id returning * into a;
@@ -22007,7 +22007,7 @@ begin
    if not c.available or c.access_role not in ('owner','writer') then
     update public.calendar_appointments set google_sync_error='A agenda de destino não permite publicação. Confira o acesso nas configurações.',google_next_attempt_at=now()+interval '15 minutes' where organization_id=p_org and id=p_id;return null;end if;
    update public.calendar_appointments set google_connection_id=c.connection_id,google_calendar_id=c.external_calendar_id,
-    google_event_id='deskcommapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
+    google_event_id='pjcrmapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
   end if;
   update public.calendar_appointments set google_claim_token=gen_random_uuid(),google_claim_epoch=google_claim_epoch+1,
    google_claim_until=clock_timestamp()+interval '90 seconds' where organization_id=p_org and id=p_id returning * into a;
@@ -22117,7 +22117,7 @@ begin
    if not c.available or c.access_role not in ('owner','writer') then
     update public.calendar_appointments set google_sync_error='A agenda de destino não permite publicação. Confira o acesso nas configurações.',google_next_attempt_at=now()+interval '15 minutes' where organization_id=p_org and id=p_id;return null;end if;
    update public.calendar_appointments set google_connection_id=c.connection_id,google_calendar_id=c.external_calendar_id,
-    google_event_id='deskcommapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
+    google_event_id='pjcrmapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
   end if;
   update public.calendar_appointments set google_claim_token=gen_random_uuid(),google_claim_epoch=google_claim_epoch+1,
    google_claim_until=clock_timestamp()+interval '90 seconds' where organization_id=p_org and id=p_id returning * into a;
@@ -26128,7 +26128,7 @@ begin
   -- sem um sinal explícito a guarda da seção 4b barraria o próprio sistema. A
   -- chave é de TRANSAÇÃO (`set_config(..., true)`) e volta a 'off' na linha
   -- seguinte: a janela é o UPDATE, não o resto da transação.
-  perform set_config('deskcomm.cliente_pela_agenda', 'on', true);
+  perform set_config('pjcrm.cliente_pela_agenda', 'on', true);
 
   update public.contacts
      set first_service_at = v_depois,
@@ -26139,7 +26139,7 @@ begin
    where organization_id = p_org
      and id = p_contact;
 
-  perform set_config('deskcomm.cliente_pela_agenda', 'off', true);
+  perform set_config('pjcrm.cliente_pela_agenda', 'off', true);
 
   -- UMA VEZ POR CONTATO: só quando a etiqueta entra na primeira vez que a regra
   -- o reconhece.
@@ -26211,7 +26211,7 @@ revoke execute on function public.fn_recalcular_cliente_do_contato(uuid, uuid, b
 --     e a etiqueta passa a ser dela. Com o dono já nulo não há o que
 --     reconciliar, que é o caso da esmagadora maioria das edições de tag.
 --
--- A CHAVE `deskcomm.cliente_pela_agenda` é de transação e não é alcançável de
+-- A CHAVE `pjcrm.cliente_pela_agenda` é de transação e não é alcançável de
 -- fora: o PostgREST não envia SQL solto, e `set_config` mora em `pg_catalog`,
 -- fora do schema exposto. Ela existe porque `auth.uid()` continua preenchido
 -- dentro da `security definer` chamada pela sessão.
@@ -26224,7 +26224,7 @@ declare
   c_etiqueta constant text := 'cliente';
 begin
   if auth.uid() is not null
-     and coalesce(current_setting('deskcomm.cliente_pela_agenda', true), '') <> 'on'
+     and coalesce(current_setting('pjcrm.cliente_pela_agenda', true), '') <> 'on'
      and (old.first_service_at is distinct from new.first_service_at
        or old.client_recognized_at is distinct from new.client_recognized_at
        or old.client_tag_by_system is distinct from new.client_tag_by_system) then
@@ -46568,7 +46568,7 @@ notify pgrst, 'reload schema';
 -- Espelho idempotente da 0581. `lead.won`, `lead.lost`, `lead.reopened` e
 -- `lead.assigned` só entram no `event_log` pelo gatilho de `crm_leads` (ou pelo
 -- servidor, sem sessão); o gatilho se anuncia com a chave de transação
--- `deskcomm.desfecho_pelo_negocio` e a restaura antes de sair. Reescrito a
+-- `pjcrm.desfecho_pelo_negocio` e a restaura antes de sair. Reescrito a
 -- partir das definições VIGENTES: o gatilho da 0070 (dono agente) e o
 -- `emit_event` da 0551. Racional completo no cabeçalho da migration.
 create or replace function public.fn_emit_event_on_lead_change() returns trigger
@@ -46586,8 +46586,8 @@ begin
   -- sessão de quem moveu o card), e sem este sinal a reserva do `emit_event`
   -- calaria o próprio gatilho. A chave é de transação e volta ao valor anterior
   -- antes do `return` — a janela é este corpo, não o resto da transação.
-  v_antes := current_setting('deskcomm.desfecho_pelo_negocio', true);
-  perform set_config('deskcomm.desfecho_pelo_negocio', 'on', true);
+  v_antes := current_setting('pjcrm.desfecho_pelo_negocio', true);
+  perform set_config('pjcrm.desfecho_pelo_negocio', 'on', true);
 
   if new.status is distinct from old.status then
     if new.status = 'won' then
@@ -46612,7 +46612,7 @@ begin
         'owner_kind', new.owner_kind));
   end if;
 
-  perform set_config('deskcomm.desfecho_pelo_negocio', coalesce(v_antes, ''), true);
+  perform set_config('pjcrm.desfecho_pelo_negocio', coalesce(v_antes, ''), true);
   return new;
 end$$;
 
@@ -46649,7 +46649,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -47179,7 +47179,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -53133,7 +53133,7 @@ begin
    if not c.available or c.access_role not in ('owner','writer') then
     update public.calendar_appointments set google_sync_error='A agenda de destino não permite publicação. Confira o acesso nas configurações.',google_next_attempt_at=now()+interval '15 minutes' where organization_id=p_org and id=p_id;return null;end if;
    update public.calendar_appointments set google_connection_id=c.connection_id,google_calendar_id=c.external_calendar_id,
-    google_event_id='deskcommapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
+    google_event_id='pjcrmapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
   end if;
   update public.calendar_appointments set google_claim_token=gen_random_uuid(),google_claim_epoch=google_claim_epoch+1,
    google_claim_until=clock_timestamp()+interval '90 seconds' where organization_id=p_org and id=p_id returning * into a;
@@ -53430,7 +53430,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -55370,7 +55370,7 @@ create policy crm_tasks_write on public.crm_tasks
 -- ─── O defeito, e por que o #2864 não o fechou ──────────────────────────────
 --
 -- O #2864 fez `lib/automation/actions/add-tag.ts` reler `tags` do banco antes de
--- mesclar, consertando o caso que a correção pública jmpo/DeskcommCRM#89
+-- mesclar, consertando o caso que a correção pública jmpo/pj-crm#89
 -- descreve: o motor monta o contexto UMA vez por evento, e TODAS as regras
 -- daquele evento recebem a mesma foto; a segunda regra gravava `foto + as suas`
 -- e apagava o que a primeira tinha acabado de gravar.
@@ -58446,7 +58446,7 @@ begin
    if not c.available or c.access_role not in ('owner','writer') then
     update public.calendar_appointments set google_sync_error='A agenda de destino não permite publicação. Confira o acesso nas configurações.',google_next_attempt_at=now()+interval '15 minutes' where organization_id=p_org and id=p_id;return null;end if;
    update public.calendar_appointments set google_connection_id=c.connection_id,google_calendar_id=c.external_calendar_id,
-    google_event_id='deskcommapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
+    google_event_id='pjcrmapp'||replace(id::text,'-',''),google_pending_write='{"reservation":true}'::jsonb where organization_id=p_org and id=p_id returning * into a;
   end if;
   update public.calendar_appointments set google_claim_token=gen_random_uuid(),google_claim_epoch=google_claim_epoch+1,
    google_claim_until=clock_timestamp()+interval '90 seconds' where organization_id=p_org and id=p_id returning * into a;
@@ -58828,7 +58828,7 @@ begin
                         (old.organization_id,old.contact_id,old.created_at)) end) then
     if current_user <> pg_get_userbyid((select proowner from pg_catalog.pg_proc
          where oid = 'public.fn_nascer_lead_da_mensagem(uuid,uuid,uuid,uuid,text,text,jsonb,text[],uuid,uuid)'::regprocedure))
-       or current_setting('deskcomm.meta_capi_birth_lead_id', true) is distinct from new.id::text then
+       or current_setting('pjcrm.meta_capi_birth_lead_id', true) is distinct from new.id::text then
       raise exception 'meta_capi_lead_birth_v1_reserved';
     end if;
   end if;
@@ -58888,7 +58888,7 @@ begin
      ) then
     -- O gatilho exige simultaneamente o owner da RPC e este ID temporário.
     -- Mesmo service_role/postgres fora deste nascimento não pode forjar a prova.
-    perform set_config('deskcomm.meta_capi_birth_lead_id', v_lead::text, true);
+    perform set_config('pjcrm.meta_capi_birth_lead_id', v_lead::text, true);
     update public.crm_leads set source_metadata =
       coalesce(source_metadata, '{}'::jsonb) ||
       jsonb_build_object('meta_capi_lead_birth_v1',
@@ -58896,7 +58896,7 @@ begin
           'ctwa_clid',v_click,'message_id',p_message,
           'conversation_id',p_conversation,'captured_at',v_msg.created_at))
       where organization_id = p_org and id = v_lead;
-    perform set_config('deskcomm.meta_capi_birth_lead_id', '', true);
+    perform set_config('pjcrm.meta_capi_birth_lead_id', '', true);
   end if;
 
   perform public.emit_event('lead.created','crm_lead',v_lead,
@@ -59781,7 +59781,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -59925,7 +59925,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -68472,7 +68472,7 @@ create index if not exists ai_agent_mcp_servers_org_agente_idx
 comment on table public.ai_agent_mcp_servers is
   'Servidores MCP externos de UM agente (até 5). Server-side only: RLS ligada sem policy e nenhum privilégio para anon/authenticated. Chave e client_secret cifrados com AES-256-GCM (AI_CRED_AES_KEY); a tela vê só chave_last4.';
 comment on column public.ai_agent_mcp_servers.modo_autenticacao is
-  'nenhuma | chave_estatica (Bearer fixo, com X-Deskcomm-* opcionais) | oauth_por_contato (cada contato autoriza com o login dele; um token por servidor × contato em contato_mcp_credenciais).';
+  'nenhuma | chave_estatica (Bearer fixo, com X-PJCRM-* opcionais) | oauth_por_contato (cada contato autoriza com o login dele; um token por servidor × contato em contato_mcp_credenciais).';
 comment on column public.ai_agent_mcp_servers.escrita_delegada is
   'Desligada por padrão. Ligada, uma ferramenta marcada como escrita pelo admin pode ser chamada durante a conversa COM A CREDENCIAL DO CONTATO do turno — dentro do que ele mesmo autorizou.';
 
@@ -70117,7 +70117,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -72428,7 +72428,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.
@@ -73706,7 +73706,7 @@ comment on table public.platform_meta_app is
 comment on column public.platform_meta_app.app_secret_encrypted is
   'Cifrado por fn_encrypt_oauth (pgp_sym_encrypt/aes256). Nunca gravar em claro: sem a chave mestra o save recusa. Quem tem este valor assina uma entrega de webhook válida com dados inventados.';
 comment on column public.platform_meta_app.verify_token_encrypted is
-  'Cifrado por fn_encrypt_oauth. Gerado pelo SERVIDOR (32 bytes de CSPRNG) e exibido UMA vez: não há leitura que o devolva em claro — quem perde o valor usa a rotação da tela. Um token escolhido à mão ("deskcomm", o nome da empresa) é adivinhável, e quem o acerta passa a receber o tráfego do webhook.';
+  'Cifrado por fn_encrypt_oauth. Gerado pelo SERVIDOR (32 bytes de CSPRNG) e exibido UMA vez: não há leitura que o devolva em claro — quem perde o valor usa a rotação da tela. Um token escolhido à mão ("pjcrm", o nome da empresa) é adivinhável, e quem o acerta passa a receber o tráfego do webhook.';
 comment on column public.platform_meta_app.verify_token_created_at is
   'Quando o verify token em vigor nasceu. A tela mostra a data para quem acabou de rotacionar saber se o valor colado no painel da Meta é o novo.';
 

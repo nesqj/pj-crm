@@ -107,10 +107,10 @@ check "nenhuma porta do WAHA é publicada sem endereço de bind" bash -c '
 # por cima sem cópia apaga o ambiente de trabalho de quem rodar por curiosidade.
 check "o instalador faz backup de um .env.local que não é local" bash -c '
   grep -q "cloud-backup" "$1"' _ "$INSTALADOR"
-check "o instalador reconhece o ambiente local pela marca DESKCOMM_ENV_MODE" bash -c '
-  grep -q "DESKCOMM_ENV_MODE=local" "$1"' _ "$INSTALADOR"
+check "o instalador reconhece o ambiente local pela marca PJCRM_ENV_MODE" bash -c '
+  grep -q "PJCRM_ENV_MODE=local" "$1"' _ "$INSTALADOR"
 check "o .env.local gerado carrega a marca (senão o próximo run apaga sem backup)" bash -c '
-  awk "/^cat <<EOF > .env.local\$/,/^EOF\$/" "$1" | grep -q "^DESKCOMM_ENV_MODE=local\$"' _ "$INSTALADOR"
+  awk "/^cat <<EOF > .env.local\$/,/^EOF\$/" "$1" | grep -q "^PJCRM_ENV_MODE=local\$"' _ "$INSTALADOR"
 
 # ── O COMPORTAMENTO, e não só o texto ──────────────────────────────────────
 #
@@ -137,7 +137,7 @@ check "ambiente da NUVEM é copiado antes de ser substituído" test -s "$TMP_DIR
   cd "$TMP_DIR" || exit 1
   rm -f .env.local.cloud-backup
   paint() { :; }
-  printf 'DESKCOMM_ENV_MODE=local\nNEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321\n' > .env.local
+  printf 'PJCRM_ENV_MODE=local\nNEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321\n' > .env.local
   eval "$(guarda)"
 ) >/dev/null 2>&1
 check "ambiente JÁ local não vira backup a cada run" bash -c '! test -e "$1/.env.local.cloud-backup"' _ "$TMP_DIR"

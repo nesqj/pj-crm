@@ -1,6 +1,6 @@
 # Prova em tela — guias do assistente e changelog da LP
 
-Medido em 2026-09-15 contra `next build` + `next start` do `deskcomm-site` (branch
+Medido em 2026-09-15 contra `next build` + `next start` do `pjcrm-site` (branch
 `feat/guias-e-changelog`, commit `ac55a44`), Chromium via Playwright, lendo o `CHANGELOG.md`
 real da `main` do produto (40 versões).
 
@@ -81,7 +81,7 @@ Duas coisas vistas no caminho, as duas esperadas:
 ## Terceira rodada: o preview do commit final do site
 
 Em 2026-09-16, depois dos consertos da revisão adversarial dos três PRs, a prova rodou de novo
-contra o preview do commit `af09d9e` do `deskcomm-site`, com outro segredo de bypass temporário,
+contra o preview do commit `af09d9e` do `pjcrm-site`, com outro segredo de bypass temporário,
 revogado logo depois. O resultado está em `run-preview-commit-final.txt`.
 
 | o que | resultado |

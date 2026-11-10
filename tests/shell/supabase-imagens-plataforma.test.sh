@@ -116,7 +116,7 @@ STUB
 chmod +x "$TMP/bin/uname" "$TMP/bin/docker"
 DOCKER_LOG="$TMP/docker-log" \
   COMPOSE_FIXTURE="$TMP/compose-oficial.yml" \
-  DESKCOMM_RELEASES_LATEST_URL=https://example.invalid/releases/latest \
+  PJCRM_RELEASES_LATEST_URL=https://example.invalid/releases/latest \
   bash "$TMP/instalador/hostgator-setup-kit/install-single-server.sh" \
     --domain crm.example.com >"$TMP/instalador-out" 2>&1 \
   && { echo '✗ instalador aceitou Supabase sem ARM64'; exit 1; }

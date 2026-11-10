@@ -92,13 +92,13 @@ nome, e não quebra (a resolução devolve nulo e a ficha esconde a linha).
 ## O incidente da pasta de produção — 2026-09-20
 
 Este trabalho foi feito, do começo ao fim, dentro de
-`/root/projects/DeskcommCRM-crm-advanx`, que é a **instalação de produção** de
+`/root/projects/pj-crm-crm-advanx`, que é a **instalação de produção** de
 `crm.advanx.com.br` — os contêineres sobem dali, nesta mesma máquina. A regra que
 proíbe isso já estava escrita em `CLAUDE.local.md` do próprio repo, datada de
 13/09/2026, e não foi lida antes de começar:
 
-> Produção = imagem OFICIAL do melgarafael. Nunca editar código na instalação.
-> Bug/melhoria: corrigir em `/root/projects/DeskcommCRM-contrib` → PR.
+> Produção = imagem OFICIAL do nesqj. Nunca editar código na instalação.
+> Bug/melhoria: corrigir em `/root/projects/pj-crm-contrib` → PR.
 
 **O dano não foi no código.** `update.sh` decide qual versão está instalada com
 `git merge-base --is-ancestor <tag> HEAD` sobre o **git HEAD da pasta**
@@ -114,7 +114,7 @@ medir a verdade e a instalação subiu para 1.41.0. As cinco branches e o remote
 `fork` foram removidos da pasta de produção, que voltou a `HEAD detached at
 v1.41.0`, limpa. Nada do trabalho se perdeu: tudo estava publicado no fork.
 
-**Para quem retomar:** este plano agora vive em `DeskcommCRM-contrib`, e as duas
+**Para quem retomar:** este plano agora vive em `pj-crm-contrib`, e as duas
 branches pendentes já estão visíveis lá por `origin` (o fork). Trabalhar dali.
 
 ## Diário de execução
@@ -125,11 +125,11 @@ que foi decidido do que aconteceu.
 
 | PR | Escopo        | Estado                                   |
 |----|---------------|------------------------------------------|
-| 1  | A1 + A2       | **merged**: melgarafael/DeskcommCRM#1211 |
-| 2  | C1 + C1b + C2 | **merged**: melgarafael/DeskcommCRM#1212 |
-| 3  | B1            | **merged**: melgarafael/DeskcommCRM#1221 |
-| 4  | B2 + B3 + B3b | aberto: melgarafael/DeskcommCRM#1387     |
-| 5  | B4            | aberto: melgarafael/DeskcommCRM#1389     |
+| 1  | A1 + A2       | **merged**: nesqj/pj-crm#1211 |
+| 2  | C1 + C1b + C2 | **merged**: nesqj/pj-crm#1212 |
+| 3  | B1            | **merged**: nesqj/pj-crm#1221 |
+| 4  | B2 + B3 + B3b | aberto: nesqj/pj-crm#1387     |
+| 5  | B4            | aberto: nesqj/pj-crm#1389     |
 
 **Desvio 6 — B4 não mexeu em `origemDoContato`.** O plano previa a rota
 preguiçosa e deixava em aberto como o nome chegaria à tela. O que foi feito: a

@@ -30,7 +30,7 @@ Um `POST` com `Content-Type: application/json` e este corpo:
 
 | Campo | O que é |
 |---|---|
-| `event` | O tipo do evento que disparou a automação (o mesmo do cabeçalho `X-Deskcomm-Event`). |
+| `event` | O tipo do evento que disparou a automação (o mesmo do cabeçalho `X-PJCRM-Event`). |
 | `occurred_at` | A hora em que o CRM montou esta entrega (o disparo da automação ou o clique em Reenviar), em ISO-8601 UTC com milissegundos. É o que o campo sempre foi. As retentativas automáticas de um mesmo disparo, segundos depois, repetem o corpo e portanto este valor. Para medir a idade da requisição, prefira o `t` de dentro do `X-Webhook-Signature` (seção 3): ele é a hora do envio de **cada tentativa** e também é coberto pela assinatura. |
 | `happened_at` | A hora em que o **fato** aconteceu (o lead foi criado, a etapa mudou…), em ISO-8601 UTC com milissegundos. É a mesma em todas as tentativas e no Reenviar, e pode ter horas ou dias de idade (uma automação adiada pela janela de envio do WhatsApp, um Reenviar clicado dias depois). Use-o para ordenar os fatos no seu sistema; nunca para recusar requisição velha. |
 | `delivery_id` | O id da entrega — o mesmo valor do cabeçalho `X-Webhook-Delivery`. |
@@ -40,22 +40,22 @@ Um `POST` com `Content-Type: application/json` e este corpo:
 
 | Cabeçalho | Quando sai | O que significa |
 |---|---|---|
-| `X-Deskcomm-Event` | sempre | O tipo do evento. |
+| `X-PJCRM-Event` | sempre | O tipo do evento. |
 | `X-Webhook-Delivery` | sempre | Id da **entrega** (um uuid). É o mesmo em todas as tentativas da mesma entrega **e** no botão Reenviar da tela de atividade. É a chave para deduplicar. |
 | `X-Webhook-Attempt` | sempre | Número da tentativa: `1`, `2`, `3`… O Reenviar continua a contagem (se a entrega já teve 3 tentativas, o Reenviar chega com `4`). É informativo — a chave de deduplicação é o Delivery. |
 | `X-Webhook-Timestamp` | sempre | Hora do **envio desta tentativa**, em segundos unix. Muda a cada tentativa. **Informativo:** nenhuma assinatura o cobre. Para a janela de tempo, use o `t` do `X-Webhook-Signature`. |
 | `X-Webhook-Signature` | com segredo | `t=<timestamp>,v1=<hex>`, em que `v1 = HMAC-SHA256(segredo, "<t>.<delivery>.<corpo cru>")`. Cobre a hora e o id além do corpo. |
-| `X-Deskcomm-Signature` | com segredo | **Legado.** `HMAC-SHA256(segredo, corpo cru)` em hex, sem hora nem id. Continua saindo exatamente igual durante a convivência; a saída dele será anunciada nas notas da versão como mudança que exige ação. |
+| `X-PJCRM-Signature` | com segredo | **Legado.** `HMAC-SHA256(segredo, corpo cru)` em hex, sem hora nem id. Continua saindo exatamente igual durante a convivência; a saída dele será anunciada nas notas da versão como mudança que exige ação. |
 
 **O que a assinatura cobre.** O `v1` do `X-Webhook-Signature` autentica o
 `t` que vai dentro dele, o `X-Webhook-Delivery` e o corpo — e só isso. Os
-cabeçalhos `X-Deskcomm-Event`, `X-Webhook-Attempt` e `X-Webhook-Timestamp`
+cabeçalhos `X-PJCRM-Event`, `X-Webhook-Attempt` e `X-Webhook-Timestamp`
 **não são autenticados**: quem captura uma requisição pode trocá-los sem que a
 assinatura deixe de conferir. Em especial, a única cópia assinada da hora do
 envio é o `t` dentro do `X-Webhook-Signature`. Um receptor que mede a idade
 pelo `X-Webhook-Timestamp` e confere o HMAC com o `t` aceita uma requisição
 velha repetida com o `X-Webhook-Timestamp` trocado pela hora atual. Use o
-`X-Deskcomm-Event` e o `X-Webhook-Attempt` só para log e roteamento; o tipo do
+`X-PJCRM-Event` e o `X-Webhook-Attempt` só para log e roteamento; o tipo do
 evento que vale é o `event` do corpo, que é assinado.
 
 Sem segredo configurado na ação, as duas assinaturas não saem — não há o que
@@ -68,7 +68,7 @@ marca própria.
    `JSON.parse`. Reserializar o JSON muda espaços e a ordem das chaves, e a
    assinatura deixa de bater.
 2. **Exija o `X-Webhook-Signature`.** Se ele não veio, recuse — **não**
-   caia para o `X-Deskcomm-Signature` legado como alternativa: quem captura uma
+   caia para o `X-PJCRM-Signature` legado como alternativa: quem captura uma
    entrega apaga o `X-Webhook-Signature`, mantém o legado (que só cobre o
    corpo e vale para sempre) e repete a requisição quando quiser, sem que a
    janela do passo 3 seja consultada. Aceitar o legado só faz sentido enquanto o
@@ -212,14 +212,14 @@ se um valor daqui deixar de bater com o que o CRM assina, o teste reprova.
 | `X-Webhook-Delivery` | `209f529f-3a34-5ccb-9486-5e20cd48fb45` |
 | Corpo cru (uma linha, sem espaços) | `{"event":"lead.created","occurred_at":"2026-01-01T00:00:00.000Z","happened_at":"2025-12-31T21:00:00.000Z","delivery_id":"209f529f-3a34-5ccb-9486-5e20cd48fb45","data":{"lead":{"id":"lead-1"}}}` |
 | `X-Webhook-Signature` esperado | `t=1767225600,v1=bccb00c040649c7e2618d9cd4a3bc79ade96d5dd939c0fb11f26064c538e57a5` |
-| `X-Deskcomm-Signature` (legado) esperado | `6aa08c69080a291fadcdd6913d78e79dbd2705a95b3cf87c8a0018491a1a8dab` |
+| `X-PJCRM-Signature` (legado) esperado | `6aa08c69080a291fadcdd6913d78e79dbd2705a95b3cf87c8a0018491a1a8dab` |
 
 Com `agora = 1767225610` a verificação passa; com `agora = 1767225901`
 (301 s depois) ela recusa.
 
 ## 8. Migrando do cabeçalho legado
 
-Quem hoje confere o `X-Deskcomm-Signature` não precisa mudar a conferência
+Quem hoje confere o `X-PJCRM-Signature` não precisa mudar a conferência
 agora: ele continua saindo igual. O corpo ganhou dois campos, `delivery_id` e
 `happened_at` (a hora do fato), e nenhum campo que já existia mudou de
 significado: o `occurred_at` segue sendo a hora em que o CRM montou a entrega.
@@ -236,11 +236,11 @@ Para migrar:
    `t` do `X-Webhook-Signature` (parágrafo acima).
 2. Passe a conferir o `X-Webhook-Signature` (seções 3, 5 e 6) e, **a partir
    desse momento, recuse a requisição que chega sem ele**. Não use o
-   `X-Deskcomm-Signature` como alternativa quando a v2 falta: toda entrega sai
+   `X-PJCRM-Signature` como alternativa quando a v2 falta: toda entrega sai
    com as duas assinaturas, e quem captura uma entrega remove a v2 e repete a
    requisição sem limite de tempo, porque o legado só cobre o corpo. Se você
    recebe de várias instalações do CRM, aceite o legado sozinho só das que
    ainda não foram atualizadas — nunca como regra geral.
 3. Passe a deduplicar pelo `X-Webhook-Delivery`.
-4. Pare de ler o `X-Deskcomm-Signature`. Quando ele for removido, as notas da
+4. Pare de ler o `X-PJCRM-Signature`. Quando ele for removido, as notas da
    versão avisam com antecedência.

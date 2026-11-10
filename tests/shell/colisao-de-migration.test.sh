@@ -524,16 +524,16 @@ echo "27. origin = FORK (clone de contribuidor): os PRs são do PAI, e as cabeç
 # do GitHub, e o insteadOf leva cada uma para um diretório local — sem rede.
 fork_repo="$TMP/fork-contrib"; clonar_ou_falhar "$principal" "$fork_repo" --bare
 c="$TMP/c27"; clonar_ou_falhar "$fork_repo" "$c"
-git -C "$c" config remote.origin.url "https://github.com/contrib/DeskcommCRM.git"
-git -C "$c" config "url.$fork_repo.insteadOf" "https://github.com/contrib/DeskcommCRM.git"
-git -C "$c" config "url.$principal.insteadOf" "https://github.com/up/DeskcommCRM.git"
+git -C "$c" config remote.origin.url "https://github.com/contrib/pj-crm.git"
+git -C "$c" config "url.$fork_repo.insteadOf" "https://github.com/contrib/pj-crm.git"
+git -C "$c" config "url.$principal.insteadOf" "https://github.com/up/pj-crm.git"
 mkdir -p "$c/scripts"; cp "$GATE_ORIGEM" "$c/scripts/checar-colisao-de-migration.sh"
 git -C "$c" switch -q -c fix/pr
 migrar "$c" "20260917220000_0276_meu.sql"; commit "$c" "PR com o 0276 que o #7 do pai também tem"
-export FAKE_GH_PAI="up/DeskcommCRM"; saida="$(gate_prs "7" "$c")"; code=$?; unset FAKE_GH_PAI
+export FAKE_GH_PAI="up/pj-crm"; saida="$(gate_prs "7" "$c")"; code=$?; unset FAKE_GH_PAI
 assert_exit "$code" 0 "número de PR aberto do pai não reprova"
 assert_contains "$saida" "PR aberto #7" "enxerga o PR do repositório PAI"
-assert_contains "$saida" "em up/DeskcommCRM" "declara QUAL repositório consultou"
+assert_contains "$saida" "em up/pj-crm" "declara QUAL repositório consultou"
 assert_not_contains "$saida" "0 listado(s)" "não consulta o fork e chama o zero de medição"
 
 echo "28. o próprio PR depois de AMEND não se acusa"

@@ -25,7 +25,7 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ─────────────────────────────────────────────────────────────────────────
-   DeskcommCRM — Design System tokens (Sage palette · density Aerada)
+   PJ CRM — Design System tokens (Sage palette · density Aerada)
    Source of truth: /app/design/lib/tokens.ts (PALETTES.sage)
    Light + dark drawn separately (NOT inverted).
    ───────────────────────────────────────────────────────────────────────── */
@@ -59,17 +59,17 @@
   --color-canal-telegram: #0088cc;
 
   /* Accent — Sage (11 stops) */
-  --color-accent-50: #f3f6f1;
-  --color-accent-100: #e4ebe0;
-  --color-accent-200: #c8d6c1;
-  --color-accent-300: #a4ba9a;
-  --color-accent-400: #82a077;
-  --color-accent-500: #67885d;
-  --color-accent-600: #506d48;
-  --color-accent-700: #41573b;
-  --color-accent-800: #374731;
-  --color-accent-900: #2f3c2b;
-  --color-accent-950: #171f15;
+  --color-accent-50: #f0f5ff;
+  --color-accent-100: #dce8ff;
+  --color-accent-200: #b6ceff;
+  --color-accent-300: #83abff;
+  --color-accent-400: #5287ff;
+  --color-accent-500: #2660ff;
+  --color-accent-600: #0023fa;
+  --color-accent-700: #0229c3;
+  --color-accent-800: #05299b;
+  --color-accent-900: #09287f;
+  --color-accent-950: #04164a;
   --color-accent: var(--color-accent-600);
   --color-accent-fg: #ffffff;
   --color-accent-soft: var(--color-accent-100);
@@ -392,20 +392,20 @@
   --color-canal-telegram: #38bdf8;
 
   /* Accent stays same hex stops; default shifts up for dark contrast */
-  --color-accent-50: #f3f6f1;
-  --color-accent-100: #e4ebe0;
-  --color-accent-200: #c8d6c1;
-  --color-accent-300: #a4ba9a;
-  --color-accent-400: #82a077;
-  --color-accent-500: #67885d;
-  --color-accent-600: #506d48;
-  --color-accent-700: #41573b;
-  --color-accent-800: #374731;
-  --color-accent-900: #2f3c2b;
-  --color-accent-950: #171f15;
+  --color-accent-50: #f0f5ff;
+  --color-accent-100: #dce8ff;
+  --color-accent-200: #b6ceff;
+  --color-accent-300: #83abff;
+  --color-accent-400: #5287ff;
+  --color-accent-500: #2660ff;
+  --color-accent-600: #0023fa;
+  --color-accent-700: #0229c3;
+  --color-accent-800: #05299b;
+  --color-accent-900: #09287f;
+  --color-accent-950: #04164a;
   --color-accent: var(--color-accent-400);
   --color-accent-fg: #161510;
-  --color-accent-soft: rgba(130, 160, 119, 0.16);
+  --color-accent-soft: rgba(82, 135, 255, 0.16);
   --color-accent-hover: var(--color-accent-300);
 
   /* Neutrals — greige (11 stops, dark) */
@@ -1004,7 +1004,7 @@
    desenha para dentro da própria caixa e não depende do overflow do pai.
    Provado na tela nos três cenários (claro, escuro, reduce) —
    `evidence/wave3-pulso/`. */
-@keyframes deskcomm-card-pulse {
+@keyframes pjcrm-card-pulse {
   from {
     border-color: var(--color-accent);
   }
@@ -1017,7 +1017,7 @@
    evento (key = contador de pulsos), e é a remontagem que faz a animação
    recomeçar. Alternar classe no mesmo nó não reinicia animação em CSS. */
 .card-pulse {
-  animation: deskcomm-card-pulse var(--duration-slow) var(--ease-out) 1;
+  animation: pjcrm-card-pulse var(--duration-slow) var(--ease-out) 1;
   border: 2px solid transparent;
   border-radius: inherit;
   box-sizing: border-box;

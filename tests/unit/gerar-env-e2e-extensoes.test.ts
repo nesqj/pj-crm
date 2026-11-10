@@ -10,7 +10,7 @@ describe("o preparo habitual do E2E inclui o catálogo local de extensões", () 
   it.each(["", "56330"])("inclui o catálogo e respeita E2E_PORT=%s", (porta) => {
     // Executa o gerador real em outro diretório, sem consultar Docker, projetos
     // Supabase ou arquivos de ambiente da estação de trabalho.
-    const destino = mkdtempSync(path.join(tmpdir(), "deskcomm-env-extensoes-"));
+    const destino = mkdtempSync(path.join(tmpdir(), "pjcrm-env-extensoes-"));
     try {
       mkdirSync(path.join(destino, "scripts"));
       mkdirSync(path.join(destino, "bin"));

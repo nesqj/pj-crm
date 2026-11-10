@@ -4,7 +4,7 @@
 - **Base de leitura:** toda referência `arquivo:linha` foi medida na `main` em `76355d4b9`. Ao implementar cada PR, reconfira a linha no SHA do dia: o conteúdo citado é a autoridade, o número da linha envelhece.
 - **Escopo:** a capacidade de o dono de uma instalação transformá-la num SaaS próprio e cobrar as empresas que atende (Stripe e Asaas na 1ª entrega), mais a suspensão de organização que de fato suspende, que é pré-requisito dela e conserta um defeito atual.
 - **Entrega:** 7 PRs em ordem (§14). Cada PR recebe o seu próprio plano de implementação.
-- **Material para os alunos (PRs 4 e 5):** guia Coolify, `docs/saas/`, skill `deskcomm-saas` e roteiros de aula — escritos **depois** do código, descrevendo o que existe.
+- **Material para os alunos (PRs 4 e 5):** guia Coolify, `docs/saas/`, skill `pjcrm-saas` e roteiros de aula — escritos **depois** do código, descrevendo o que existe.
 
 ## Decisões do dono (29/09/2026)
 
@@ -822,10 +822,10 @@ Migration 3; `lib/cobranca/*` (contrato, Stripe, estado, régua, sincronizar em 
 Adaptador com `includeDeleted`, `existe` por pagamento confirmado, datas no fim do dia SP, guarda do `trocarPlano`; CPF/CNPJ; token; webhook por API confirmado no sandbox (ou manual); e2e fora do CI.
 
 ### PR 4: guia Coolify (`docs/saas/coolify.md`)
-Caminho suportado: `install.sh` por SSH na VPS do Coolify (detecta `coolify-proxy`, grava `REVERSE_PROXY=traefik`, descobre a rede `coolify` e os entrypoints `http`/`https`: `install.sh:587-592, 651-744, 982-1041, 1418-1450`). Banco **Supabase Cloud** (o single-server força Caddy em 80/443, `install-single-server.sh:158-170`). Não usar o compose pelo painel (profiles não confiáveis, um arquivo só, sem `update.sh` nem migrator). Conferir 307 e que `/api/v1/webhooks/cobranca/*` passa sem herdar `deskcomm-waha-block`. Atualizar pelo `update.sh`. Dimensionamento: medido na PR 4 por quem escreve o guia, numa VPS Coolify real instalada pelo `install.sh`, com `docker stats --no-stream` (RAM e CPU de `app`, `worker`, `scheduler` e WAHA) em repouso e com uma conversa de teste; o guia publica o número com a data e o SHA.
+Caminho suportado: `install.sh` por SSH na VPS do Coolify (detecta `coolify-proxy`, grava `REVERSE_PROXY=traefik`, descobre a rede `coolify` e os entrypoints `http`/`https`: `install.sh:587-592, 651-744, 982-1041, 1418-1450`). Banco **Supabase Cloud** (o single-server força Caddy em 80/443, `install-single-server.sh:158-170`). Não usar o compose pelo painel (profiles não confiáveis, um arquivo só, sem `update.sh` nem migrator). Conferir 307 e que `/api/v1/webhooks/cobranca/*` passa sem herdar `pjcrm-waha-block`. Atualizar pelo `update.sh`. Dimensionamento: medido na PR 4 por quem escreve o guia, numa VPS Coolify real instalada pelo `install.sh`, com `docker stats --no-stream` (RAM e CPU de `app`, `worker`, `scheduler` e WAHA) em repouso e com uma conversa de teste; o guia publica o número com a data e o SHA.
 
 ### PR 5: kit SaaS
-`docs/saas/` (jornada do revendedor; Stripe × Asaas — "Stripe BR = cartão + boleto, sem Pix recorrente; Pix recorrente = Asaas"; chaves passo a passo; testar e publicar; régua; troca de plano na virada; nota fiscal fora; termos com o cliente final; `docs/saas/aulas/`). Skill `.agents/skills/deskcomm-saas/` (`SKILL.md` ≤ 500 linhas, description ≤ ~800 caracteres, `agents/openai.yaml`, citação nas 4 portas, `pnpm skills:sync`, "rode X para ver" em vez de números).
+`docs/saas/` (jornada do revendedor; Stripe × Asaas — "Stripe BR = cartão + boleto, sem Pix recorrente; Pix recorrente = Asaas"; chaves passo a passo; testar e publicar; régua; troca de plano na virada; nota fiscal fora; termos com o cliente final; `docs/saas/aulas/`). Skill `.agents/skills/pjcrm-saas/` (`SKILL.md` ≤ 500 linhas, description ≤ ~800 caracteres, `agents/openai.yaml`, citação nas 4 portas, `pnpm skills:sync`, "rode X para ver" em vez de números).
 
 ---
 

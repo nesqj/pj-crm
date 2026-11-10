@@ -14,7 +14,7 @@ services:
       dockerfile: Dockerfile
       args:
         APP_VERSION: ${APP_VERSION:-local}
-    image: deskcomm-app:local
+    image: pjcrm-app:local
     pull_policy: never
     restart: unless-stopped
     env_file: ${LOCAL_ENV_FILE:-.env.local}
@@ -44,7 +44,7 @@ services:
       dockerfile: Dockerfile.worker
       args:
         APP_VERSION: ${APP_VERSION:-local}
-    image: deskcomm-worker:local
+    image: pjcrm-worker:local
     pull_policy: never
     restart: unless-stopped
     env_file: ${LOCAL_ENV_FILE:-.env.local}
@@ -75,7 +75,7 @@ services:
       dockerfile: Dockerfile.scheduler
       args:
         APP_VERSION: ${APP_VERSION:-local}
-    image: deskcomm-scheduler:local
+    image: pjcrm-scheduler:local
     pull_policy: never
     restart: unless-stopped
     env_file: ${LOCAL_ENV_FILE:-.env.local}

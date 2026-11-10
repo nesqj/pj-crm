@@ -4,19 +4,19 @@ sonda update-r1b: 0 nao-zero de 46 (OWNER_PASSWORD=0, padroes=0)
 exit=0
 v1.76.0
 TRAEFIK_NETWORK=coolify
-COMPOSE_FILE=docker-compose.yml:docker-compose.deskcomm.yml:docker-compose.deskcomm-traefik.yml
+COMPOSE_FILE=docker-compose.yml:docker-compose.pjcrm.yml:docker-compose.pjcrm-traefik.yml
 API_GW_HTTP_PORT=8001
-.runtime/supabase/docker-compose.deskcomm-traefik.yml
-coolify deskcommcrm-supabase_default deskcommcrm_supabase 
+.runtime/supabase/docker-compose.pjcrm-traefik.yml
+coolify pjcrm-supabase_default pjcrm_supabase 
 SUPABASE_INTERNAL_URL="http://127.0.0.1:8001"
-APP_IMAGE=ghcr.io/melgarafael/deskcommcrm:1.76.0
+APP_IMAGE=ghcr.io/nesqj/pjcrm:1.76.0
 linha-Atualizando-o-Supabase=0
 4:▶ Procurando atualizações
 7:▶ Conferindo se dá para atualizar (preflight)
 10:▶ Backup de segurança (antes de mexer no banco)
-12:▶ Dump do banco → /root/pr4/deskcommcrm/backups/db-20261007-134008.sql.gz
-15:▶ Snapshot das sessões do WhatsApp → /root/pr4/deskcommcrm/backups/waha-20261007-134008.tgz
-18:▶ Arquivos anexados (Storage) → /root/pr4/deskcommcrm/backups/storage-20261007-134008.tgz
+12:▶ Dump do banco → /root/pr4/pjcrm/backups/db-20261007-134008.sql.gz
+15:▶ Snapshot das sessões do WhatsApp → /root/pr4/pjcrm/backups/waha-20261007-134008.tgz
+18:▶ Arquivos anexados (Storage) → /root/pr4/pjcrm/backups/storage-20261007-134008.tgz
 21:▶ Limpando backups antigos (mantém 14)
 25:▶ Baixando o código novo
 76:▶ Atualizando o banco de dados

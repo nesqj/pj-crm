@@ -216,7 +216,7 @@ const DOCUMENTO = `<!doctype html>
 <html lang="pt-BR">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Curso em imagens do DeskComm: cada tela do sistema com fotos reais, setas e um simulador para treinar.">
+<meta name="description" content="Curso em imagens do PJ CRM: cada tela do sistema com fotos reais, setas e um simulador para treinar.">
 `;
 writeFileSync(path.join(SAIDA, "index.html"), BASE ? DOCUMENTO + html : html);
 console.info(

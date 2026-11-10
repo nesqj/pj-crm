@@ -129,7 +129,7 @@ const GATILHO_ESPERADO: Record<string, { condicao: string | null; efeito: string
       "Sem `tag`, um dispatch numa branch moveria o canal. Sem o `v`, uma tag de teste o move.",
   },
 
-  // As imagens de FUNDO (#604): `deskcomm-worker` e `deskcomm-scheduler`
+  // As imagens de FUNDO (#604): `pjcrm-worker` e `pjcrm-scheduler`
   // construíam, publicavam e recebiam tag sem que job nenhum as executasse. Na
   // #648 o resultado foi dez dias de `event_log` parado com o `/healthz` verde.
   // Desligá-lo devolve exatamente esse buraco: a imagem publica, o canal anda,
@@ -262,7 +262,7 @@ const GATILHO_ESPERADO: Record<string, { condicao: string | null; efeito: string
   // --- e o que legitimamente tem interruptor -----------------------------------
   "acolhida.yml::acolher": {
     condicao:
-      "github.repository_owner == 'melgarafael' && " +
+      "github.repository_owner == 'nesqj' && " +
       "github.event.pull_request.head.repo.full_name != github.repository",
     efeito:
       "Este job posta a acolhida automática em PR de fork — a resposta em minutos que existe " +

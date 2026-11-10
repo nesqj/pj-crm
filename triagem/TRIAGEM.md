@@ -195,7 +195,7 @@ Gates da `main`: `typecheck`, `lint`, `lint:channels`, `test:unit`, `test:shell`
 Obrigatórios no merge — **cinco**, e não confie nesta lista: meça.
 
 ```bash
-gh api repos/melgarafael/DeskcommCRM/branches/main/protection \
+gh api repos/nesqj/pj-crm/branches/main/protection \
   --jq '.required_status_checks.contexts|join(", ")'
 # em 2026-08-14: verify, build-and-size, invariants, e2e, imagens-ok
 ```
@@ -456,10 +456,10 @@ própria logo abaixo):
 # `refs/tri/N` é uma CÓPIA, ela sobrevive ao fechamento do PR (medido em
 # 19/09/2026: 323 refs/tri contra 35 PRs abertos, 288 delas de PR que não está
 # aberto) e ela pode estar VELHA. `--limit 1000`, e não 100 nem o padrão 30.
-git fetch --force origin $(for n in $(gh pr list --repo melgarafael/DeskcommCRM \
+git fetch --force origin $(for n in $(gh pr list --repo nesqj/pj-crm \
   --state open --limit 1000 --json number --jq '.[].number'); do
   printf "pull/%s/head:refs/tri/%s " "$n" "$n"; done)
-for n in $(gh pr list --repo melgarafael/DeskcommCRM --state open --limit 1000 \
+for n in $(gh pr list --repo nesqj/pj-crm --state open --limit 1000 \
   --json number --jq '.[].number'); do
   # `if d=$(…)` e não `git diff | sed || echo`: num cano o status é o do `sed`,
   # e o `|| echo` nunca disparava.
@@ -810,7 +810,7 @@ troca errada — e ele nem tem como ver a nossa fila. O `CLAUDE.md` manda "veja 
 `ls supabase/migrations/`", ele leu, e acertou contra a `main`. **O que ele não pode ver não pode
 ser cobrado dele** (passe 10).
 
-O escape `DESKCOMM_GOV_MIGRATION_EDIT=1` existe para quando você já **decidiu** qual numeração é
+O escape `PJCRM_GOV_MIGRATION_EDIT=1` existe para quando você já **decidiu** qual numeração é
 canônica — e a decisão vai escrita no corpo do commit, não fica implícita no uso do escape.
 
 ---
@@ -1133,7 +1133,7 @@ Um hook local desta casa dispara em merge da `main` sem que você tenha editado 
 | tripla da migration | ele examina só arquivo com status `A`, e um `git mv` entra como `R096` — então ele **passa de graça** na renumeração | conferir à mão contra `git log --all --name-only`, os PRs abertos e as outras branches |
 
 O NNNN que o hook confere é medido sobre a **população da pergunta** — a main do
-PRODUTO (o remoto que aponta para `melgarafael/DeskcommCRM`, com qualquer nome)
+PRODUTO (o remoto que aponta para `nesqj/pj-crm`, com qualquer nome)
 mais `refs/heads` e `refs/remotes` — e não só sobre as branches locais, que era o
 recorte medido como errado na #1273. O que a população local NÃO cobre são os PRs
 abertos, e isso sai escrito na própria mensagem do hook, junto com o comando que
@@ -1149,8 +1149,8 @@ triagem: no diff de `tests/invariants/`, **acrescentar é livre**; **tirar uma c
 (`expect`), pôr `skip`/`todo` ou apagar o arquivo** vira documento de decisão para o mantenedor,
 com o trecho e o motivo. Confira com `git diff origin/main...HEAD -- tests/invariants/ | grep -E '^-.*expect|^\+.*\.(skip|todo)\('`.
 
-O escape da migration existe (`DESKCOMM_GOV_MIGRATION_EDIT=1`), e o de invariantes
-(`DESKCOMM_GOV_INVARIANTS_EDIT=1`) agora só serve para uma deleção deliberada. Os dois são
+O escape da migration existe (`PJCRM_GOV_MIGRATION_EDIT=1`), e o de invariantes
+(`PJCRM_GOV_INVARIANTS_EDIT=1`) agora só serve para uma deleção deliberada. Os dois são
 legítimos — mas **a razão vai escrita no corpo do commit, com a medição**, nunca implícita
 no uso da variável. A linha do segundo caso é a mais importante: o hook da migration **não é rede
 para renumeração**, e quem lê a mensagem dele achando que é vai renumerar contra uma régua cega.
@@ -1445,7 +1445,7 @@ done
 
 **Deu 0? Olhe o `http=` ANTES de repetir.** `http=404` não é janela de cache: é a página não
 existir, e nenhuma quantidade de repetição conserta isso. Nesse estado o 0 não fala da versão,
-fala do site — a vitrine sai de um PR do repositório `deskcomm-site`, e sem ele no ar o passo do
+fala do site — a vitrine sai de um PR do repositório `pjcrm-site`, e sem ele no ar o passo do
 corte reprova toda release. Escale ao mantenedor em vez de investigar o `CHANGELOG.md`.
 
 **`http=200` com `listada=0`? Repita antes de concluir qualquer coisa.** A página revalida a cada
@@ -2366,7 +2366,7 @@ Cada um destes foi cometido de verdade nesta casa, e é por isso que estão escr
     Duas defesas, e a segunda é a que pega:
 
     ```bash
-    DESKCOMM_GOV_MIGRATION_EDIT=1 git commit ...        # a variável que o hook exige
+    PJCRM_GOV_MIGRATION_EDIT=1 git commit ...        # a variável que o hook exige
     git log --oneline -1 && git diff --stat origin/main..HEAD   # o commit EXISTE e tem o tamanho certo?
     ```
 
@@ -2399,7 +2399,7 @@ Cada um destes foi cometido de verdade nesta casa, e é por isso que estão escr
     sai com a âncora do nome canônico, `^[0-9]{14}_([0-9]{4})_`, aplicada ao NOME
     sem a pasta — `_0[0-9]{3}_` sem âncora pega o número do slug. A variável de
     repositório não é `origin/main`: é o remoto que aponta para
-    `melgarafael/DeskcommCRM`, com qualquer nome (#1273).
+    `nesqj/pj-crm`, com qualquer nome (#1273).
 
     **No minuto de ALOCAR, o `checar` não basta:** ele mede o arquivo que o PR JÁ
     acrescentou e, sem migration nova, responde `OK — nenhuma migration acrescentada`
@@ -2409,7 +2409,7 @@ Cada um destes foi cometido de verdade nesta casa, e é por isso que estão escr
 
     ```bash
     abertos=$(mktemp)
-    gh pr list --repo melgarafael/DeskcommCRM --state open --limit 1000 --json number --jq '.[].number' > "$abertos"
+    gh pr list --repo nesqj/pj-crm --state open --limit 1000 --json number --jq '.[].number' > "$abertos"
     git fetch -q --force origin $(sed 's#.*#pull/&/head:refs/tri/&#' "$abertos")
     while read -r n; do
       if a=$(git diff --name-only --diff-filter=A origin/main...refs/tri/$n -- supabase/migrations 2>/dev/null); then
@@ -2520,7 +2520,7 @@ Cada um destes foi cometido de verdade nesta casa, e é por isso que estão escr
 
     ```
     ::error::Este commit apagou 12 fragmento(s) de .changes/ mas não foi assinado
-             pelo App da release (assinante: deskcommcrm-release[bot]).
+             pelo App da release (assinante: pjcrm-release[bot]).
     ::error::A tag v1.17.0 NÃO foi criada.
     ```
 
@@ -2685,7 +2685,7 @@ Cada um destes foi cometido de verdade nesta casa, e é por isso que estão escr
     declarado verde.
 
 49. **O valor do fixture contém a palavra que a asserção procura.** Um e-mail semeado como
-    `convite.pendente.<uuid>@deskcomm.test` fez `row.getByText("Pendente")` casar **duas** coisas na
+    `convite.pendente.<uuid>@pjcrm.test` fez `row.getByText("Pendente")` casar **duas** coisas na
     mesma linha — a célula do e-mail e o selo de status —, e o Playwright reprovou por strict mode.
 
     O defeito não está na asserção nem na tela: está no **fixture**, que embute o vocabulário que o
@@ -2697,7 +2697,7 @@ Cada um destes foi cometido de verdade nesta casa, e é por isso que estão escr
     adivinhar que a causa mora no endereço semeado trinta linhas acima.
 
 50. **O `origin` é do repositório, não do worktree — e trocá-lo quebra todas as sessões.**
-    Um `git push` falhou com `fatal: repository 'https://github.com/alguem/DeskcommCRM.git/' not
+    Um `git push` falhou com `fatal: repository 'https://github.com/alguem/pj-crm.git/' not
     found`: o remoto tinha sido apontado para o **endereço de exemplo** da documentação.
 
     `[remote "origin"]` mora no `.git/config` do repositório PRINCIPAL, e worktree não tem config

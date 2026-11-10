@@ -224,7 +224,7 @@ describe("serviços opt-in e disponibilidade factual", () => {
     expect(a).toMatchObject({ owner_user_id: null, service_destination_calendar_id: calendar, service_publication_mode: "service" });
     expect((await pool.query("select owner_user_id from calendar_service_google_candidates where id=$1", [a.id])).rows[0]).toMatchObject({ owner_user_id: tenants[0].manager });
     const snapshot = (await pool.query("select fn_google_appointment($1,$2,'claim') r", [tenants[0].org, a.id])).rows[0].r;
-    expect(snapshot).toMatchObject({ owner_user_id: null, google_connection_id: conn, google_calendar_id: calendar, google_event_id: `deskcommapp${a.id.replaceAll('-', '')}` });
+    expect(snapshot).toMatchObject({ owner_user_id: null, google_connection_id: conn, google_calendar_id: calendar, google_event_id: `pjcrmapp${a.id.replaceAll('-', '')}` });
     const unconfigured = await book(await service(), await contact());
     expect((await pool.query("select fn_google_appointment($1,$2,'claim') r", [tenants[0].org, unconfigured.id])).rows[0].r).toEqual({ terminal: "not_configured" });
     expect((await pool.query("select id from calendar_service_google_candidates where id=$1", [unconfigured.id])).rows).toEqual([]);

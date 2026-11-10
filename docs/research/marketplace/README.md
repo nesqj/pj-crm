@@ -19,7 +19,7 @@ As escolhas que dependem do dono do produto estão no **DEC-007**.
 
 ## As cinco conclusões que mudaram o plano
 
-1. **A página pública mora em outro repositório** (`deskcomm-site`), fora deste CI, e este
+1. **A página pública mora em outro repositório** (`pjcrm-site`), fora deste CI, e este
    repositório não gera página estática. A vitrine pública é um segundo pull request.
 2. **Instalar é ato do administrador da instalação**, não do usuário do tenant: exige
    `is_platform_admin`, escopo `full` e ausência de sessão de suporte (`lib/extensions/http.ts:43-70`).

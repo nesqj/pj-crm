@@ -28,27 +28,27 @@
 services:
   app:
     environment:
-      NODE_EXTRA_CA_CERTS: /etc/deskcomm/ca/supabase-ca.crt
+      NODE_EXTRA_CA_CERTS: /etc/pjcrm/ca/supabase-ca.crt
     volumes:
       - type: bind
         source: ${SUPABASE_SSL_ROOT_CERT}
-        target: /etc/deskcomm/ca/supabase-ca.crt
+        target: /etc/pjcrm/ca/supabase-ca.crt
         read_only: true
 
   worker:
     environment:
-      NODE_EXTRA_CA_CERTS: /etc/deskcomm/ca/supabase-ca.crt
+      NODE_EXTRA_CA_CERTS: /etc/pjcrm/ca/supabase-ca.crt
     volumes:
       - type: bind
         source: ${SUPABASE_SSL_ROOT_CERT}
-        target: /etc/deskcomm/ca/supabase-ca.crt
+        target: /etc/pjcrm/ca/supabase-ca.crt
         read_only: true
 
   scheduler:
     environment:
-      NODE_EXTRA_CA_CERTS: /etc/deskcomm/ca/supabase-ca.crt
+      NODE_EXTRA_CA_CERTS: /etc/pjcrm/ca/supabase-ca.crt
     volumes:
       - type: bind
         source: ${SUPABASE_SSL_ROOT_CERT}
-        target: /etc/deskcomm/ca/supabase-ca.crt
+        target: /etc/pjcrm/ca/supabase-ca.crt
         read_only: true

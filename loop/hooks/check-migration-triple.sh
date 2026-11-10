@@ -8,10 +8,10 @@
 #      Linha no MANIFEST.md staged ainda passa, para PR aberto antes da mudança.
 # E o NNNN do nome novo não pode existir em NENHUMA branch local — a cadeia
 # vendaval/F2-* tem migrations não mergeadas; colisão de sequência é bug real.
-# Bypass (correção orientada pelo dono): DESKCOMM_GOV_MIGRATION_EDIT=1.
+# Bypass (correção orientada pelo dono): PJCRM_GOV_MIGRATION_EDIT=1.
 set -euo pipefail
 
-[ "${DESKCOMM_GOV_MIGRATION_EDIT:-0}" = "1" ] && exit 0
+[ "${PJCRM_GOV_MIGRATION_EDIT:-0}" = "1" ] && exit 0
 
 top="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
@@ -52,7 +52,7 @@ staged=$(git diff --cached --name-only)
 if ! grep -qx 'supabase/baseline.sql' <<<"$staged"; then
   echo "pre-commit BLOQUEADO: migration nova sem apêndice em supabase/baseline.sql no MESMO commit." >&2
   echo "A tripla é indivisível (CLAUDE.md §Migrations): migrations/*.sql + baseline.sql + linha \`-- manifest:\` no .sql." >&2
-  echo "Sem o baseline, self-hosters nunca recebem a mudança. Correção orientada pelo dono: DESKCOMM_GOV_MIGRATION_EDIT=1." >&2
+  echo "Sem o baseline, self-hosters nunca recebem a mudança. Correção orientada pelo dono: PJCRM_GOV_MIGRATION_EDIT=1." >&2
   exit 1
 fi
 
@@ -64,7 +64,7 @@ if ! grep -qx 'supabase/migrations/MANIFEST.md' <<<"$staged"; then
     if ! git show ":$p" 2>/dev/null | grep -E '^-- manifest:[[:space:]]*[^[:space:]]' >/dev/null; then
       echo "pre-commit BLOQUEADO: '$p' sem descrição — ponha uma linha \`-- manifest: <o quê e por quê>\` no cabeçalho do .sql." >&2
       echo "NÃO acrescente linha no supabase/migrations/MANIFEST.md: ele é histórico, e era o arquivo que fazia todo PR com migration conflitar." >&2
-      echo "Correção orientada pelo dono: DESKCOMM_GOV_MIGRATION_EDIT=1." >&2
+      echo "Correção orientada pelo dono: PJCRM_GOV_MIGRATION_EDIT=1." >&2
       exit 1
     fi
   done <<<"$new_migrations"
@@ -81,7 +81,7 @@ houve_conflito=0
 #
 # A régua que este hook ensina é "o próximo NNNN livre", e ela media `git branch`
 # — as branches LOCAIS. A população agora é a main do PRODUTO (o remoto que
-# aponta para melgarafael/DeskcommCRM, com qualquer nome) mais `refs/heads` E
+# aponta para nesqj/pj-crm, com qualquer nome) mais `refs/heads` E
 # `refs/remotes` — e o que ela NÃO cobre (os PRs abertos pela lista do `gh`) sai
 # declarado na própria mensagem. Caso medido que CONTINUA fora: o 0269 do PR
 # aberto #965 (de fork) vivia só na cópia `refs/remotes/origin/pr/965`, e as
@@ -122,7 +122,7 @@ fi
 # (29/09/2026) ela tinha ~1,29 M linhas (~112 MB), e o teste de vazio que havia aqui,
 # `${populacao// /}`, é uma substituição de padrão do bash — quadrática no tamanho da
 # string. O hook não terminava em 45 min. O grep lê o arquivo direto.
-populacao="$(mktemp)" || { echo "pre-commit BLOQUEADO: mktemp falhou — a população de migrations não pôde ser medida. Correção orientada pelo dono: DESKCOMM_GOV_MIGRATION_EDIT=1." >&2; exit 1; }
+populacao="$(mktemp)" || { echo "pre-commit BLOQUEADO: mktemp falhou — a população de migrations não pôde ser medida. Correção orientada pelo dono: PJCRM_GOV_MIGRATION_EDIT=1." >&2; exit 1; }
 trap 'rm -f "$populacao"' EXIT
 if declare -F pop_migrations >/dev/null 2>&1; then
   # O HEAD entra SEMPRE: `pop_refs_de_outrem` tira a ref cujo SHA é o do HEAD (a
@@ -130,7 +130,7 @@ if declare -F pop_migrations >/dev/null 2>&1; then
   # sumia da conta — a segunda 0411 e o carimbo repetido passavam calados, e a
   # dica de próximo livre apontava para o número da branch. O próprio arquivo
   # encenado não é acusado: o `grep -vE " <nome>$"` abaixo o tira.
-  { pop_migrations $refs HEAD 2>/dev/null || true; } >"$populacao" || { echo "pre-commit BLOQUEADO: não foi possível gravar a população de migrations em $populacao. Correção orientada pelo dono: DESKCOMM_GOV_MIGRATION_EDIT=1." >&2; exit 1; }
+  { pop_migrations $refs HEAD 2>/dev/null || true; } >"$populacao" || { echo "pre-commit BLOQUEADO: não foi possível gravar a população de migrations em $populacao. Correção orientada pelo dono: PJCRM_GOV_MIGRATION_EDIT=1." >&2; exit 1; }
 fi
 if ! grep -q . "$populacao"; then
   if ! declare -F pop_migrations >/dev/null 2>&1; then
@@ -170,7 +170,7 @@ while IFS= read -r path; do
       echo "Para o próximo número livre (main do produto ∪ PRs abertos): pnpm checar:colisao-de-migration" >&2
     fi
     echo "E troque o TIMESTAMP JUNTO: renumerar só o NNNN fabricou 12 das colisões de timestamp deste repo." >&2
-    echo "Correção orientada pelo dono: DESKCOMM_GOV_MIGRATION_EDIT=1." >&2
+    echo "Correção orientada pelo dono: PJCRM_GOV_MIGRATION_EDIT=1." >&2
     houve_conflito=1
   fi
 done <<<"$new_migrations"
@@ -215,7 +215,7 @@ while IFS= read -r path; do
     echo "pre-commit BLOQUEADO: o TIMESTAMP $ts de '$fname' já existe em: $(awk '{printf "%s(%s) ", $1, $2}' <<<"$conflict" | sed 's/ $//')" >&2
     echo "O timestamp é a PK de supabase_migrations.schema_migrations: repetido, o db push colide na PK e o db reset quebra (issue #143)." >&2
     echo "Escolha um instante livre — e renumerar só o NNNN não resolve: os dois têm de ser únicos." >&2
-    echo "Correção orientada pelo dono: DESKCOMM_GOV_MIGRATION_EDIT=1." >&2
+    echo "Correção orientada pelo dono: PJCRM_GOV_MIGRATION_EDIT=1." >&2
     houve_conflito=1
   fi
 done <<<"$new_migrations"

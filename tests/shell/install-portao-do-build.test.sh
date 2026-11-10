@@ -20,7 +20,7 @@
 #      construir de propósito — e o `docker-compose.build.yml` nunca é tocado.
 #   2. PORTÃO ABERTO: o registro responde E o `up -d` falhou → constrói aqui.
 #      É a recuperação de arquitetura do #1060/#1143 e ela não pode sumir.
-#   3. O ESCAPE DE PROPÓSITO: registro fora + DESKCOMM_BUILD_LOCAL=1 → o pedido
+#   3. O ESCAPE DE PROPÓSITO: registro fora + PJCRM_BUILD_LOCAL=1 → o pedido
 #      humano abre o portão e o install constrói.
 #   4. A ESPERA é a mesma do update.sh: a sonda que o portão faz é a função
 #      compartilhada `veredito_das_imagens_da_release`, e ela corre sob
@@ -158,8 +158,8 @@ check "a mensagem é a da INSTALAÇÃO e diz que foi o registro que não respond
   grep -q 'o registro de imagens não respondeu' "$OUT"
 check "ela diz o que fazer em seguida (rodar de novo em alguns minutos)" \
   grep -q 'de novo em alguns minutos' "$OUT"
-check "e ensina a saída de propósito, com DESKCOMM_BUILD_LOCAL=1" \
-  grep -q 'DESKCOMM_BUILD_LOCAL=1 bash hostgator-setup-kit/install.sh --yes' "$OUT"
+check "e ensina a saída de propósito, com PJCRM_BUILD_LOCAL=1" \
+  grep -q 'PJCRM_BUILD_LOCAL=1 bash hostgator-setup-kit/install.sh --yes' "$OUT"
 
 echo
 echo "── 2. PORTÃO ABERTO: o registro responde → constrói aqui (recuperação #1060/#1143)"
@@ -176,8 +176,8 @@ check "nunca passou pela recusa da #2631" \
   bash -c "! grep -q 'o registro de imagens não respondeu' '$OUT'"
 
 echo
-echo "── 3. O ESCAPE DE PROPÓSITO: registro fora, mas quem opera pediu com DESKCOMM_BUILD_LOCAL=1"
-rodar proposito REGISTRO_FORA=1 UP_D_FORA=1 DESKCOMM_BUILD_LOCAL=1
+echo "── 3. O ESCAPE DE PROPÓSITO: registro fora, mas quem opera pediu com PJCRM_BUILD_LOCAL=1"
+rodar proposito REGISTRO_FORA=1 UP_D_FORA=1 PJCRM_BUILD_LOCAL=1
 check "o pedido humano abre o portão mesmo sem resposta do registro" \
   grep -q 'docker-compose.build.yml' "$DOCKERLOG"
 check "terminou com 0" [ "$RC" -eq 0 ]

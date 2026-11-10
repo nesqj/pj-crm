@@ -178,7 +178,7 @@ mkdir -p "$PROJ/.runtime/supabase" "$PROJ/backups"
 : > "$PROJ/docker-compose.prod.yml"
 printf '%s\n' 'SINGLE_SERVER="1"' \
   'SUPABASE_DB_URL="postgresql://postgres:***@supabase-db:5432/postgres"' \
-  'PSQL_DOCKER_NETWORK="deskcommcrm_supabase"' \
+  'PSQL_DOCKER_NETWORK="pjcrm_supabase"' \
   'NEXT_PUBLIC_SUPABASE_URL="https://crm.exemplo.com"' > "$PROJ/.env"
 printf '%s\n' 'POSTGRES_PASSWORD=s3nh:@/a' > "$PROJ/.runtime/supabase/.env"
 dump "$PROJ/backups/db-20261004-030000.sql.gz"

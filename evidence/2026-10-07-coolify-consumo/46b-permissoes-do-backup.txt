@@ -1,4 +1,4 @@
-== permissoes dos backups guardados (stat -c "%a %s %n", medido na VPS; nomes sem /root/deskcomm-)
+== permissoes dos backups guardados (stat -c "%a %s %n", medido na VPS; nomes sem /root/pjcrm-)
 == quem gerou cada um (ledger): *-134008 = backup do update.sh da U1 Passo 2 (runner com umask 022 antes do update.sh);
 ==   *-135302 = backup.sh da G3 Passo 0 (comando com umask 077); *-141954 = backup.sh da G5 Passo 1 (umask 077).
 == as pastas guardado-* sao 700 e foram copiadas com cp -rp (o modo de backups/ e dos arquivos e o da arvore do clone).

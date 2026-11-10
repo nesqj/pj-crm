@@ -354,7 +354,7 @@ function nuvemshopLoja(storeId, res) {
   return responder(res, 200, {
     id: Number(storeId),
     name: "Loja E2E",
-    email: "loja-e2e@deskcomm.test",
+    email: "loja-e2e@pjcrm.test",
     country: "BR",
     currency: "BRL",
     language: "pt",

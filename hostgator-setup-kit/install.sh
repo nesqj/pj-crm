@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# DeskcommCRM — instalador self-host para VPS (HostGator).
+# PJ CRM — instalador self-host para VPS (HostGator).
 #
 # Idempotente: pode rodar de novo sem estragar nada. Dependências no host:
 # só docker, docker compose, git, openssl, curl. psql/bootstrap rodam via Docker.
@@ -15,11 +15,11 @@ set -euo pipefail
 # de qualquer 'cd' (step 2 pode entrar num repo clonado à parte).
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 
-REPO_URL="${REPO_URL:-https://github.com/melgarafael/DeskcommCRM.git}"
+REPO_URL="${REPO_URL:-https://github.com/nesqj/pj-crm.git}"
 # Uma constante, dois usos (o fim feliz e o fim travado) — e o comecar.sh tem a
 # gêmea. Link repetido à mão vira link divergente na primeira troca.
 COMUNIDADE_URL="https://lp-comunidade.automatiklabs.com.br"
-REPO_DIR="${REPO_DIR:-deskcommcrm}"
+REPO_DIR="${REPO_DIR:-pjcrm}"
 COMPOSE="docker-compose.prod.yml"
 COMPOSE_TRAEFIK="docker-compose.traefik.yml"
 COMPOSE_NPM="docker-compose.npm.yml"
@@ -93,7 +93,7 @@ dc_files() {
 # clone existir, e o validador da connection string já precisa saber explicar uma
 # falha de certificado). Se mexer numa, mexa na outra — as duas mensagens e o
 # caminho fixo do contêiner têm de sair byte a byte iguais.
-CA_NO_CONTAINER="/etc/deskcomm/ca/supabase-ca.crt"
+CA_NO_CONTAINER="/etc/pjcrm/ca/supabase-ca.crt"
 
 # stdout: caminho absoluto da CA (o docker recusa bind relativo).
 # stderr: o que falta, sempre com o nome da variável — é a frase que aparece no
@@ -196,7 +196,7 @@ banner() {
   # Terminal estreito recebe a versão de uma linha: logo quebrado no meio é
   # pior do que logo nenhum.
   if [ "$COLOR" != 1 ] || [ "$cols" -lt $((LOGO_COLS + 2)) ]; then
-    paint 1 "  DESKCOMM"
+    paint 1 "  PJCRM"
   else
     # Tela limpa: tira o ruído do clone/apt de cima do logo. Exige TTY de
     # verdade (não basta COLOR=1): com FORCE_COLOR numa saída redirecionada, um
@@ -235,7 +235,7 @@ show_recovery() {
   printf '\n%s\n\n' "$(t "Como voltar atrás e recomeçar do zero:")"
   printf '  %s\n' "cd ${dir}"
   printf '  %s\n' "rm -f .env                                    # $(t "apaga a configuração digitada")"
-  printf '  %s\n' "rm -f ${MARCA_INSTALACAO_NOME:-.deskcomm-instalado}          # $(t "apaga o marcador desta instalação")"
+  printf '  %s\n' "rm -f ${MARCA_INSTALACAO_NOME:-.pjcrm-instalado}          # $(t "apaga o marcador desta instalação")"
   printf '  %s\n' "docker compose $(dc_files) down -v          # $(t "derruba o que subiu")"
   printf '  %s\n' "bash ${KIT_DIR:-hostgator-setup-kit}/install.sh   # $(t "começa de novo")"
   printf '\n%s\n' "$(t "Se o schema chegou a ser aplicado e você quer o banco limpo de novo,")"
@@ -755,9 +755,9 @@ decide_proxy() {  # decide_proxy <portas_ocupadas> <projeto_do_dono> <projeto_at
   # próprio kit ensina como caminho para corrigir uma resposta.
   #
   # Só que "mesma instalação" NÃO é o mesmo que "mesmo nome de projeto": o nome
-  # é o basename da pasta, e toda cópia do repo se chama DeskcommCRM. Duas
-  # árvores irmãs (/root/DeskcommCRM e /root/apagar7/DeskcommCRM) colidem no
-  # nome `deskcommcrm` e esta linha as declarava re-execução uma da outra —
+  # é o basename da pasta, e toda cópia do repo se chama PJ CRM. Duas
+  # árvores irmãs (/root/pj-crm e /root/apagar7/pj-crm) colidem no
+  # nome `pjcrm` e esta linha as declarava re-execução uma da outra —
   # exatamente o caso que a varredura de portas foi escrita para pegar. Medido
   # numa VPS de produção em 2026-08-24: a instalação de uma aula passou por
   # aqui, recriou os contêineres do CRM no ar com o .env dela e trocou o banco
@@ -1039,7 +1039,7 @@ source "$KIT_DIR/_common.sh"
 #
 # Instalação NOVA não é afetada: sem contêiner do projeto no ar, a função
 # devolve vazio e o guarda deixa passar. Re-executar na MESMA pasta idem — a
-# árvore é a mesma. `DESKCOMM_ASSUMIR_PROJETO=1` é a saída para quem move a
+# árvore é a mesma. `PJCRM_ASSUMIR_PROJETO=1` é a saída para quem move a
 # instalação de lugar de propósito, e é a mesma dos outros dois call sites.
 recusar_projeto_de_outra_arvore || die "$(t "Instalação interrompida para não derrubar o CRM que já está no ar nesta VPS.")"
 
@@ -1087,7 +1087,7 @@ fi
 #
 # A varredura NÃO procura por "traefik": procura por QUEM PUBLICA as portas, e
 # só depois pergunta o que é. A versão anterior só reconhecia Traefik, então um
-# Caddy — inclusive o de outro DeskcommCRM instalado na mesma VPS — passava
+# Caddy — inclusive o de outro PJ CRM instalado na mesma VPS — passava
 # despercebido e a instalação escolhia `caddy`, garantindo o choque de portas.
 # Medido numa VPS com produção rodando: exatamente esse erro, na fase 4.
 #
@@ -1115,7 +1115,7 @@ if [ -n "$portas_ocupadas" ]; then
     unset _resto
     # De qual cópia do repo saiu esse contêiner. É o que separa "sou eu rodando
     # de novo" de "é a instalação irmã que está no ar" quando as duas pastas se
-    # chamam DeskcommCRM e por isso compartilham o nome do projeto.
+    # chamam PJ CRM e por isso compartilham o nome do projeto.
     dono_arvore="$(docker inspect "$dono_portas" --format '{{index .Config.Labels "com.docker.compose.project.working_dir"}}' 2>/dev/null || true)"
     dono_arvore="${dono_arvore%/}"
   fi
@@ -1205,9 +1205,9 @@ e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
     # à instalação que está no ar — foi assim que uma aula subiu por cima de uma
     # produção. Aqui o nome das DUAS pastas aparece.
     if [ -n "$dono_arvore" ] && [ "$dono_projeto" = "$proj_atual" ] && [ "$dono_arvore" != "$_minha_arvore" ]; then
-      c_red "$(t "✖ Já existe um DeskcommCRM NO AR nesta VPS, instalado em {1}." "$dono_arvore")"
+      c_red "$(t "✖ Já existe um PJ CRM NO AR nesta VPS, instalado em {1}." "$dono_arvore")"
       printf '\n%s\n'   "$(t "  Esta pasta ({1}) é outra cópia do repo. As duas se chamam" "$_minha_arvore")"
-      printf '%s\n'     "$(t "  DeskcommCRM, então o Docker dá às duas o MESMO nome de projeto")"
+      printf '%s\n'     "$(t "  PJ CRM, então o Docker dá às duas o MESMO nome de projeto")"
       printf '%s\n\n'   "$(t "  ('{1}') — e instalar aqui recriaria os contêineres daquela." "$proj_atual")"
       printf '%s\n'     "$(t "  Na prática: o CRM que está no ar passaria a rodar com o .env DESTA pasta")"
       printf '%s\n\n'   "$(t "  (outro banco, outras chaves), e as conexões de WhatsApp cairiam.")"
@@ -1215,8 +1215,8 @@ e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
       printf '%s\n\n'   "       cd ${dono_arvore} && bash hostgator-setup-kit/update.sh"
       printf '%s\n'     "$(t "  Quer mesmo uma SEGUNDA instalação nesta VPS? Ela precisa de nome de")"
       printf '%s\n'     "$(t "  projeto e domínio próprios — ponha no .env desta pasta, antes de rodar:")"
-      printf '%s\n\n'   "       COMPOSE_PROJECT_NAME=deskcomm-$(basename "${_minha_arvore}" | tr 'A-Z' 'a-z')-2"
-      die "$(t "Instalação interrompida para não derrubar o DeskcommCRM que está no ar em {1}." "$dono_arvore")"
+      printf '%s\n\n'   "       COMPOSE_PROJECT_NAME=pjcrm-$(basename "${_minha_arvore}" | tr 'A-Z' 'a-z')-2"
+      die "$(t "Instalação interrompida para não derrubar o PJ CRM que está no ar em {1}." "$dono_arvore")"
     fi
     # Concordância com o número de portas: "A porta 80 e 443 já está ocupada"
     # saiu na prova real e denuncia texto montado sem olhar o próprio dado.
@@ -1228,7 +1228,7 @@ e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
     printf '\n%s\n'   "$(t "  O CRM precisa dessas duas portas para publicar o site com HTTPS. Subir um")"
     printf '%s\n\n'   "$(t "  segundo proxy nelas não funciona: o Docker recusa e a instalação para.")"
     printf '%s\n'     "$(t "  Como resolver, na ordem do mais provável:")"
-    printf '\n%s\n'   "$(t "  1. Já é outro DeskcommCRM neste servidor? Então use aquele — entre na")"
+    printf '\n%s\n'   "$(t "  1. Já é outro PJ CRM neste servidor? Então use aquele — entre na")"
     printf '%s\n'     "$(t "     pasta dele e rode: bash hostgator-setup-kit/update.sh")"
     printf '\n%s\n'   "$(t "  2. Não usa mais o que está ocupando? Desligue e rode este instalador de novo:")"
     [ -n "$dono_portas" ] && printf '%s\n' "$(t "       docker stop {1}" "$dono_portas")"
@@ -1298,7 +1298,7 @@ fi
 # colar. Sem o token, nada muda: seguem as perguntas de sempre.
 if [ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" ] && [ -n "${SUPABASE_ACCESS_TOKEN:-}" ]; then
   step "$(t "Criando o projeto Supabase automaticamente")"
-  _sb_out="$(bash "$KIT_DIR/supabase-provision.sh" "${APP_NAME:-DeskcommCRM}" "${SUPABASE_REGION:-sa-east-1}")" \
+  _sb_out="$(bash "$KIT_DIR/supabase-provision.sh" "${APP_NAME:-PJ CRM}" "${SUPABASE_REGION:-sa-east-1}")" \
     || die "$(t "Não consegui criar o projeto Supabase. Crie no painel e rode de novo sem SUPABASE_ACCESS_TOKEN.")"
   # O script imprime `CHAVE='valor'` em stdout (o visual dele vai para stderr).
   # A leitura é por parse, não por `eval` — o porquê está em
@@ -1418,8 +1418,8 @@ fi
 [ "$PLATAFORMA_HOST" = linux/arm64 ] || VERSAO_ALVO="$(ultima_versao_publicada "$REPO_URL")"
 
 # A tag do git é condição NECESSÁRIA, não suficiente: ela nasce minutos antes
-# das imagens, e `deskcomm-worker`/`deskcomm-scheduler` só passaram a existir
-# depois das releases que já estão publicadas — `deskcomm-worker:1.2.1` nunca
+# das imagens, e `pjcrm-worker`/`pjcrm-scheduler` só passaram a existir
+# depois das releases que já estão publicadas — `pjcrm-worker:1.2.1` nunca
 # vai existir, porque a v1.2.1 é passado. Sem esta conferência, o .env do
 # cliente receberia duas referências impossíveis e o kit as construiria aqui em
 # silêncio, do topo da main: app de uma release + worker de outro código.
@@ -1476,7 +1476,7 @@ FIELDS=(
   ${CAMPO_OPENAI_EXTRA:+"$CAMPO_OPENAI_EXTRA"}
   "OWNER_EMAIL|E-mail do primeiro admin (dono)||v_email||"
   "OWNER_PASSWORD|Senha do primeiro admin (mínimo 8 caracteres)||v_password|secret|"
-  "APP_NAME|Nome que aparece na interface (Enter para o padrão)|DeskcommCRM|||"
+  "APP_NAME|Nome que aparece na interface (Enter para o padrão)|PJ CRM|||"
   # Idioma da instalação. Fica JUNTO do nome do produto de propósito: as duas
   # perguntas são "como o sistema se apresenta", e separá-las faria a segunda
   # parecer configuração técnica.
@@ -1579,7 +1579,7 @@ gen_b64() { openssl rand -base64 32; }
 # serviço não sobe sem admin, e pedir ao dono que invente três segredos no dia
 # em que ele quiser ligar a voz é o "edite o .env à mão" que a doutrina de
 # packaging proíbe. Gerar não liga nada — quem liga é COMPOSE_PROFILES.
-: "${WACALLS_ADMIN_USER:=deskcomm}"
+: "${WACALLS_ADMIN_USER:=pjcrm}"
 : "${WACALLS_ADMIN_PASSWORD:=$(gen_hex)}"
 : "${WACALLS_API_TOKEN:=$(gen_hex)}"
 # O container WAHA espera o HASH SHA512 hex; o app envia o plaintext no X-Api-Key.
@@ -1755,7 +1755,7 @@ _ref_final="${APP_IMAGE##*/}"
 case "$_ref_final" in
   *@sha256:*)
     # O operador pinou o app por DIGEST. Derivar a tag daí produziria
-    # `deskcomm-worker:<hash-do-app>` — uma referência que não existe em lugar
+    # `pjcrm-worker:<hash-do-app>` — uma referência que não existe em lugar
     # nenhum, e o `pull` falharia com "manifest unknown" sem ninguém entender
     # por quê. Worker e scheduler vão para o canal estável, e o aviso sai porque
     # quem pinou por digest tinha um motivo e precisa saber que ele não se
@@ -1862,7 +1862,7 @@ esac
   # pergunta de novo (nem com --yes). Só install.sh a ativa; update.sh, backup.sh
   # e os demais não chamam perguntar_idioma_cli, então seguem em pt-BR mesmo com
   # esta linha no .env.
-  envq DESKCOMM_IDIOMA_CLI "$IDIOMA_CLI"
+  envq PJCRM_IDIOMA_CLI "$IDIOMA_CLI"
   envq APP_LOGO_URL "${APP_LOGO_URL:-}"
   # Perguntar sem gravar seria PIOR que não perguntar: este bloco fecha com
   # `} > .env`, que TRUNCA o arquivo a partir da lista fechada de `envq` acima e
@@ -2463,7 +2463,7 @@ fi
 #
 # Quem tem registro respondendo continua se recuperando sozinho: é a
 # recuperação de arquitetura do #1060/#1143 e ela não pode sumir. Quem quer
-# construir de propósito pede com DESKCOMM_BUILD_LOCAL=1.
+# construir de propósito pede com PJCRM_BUILD_LOCAL=1.
 #
 # Na instalação não há versão anterior para onde voltar (o update.sh devolve a
 # anterior e aponta o diagnóstico), então a recusa é UM die com a mensagem da
@@ -2474,11 +2474,11 @@ fi
 # decide a frase é `motivo_da_recusa_do_build_local` (em _common.sh), na mesma
 # ordem em que o portão decide: o operador sem buildx recebe "instale o
 # buildx", não "mexa na rede". A saída de propósito continua sendo o
-# DESKCOMM_BUILD_LOCAL=1.
+# PJCRM_BUILD_LOCAL=1.
 CONSTRUIU_AQUI=""
 if ! dc up -d; then
   if ! build_local_permitido "$VERSAO_ALVO"; then
-    die "$(t "Não coloquei o CRM no ar: {1} A construção local segue fechada por padrão, e numa instalação não há versão anterior para onde voltar. Para construir as imagens aqui DE PROPÓSITO (mais lento, exige memória): {2}" "$(motivo_da_recusa_do_build_local "$VERSAO_ALVO")" "DESKCOMM_BUILD_LOCAL=1 bash hostgator-setup-kit/install.sh --yes")"
+    die "$(t "Não coloquei o CRM no ar: {1} A construção local segue fechada por padrão, e numa instalação não há versão anterior para onde voltar. Para construir as imagens aqui DE PROPÓSITO (mais lento, exige memória): {2}" "$(motivo_da_recusa_do_build_local "$VERSAO_ALVO")" "PJCRM_BUILD_LOCAL=1 bash hostgator-setup-kit/install.sh --yes")"
   fi
   if construir_aqui_e_subir "$VERSAO_ALVO"; then
     CONSTRUIU_AQUI=1
@@ -2599,7 +2599,7 @@ setup_update_agent_cron
 # contêiner, que é o mesmo que ela usava para quem instalou numa versão
 # anterior.
 if [ "${APP_SAUDAVEL:-0}" = 1 ]; then
-  marcar_instalacao_feita "$VERSAO_ALVO" || c_ylw "$(t "⚠ Não consegui gravar o marcador desta instalação (arquivo .deskcomm-instalado). O CRM está no ar; numa arquitetura sem imagens publicadas, a atualização pode pedir uma VPS suportada até o marcador existir.")"
+  marcar_instalacao_feita "$VERSAO_ALVO" || c_ylw "$(t "⚠ Não consegui gravar o marcador desta instalação (arquivo .pjcrm-instalado). O CRM está no ar; numa arquitetura sem imagens publicadas, a atualização pode pedir uma VPS suportada até o marcador existir.")"
 fi
 
 # ── Final ───────────────────────────────────────────────────────────────────
@@ -2729,7 +2729,7 @@ $(telemetria_no_banner)
     $(t "backup:")        bash hostgator-setup-kit/backup.sh
     $(t "trocar config:") bash hostgator-setup-kit/install.sh
                    $(t "(mostra tudo o que você respondeu e deixa corrigir por número)")
-    $(t "recomeçar:")     docker compose $(dc_files) down -v && rm -f .env ${MARCA_INSTALACAO_NOME:-.deskcomm-instalado}
+    $(t "recomeçar:")     docker compose $(dc_files) down -v && rm -f .env ${MARCA_INSTALACAO_NOME:-.pjcrm-instalado}
                    $(t "(derruba tudo; depois rode o install.sh de novo)")
 
 DONE

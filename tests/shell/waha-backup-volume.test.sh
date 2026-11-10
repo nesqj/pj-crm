@@ -8,7 +8,7 @@
 # Duas regressões, medidas na issue #1438:
 #
 #  1. `docker compose config --volumes` devolve o nome LÓGICO (`waha-data`) e o
-#     volume real tem o prefixo do projeto (`deskcommcrm_waha-data`). Montar o
+#     volume real tem o prefixo do projeto (`pjcrm_waha-data`). Montar o
 #     lógico cria um volume global VAZIO: o .tgz sai com ~87 bytes.
 #  2. `.Name` só responde por volume NOMEADO. Num bind de pasta do host ele vem
 #     vazio — e aí o nome lógico volta pela porta dos fundos. E, mesmo com o
@@ -43,7 +43,7 @@ snapshot_tem() { tar tzf "$1" 2>/dev/null | grep -qxF "./noweb/waha.sqlite3"; }
 # $VOLSTORE/<nome>, criado vazio quando não existe (o defeito da issue nasce
 # aqui). $WAHA_ID e $WAHA_MONTAGEM entram por ambiente em cada cenário.
 export VOLSTORE="$WORK/volumes" DUBLE_LOG="$WORK/docker.log"
-mkdir -p "$WORK/bin" "$VOLSTORE" "$WORK/sessoes/noweb" "$VOLSTORE/deskcommcrm_waha-data/noweb"
+mkdir -p "$WORK/bin" "$VOLSTORE" "$WORK/sessoes/noweb" "$VOLSTORE/pjcrm_waha-data/noweb"
 cat > "$WORK/bin/docker" <<'STUB'
 #!/usr/bin/env bash
 set -uo pipefail
@@ -89,17 +89,17 @@ reprova() { ! ( source "$KIT_DIR/_common.sh"; tar_tem_sessao "$1" ); }
 
 echo "volume_waha_data:"
 check "volume nomeado: vale o nome físico da montagem, não o da pasta" \
-  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='volume|deskcommcrm_waha-data|' volume_de /root/deskcomm-crm)" deskcommcrm_waha-data
+  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='volume|pjcrm_waha-data|' volume_de /root/pj-crm)" pjcrm_waha-data
 check "bind: vale a pasta do host, onde o .Name vem vazio" \
-  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='bind||/srv/waha-sessoes' volume_de /root/deskcomm-crm)" /srv/waha-sessoes
+  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='bind||/srv/waha-sessoes' volume_de /root/pj-crm)" /srv/waha-sessoes
 check "contêiner sem a montagem /app/.sessions cai no nome do projeto" \
-  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='' volume_de /root/DeskcommCRM)" deskcommcrm_waha-data
-check "sem contêiner, pasta /root/DeskcommCRM dá deskcommcrm_waha-data" \
-  igual "$(volume_de /root/DeskcommCRM)" deskcommcrm_waha-data
+  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='' volume_de /root/pj-crm)" pjcrm_waha-data
+check "sem contêiner, pasta /root/pj-crm dá pjcrm_waha-data" \
+  igual "$(volume_de /root/pj-crm)" pjcrm_waha-data
 check "sem contêiner, pasta com hífen mantém o hífen, como o compose" \
-  igual "$(volume_de /root/deskcomm-crm)" deskcomm-crm_waha-data
+  igual "$(volume_de /root/pj-crm)" pj-crm_waha-data
 check "sem contêiner, COMPOSE_PROJECT_NAME vence o nome da pasta" \
-  igual "$(COMPOSE_PROJECT_NAME=deskcomm-prod volume_de /root/DeskcommCRM)" deskcomm-prod_waha-data
+  igual "$(COMPOSE_PROJECT_NAME=pjcrm-prod volume_de /root/pj-crm)" pjcrm-prod_waha-data
 
 echo "tar_tem_sessao:"
 mkdir -p "$WORK/vazio" "$WORK/cheio/noweb"
@@ -115,7 +115,7 @@ mkdir -p "$PROJ/backups"
 : > "$PROJ/docker-compose.prod.yml"
 printf '%s\n' 'SUPABASE_DB_URL="postgresql://postgres:senha@db.exemplo.supabase.co:5432/postgres"' > "$PROJ/.env"
 head -c 4096 /dev/urandom > "$WORK/sessoes/noweb/waha.sqlite3"
-head -c 4096 /dev/urandom > "$VOLSTORE/deskcommcrm_waha-data/noweb/waha.sqlite3"
+head -c 4096 /dev/urandom > "$VOLSTORE/pjcrm_waha-data/noweb/waha.sqlite3"
 
 backup() {  # backup <arquivo-de-saída> [WAHA_ID] [WAHA_MONTAGEM]
   rm -f "$PROJ"/backups/waha-*.tgz
@@ -135,9 +135,9 @@ check "bind: a pasta do host foi a montagem levada ao docker" contem "$DUBLE_LOG
 
 # Volume nomeado com o prefixo do projeto: é o defeito original da issue.
 : > "$DUBLE_LOG"
-backup "$WORK/saida-volume.txt" abc123 'volume|deskcommcrm_waha-data|'
+backup "$WORK/saida-volume.txt" abc123 'volume|pjcrm_waha-data|'
 check "volume nomeado: monta o nome com o prefixo, não o waha-data do compose" \
-  contem "$DUBLE_LOG" "deskcommcrm_waha-data:/data:ro"
+  contem "$DUBLE_LOG" "pjcrm_waha-data:/data:ro"
 check "volume nomeado: o snapshot sai com o arquivo de sessão real" snapshot_tem "$(snapshot)"
 
 # Contêiner fora do ar e nenhum volume físico com esse nome: o docker criaria um

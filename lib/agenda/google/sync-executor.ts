@@ -226,7 +226,7 @@ export async function reconcileAppointment(
     const blocoDoNegocio = await blocoDoNegocioDoEvento(db, org, a);
     /**
      * O compromisso com o que é resolvido aqui (não é coluna): a lista de
-     * convidados já com e-mail, os ids que vão para `deskcomm_guests` e o bloco
+     * convidados já com e-mail, os ids que vão para `pjcrm_guests` e o bloco
      * que a descrição leva no fim.
      */
     const comEquipe = <T extends object>(x: T) => ({
@@ -342,7 +342,7 @@ export async function reconcileAppointment(
       linked?.[`${PREFIXO_PROPRIEDADE}_appointment`] === id;
     /**
      * Quem ERA convidado da equipe e não fica (#4006). O evento guarda os ids
-     * publicados em `deskcomm_guests`; os e-mails deles é que permitem DESconvidar.
+     * publicados em `pjcrm_guests`; os e-mails deles é que permitem DESconvidar.
      * Só vale em evento que é deste compromisso: nos outros, a lista não é nossa.
      */
     const quemSaiu = association

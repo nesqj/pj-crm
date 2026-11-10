@@ -629,7 +629,7 @@ function ServidorNaLista({
               <Button
                 size="sm"
                 variant="outline"
-                // `solicitar_acesso_*` é a ferramenta que o Deskcomm cria sozinho:
+                // `solicitar_acesso_*` é a ferramenta que o PJ CRM cria sozinho:
                 // marcá-la como do servidor só gasta uma vaga do teto.
                 disabled={disabled || !/^[A-Za-z0-9_-]{1,64}$/.test(manual) || manual.startsWith("solicitar_acesso_")}
                 onClick={() => {

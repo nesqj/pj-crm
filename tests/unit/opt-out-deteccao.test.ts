@@ -52,7 +52,7 @@ const PEDE_PARA_SAIR = [
   "quero sair da lista",
   "quero cancelar a inscrição",
   "me descadastra aí",
-  // ─── Formas que passavam batido (medido por @deskcommopp4s-cmd, #1607) ─────
+  // ─── Formas que passavam batido (medido por @pjcrmopp4s-cmd, #1607) ─────
   //
   // INFINITIVO — "pode me remover da lista" é como se pede de fato; a lista de
   // verbos tinha `remove|remova` e não `remover`.
@@ -176,7 +176,7 @@ const NAO_PEDE_PARA_SAIR = [
   // colagem — o defeito da versão com `\b` ASCII, que já tinha sido corrigido
   "amanhã ele sairá do escritório e pararão as obras",
   "a obra pararia se chovesse",
-  // ─── Invasores das aberturas do #1607 (@deskcommopp4s-cmd) ────────────────
+  // ─── Invasores das aberturas do #1607 (@pjcrmopp4s-cmd) ────────────────
   //
   // remover/apagar/tirar aparecem, mas o OBJETO não é a comunicação com o
   // cliente. Nenhuma bloqueia.

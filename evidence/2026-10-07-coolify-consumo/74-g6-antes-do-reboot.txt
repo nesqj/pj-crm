@@ -1,6 +1,6 @@
-Created symlink /etc/systemd/system/multi-user.target.wants/deskcomm-fecha-painel.service → /etc/systemd/system/deskcomm-fecha-painel.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/pjcrm-fecha-painel.service → /etc/systemd/system/pjcrm-fecha-painel.service.
 ipv4=3 ipv6=3 ativo=active
 -- antes do reboot
 conteineres=23
-coolify coolify-db coolify-proxy coolify-realtime coolify-redis coolify-sentinel deskcommcrm-app-1 deskcommcrm-redis-1 deskcommcrm-scheduler-1 deskcommcrm-srh-1 deskcommcrm-supabase-api-gw-1 deskcommcrm-supabase-auth-1 deskcommcrm-supabase-db-1 deskcommcrm-supabase-functions-1 deskcommcrm-supabase-imgproxy-1 deskcommcrm-supabase-meta-1 deskcommcrm-supabase-realtime-1 deskcommcrm-supabase-rest-1 deskcommcrm-supabase-storage-1 deskcommcrm-supabase-studio-1 deskcommcrm-supabase-supavisor-1 deskcommcrm-waha-1 deskcommcrm-worker-1 
+coolify coolify-db coolify-proxy coolify-realtime coolify-redis coolify-sentinel pjcrm-app-1 pjcrm-redis-1 pjcrm-scheduler-1 pjcrm-srh-1 pjcrm-supabase-api-gw-1 pjcrm-supabase-auth-1 pjcrm-supabase-db-1 pjcrm-supabase-functions-1 pjcrm-supabase-imgproxy-1 pjcrm-supabase-meta-1 pjcrm-supabase-realtime-1 pjcrm-supabase-rest-1 pjcrm-supabase-storage-1 pjcrm-supabase-studio-1 pjcrm-supabase-supavisor-1 pjcrm-waha-1 pjcrm-worker-1 
 2026-09-30 14:25:05

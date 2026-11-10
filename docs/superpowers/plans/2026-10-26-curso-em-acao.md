@@ -1,4 +1,4 @@
-# Deskcomm em ação Implementation Plan
+# PJ CRM em ação Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use $superpowers-subagent-driven-development to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -49,7 +49,7 @@
 
 **Interfaces:** nomes de captura `demo-<jornada>--historia--<cena>`. Os scripts novos só aceitam Supabase e app localhost, reutilizam segurança/medição e credenciais privadas da bancada. Não inserir credencial real em semente ou arquivos públicos.
 
-- [ ] Preparar a bancada vps-teste preservando volumes. Reproduzir os pilotos clínica/agenda, pedido via dados externos e infoproduto/caso. Usar a configuração autorizada da Deskcomm Admin para IA sem imprimir ou persistir chaves. Guardar evidência de execução e limites separada dos assets.
+- [ ] Preparar a bancada vps-teste preservando volumes. Reproduzir os pilotos clínica/agenda, pedido via dados externos e infoproduto/caso. Usar a configuração autorizada da PJ CRM Admin para IA sem imprimir ou persistir chaves. Guardar evidência de execução e limites separada dos assets.
 - [ ] Criar receitas de dados fictícios e fotografar as cenas nos estados reais do produto. Distinguir estado semeado, ação executada pelo usuário/ferramenta e execução observada de IA. Usar nomes/contextos coerentes por nicho.
 - [ ] Para ação por IA, medir agente e ferramenta direta no mesmo texto cru; se divergirem, manter rótulo de roteiro e registrar defeito. Não alegar comportamento que a execução não demonstrou.
 - [ ] Validar todas as referências, fotos e geometria, montar e percorrer catálogo/cenas/modo montagem no navegador desktop e celular. Registrar captura visual e ausência de erros.
@@ -57,7 +57,7 @@
 
 ### Task 4: Publicação e verificação final
 
-**Files:** site `/Users/rafaelmelgaco/deskcomm-site-curso/public/curso/index.html` e `public/curso/capturas/*.jpg`; documentação de evidência no produto e fragmento de release somente se efeito real no operador exigir.
+**Files:** site `/Users/rafaelmelgaco/pjcrm-site-curso/public/curso/index.html` e `public/curso/capturas/*.jpg`; documentação de evidência no produto e fragmento de release somente se efeito real no operador exigir.
 
 **Interfaces:** publicar só HTML e JPEGs referenciados, sem arquivos privados. Preservar 61 módulos existentes sem depender de contagem congelada; medir a contagem no gerado.
 

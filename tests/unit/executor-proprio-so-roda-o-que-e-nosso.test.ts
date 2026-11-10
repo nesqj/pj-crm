@@ -19,7 +19,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const GUARDA = "infra/executor-proprio/so-o-que-e-nosso.sh";
-const REPO = "melgarafael/DeskcommCRM";
+const REPO = "nesqj/pj-crm";
 
 function guarda(evento: string, payload: unknown, repo = REPO): number {
   const dir = mkdtempSync(join(tmpdir(), "guarda-"));
@@ -52,7 +52,7 @@ describe("a guarda da máquina", () => {
   });
 
   it.each([
-    ["pull_request de fork", "pull_request", prDe("alguem/DeskcommCRM")],
+    ["pull_request de fork", "pull_request", prDe("alguem/pj-crm")],
     ["pull_request com o fork apagado", "pull_request", prDe(null)],
     ["pull_request com payload ilegível", "pull_request", "{isto não é json"],
     ["pull_request_target", "pull_request_target", prDe(REPO)],
@@ -69,17 +69,17 @@ describe("a guarda da máquina", () => {
 
   it("a imagem instala a guarda como hook de entrada do runner", () => {
     const dockerfile = readFileSync("infra/executor-proprio/Dockerfile", "utf-8");
-    expect(dockerfile).toContain("ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/deskcomm/so-o-que-e-nosso.sh");
-    expect(dockerfile).toMatch(/COPY so-o-que-e-nosso\.sh .*\/opt\/deskcomm\//);
+    expect(dockerfile).toContain("ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/pjcrm/so-o-que-e-nosso.sh");
+    expect(dockerfile).toMatch(/COPY so-o-que-e-nosso\.sh .*\/opt\/pjcrm\//);
   });
 });
 
 // --- roteamento --------------------------------------------------------------
 
 const TODOS =
-  "${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'deskcomm-proprio' || 'ubuntu-latest' }}";
+  "${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'pjcrm-proprio' || 'ubuntu-latest' }}";
 const SO_PR =
-  "${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || (vars.EXECUTOR_PROPRIO == 'ligado' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && 'deskcomm-proprio' || 'ubuntu-latest') }}";
+  "${{ matrix.arch == 'arm64' && 'ubuntu-24.04-arm' || (vars.EXECUTOR_PROPRIO == 'ligado' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && 'pjcrm-proprio' || 'ubuntu-latest') }}";
 
 const ESPERADO: Record<string, string> = {
   "ci.yml::verify-parte": TODOS,
@@ -117,7 +117,7 @@ describe("o roteamento dos workflows", () => {
   });
 
   it("exatamente os jobs pesados podem ir para a máquina, cada um com a expressão declarada", () => {
-    const naMaquina = Object.fromEntries([...mapa].filter(([, v]) => v.includes("deskcomm-proprio")));
+    const naMaquina = Object.fromEntries([...mapa].filter(([, v]) => v.includes("pjcrm-proprio")));
     expect(naMaquina).toEqual(ESPERADO);
   });
 
@@ -130,7 +130,7 @@ describe("o roteamento dos workflows", () => {
   it("nenhum workflow com pull_request_target manda job para a máquina", () => {
     for (const arquivo of readdirSync(".github/workflows")) {
       const texto = readFileSync(`.github/workflows/${arquivo}`, "utf-8");
-      if (/^\s+pull_request_target:/m.test(texto)) expect(texto, arquivo).not.toContain("deskcomm-proprio");
+      if (/^\s+pull_request_target:/m.test(texto)) expect(texto, arquivo).not.toContain("pjcrm-proprio");
     }
   });
 });

@@ -1,7 +1,7 @@
 # Revisão dos campos lidos no documento — #3476
 
-Fonte: [workflow E2E 40400799649](https://github.com/melgarafael/DeskcommCRM/actions/runs/40400799649),
-parte 7, [job 121847899398](https://github.com/melgarafael/DeskcommCRM/actions/runs/40400799649/job/121847899398).
+Fonte: [workflow E2E 40400799649](https://github.com/nesqj/pj-crm/actions/runs/40400799649),
+parte 7, [job 121847899398](https://github.com/nesqj/pj-crm/actions/runs/40400799649/job/121847899398).
 **42 casos passaram; seis são desta entrega.** HEAD do PR:
 `0a52385384baf59f9bc0135789c91168bf9f91bc`. O checkout compilado foi o merge
 `111bbf7581aeedca43a5525692683a9259b51b81`. A comparação de produto, baseline,

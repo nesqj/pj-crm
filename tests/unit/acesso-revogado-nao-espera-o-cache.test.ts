@@ -41,7 +41,7 @@ function cookieDeSessao(): { name: string; value: string } {
   const b64 = (o: unknown) => Buffer.from(JSON.stringify(o)).toString("base64url");
   const token = `${b64({ alg: "HS256" })}.${b64({ sub: USER_ID, exp: EXPIRACAO_DO_TOKEN_S })}.assinatura`;
   return {
-    name: "sb-deskcomm-auth",
+    name: "sb-pjcrm-auth",
     value: `base64-${b64({ access_token: token, expires_at: EXPIRACAO_DO_TOKEN_S })}`,
   };
 }

@@ -17,7 +17,7 @@ e a autoria. As worktrees de origem não foram alteradas.
 |---|---|---|
 | #3370 — leitor de catálogo e turco em construção | @nusretbayindir-stack (Agenterix) | `0d175e3fdc654d00883fb513646fa8e8e18b8148` |
 | #3447 — conferir arquivos antes do restore | @samirhvbr | `680677f4cae18b24898a9575180006de901051b7` |
-| #3467 — curso de configurações e administração | @melgarafael | `115fe34f89efc993973d3aff35b313457630d481` |
+| #3467 — curso de configurações e administração | @nesqj | `115fe34f89efc993973d3aff35b313457630d481` |
 | #2327 — hold do número e retomada dos retornos automáticos | @Sandersono | `22e4211718e1890e8123733aa36a7885de6e4eeb` |
 
 Somente os reparos de CI `5399f824c` e `b6e97ab6b` entraram por cherry-pick,

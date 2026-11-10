@@ -36,7 +36,7 @@ ensure_vapid_keys() {
 }
 
 has_local_env() {
-  [[ "$(env_value DESKCOMM_ENV_MODE)" == "local" ]] || return 1
+  [[ "$(env_value PJCRM_ENV_MODE)" == "local" ]] || return 1
   local key
   for key in NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY \
     SUPABASE_DB_URL INTERNAL_SECRET CPF_ENCRYPTION_KEY WAHA_BYO_ENCRYPTION_KEY AI_CRED_AES_KEY \
@@ -78,7 +78,7 @@ generate() {
   api_url="http://${vm_ip}:54321"
   app_url="http://${vm_ip}:${app_port}"
 
-  if [[ -f "$ENV_FILE" ]] && [[ "$(env_value DESKCOMM_ENV_MODE)" != "local" ]]; then
+  if [[ -f "$ENV_FILE" ]] && [[ "$(env_value PJCRM_ENV_MODE)" != "local" ]]; then
     local backup
     backup="${ENV_FILE}.cloud-backup"
     if [[ ! -e "$backup" ]]; then
@@ -100,7 +100,7 @@ generate() {
   tmp="$(mktemp "${ENV_FILE}.XXXXXX")"
   umask 077
   cat > "$tmp" <<EOF
-DESKCOMM_ENV_MODE=local
+PJCRM_ENV_MODE=local
 NODE_ENV=production
 NEXT_PUBLIC_SUPABASE_URL=$api_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=$anon_key
@@ -127,8 +127,8 @@ WAHA_WEBHOOK_REQUIRE_SIGNATURE=false
 WHATSAPP_RESTART_ALL_SESSIONS=True
 
 UPSTASH_REDIS_REST_URL=http://srh:80
-UPSTASH_REDIS_REST_TOKEN=deskcomm-local-redis
-SRH_TOKEN=deskcomm-local-redis
+UPSTASH_REDIS_REST_TOKEN=pjcrm-local-redis
+SRH_TOKEN=pjcrm-local-redis
 LGPD_SIGNING_KEY=$(openssl rand -hex 32)
 APP_PORT=$app_port
 SENTRY_DSN=

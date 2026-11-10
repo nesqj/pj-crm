@@ -12,7 +12,7 @@ param(
 if (-not $Repo -and (Get-Command gh -ErrorAction SilentlyContinue)) {
   $Repo = gh repo view --json nameWithOwner -q .nameWithOwner 2>$null
 }
-if (-not $Repo) { $Repo = "SEU_USER/DeskcommCRM" }
+if (-not $Repo) { $Repo = "SEU_USER/pj-crm" }
 
 $AppUrl = $AppUrl.TrimEnd("/")
 $Tick = "$AppUrl/api/v1/system/relogio/tick"

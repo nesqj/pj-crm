@@ -2,7 +2,7 @@
 # Uma VAGA do executor próprio: pede ao GitHub uma credencial de uso único
 # (runner JIT, que executa no máximo um job e some), sobe um contêiner limpo com
 # ela, espera o job terminar e repete. Roda como serviço systemd
-# `deskcomm-vaga@N` (N = número da vaga), instalado por instalar.sh.
+# `pjcrm-vaga@N` (N = número da vaga), instalado por instalar.sh.
 #
 # Uma vaga = um job por vez. As vagas não colidem entre si mesmo com portas
 # fixas (o e2e sobe o Supabase em 54321/54322, o teste de imagem usa :3000)
@@ -10,12 +10,12 @@
 set -uo pipefail
 
 VAGA="${1:?uso: vaga.sh <número da vaga>}"
-CONF=/etc/deskcomm-executor
-REPO="$(cat "$CONF/repo" 2>/dev/null || echo melgarafael/DeskcommCRM)"
+CONF=/etc/pjcrm-executor
+REPO="$(cat "$CONF/repo" 2>/dev/null || echo nesqj/pj-crm)"
 CPUS="$(cat "$CONF/cpus-por-vaga" 2>/dev/null || echo 4)"
 MEMORIA="$(cat "$CONF/memoria-por-vaga" 2>/dev/null || echo 14g)"
-IMAGEM=deskcomm-executor:atual
-ROTULO=deskcomm-proprio
+IMAGEM=pjcrm-executor:atual
+ROTULO=pjcrm-proprio
 
 while true; do
   token="$(cat "$CONF/token" 2>/dev/null)" || token=""
@@ -25,7 +25,7 @@ while true; do
     continue
   fi
 
-  nome="deskcomm-vaga-${VAGA}-$(date +%s)"
+  nome="pjcrm-vaga-${VAGA}-$(date +%s)"
   resposta=$(curl -fsS -X POST \
       -H "Authorization: Bearer ${token}" \
       -H "Accept: application/vnd.github+json" \
@@ -38,11 +38,11 @@ while true; do
 
   # Contêiner que sobrou de rodada anterior (queda de energia, kill) faria o
   # `--name` fixo falhar na hora — e cada volta queimaria uma credencial nova.
-  docker rm -f "deskcomm-vaga-${VAGA}" >/dev/null 2>&1 || true
+  docker rm -f "pjcrm-vaga-${VAGA}" >/dev/null 2>&1 || true
 
   echo "vaga ${VAGA}: ${nome} pronto, esperando job"
   docker run --rm --runtime=sysbox-runc \
-    --name "deskcomm-vaga-${VAGA}" \
+    --name "pjcrm-vaga-${VAGA}" \
     --cpus "$CPUS" --memory "$MEMORIA" \
     -e JIT_CONFIG="$cfg" \
     "$IMAGEM"

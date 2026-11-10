@@ -271,7 +271,7 @@ async function ultimaRecebidaDaFicha(
  * Devolve `true` quando o id NÃO pôde ser gravado porque o eco dela já o ocupa.
  * Antes, essa recusa caía no `catch` do laço como "erro transiente — mantida
  * queued", e o cliente recebia a mesma mensagem de novo a cada tick — a
- * armadilha medida na issue #196 do DeskcommCRM. Aqui a mensagem sai `sent` sem
+ * armadilha medida na issue #196 do PJ CRM. Aqui a mensagem sai `sent` sem
  * o id, e quem o grava é `stampExternalIdAfterEcho`, depois que o eco sai.
  *
  * Qualquer outro erro sobe como antes: sem conseguir escrever no banco, não há

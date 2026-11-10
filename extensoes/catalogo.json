@@ -3,7 +3,7 @@
   "origin": "https://extensoes.deskcomm.com.br",
   "entries": [
     {
-      "publisher": "deskcomm",
+      "publisher": "pjcrm",
       "name": "carrinho-abandonado",
       "version": "1.0.0",
       "license": "MIT",
@@ -27,10 +27,10 @@
         "navigation.inbox",
         "navigation.kanban"
       ],
-      "sha256": "54e78e246a2c7a9e788cfafe4347c66e7bd38e30a5daf80c6515a177acd94174",
-      "byte_length": 3928,
-      "publisher_label": "Deskcomm",
-      "repository": "https://github.com/melgarafael/DeskcommCRM",
+      "sha256": "4ec8379ec91af1e7c01777ac8a55256ebdb12b0882a1f105a20d69c028b14e3d",
+      "byte_length": 3925,
+      "publisher_label": "PJ CRM",
+      "repository": "https://github.com/nesqj/pj-crm",
       "tags": [
         "ecommerce",
         "vendas",
@@ -39,7 +39,7 @@
       "published_at": "2026-09-18"
     },
     {
-      "publisher": "deskcomm",
+      "publisher": "pjcrm",
       "name": "primeira-semana",
       "version": "1.0.0",
       "license": "MIT",
@@ -63,10 +63,10 @@
         "navigation.tasks",
         "navigation.contacts"
       ],
-      "sha256": "a501e34fbeee4dbe5beaee0249f6440602edee1975638f0c4ad69480903ba4ad",
-      "byte_length": 3323,
-      "publisher_label": "Deskcomm",
-      "repository": "https://github.com/melgarafael/DeskcommCRM",
+      "sha256": "c3b3840635a2e939299106cf3816e6160d0a30f2d5dfaee046e271600d4337e8",
+      "byte_length": 3320,
+      "publisher_label": "PJ CRM",
+      "repository": "https://github.com/nesqj/pj-crm",
       "tags": [
         "equipe",
         "treinamento"
@@ -74,7 +74,7 @@
       "published_at": "2026-09-18"
     },
     {
-      "publisher": "deskcomm",
+      "publisher": "pjcrm",
       "name": "retorno-de-paciente",
       "version": "1.0.0",
       "license": "MIT",
@@ -98,10 +98,10 @@
         "navigation.inbox",
         "navigation.agenda"
       ],
-      "sha256": "fb65a77b8420899b16b059ffd954b597864df23b2f1827bcd11913e56f56cc3e",
-      "byte_length": 3523,
-      "publisher_label": "Deskcomm",
-      "repository": "https://github.com/melgarafael/DeskcommCRM",
+      "sha256": "9ab59eb7a3e505c7e8cb5cd8cbce50eda907171961ed69d24fcf0bfe020df717",
+      "byte_length": 3520,
+      "publisher_label": "PJ CRM",
+      "repository": "https://github.com/nesqj/pj-crm",
       "tags": [
         "clinica",
         "retorno",
@@ -110,5 +110,5 @@
       "published_at": "2026-09-18"
     }
   ],
-  "revision": 1
+  "revision": 2
 }

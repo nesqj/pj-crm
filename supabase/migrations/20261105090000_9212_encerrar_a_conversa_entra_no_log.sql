@@ -178,7 +178,7 @@ begin
   -- (push, webhook de saída, conversão de anúncio).
   if auth.uid() is not null
      and p_event_type in ('lead.won','lead.lost','lead.reopened','lead.assigned')
-     and coalesce(current_setting('deskcomm.desfecho_pelo_negocio', true), '') <> 'on' then
+     and coalesce(current_setting('pjcrm.desfecho_pelo_negocio', true), '') <> 'on' then
     raise exception 'reserved_message_received' using errcode='42501';
   end if;
   -- Estes campos autorizam efeitos operacionais; não são payload público.

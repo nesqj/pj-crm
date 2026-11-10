@@ -1,4 +1,4 @@
-# Security Review: deskcomm-agenda-horarios
+# Security Review: pjcrm-agenda-horarios
 
 ## Scope
 

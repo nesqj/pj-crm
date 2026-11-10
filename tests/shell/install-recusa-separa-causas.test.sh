@@ -20,10 +20,10 @@
 #      balde).
 #   2. REGISTRO FORA (com buildx instalado): a recusa cita o registro — e NÃO
 #      culpa o buildx. O mesmo portão, causa diferente, diagnóstico diferente.
-#   3. PROIBIÇÃO EXPLÍCITA (DESKCOMM_BUILD_LOCAL=0): a recusa diz que quem
+#   3. PROIBIÇÃO EXPLÍCITA (PJCRM_BUILD_LOCAL=0): a recusa diz que quem
 #      opera proibiu — tampouco é culpa do registro.
 #   4. O ESCAPE DE PROPÓSITO continua acima de tudo: sem buildx + registro fora
-#      + DESKCOMM_BUILD_LOCAL=1 → o pedido humano abre o portão e constrói.
+#      + PJCRM_BUILD_LOCAL=1 → o pedido humano abre o portão e constrói.
 #   5. A ordem no arquivo: o portão decide, e o motivo é consultado DENTRO do
 #      bloco dele, antes do `construir_aqui_e_subir`.
 #
@@ -189,8 +189,8 @@ check "NÃO culpa o buildx (esta VPS tem o plugin)" \
 check "não constrói" eval '! construiu'
 
 echo
-echo "── 3. PROIBIÇÃO EXPLÍCITA: DESKCOMM_BUILD_LOCAL=0 → a recusa diz que quem opera proibiu"
-rodar proibido DESKCOMM_BUILD_LOCAL=0 UP_D_FORA=1
+echo "── 3. PROIBIÇÃO EXPLÍCITA: PJCRM_BUILD_LOCAL=0 → a recusa diz que quem opera proibiu"
+rodar proibido PJCRM_BUILD_LOCAL=0 UP_D_FORA=1
 check "saiu com 1" [ "$RC" -eq 1 ]
 check "diz que a proibição veio do ambiente, não do registro" \
   grep -q 'desligada por você mesmo' "$OUT"
@@ -199,8 +199,8 @@ check "NÃO culpa o registro (a sonda nem precisou rodar)" \
 check "não constrói" eval '! construiu'
 
 echo
-echo "── 4. O ESCAPE DE PROPÓSITO continua acima de tudo: sem buildx, mas com DESKCOMM_BUILD_LOCAL=1"
-rodar escape SEM_BUILDX=1 UP_D_FORA=1 DESKCOMM_BUILD_LOCAL=1
+echo "── 4. O ESCAPE DE PROPÓSITO continua acima de tudo: sem buildx, mas com PJCRM_BUILD_LOCAL=1"
+rodar escape SEM_BUILDX=1 UP_D_FORA=1 PJCRM_BUILD_LOCAL=1
 check "o pedido humano abre o portão: o overlay docker-compose.build.yml foi chamado" \
   grep -q 'docker-compose.build.yml' "$DOCKERLOG"
 check "terminou com 0" [ "$RC" -eq 0 ]

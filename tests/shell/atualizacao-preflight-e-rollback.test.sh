@@ -20,7 +20,7 @@
 #   2. SEM REGISTRO NO MEIO DO UPDATE — o build local NÃO é disparado por
 #      padrão, o run termina com diagnóstico persistido, e NENHUM serviço
 #      encerra em `Created`/`Exited` (o rollback devolve a versão anterior);
-#   3. CONTROLE — com `DESKCOMM_BUILD_LOCAL=1` (quem quer de propósito) o
+#   3. CONTROLE — com `PJCRM_BUILD_LOCAL=1` (quem quer de propósito) o
 #      build acontece e a atualização fecha no ar. Sem este controle, um
 #      código que nunca construísse passaria no caso 2 por acidente.
 #
@@ -110,7 +110,7 @@ case "${1:-}" in
     # cuja publicação TERMINOU (`$DUB/voz-pronta` é o interruptor do caso 4).
     [ -f "$DUB/registro" ] || exit 1
     case "$*" in
-      *deskcomm-voice-agent*) [ -f "$DUB/voz-pronta" ] || exit 1 ;;
+      *pjcrm-voice-agent*) [ -f "$DUB/voz-pronta" ] || exit 1 ;;
     esac
     exit 0 ;;
 esac
@@ -186,7 +186,7 @@ export PATH="$WORK/bin:$PATH"
 # Uma VPS que JÁ ESTÁ no ar, na 0.8.0, com as quatro imagens pinadas no .env —
 # é o estado de quem clica em "Atualizar" na tela.
 montar_instalacao() {  # montar_instalacao <raiz>
-  local raiz="$1" proj="$1/deskcommcrm"
+  local raiz="$1" proj="$1/pjcrm"
   mkdir -p "$proj/supabase"
   cp -RL "$RAIZ/hostgator-setup-kit" "$proj/"
   # O dublê do backup grava a marca SÓ se for executado — é como o caso 1 prova
@@ -205,13 +205,13 @@ STUB
   # de qualquer construção e o caso 3 (controle) mediria outra coisa.
   cp "$RAIZ/docker-compose.build.yml" "$proj/"
   cat > "$proj/.env" <<ENV
-APP_IMAGE=${NS}/deskcommcrm:0.8.0
+APP_IMAGE=${NS}/pjcrm:0.8.0
 APP_PULL_POLICY=missing
-WORKER_IMAGE=${NS}/deskcomm-worker:0.8.0
+WORKER_IMAGE=${NS}/pjcrm-worker:0.8.0
 WORKER_PULL_POLICY=missing
-SCHEDULER_IMAGE=${NS}/deskcomm-scheduler:0.8.0
+SCHEDULER_IMAGE=${NS}/pjcrm-scheduler:0.8.0
 SCHEDULER_PULL_POLICY=missing
-VOICE_AGENT_IMAGE=${NS}/deskcomm-voice-agent:0.8.0
+VOICE_AGENT_IMAGE=${NS}/pjcrm-voice-agent:0.8.0
 VOICE_AGENT_PULL_POLICY=missing
 WAHA_IMAGE=devlikeapro/waha:latest-2026.7.2
 SUPABASE_DB_URL=postgresql://x/y
@@ -255,7 +255,7 @@ preparar_vps() {
 rodar_update() {
   local raiz="$1" saida="$2"; shift 2
   RC=0
-  ( cd "$raiz" && env "$@" bash deskcommcrm/hostgator-setup-kit/update.sh \
+  ( cd "$raiz" && env "$@" bash pjcrm/hostgator-setup-kit/update.sh \
       --to v0.9.0 --force ) > "$saida" 2>&1 < /dev/null || RC=$?
 }
 
@@ -268,7 +268,7 @@ rm -f "$DUB/registro"                      # registro/DNS inacessível
 R1="$WORK/caso1"; mkdir -p "$R1"; montar_instalacao "$R1"
 OUT1="$WORK/saida1.txt"
 rodar_update "$R1" "$OUT1"; RC1="$RC"
-DIAG1="$R1/deskcommcrm/.deskcomm-update-diagnostico.log"
+DIAG1="$R1/pjcrm/.pjcrm-update-diagnostico.log"
 
 if [ "$RC1" -eq 3 ]; then
   ok "o update RECUSOU sem começar (RC 3 — o agente não tenta desfazer)"
@@ -291,15 +291,15 @@ if grep -qE ' stop | up -d| rm -f' "$DOCKER_LOG"; then
 else
   ok "nenhum serviço foi parado, recriado ou removido"
 fi
-if grep -q "^APP_IMAGE=$NS/deskcommcrm:0.8.0$" "$R1/deskcommcrm/.env"; then
+if grep -q "^APP_IMAGE=$NS/pjcrm:0.8.0$" "$R1/pjcrm/.env"; then
   ok "o .env segue apontando para a versão de antes (0.8.0)"
 else
-  nao ".env intocado" "APP_IMAGE=:0.8.0" "$(grep '^APP_IMAGE=' "$R1/deskcommcrm/.env")"
+  nao ".env intocado" "APP_IMAGE=:0.8.0" "$(grep '^APP_IMAGE=' "$R1/pjcrm/.env")"
 fi
 if [ -f "$DIAG1" ]; then
   ok "o run terminou com diagnóstico PERSISTIDO"
 else
-  nao "diagnóstico persistido" ".deskcomm-update-diagnostico.log existe" "arquivo ausente"
+  nao "diagnóstico persistido" ".pjcrm-update-diagnostico.log existe" "arquivo ausente"
 fi
 if [ -f "$DIAG1" ] && grep -qiE 'registro|falha' "$DIAG1"; then
   ok "e o diagnóstico é legível (cita a causa e o status)"
@@ -313,7 +313,7 @@ preparar_vps
 R2="$WORK/caso2"; mkdir -p "$R2"; montar_instalacao "$R2"
 OUT2="$WORK/saida2.txt"
 rodar_update "$R2" "$OUT2"; RC2="$RC"
-DIAG2="$R2/deskcommcrm/.deskcomm-update-diagnostico.log"
+DIAG2="$R2/pjcrm/.pjcrm-update-diagnostico.log"
 
 if [ "$RC2" -ne 0 ]; then
   ok "o update terminou como FALHA (RC $RC2), não como sucesso"
@@ -334,11 +334,11 @@ else
   ok "NENHUM serviço saiu em Created/Exited — o rollback religou o que estava no ar"
 fi
 for chave in APP WORKER SCHEDULER VOICE_AGENT; do
-  if grep -q "^${chave}_IMAGE=$NS/.*:0.8.0$" "$R2/deskcommcrm/.env"; then
+  if grep -q "^${chave}_IMAGE=$NS/.*:0.8.0$" "$R2/pjcrm/.env"; then
     ok "o pin ${chave}_IMAGE voltou para a versão anterior (0.8.0)"
   else
     nao "rollback do pin ${chave}_IMAGE" "…:0.8.0" \
-        "$(grep "^${chave}_IMAGE=" "$R2/deskcommcrm/.env" 2>/dev/null)"
+        "$(grep "^${chave}_IMAGE=" "$R2/pjcrm/.env" 2>/dev/null)"
   fi
 done
 if [ -f "$DIAG2" ] && grep -qiE 'falha|RC 1|saída: 1' "$DIAG2"; then
@@ -347,22 +347,22 @@ else
   nao "diagnóstico da falha" "arquivo com status de falha" \
       "$(tail -4 "$DIAG2" 2>/dev/null | tr '\n' ' ')"
 fi
-if grep -qiE 'registro|DESKCOMM_BUILD_LOCAL' "$OUT2"; then
+if grep -qiE 'registro|PJCRM_BUILD_LOCAL' "$OUT2"; then
   ok "a saída explica POR QUE não construiu e como construir de propósito"
 else
-  nao "explicação na saída" "menção ao registro ou a DESKCOMM_BUILD_LOCAL" \
+  nao "explicação na saída" "menção ao registro ou a PJCRM_BUILD_LOCAL" \
       "$(tail -3 "$OUT2" | tr '\n' ' ')"
 fi
 
 # ════════════════════════════════════════════════════════════════════════════
-echo "── caso 3 — CONTROLE: com DESKCOMM_BUILD_LOCAL=1 o build ACONTECE"
+echo "── caso 3 — CONTROLE: com PJCRM_BUILD_LOCAL=1 o build ACONTECE"
 # Sem este controle, um código que nunca construísse passaria no caso 2 por
 # acidente (o log do docker estaria vazio de build por qualquer outro motivo).
 preparar_vps
 R3="$WORK/caso3"; mkdir -p "$R3"; montar_instalacao "$R3"
 OUT3="$WORK/saida3.txt"
-rodar_update "$R3" "$OUT3" DESKCOMM_BUILD_LOCAL=1; RC3="$RC"
-DIAG3="$R3/deskcommcrm/.deskcomm-update-diagnostico.log"
+rodar_update "$R3" "$OUT3" PJCRM_BUILD_LOCAL=1; RC3="$RC"
+DIAG3="$R3/pjcrm/.pjcrm-update-diagnostico.log"
 
 if grep -q -- '-f docker-compose.build.yml build' "$DOCKER_LOG"; then
   ok "o build local foi EXECUTADO (prova que o que trava o caso 2 é o portão)"
@@ -381,10 +381,10 @@ if grep -qE ' (created|exited)$' "$DUB/estado.txt"; then
 else
   ok "app, worker, scheduler e proxy saíram SAUDÁVEIS"
 fi
-if grep -q "^APP_IMAGE=$NS/deskcommcrm:0.9.0$" "$R3/deskcommcrm/.env"; then
+if grep -q "^APP_IMAGE=$NS/pjcrm:0.9.0$" "$R3/pjcrm/.env"; then
   ok "sem rollback: o .env ficou na versão nova (0.9.0)"
 else
-  nao ".env na versão nova" "APP_IMAGE=:0.9.0" "$(grep '^APP_IMAGE=' "$R3/deskcommcrm/.env")"
+  nao ".env na versão nova" "APP_IMAGE=:0.9.0" "$(grep '^APP_IMAGE=' "$R3/pjcrm/.env")"
 fi
 if [ -f "$DIAG3" ] && grep -qiE 'concluído|sucesso' "$DIAG3"; then
   ok "o run de sucesso TAMBÉM deixa diagnóstico (status legível)"
@@ -395,15 +395,15 @@ fi
 
 # ════════════════════════════════════════════════════════════════════════════
 echo "── caso 3b — a saída de escape vale com o registro FORA desde o início"
-# A recusa do portão ensina `DESKCOMM_BUILD_LOCAL=1 … --force`. Com o registro
+# A recusa do portão ensina `PJCRM_BUILD_LOCAL=1 … --force`. Com o registro
 # ainda fora, o preflight não pode recusar justamente esse pedido.
 preparar_vps
 rm -f "$DUB/registro"
 R3B="$WORK/caso3b"; mkdir -p "$R3B"; montar_instalacao "$R3B"
 OUT3B="$WORK/saida3b.txt"
-rodar_update "$R3B" "$OUT3B" DESKCOMM_BUILD_LOCAL=1; RC3B="$RC"
+rodar_update "$R3B" "$OUT3B" PJCRM_BUILD_LOCAL=1; RC3B="$RC"
 if [ "$RC3B" -eq 0 ] && grep -q -- '-f docker-compose.build.yml build' "$DOCKER_LOG"; then
-  ok "com DESKCOMM_BUILD_LOCAL=1 o preflight não recusa: construiu e concluiu (RC 0)"
+  ok "com PJCRM_BUILD_LOCAL=1 o preflight não recusa: construiu e concluiu (RC 0)"
 else
   nao "saída de escape aceita" "RC 0 com build local" "RC $RC3B; $(grep -m1 'Motivo' "$OUT3B")"
 fi
@@ -418,17 +418,17 @@ for jeito in exited some; do
   : > "$DUB/worker-$jeito"
   R5="$WORK/caso5-$jeito"; mkdir -p "$R5"; montar_instalacao "$R5"
   OUT5="$WORK/saida5-$jeito.txt"
-  rodar_update "$R5" "$OUT5" DESKCOMM_BUILD_LOCAL=1; RC5="$RC"
+  rodar_update "$R5" "$OUT5" PJCRM_BUILD_LOCAL=1; RC5="$RC"
   if [ "$RC5" -ne 0 ] && grep -q 'NÃO subiram: worker' "$OUT5"; then
     ok "worker $jeito: a atualização FALHOU e nomeou o worker (RC $RC5)"
   else
     nao "worker $jeito acusado" "RC≠0 e 'NÃO subiram: worker'" "RC $RC5; $(tail -2 "$OUT5" | tr '\n' ' ')"
   fi
-  if grep -q "^APP_IMAGE=$NS/deskcommcrm:0.8.0$" "$R5/deskcommcrm/.env" \
-     && grep -q "^WORKER_IMAGE=$NS/deskcomm-worker:0.8.0$" "$R5/deskcommcrm/.env"; then
+  if grep -q "^APP_IMAGE=$NS/pjcrm:0.8.0$" "$R5/pjcrm/.env" \
+     && grep -q "^WORKER_IMAGE=$NS/pjcrm-worker:0.8.0$" "$R5/pjcrm/.env"; then
     ok "worker $jeito: os pins voltaram para a versão anterior (0.8.0)"
   else
-    nao "worker $jeito: pins de volta" "…:0.8.0" "$(grep -E '^(APP|WORKER)_IMAGE=' "$R5/deskcommcrm/.env" | tr '\n' ' ')"
+    nao "worker $jeito: pins de volta" "…:0.8.0" "$(grep -E '^(APP|WORKER)_IMAGE=' "$R5/pjcrm/.env" | tr '\n' ' ')"
   fi
 done
 
@@ -609,7 +609,7 @@ R8="$WORK/caso8"; mkdir -p "$R8"; montar_instalacao "$R8"
 # `topo.txt` existe no topo e NÃO existe na v0.9.0: é um dos arquivos que a troca
 # de versão mexe, e é por ele que o `git checkout` recusaria (medido: o git
 # recusa exatamente nos arquivos que `git diff HEAD <tag>` lista).
-printf 'ajuste local de quem opera\n' >> "$R8/deskcommcrm/topo.txt"
+printf 'ajuste local de quem opera\n' >> "$R8/pjcrm/topo.txt"
 OUT8="$WORK/saida8.txt"
 rodar_update "$R8" "$OUT8"; RC8="$RC"
 
@@ -656,9 +656,9 @@ echo "── caso 8b — CONTROLE: alteração local que a versão alvo NÃO tro
 # arquivo que a versão nova nem toca.
 preparar_vps
 R8B="$WORK/caso8b"; mkdir -p "$R8B"; montar_instalacao "$R8B"
-printf '# ajuste local de quem opera\n' >> "$R8B/deskcommcrm/hostgator-setup-kit/install.sh"
+printf '# ajuste local de quem opera\n' >> "$R8B/pjcrm/hostgator-setup-kit/install.sh"
 OUT8B="$WORK/saida8b.txt"
-rodar_update "$R8B" "$OUT8B" DESKCOMM_BUILD_LOCAL=1; RC8B="$RC"
+rodar_update "$R8B" "$OUT8B" PJCRM_BUILD_LOCAL=1; RC8B="$RC"
 
 if [ "$RC8B" -eq 0 ] && grep -q 'Atualização concluída' "$OUT8B"; then
   ok "a atualização SEGUIU e fechou no ar (RC 0, 'Atualização concluída')"
@@ -682,9 +682,9 @@ segue_8() {
   local nome="$1" desc="$2" preparo="$3" r out
   preparar_vps
   r="$WORK/caso$nome"; mkdir -p "$r"; montar_instalacao "$r"
-  ( cd "$r/deskcommcrm" && eval "$preparo" ) >/dev/null 2>&1
+  ( cd "$r/pjcrm" && eval "$preparo" ) >/dev/null 2>&1
   out="$WORK/saida$nome.txt"
-  rodar_update "$r" "$out" DESKCOMM_BUILD_LOCAL=1
+  rodar_update "$r" "$out" PJCRM_BUILD_LOCAL=1
   if [ "$RC" -eq 0 ] && grep -q 'Atualização concluída' "$out"; then
     ok "$desc: a atualização SEGUIU e fechou no ar"
   else
@@ -697,7 +697,7 @@ recusa_8() {
   local nome="$1" desc="$2" preparo="$3" r out padrao; shift 3
   preparar_vps
   r="$WORK/caso$nome"; mkdir -p "$r"; montar_instalacao "$r"
-  ( cd "$r/deskcommcrm" && eval "$preparo" ) >/dev/null 2>&1
+  ( cd "$r/pjcrm" && eval "$preparo" ) >/dev/null 2>&1
   out="$WORK/saida$nome.txt"
   rodar_update "$r" "$out"
   if [ "$RC" -eq 3 ] && [ ! -f "$r/marca-backup" ]; then

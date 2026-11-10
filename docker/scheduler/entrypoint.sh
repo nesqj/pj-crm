@@ -1,5 +1,5 @@
 #!/bin/sh
-# Entrypoint do deskcomm-scheduler: escreve o crontab e entrega o PID 1 ao crond.
+# Entrypoint do pjcrm-scheduler: escreve o crontab e entrega o PID 1 ao crond.
 #
 # Por que gerar em runtime em vez de assar o arquivo na imagem: o INTERNAL_SECRET
 # só existe no .env do cliente, e o busybox crond não expande variáveis dentro da
@@ -185,7 +185,7 @@ umask 077
 # `.env.cron-drain` do kit. De brinde, o valor deixa de passar pelo sh do crond:
 # `$`, crase e aspas no segredo não precisam mais de escape nenhum.
 # CRON_AUTH_DIR é ponto de injeção do teste, como o CRONTAB_PATH abaixo.
-AUTH_DIR="${CRON_AUTH_DIR:-/run/deskcomm-cron}"
+AUTH_DIR="${CRON_AUTH_DIR:-/run/pjcrm-cron}"
 AUTH_FILE="$AUTH_DIR/header"
 mkdir -p "$AUTH_DIR"
 chmod 700 "$AUTH_DIR"
@@ -209,7 +209,7 @@ echo "$CRONS" | while IFS='|' read -r quando timeout rota; do
   # uma linha a mais: o `||` só dispara em falha.
   # % é proibido aqui (crontab de vixie trata como início de stdin) e `$`/crase
   # seriam reavaliados pelo sh do crond — nenhum dos dois aparece na mensagem.
-  printf '%s curl -fsS -m%s -H '"'"'@%s'"'"' "%s/%s" >/dev/null || echo "deskcomm-cron: FALHOU %s — veja o erro do curl logo acima; se for 401 ou 403, o segredo que este scheduler manda não é o que o app enxerga: confira INTERNAL_SECRET/INTERNAL_CRON_SECRET no .env e rode docker compose up -d --force-recreate app scheduler" >&2\n' \
+  printf '%s curl -fsS -m%s -H '"'"'@%s'"'"' "%s/%s" >/dev/null || echo "pjcrm-cron: FALHOU %s — veja o erro do curl logo acima; se for 401 ou 403, o segredo que este scheduler manda não é o que o app enxerga: confira INTERNAL_SECRET/INTERNAL_CRON_SECRET no .env e rode docker compose up -d --force-recreate app scheduler" >&2\n' \
     "$quando" "$timeout" "$AUTH_FILE" "$APP_ORIGIN" "$rota" "$rota" >> "$DESTINO"
 done
 

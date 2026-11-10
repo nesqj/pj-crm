@@ -12,20 +12,20 @@ describe("basePublicaDoWebhookMeta / META_WEBHOOK_BASE_URL (#1426)", () => {
   afterEach(() => vi.restoreAllMocks());
 
   it("prioriza META_WEBHOOK_BASE_URL quando configurada, normalizando barras finais", () => {
-    vi.spyOn(env, "META_WEBHOOK_BASE_URL", "get").mockReturnValue("https://deskcomm.empresa.com.br///");
-    vi.spyOn(env, "NEXT_PUBLIC_APP_URL", "get").mockReturnValue("https://deskcomm.empresa.internal");
+    vi.spyOn(env, "META_WEBHOOK_BASE_URL", "get").mockReturnValue("https://pjcrm.empresa.com.br///");
+    vi.spyOn(env, "NEXT_PUBLIC_APP_URL", "get").mockReturnValue("https://pjcrm.empresa.internal");
 
-    expect(basePublicaDoWebhookMeta(req)).toBe("https://deskcomm.empresa.com.br");
+    expect(basePublicaDoWebhookMeta(req)).toBe("https://pjcrm.empresa.com.br");
     // Guarda do escopo: a base da instalação também monta o webhook da Zernio e do
     // canal parceiro (`/api/v1/webhooks/channel/<token>`), e a variável da Meta não a toca.
-    expect(basePublicaDaInstalacao(req)).toBe("https://deskcomm.empresa.internal");
+    expect(basePublicaDaInstalacao(req)).toBe("https://pjcrm.empresa.internal");
   });
 
   it("recai para NEXT_PUBLIC_APP_URL quando META_WEBHOOK_BASE_URL estiver vazia", () => {
     vi.spyOn(env, "META_WEBHOOK_BASE_URL", "get").mockReturnValue("");
-    vi.spyOn(env, "NEXT_PUBLIC_APP_URL", "get").mockReturnValue("https://deskcomm.empresa.internal/");
+    vi.spyOn(env, "NEXT_PUBLIC_APP_URL", "get").mockReturnValue("https://pjcrm.empresa.internal/");
 
-    expect(basePublicaDoWebhookMeta(req)).toBe("https://deskcomm.empresa.internal");
+    expect(basePublicaDoWebhookMeta(req)).toBe("https://pjcrm.empresa.internal");
   });
 
   it("recai para origin/nextUrl quando NEXT_PUBLIC_APP_URL for placeholder.invalid e META_WEBHOOK_BASE_URL for vazia", () => {

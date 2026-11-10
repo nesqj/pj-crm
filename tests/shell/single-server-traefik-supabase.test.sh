@@ -177,15 +177,15 @@ echo "etiquetas do override vs Caddyfile.single-server"
 check "a rota nasce desligada (chave interpolável, não um true fixo)" \
   grep -qF 'traefik.enable: "${TRAEFIK_ENABLE:-false}"' "$OVERRIDE"
 check "a rede usada é a ponte privada desta instalação (o Envoy já está nela)" \
-  grep -qF 'traefik.docker.network: "${SINGLE_SERVER_NETWORK:-deskcomm_single_server}"' "$OVERRIDE"
+  grep -qF 'traefik.docker.network: "${SINGLE_SERVER_NETWORK:-pjcrm_single_server}"' "$OVERRIDE"
 check "entrypoint/certresolver usam os mesmos defaults do docker-compose.traefik.yml" \
-  bash -c 'grep -qF "traefik.http.routers.deskcomm-supabase.entrypoints: \"\${TRAEFIK_ENTRYPOINT:-websecure}\"" "$1" && grep -qF "traefik.http.routers.deskcomm-supabase.tls.certresolver: \"\${TRAEFIK_CERTRESOLVER:-letsencrypt}\"" "$1"' _ "$OVERRIDE"
+  bash -c 'grep -qF "traefik.http.routers.pjcrm-supabase.entrypoints: \"\${TRAEFIK_ENTRYPOINT:-websecure}\"" "$1" && grep -qF "traefik.http.routers.pjcrm-supabase.tls.certresolver: \"\${TRAEFIK_CERTRESOLVER:-letsencrypt}\"" "$1"' _ "$OVERRIDE"
 check "o serviço aponta para a porta do Envoy (8000)" \
-  grep -qF 'traefik.http.services.deskcomm-supabase.loadbalancer.server.port: "8000"' "$OVERRIDE"
+  grep -qF 'traefik.http.services.pjcrm-supabase.loadbalancer.server.port: "8000"' "$OVERRIDE"
 check "prioridade 500: acima da rota geral do app e abaixo do bloqueio 1000 do WAHA" \
-  bash -c 'grep -qF "deskcomm-supabase.priority: \"500\"" "$1" && grep -qF "deskcomm-waha-block.priority: \"1000\"" "$2"' _ "$OVERRIDE" "$TRAEFIK_YML"
+  bash -c 'grep -qF "pjcrm-supabase.priority: \"500\"" "$1" && grep -qF "pjcrm-waha-block.priority: \"1000\"" "$2"' _ "$OVERRIDE" "$TRAEFIK_YML"
 check "gzip do Caddyfile acompanha a rota do Supabase" \
-  grep -qF 'deskcomm-supabase-compress.compress: "true"' "$OVERRIDE"
+  grep -qF 'pjcrm-supabase-compress.compress: "true"' "$OVERRIDE"
 
 # As seis prefixos do Caddyfile — a REFERÊNCIA do modo Caddy —, uma a uma.
 prefixos="$(grep -E '^[[:space:]]*@supabase path ' "$CADDYFILE" | head -1 | sed 's/^[[:space:]]*@supabase path //' | tr ' ' '\n' | sed 's/\*$//' | tr '\n' ' ')"
@@ -198,7 +198,7 @@ check "nenhuma prefixo extra no overlay (6 rotas, como o Caddyfile)" igual "$n_r
 check "a regra casa com o Host do domínio (não publica os outros tenants da VPS)" \
   grep -qF 'Host(`${TRAEFIK_HOST:-}`) &&' "$OVERRIDE"
 check "o override NÃO declara rede externa nova (derrubaria a instalação em Caddy)" \
-  bash -c 'test "$(sed -n "/^networks:/,\$p" "$1" | grep -cE "^  [a-z_]+:")" = 1 && grep -q "^  deskcomm_private:" "$1"' _ "$OVERRIDE"
+  bash -c 'test "$(sed -n "/^networks:/,\$p" "$1" | grep -cE "^  [a-z_]+:")" = 1 && grep -q "^  pjcrm_private:" "$1"' _ "$OVERRIDE"
 
 # ════════════════════════════════════════════════════════════════════════════
 # (7) Interpolação do Compose de verdade (onde existe `docker compose`)
@@ -214,12 +214,12 @@ if [ -n "$DOCKER_REAL" ] && "$DOCKER_REAL" compose version >/dev/null 2>&1; then
     done
     printf '    ports:\n      - 5432:5432\n      - 6543:6543\n'
   } > "$CFG/docker-compose.yml"
-  cp "$OVERRIDE" "$CFG/docker-compose.deskcomm.yml"
+  cp "$OVERRIDE" "$CFG/docker-compose.pjcrm.yml"
 
   etiquetas() {  # etiquetas [<linha extra do .env>] → JSON das labels do api-gw
-    printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.deskcomm.yml' \
-      'COMPOSE_PROJECT_NAME=deskcommcrm-supabase' \
-      'SINGLE_SERVER_NETWORK=deskcommcrm_supabase' "$@" > "$CFG/.env"
+    printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.pjcrm.yml' \
+      'COMPOSE_PROJECT_NAME=pjcrm-supabase' \
+      'SINGLE_SERVER_NETWORK=pjcrm_supabase' "$@" > "$CFG/.env"
     (cd "$CFG" && env -i PATH="$PATH" HOME="$HOME" "$DOCKER_REAL" compose config --format json 2>/dev/null) \
       | python3 -c 'import json,sys; print(json.dumps(json.load(sys.stdin)["services"]["api-gw"]["labels"]))'
   }
@@ -230,11 +230,11 @@ if [ -n "$DOCKER_REAL" ] && "$DOCKER_REAL" compose version >/dev/null 2>&1; then
   check "com TRAEFIK_ENABLE=true o Traefik enxerga o Envoy" \
     igual "$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["traefik.enable"])' "$ligadas")" true
   check "a regra interpolada casa com o domínio da instalação" \
-    bash -c 'python3 -c "import json,sys; print(json.loads(sys.argv[1])[\"traefik.http.routers.deskcomm-supabase.rule\"])" "$1" | grep -qF "Host(\`crm.exemplo.com.br\`)"' _ "$ligadas"
+    bash -c 'python3 -c "import json,sys; print(json.loads(sys.argv[1])[\"traefik.http.routers.pjcrm-supabase.rule\"])" "$1" | grep -qF "Host(\`crm.exemplo.com.br\`)"' _ "$ligadas"
   check "as seis prefixos sobrevivem à interpolação" \
-    bash -c 'python3 -c "import json,sys; print(json.loads(sys.argv[1])[\"traefik.http.routers.deskcomm-supabase.rule\"])" "$1" | grep -qF "PathPrefix(\`/graphql/v1\`)"' _ "$ligadas"
+    bash -c 'python3 -c "import json,sys; print(json.loads(sys.argv[1])[\"traefik.http.routers.pjcrm-supabase.rule\"])" "$1" | grep -qF "PathPrefix(\`/graphql/v1\`)"' _ "$ligadas"
   check "a rede interpolada é a desta instalação" \
-    igual "$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["traefik.docker.network"])' "$ligadas")" deskcommcrm_supabase
+    igual "$(python3 -c 'import json,sys; print(json.loads(sys.argv[1])["traefik.docker.network"])' "$ligadas")" pjcrm_supabase
 
   # Sem a chave (instalação em Caddy): a mesma etiqueta nasce `false`.
   desligadas="$(etiquetas)" ; rc=$?
@@ -245,19 +245,19 @@ if [ -n "$DOCKER_REAL" ] && "$DOCKER_REAL" compose version >/dev/null 2>&1; then
   # (8) Traefik em BRIDGE (Coolify): o terceiro arquivo põe o Envoy na rede do
   #     proxy, o Traefik o procura nela, e a porta do host vem do .env.
   check "o kit traz o arquivo do Traefik em bridge" test -f "$PONTE"
-  cp "$PONTE" "$CFG/docker-compose.deskcomm-traefik.yml" 2>/dev/null
-  printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.deskcomm.yml:docker-compose.deskcomm-traefik.yml' \
-    'COMPOSE_PROJECT_NAME=deskcommcrm-supabase' 'SINGLE_SERVER_NETWORK=deskcommcrm_supabase' \
+  cp "$PONTE" "$CFG/docker-compose.pjcrm-traefik.yml" 2>/dev/null
+  printf '%s\n' 'COMPOSE_FILE=docker-compose.yml:docker-compose.pjcrm.yml:docker-compose.pjcrm-traefik.yml' \
+    'COMPOSE_PROJECT_NAME=pjcrm-supabase' 'SINGLE_SERVER_NETWORK=pjcrm_supabase' \
     'TRAEFIK_ENABLE=true' "TRAEFIK_HOST=$DOMINIO" 'TRAEFIK_NETWORK=coolify' 'API_GW_HTTP_PORT=8001' > "$CFG/.env"
   ponte="$(cd "$CFG" && env -i PATH="$PATH" HOME="$HOME" "$DOCKER_REAL" compose config --format json 2>/dev/null \
     | python3 -c 'import json,sys
 c=json.load(sys.stdin); g=c["services"]["api-gw"]
 print(",".join(sorted(g.get("networks",{}))))
-print(c["networks"].get("deskcomm_proxy",{}).get("name",""))
+print(c["networks"].get("pjcrm_proxy",{}).get("name",""))
 print(g["labels"]["traefik.docker.network"])
 print(",".join("%s:%s" % (p.get("host_ip",""), p.get("published","")) for p in g.get("ports",[])))' 2>/dev/null)"
   check "bridge: o Envoy entra também na rede do proxy" \
-    igual "$(sed -n 1p <<<"$ponte")" "default,deskcomm_private,deskcomm_proxy"
+    igual "$(sed -n 1p <<<"$ponte")" "default,pjcrm_private,pjcrm_proxy"
   check "bridge: a rede do proxy é a exportada (TRAEFIK_NETWORK)" igual "$(sed -n 2p <<<"$ponte")" coolify
   check "bridge: o Traefik procura o Envoy na rede dele" igual "$(sed -n 3p <<<"$ponte")" coolify
   check "bridge: a porta do host sai do API_GW_HTTP_PORT, só no loopback" \
@@ -270,7 +270,7 @@ fi
 # (9) Porta do gateway e Traefik em bridge (Coolify) pelo instalador inteiro
 # ════════════════════════════════════════════════════════════════════════════
 echo "porta do gateway e Traefik em bridge"
-DOIS='COMPOSE_FILE=docker-compose.yml:docker-compose.deskcomm.yml'
+DOIS='COMPOSE_FILE=docker-compose.yml:docker-compose.pjcrm.yml'
 subiu() { grep -qF 'compose up' "$WORK/docker.log"; }
 falha() { ! "$@"; }  # o instalador é função deste shell: `bash -c` não a enxerga
 if [ -r /proc/meminfo ]; then
@@ -297,13 +297,13 @@ COOLIFY="$WORK/coolify"; montar_arvore "$COOLIFY"
 check "Traefik em bridge (TRAEFIK_NETWORK=coolify): roda até o fim" \
   rodar_instalador "$COOLIFY" REVERSE_PROXY=traefik TRAEFIK_NETWORK=coolify
 check "bridge: COMPOSE_FILE ganha o terceiro arquivo" \
-  grep -qxF "$DOIS:docker-compose.deskcomm-traefik.yml" "$COOLIFY/.runtime/supabase/.env"
+  grep -qxF "$DOIS:docker-compose.pjcrm-traefik.yml" "$COOLIFY/.runtime/supabase/.env"
 check "bridge: o terceiro arquivo é a cópia do kit" \
-  cmp -s "$PONTE" "$COOLIFY/.runtime/supabase/docker-compose.deskcomm-traefik.yml"
+  cmp -s "$PONTE" "$COOLIFY/.runtime/supabase/docker-compose.pjcrm-traefik.yml"
 check "bridge: TRAEFIK_NETWORK gravada no .env do Supabase" \
   grep -qxF 'TRAEFIK_NETWORK=coolify' "$COOLIFY/.runtime/supabase/.env"
 check "Traefik em modo host (sem TRAEFIK_NETWORK): dois arquivos, sem o terceiro" \
-  bash -c 'grep -qxF "$1" "$2/.env" && test ! -e "$2/docker-compose.deskcomm-traefik.yml"' _ "$DOIS" "$ARVORE/.runtime/supabase"
+  bash -c 'grep -qxF "$1" "$2/.env" && test ! -e "$2/docker-compose.pjcrm-traefik.yml"' _ "$DOIS" "$ARVORE/.runtime/supabase"
 SEMREDE="$WORK/semrede"; montar_arvore "$SEMREDE"
 : > "$WORK/docker.log"
 check "rede do proxy inexistente é recusada" \
@@ -314,7 +314,7 @@ CADDYREDE="$WORK/caddyrede"; montar_arvore "$CADDYREDE"
 check "Caddy com TRAEFIK_NETWORK por engano: roda até o fim" \
   rodar_instalador "$CADDYREDE" TRAEFIK_NETWORK=coolify
 check "Caddy: a rede do proxy não entra (dois arquivos, sem o terceiro)" \
-  bash -c 'grep -qxF "$1" "$2/.env" && test ! -e "$2/docker-compose.deskcomm-traefik.yml"' _ "$DOIS" "$CADDYREDE/.runtime/supabase"
+  bash -c 'grep -qxF "$1" "$2/.env" && test ! -e "$2/docker-compose.pjcrm-traefik.yml"' _ "$DOIS" "$CADDYREDE/.runtime/supabase"
 else
   echo "$SEM_MEMINFO_MSG"
 fi
@@ -333,13 +333,13 @@ for nome in com-ponte sem-ponte; do
   printf 'ref=%s\n' "$ref_pinada" > "$WORK/upd-$nome/.runtime/supabase/.supabase-version"
   printf 'DISABLE_SIGNUP=false\n' > "$WORK/upd-$nome/.runtime/supabase/.env"
 done
-printf '# versão velha\n' > "$WORK/upd-com-ponte/.runtime/supabase/docker-compose.deskcomm-traefik.yml"
+printf '# versão velha\n' > "$WORK/upd-com-ponte/.runtime/supabase/docker-compose.pjcrm-traefik.yml"
 check "update: termina bem em quem tem o terceiro arquivo" atualizar_arvore "$WORK/upd-com-ponte"
 check "update: o terceiro arquivo passa a ser o do kit" \
-  cmp -s "$PONTE" "$WORK/upd-com-ponte/.runtime/supabase/docker-compose.deskcomm-traefik.yml"
+  cmp -s "$PONTE" "$WORK/upd-com-ponte/.runtime/supabase/docker-compose.pjcrm-traefik.yml"
 check "update: termina bem em quem não tem o terceiro arquivo" atualizar_arvore "$WORK/upd-sem-ponte"
 check "update: quem não tinha o terceiro arquivo continua sem ele" \
-  test ! -e "$WORK/upd-sem-ponte/.runtime/supabase/docker-compose.deskcomm-traefik.yml"
+  test ! -e "$WORK/upd-sem-ponte/.runtime/supabase/docker-compose.pjcrm-traefik.yml"
 
 echo "saída do setup.sh oficial do Supabase"
 # O setup.sh da ref imprime NOME=valor de cada segredo que gera (service_role,

@@ -748,13 +748,13 @@ describe("uso durante o atendimento: opção do agente + identidade do contato (
 
     const forjado = {
       consulta: "meu número é outro",
-      "X-Deskcomm-Contato-Telefone": "5599000000000",
-      "x-deskcomm-contato-id": OUTRA_ORG,
-      "X-DESKCOMM-CANAL": "sms",
+      "X-PJCRM-Contato-Telefone": "5599000000000",
+      "x-pjcrm-contato-id": OUTRA_ORG,
+      "X-PJCRM-CANAL": "sms",
       headers: {
-        "X-Deskcomm-Contato-Telefone": "5599000000000",
-        "x-deskcomm-contato-id": OUTRA_ORG,
-        "X-Deskcomm-Extra": "1",
+        "X-PJCRM-Contato-Telefone": "5599000000000",
+        "x-pjcrm-contato-id": OUTRA_ORG,
+        "X-PJCRM-Extra": "1",
         Authorization: "Bearer outra",
       },
     };
@@ -767,7 +767,7 @@ describe("uso durante o atendimento: opção do agente + identidade do contato (
     expect(posts.length).toBeGreaterThan(0);
     for (const r of posts) {
       expect(identidadeNoFio(r.cabecalhos)).toEqual({ id: CONTATO, telefone: "5511987654321", canal: "whatsapp" });
-      expect(r.cabecalhos["x-deskcomm-extra"], "argumento acrescentou cabeçalho").toBeUndefined();
+      expect(r.cabecalhos["x-pjcrm-extra"], "argumento acrescentou cabeçalho").toBeUndefined();
       expect(r.cabecalhos.authorization).toBe(`Bearer ${CHAVE}`);
     }
     // O que o modelo escreveu chega ao servidor como ARGUMENTO, no corpo — que

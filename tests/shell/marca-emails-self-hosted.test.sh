@@ -139,7 +139,7 @@ check "URL vazia (controle): continua nomeando SUPABASE_ACCESS_TOKEN" diz vazia 
 # ── O MESMO defeito no update.sh ────────────────────────────────────────────
 # No primeiro `update.sh` SEM token, o aviso "CONFIRA UMA COISA, UMA VEZ SÓ"
 # saía em toda topologia (o install.sh nunca cria o marcador
-# `.deskcomm-site-url-avisado`) e mandava ao "painel do Supabase" e a
+# `.pjcrm-site-url-avisado`) e mandava ao "painel do Supabase" e a
 # `export SUPABASE_ACCESS_TOKEN=sbp_...`. No single-server o Site URL é do kit
 # (install-single-server.sh grava SITE_URL e ADDITIONAL_REDIRECT_URLS desde o
 # nascimento); num Supabase próprio a conferência é no .env dele, não num painel

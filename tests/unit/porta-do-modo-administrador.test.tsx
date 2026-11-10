@@ -31,7 +31,7 @@ vi.mock("next/navigation", () => ({
 vi.mock("@/hooks/auth/AuthProvider", () => ({
   useUser: () => ({
     full_name: "E2E Dono do Servidor",
-    email: "e2e-dono@deskcomm.test",
+    email: "e2e-dono@pjcrm.test",
     avatar_url: null,
     is_platform_admin: true,
   }),

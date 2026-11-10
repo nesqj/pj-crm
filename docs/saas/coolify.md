@@ -1,4 +1,4 @@
-# Instalar o DeskcommCRM numa VPS com Coolify
+# Instalar o PJ CRM numa VPS com Coolify
 
 Este guia é para quem tem uma VPS (testado na HostGator) e quer usar o **Coolify** nela. No
 fim, o CRM **e o banco de dados dele** estarão rodando na mesma VPS, atrás do proxy do
@@ -175,7 +175,7 @@ abrindo pelo túnel. (O firewall `ufw` não serve aqui: ele não filtra as porta
 Docker publica.)
 
 ```bash
-cat > /usr/local/sbin/deskcomm-fecha-painel.sh <<"FIM"
+cat > /usr/local/sbin/pjcrm-fecha-painel.sh <<"FIM"
 #!/bin/sh
 # Fecha para fora as portas do painel do Coolify (8000, 6001, 6002). O painel
 # continua acessível pelo túnel SSH. DOCKER-USER, e não ufw: o ufw não filtra
@@ -192,8 +192,8 @@ for p in 8000 6001 6002; do
     || ip6tables -I DOCKER-USER -i "$IF" -p tcp -m conntrack --ctorigdstport "$p" --ctdir ORIGINAL -j DROP
 done
 FIM
-chmod 755 /usr/local/sbin/deskcomm-fecha-painel.sh
-cat > /etc/systemd/system/deskcomm-fecha-painel.service <<"FIM"
+chmod 755 /usr/local/sbin/pjcrm-fecha-painel.sh
+cat > /etc/systemd/system/pjcrm-fecha-painel.service <<"FIM"
 [Unit]
 Description=Fecha para fora o painel do Coolify (8000, 6001, 6002)
 After=docker.service
@@ -202,12 +202,12 @@ Requires=docker.service
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/sbin/deskcomm-fecha-painel.sh
+ExecStart=/usr/local/sbin/pjcrm-fecha-painel.sh
 
 [Install]
 WantedBy=multi-user.target
 FIM
-systemctl daemon-reload && systemctl enable --now deskcomm-fecha-painel.service && iptables -S DOCKER-USER | grep -c ctorigdstport; ip6tables -S DOCKER-USER | grep -c ctorigdstport
+systemctl daemon-reload && systemctl enable --now pjcrm-fecha-painel.service && iptables -S DOCKER-USER | grep -c ctorigdstport; ip6tables -S DOCKER-USER | grep -c ctorigdstport
 ```
 
 **Você vai ver:** a janela do túnel fica parada, sem mostrar nada: é assim mesmo, deixe-a
@@ -274,7 +274,7 @@ nada, espere mais um pouco e rode de novo.
 Na VPS, baixe o CRM e entre na pasta:
 
 ```bash
-cd ~ && git clone --depth 1 https://github.com/melgarafael/DeskcommCRM.git deskcommcrm && cd deskcommcrm
+cd ~ && git clone --depth 1 https://github.com/nesqj/pj-crm.git pjcrm && cd pjcrm
 ```
 
 Agora rode o instalador **com todas as variáveis**, trocando só o domínio no fim. Copie o
@@ -306,7 +306,7 @@ O instalador não faz perguntas: o domínio já vai no comando.
 
 ```
 ▶ Preparando o Supabase self-hosted self-hosted/v0.8.1
-===> Setup starting in /root/deskcommcrm
+===> Setup starting in /root/pjcrm
 ===> Generating secrets and legacy API keys
 ===> Generating asymmetric key pair and opaque API keys
 ===> Pulling Docker images
@@ -320,7 +320,7 @@ O instalador não faz perguntas: o domínio já vai no comando.
 Credenciais iniciais (arquivo protegido com permissao 600):
   usuario: admin@crm.SEUDOMINIO.com.br
   senha:   (uma senha longa, gerada agora)
-  arquivo: /root/deskcommcrm/.runtime/admin-credentials
+  arquivo: /root/pjcrm/.runtime/admin-credentials
 ```
 
 As chaves do banco **não aparecem na tela**: o instalador as guarda em
@@ -337,7 +337,7 @@ Na VPS medida, a instalação levou **2 min 44 s na primeira vez** (baixando as 
 
 **No fim aparecem o usuário e a senha do admin do CRM: anote num gerenciador de senhas.
 Não tire print nem grave a tela.** Eles também ficam guardados em
-`~/deskcommcrm/.runtime/admin-credentials`.
+`~/pjcrm/.runtime/admin-credentials`.
 
 **Se der errado:**
 
@@ -366,18 +366,18 @@ Não tire print nem grave a tela.** Eles também ficam guardados em
   travaram (sem mensagem de erro) e o CRM inteiro parou junto. Para conferir, na VPS:
 
   ```bash
-  docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' $(docker ps -qf label=com.docker.compose.service=api-gw -f label=com.docker.compose.project=deskcommcrm-supabase)
+  docker inspect -f '{{range $k,$v := .NetworkSettings.Networks}}{{$k}} {{end}}' $(docker ps -qf label=com.docker.compose.service=api-gw -f label=com.docker.compose.project=pjcrm-supabase)
   ```
 
   A resposta tem de incluir `coolify`. Se o `coolify` não aparecer, não tente consertar à
   mão: anote a saída e peça ajuda (o conserto deste caso não foi medido nesta versão).
-- A conexão SSH caiu no meio → entre de novo (Passo 0), `cd deskcommcrm` e rode o mesmo
+- A conexão SSH caiu no meio → entre de novo (Passo 0), `cd pjcrm` e rode o mesmo
   bloco (não medido nesta versão).
 
 ## Passo 6 — Conferir que está no ar
 
 Abra `https://crm.SEUDOMINIO.com.br/login` no navegador e entre com o usuário e a senha do
-Passo 5. Na primeira entrada aparece o assistente "Boas-vindas ao DeskcommCRM", com seis
+Passo 5. Na primeira entrada aparece o assistente "Boas-vindas ao PJ CRM", com seis
 passos; dá para pular os que você não quiser fazer agora (medido em 14/10/2026). O endereço
 sem `/login` abre a página inicial pública do sistema.
 
@@ -408,7 +408,7 @@ Responde `403`, de propósito: o endereço global do WhatsApp fica fechado. Qual
 normalmente.
 
 ```bash
-cd ~/deskcommcrm && printf 'apikey: %s\n' "$(grep '^NEXT_PUBLIC_SUPABASE_ANON_KEY=' .env | cut -d= -f2- | tr -d '"')" | curl -s -o /dev/null -w '%{http_code}\n' -H @- https://crm.SEUDOMINIO.com.br/auth/v1/settings
+cd ~/pjcrm && printf 'apikey: %s\n' "$(grep '^NEXT_PUBLIC_SUPABASE_ANON_KEY=' .env | cut -d= -f2- | tr -d '"')" | curl -s -o /dev/null -w '%{http_code}\n' -H @- https://crm.SEUDOMINIO.com.br/auth/v1/settings
 ```
 
 Responde `200`: o banco responde pelo seu domínio. (A chave usada aqui é a pública, a
@@ -530,7 +530,7 @@ Todos os números, as réguas e o que ficou de fora estão em
 Na VPS:
 
 ```bash
-cd ~/deskcommcrm && bash hostgator-setup-kit/update.sh
+cd ~/pjcrm && bash hostgator-setup-kit/update.sh
 ```
 
 Ele atualiza o CRM **e** o banco. A porta do banco (8001) e a rede do proxy ficam como
@@ -577,29 +577,29 @@ o `update.sh` e não atualiza o banco.
 Se um dia precisar subir o CRM à mão, use sempre os **três** `-f`:
 
 ```bash
-cd ~/deskcommcrm && docker compose -f docker-compose.prod.yml -f docker-compose.single-server.yml -f docker-compose.traefik.yml --env-file .env up -d app
+cd ~/pjcrm && docker compose -f docker-compose.prod.yml -f docker-compose.single-server.yml -f docker-compose.traefik.yml --env-file .env up -d app
 ```
 
 Mais detalhes em [`docs/runbooks/deploy.md`](../runbooks/deploy.md).
 
 ## Backup (o banco agora mora nesta VPS)
 
-O banco, os anexos e a conexão do WhatsApp moram **dentro da pasta `deskcommcrm`**. Se a
+O banco, os anexos e a conexão do WhatsApp moram **dentro da pasta `pjcrm`**. Se a
 VPS se perder sem uma cópia fora dela, **tudo se perde**.
 
 **1. Faça o backup e guarde uma cópia protegida**, na VPS:
 
 ```bash
-cd ~/deskcommcrm && (umask 077 && bash hostgator-setup-kit/backup.sh)
-D=~/deskcomm-guardado-$(date +%F-%H%M); mkdir -p -m 700 $D && cp -p .env $D/env && cp -p .runtime/supabase/.env $D/env-supabase && cp -p .runtime/admin-credentials $D/ && cp -rp backups $D/
+cd ~/pjcrm && (umask 077 && bash hostgator-setup-kit/backup.sh)
+D=~/pjcrm-guardado-$(date +%F-%H%M); mkdir -p -m 700 $D && cp -p .env $D/env && cp -p .runtime/supabase/.env $D/env-supabase && cp -p .runtime/admin-credentials $D/ && cp -rp backups $D/
 ```
 
 Os parênteses fazem a proteção valer só para o backup.
 
 **Você vai ver:** "✓ banco: … (conferido)", "✓ sessões WhatsApp salvas", "✓ anexos" e
-"✓ backup concluído". O backup guarda os 14 mais recentes em `~/deskcommcrm/backups/`.
+"✓ backup concluído". O backup guarda os 14 mais recentes em `~/pjcrm/backups/`.
 
-A pasta `deskcomm-guardado-…` nasce fechada (só o root entra). Mantenha-a assim: ela guarda
+A pasta `pjcrm-guardado-…` nasce fechada (só o root entra). Mantenha-a assim: ela guarda
 a sessão do WhatsApp (`waha-*.tgz`) e os anexos (`storage-*.tgz`). Com o kit atual (#2565,
 provado por teste), esses arquivos e o banco já saem do backup só para o dono (permissão `600`)
 e a pasta `backups/` fica `700`. Na instalação medida, anterior a esse conserto, eles saíam com
@@ -611,7 +611,7 @@ a leitura aberta (`644`), e quem os protegia era a pasta fechada.
   **seu computador**:
 
   ```bash
-  scp -P 22022 -r root@SEU-IP:deskcomm-guardado-AAAA-MM-DD-HHMM/backups .
+  scp -P 22022 -r root@SEU-IP:pjcrm-guardado-AAAA-MM-DD-HHMM/backups .
   ```
 
 - as **chaves** (`env`, `env-supabase` e `admin-credentials`, na mesma pasta guardada).
@@ -640,7 +640,7 @@ Cada item: o que você vê → como conferir → o que fazer. Os comandos rodam 
   1. o CRM foi subido à mão com a lista errada de `-f`. Suba com os três:
 
      ```bash
-     cd ~/deskcommcrm && docker compose -f docker-compose.prod.yml -f docker-compose.single-server.yml -f docker-compose.traefik.yml --env-file .env up -d app
+     cd ~/pjcrm && docker compose -f docker-compose.prod.yml -f docker-compose.single-server.yml -f docker-compose.traefik.yml --env-file .env up -d app
      curl -sSI https://crm.SEUDOMINIO.com.br/app | head -1
      ```
 
@@ -648,7 +648,7 @@ Cada item: o que você vê → como conferir → o que fazer. Os comandos rodam 
      certo:
 
      ```bash
-     docker inspect -f '{{index .Config.Labels "traefik.docker.network"}}' $(docker ps -qf label=com.docker.compose.service=app -f label=com.docker.compose.project=deskcommcrm)
+     docker inspect -f '{{index .Config.Labels "traefik.docker.network"}}' $(docker ps -qf label=com.docker.compose.service=app -f label=com.docker.compose.project=pjcrm)
      ```
 
      Tem de responder `coolify`. Com a lista errada de `-f`, a resposta vem vazia.
@@ -681,7 +681,7 @@ Cada item: o que você vê → como conferir → o que fazer. Os comandos rodam 
 
 - **Não instale o CRM pelo recurso "Docker Compose" do painel do Coolify.** Ele não roda o
   instalador do kit.
-- **Não apague a pasta `deskcommcrm`.** O banco mora nela (em
+- **Não apague a pasta `pjcrm`.** O banco mora nela (em
   `.runtime/supabase/volumes`). Apagar a pasta é apagar os seus clientes e conversas.
   Para remover de propósito, siga [Remover o CRM](#remover-o-crm-sem-tocar-no-coolify).
 - **Na faxina do Coolify (Docker Cleanup), não marque "Unused volumes" nem "Unused
@@ -716,8 +716,8 @@ WhatsApp e a configuração. Não tem volta.** Faça o backup e leve-o para fora
 **1. Backup e cópia protegida** (o mesmo da seção [Backup](#backup-o-banco-agora-mora-nesta-vps)):
 
 ```bash
-cd ~/deskcommcrm && (umask 077 && bash hostgator-setup-kit/backup.sh)
-D=~/deskcomm-guardado-$(date +%F-%H%M); mkdir -p -m 700 $D && cp -p .env $D/env && cp -p .runtime/supabase/.env $D/env-supabase && cp -p .runtime/admin-credentials $D/ && cp -rp backups $D/
+cd ~/pjcrm && (umask 077 && bash hostgator-setup-kit/backup.sh)
+D=~/pjcrm-guardado-$(date +%F-%H%M); mkdir -p -m 700 $D && cp -p .env $D/env && cp -p .runtime/supabase/.env $D/env-supabase && cp -p .runtime/admin-credentials $D/ && cp -rp backups $D/
 ```
 
 Os parênteses fazem a proteção valer só para o backup.
@@ -729,13 +729,13 @@ Backup.
 
 ```bash
 (
-  cd ~/deskcommcrm && [ -d .runtime ] || { echo "Não achei a instalação em ~/deskcommcrm aqui: nada foi apagado."; exit 1; }
+  cd ~/pjcrm && [ -d .runtime ] || { echo "Não achei a instalação em ~/pjcrm aqui: nada foi apagado."; exit 1; }
   docker compose -f docker-compose.prod.yml -f docker-compose.single-server.yml -f docker-compose.traefik.yml --env-file .env down -v --remove-orphans
   NET=$(grep "^SINGLE_SERVER_NETWORK=" .env | cut -d\" -f2)
   (cd .runtime/supabase && env -i PATH="$PATH" HOME=/root docker compose down -v --remove-orphans)
   docker network rm "$NET"
-  ( crontab -l 2>/dev/null | grep -v "# deskcomm:/root/deskcommcrm:" ) | crontab -
-  cd ~ && rm -rf ~/deskcommcrm
+  ( crontab -l 2>/dev/null | grep -v "# pjcrm:/root/pjcrm:" ) | crontab -
+  cd ~ && rm -rf ~/pjcrm
 )
 ```
 

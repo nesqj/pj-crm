@@ -724,7 +724,7 @@ export async function runVoiceCallsBridgeLoop(
     try {
       const res = await fetch(`${cfg.baseUrl}/api/events`, {
         headers: {
-          'X-Client-Id': 'deskcomm-worker',
+          'X-Client-Id': 'pjcrm-worker',
           Authorization: `Bearer ${cfg.apiToken.trim()}`,
         },
         signal,

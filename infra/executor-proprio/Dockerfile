@@ -42,13 +42,13 @@ RUN curl -fsSL -o /tmp/runner.tgz \
  && ./bin/installdependencies.sh \
  && chown -R runner:runner /home/runner
 
-COPY so-o-que-e-nosso.sh entrypoint.sh /opt/deskcomm/
-RUN chmod 0755 /opt/deskcomm/*.sh \
+COPY so-o-que-e-nosso.sh entrypoint.sh /opt/pjcrm/
+RUN chmod 0755 /opt/pjcrm/*.sh \
  # A guarda é lida pelo runner a partir do `.env` do diretório dele (método
  # documentado). Arquivo do root: o job só roda DEPOIS da guarda, e o contêiner
  # morre ao fim do job, então nada o reescreve para o próximo.
- && echo "ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/deskcomm/so-o-que-e-nosso.sh" > /home/runner/actions-runner/.env \
+ && echo "ACTIONS_RUNNER_HOOK_JOB_STARTED=/opt/pjcrm/so-o-que-e-nosso.sh" > /home/runner/actions-runner/.env \
  && chown root:root /home/runner/actions-runner/.env \
  && chmod 0644 /home/runner/actions-runner/.env
 
-ENTRYPOINT ["/opt/deskcomm/entrypoint.sh"]
+ENTRYPOINT ["/opt/pjcrm/entrypoint.sh"]

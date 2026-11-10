@@ -188,7 +188,7 @@ jobs:
     timeout-minutes: 15
     # Executor próprio para trabalho nosso quando EXECUTOR_PROPRIO=ligado; o
     # porquê e a guarda contra fork: comentário do e2e-parte no e2e.yml.
-    runs-on: ${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'deskcomm-proprio' || 'ubuntu-latest' }}
+    runs-on: ${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'pjcrm-proprio' || 'ubuntu-latest' }}
     concurrency:
       group: ${{ github.workflow }}-verify-parte${{ matrix.parte }}-${{ github.event.pull_request.number || github.ref }}${{ github.event_name == 'pull_request' && github.run_attempt != '1' && format('-reentrada-{0}', github.event.pull_request.head.sha) || '' }}${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.run_attempt != '1' && format('-reentrada-{0}', github.sha) || '' }}
       cancel-in-progress: ${{ github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/main') }}
@@ -393,7 +393,7 @@ jobs:
 
       # O MAPA DA SKILL COBRE O MENU? — aviso, nunca reprova.
       #
-      # A skill deskcomm-operacao ensinava só parte das telas do menu
+      # A skill pjcrm-operacao ensinava só parte das telas do menu
       # porque nada comparava o menu (lib/navigation/catalogo.ts) com o
       # mapa dela.
       # Este passo confere e AVISA (::warning); continue-on-error garante
@@ -401,7 +401,7 @@ jobs:
       - name: Mapa da skill de operação cobre as telas do menu? (aviso)
         if: matrix.parte == 1 && github.event_name == 'pull_request'
         continue-on-error: true
-        run: bash .agents/skills/deskcomm-operacao/scripts/conferir-mapa.sh --ci
+        run: bash .agents/skills/pjcrm-operacao/scripts/conferir-mapa.sh --ci
 
       # O ACERVO DE `.changes/` CABE NA TELA DA VPS? — e por que fora de PR.
       #
@@ -651,7 +651,7 @@ jobs:
     timeout-minutes: 30
     # Executor próprio para trabalho nosso quando EXECUTOR_PROPRIO=ligado; o
     # porquê e a guarda contra fork: comentário do e2e-parte no e2e.yml.
-    runs-on: ${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'deskcomm-proprio' || 'ubuntu-latest' }}
+    runs-on: ${{ vars.EXECUTOR_PROPRIO == 'ligado' && (github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository) && 'pjcrm-proprio' || 'ubuntu-latest' }}
     needs: [invariants-alcance]
     concurrency:
       group: ${{ github.workflow }}-invariants-majors-pg${{ matrix.pg }}-${{ github.event.pull_request.number || github.ref }}${{ github.event_name == 'pull_request' && github.run_attempt != '1' && format('-reentrada-{0}', github.event.pull_request.head.sha) || '' }}${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.run_attempt != '1' && format('-reentrada-{0}', github.sha) || '' }}

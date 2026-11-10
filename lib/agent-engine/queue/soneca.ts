@@ -2,7 +2,7 @@
  * A SONECA do laço da fila: dormir até o instante pedido, com dois motivos para
  * sair antes — chegou trabalho (`acordar`) e desligou (`signal`).
  *
- * O DEFEITO QUE ELA FECHA (#3688, medido pelo @melgarafael com relógio falso e
+ * O DEFEITO QUE ELA FECHA (#3688, medido pelo @nesqj com relógio falso e
  * `dormir` de verdade): com o recuo exponencial da fila vazia LIGADO (opt-in,
  * doc 242), uma instalação parada dorme até o teto `QUEUE_IDLE_MAX_INTERVAL_MS`. O inbound que
  * chega NO MEIO dessa soneca vira job em segundos — o `runDrainLoop` roda no

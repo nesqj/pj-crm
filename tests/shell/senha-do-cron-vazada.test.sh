@@ -74,7 +74,7 @@ novo_projeto() {  # novo_projeto <nome> <legado:0|1|sem-drain>
   printf 'INTERNAL_SECRET="segredo-do-scheduler-9z9z"\nINTERNAL_CRON_SECRET="%s"\nNEXT_PUBLIC_APP_URL="%s"\n' "$VELHA" "$URL" > "$p/proj/.env"
   case "$2" in
     1) printf '* * * * * curl -fsS -H "Authorization: Bearer %s" "%s/api/v1/cron/event-log-drain" >/dev/null 2>&1\n' "$VELHA" "$URL" > "$p/log/crontab" ;;
-    0) printf '* * * * * curl -fsS -H @"%s/.env.cron-drain" "%s/api/v1/cron/event-log-drain" >/dev/null 2>&1 # deskcomm:%s:drain\n' "$p/proj" "$URL" "$p/proj" > "$p/log/crontab"
+    0) printf '* * * * * curl -fsS -H @"%s/.env.cron-drain" "%s/api/v1/cron/event-log-drain" >/dev/null 2>&1 # pjcrm:%s:drain\n' "$p/proj" "$URL" "$p/proj" > "$p/log/crontab"
        printf 'Authorization: Bearer %s\n' "$VELHA" > "$p/proj/.env.cron-drain"; chmod 600 "$p/proj/.env.cron-drain" ;;
     sem-drain) : ;;
   esac
@@ -110,7 +110,7 @@ check "o INTERNAL_SECRET (que nunca foi pro log) ficou como estava" [ "$(valor_e
 check "os contêineres foram recriados (1 up -d)" [ "$(ups a)" = 1 ]
 check "o arquivo do cron leva a senha nova" [ "$(cat "$WORK/a/proj/.env.cron-drain")" = "Authorization: Bearer $NOVA" ]
 check "nenhuma linha do crontab carrega senha" bash -c '! grep -q "Bearer" "$1"' _ "$WORK/a/log/crontab"
-check "a marca foi gravada" [ -e "$WORK/a/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "a marca foi gravada" [ -e "$WORK/a/proj/.pjcrm-segredo-do-cron-trocado" ]
 check "o aviso recomenda apagar os logs antigos" grep -q 'apagar os logs antigos' "$WORK/a/log/saida-update.sh"
 
 echo "de novo: não troca outra vez"
@@ -128,16 +128,16 @@ check "a linha do crontab continua uma só" [ "$(grep -c 'event-log-drain' "$WOR
 
 echo "update.sh dirigido pelo botão da tela: NÃO troca (o agente fala com a senha velha)"
 novo_projeto c 1
-rodar c update.sh DESKCOMM_AGENT_REPORT=1
+rodar c update.sh PJCRM_AGENT_REPORT=1
 check "a senha segue a velha" [ "$(valor_env c INTERNAL_CRON_SECRET)" = "$VELHA" ]
-check "sem marca — a troca fica para o agent.sh" [ ! -e "$WORK/c/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "sem marca — a troca fica para o agent.sh" [ ! -e "$WORK/c/proj/.pjcrm-segredo-do-cron-trocado" ]
 check "nenhum up -d" [ "$(ups c)" = 0 ]
 
 echo "agent.sh na execução seguinte: troca e já anuncia com a senha nova"
 rodar c agent.sh
 NOVA_C="$(valor_env c INTERNAL_CRON_SECRET)"
 check "a senha no .env mudou" [ "$NOVA_C" != "$VELHA" ]
-check "a marca foi gravada" [ -e "$WORK/c/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "a marca foi gravada" [ -e "$WORK/c/proj/.pjcrm-segredo-do-cron-trocado" ]
 check "a linha legada do crontab foi reescrita" bash -c '! grep -q "Bearer" "$1"' _ "$WORK/c/log/crontab"
 check "o anúncio da versão foi com a senha NOVA" grep -qx "Authorization: Bearer $NOVA_C" "$WORK/c/log/curl-auth"
 check "nenhuma chamada saiu com a senha velha" bash -c '! grep -q "$1" "$2"' _ "$VELHA" "$WORK/c/log/curl-auth"
@@ -148,7 +148,7 @@ check "a próxima execução do agente não troca de novo" [ "$(valor_env c INTE
 echo "instalação nova: nasce marcada, sem troca"
 novo_projeto d sem-drain
 rodar d install.sh
-check "a marca foi gravada" [ -e "$WORK/d/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "a marca foi gravada" [ -e "$WORK/d/proj/.pjcrm-segredo-do-cron-trocado" ]
 check "a senha é a que o install gerou" [ "$(valor_env d INTERNAL_CRON_SECRET)" = "$VELHA" ]
 check "nenhum up -d" [ "$(ups d)" = 0 ]
 rodar d agent.sh
@@ -157,20 +157,20 @@ check "o agent.sh depois dela também não troca" [ "$(valor_env d INTERNAL_CRON
 echo "reinstalar por cima de uma instalação que vazou: NÃO marca"
 novo_projeto e 1
 rodar e install.sh
-check "sem marca — a próxima atualização ainda troca" [ ! -e "$WORK/e/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "sem marca — a próxima atualização ainda troca" [ ! -e "$WORK/e/proj/.pjcrm-segredo-do-cron-trocado" ]
 
 echo "host que nunca teve a linha do drain: nada vazou, nada a trocar"
 novo_projeto f sem-drain
 rodar f update.sh
 check "a senha segue a mesma" [ "$(valor_env f INTERNAL_CRON_SECRET)" = "$VELHA" ]
 check "nenhum up -d" [ "$(ups f)" = 0 ]
-check "marcado para não perguntar de novo" [ -e "$WORK/f/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "marcado para não perguntar de novo" [ -e "$WORK/f/proj/.pjcrm-segredo-do-cron-trocado" ]
 
 echo "o app não sobe com a senha nova: volta a velha e tenta de novo depois"
 novo_projeto g 1
 rodar g update.sh DOCKER_FALHA_UP=1
 check "o .env voltou para a senha velha" [ "$(valor_env g INTERNAL_CRON_SECRET)" = "$VELHA" ]
-check "sem marca — tenta na próxima" [ ! -e "$WORK/g/proj/.deskcomm-segredo-do-cron-trocado" ]
+check "sem marca — tenta na próxima" [ ! -e "$WORK/g/proj/.pjcrm-segredo-do-cron-trocado" ]
 check "o arquivo do cron segue com a senha que o app aceita" [ "$(cat "$WORK/g/proj/.env.cron-drain")" = "Authorization: Bearer $VELHA" ]
 check "a atualização não morreu por isso" grep -q 'automações ativas' "$WORK/g/log/saida-update.sh"
 

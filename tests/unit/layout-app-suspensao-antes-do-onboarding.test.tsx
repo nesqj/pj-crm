@@ -28,7 +28,7 @@ vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => undefined, g
 vi.mock("@/lib/branding/instalacao", () => ({ marcaDaInstalacao: async () => ({}) }));
 vi.mock("@/lib/branding/organizacao", () => ({
   resolverMarcaDaOrganizacao: () => ({
-    name: "Deskcomm", logoUrl: null, cor: "#000000",
+    name: "PJ CRM", logoUrl: null, cor: "#000000",
     origens: { nome: "instalacao", logoUrl: "instalacao", cor: "instalacao" },
   }),
 }));

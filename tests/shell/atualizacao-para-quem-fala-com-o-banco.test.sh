@@ -34,9 +34,9 @@ cat > "$tmp/bin/docker" <<'DUBLE'
 #!/usr/bin/env bash
 if [ "$1" = "ps" ]; then
   cat <<'LISTA'
-deskcomm-app-1
-deskcomm-worker-1
-deskcomm-scheduler-1
+pjcrm-app-1
+pjcrm-worker-1
+pjcrm-scheduler-1
 realtime-dev.supabase-realtime
 supabase-auth
 supabase-db
@@ -96,7 +96,7 @@ echo "caso 4 — CONTROLE: Supabase hospedado devolve vazio"
 # onde o Supabase é hospedado não há o que parar, e quem protege é a conferência.
 cat > "$tmp/bin/docker" <<'DUBLE'
 #!/usr/bin/env bash
-if [ "$1" = "ps" ]; then printf 'deskcomm-app-1\ndeskcomm-worker-1\n'; exit 0; fi
+if [ "$1" = "ps" ]; then printf 'pjcrm-app-1\npjcrm-worker-1\n'; exit 0; fi
 exit 0
 DUBLE
 chmod +x "$tmp/bin/docker"
@@ -113,7 +113,7 @@ cat > "$tmp/bin/docker" <<DUBLE
 #!/usr/bin/env bash
 echo "\$*" >> "$diario"
 if [ "\$1" = "ps" ]; then
-  printf 'deskcomm-app-1\nrealtime-dev.supabase-realtime\nsupabase-rest\nsupabase-studio\nimobplus-server-app-1\n'
+  printf 'pjcrm-app-1\nrealtime-dev.supabase-realtime\nsupabase-rest\nsupabase-studio\nimobplus-server-app-1\n'
   exit 0
 fi
 exit 0
@@ -381,8 +381,8 @@ echo "caso 21 — com proxy externo, o aviso sobe roteado pelo dominio REAL"
 REVERSE_PROXY=traefik DOMAIN="crm.exemplo.com.br" TRAEFIK_NETWORK=traefik manutencao_sobe >/dev/null 2>&1
 linha="$(cat "$diario")"
 case "$linha" in
-  *"deskcomm-manutencao"*) ok "o aviso subiu" ;;
-  *) nao "o aviso sobe" "run ... deskcomm-manutencao" "$linha" ;;
+  *"pjcrm-manutencao"*) ok "o aviso subiu" ;;
+  *) nao "o aviso sobe" "run ... pjcrm-manutencao" "$linha" ;;
 esac
 case "$linha" in
   *"crm.exemplo.com.br"*) ok "com o dominio da instalacao na regra" ;;
@@ -423,7 +423,7 @@ esac
 
 echo "caso 24 — com o Caddy do kit, o aviso atende onde o Caddy procura"
 : > "$diario"; duble_diario
-REVERSE_PROXY=caddy PROJECT_DIR="/root/DeskcommCRM" manutencao_sobe >/dev/null 2>&1
+REVERSE_PROXY=caddy PROJECT_DIR="/root/pj-crm" manutencao_sobe >/dev/null 2>&1
 linha_caddy="$(cat "$diario")"
 case "$linha_caddy" in
   *"--network-alias app"*) ok "assume o apelido 'app' na rede interna" ;;
@@ -448,16 +448,16 @@ esac
 echo "caso 25 — o aviso desce quando o CRM volta"
 : > "$diario"; duble_diario
 REGRAS_FALTANDO="" PARADOS="" restaurar_servicos >/dev/null 2>&1
-grep -q 'rm -f deskcomm-manutencao' "$diario" && ok "o aviso desceu" \
-  || nao "aviso desce" "rm -f deskcomm-manutencao" "$(tr '\n' ';' < "$diario")"
+grep -q 'rm -f pjcrm-manutencao' "$diario" && ok "o aviso desceu" \
+  || nao "aviso desce" "rm -f pjcrm-manutencao" "$(tr '\n' ';' < "$diario")"
 
 echo "caso 26 — ⛔ CONTROLE: com regra faltando, o aviso FICA de pe"
 # O CRM nao volta ao ar com regra de isolamento faltando. Nesse caso a pagina e a
 # UNICA coisa que explica a quem tentar abrir por que o sistema nao responde.
 : > "$diario"; duble_diario
 REGRAS_FALTANDO="crm_leads_select|crm_leads" PARADOS="" restaurar_servicos >/dev/null 2>&1
-grep -q 'rm -f deskcomm-manutencao' "$diario" \
-  && nao "o aviso fica" "sem 'rm -f deskcomm-manutencao'" "$(tr '\n' ';' < "$diario")" \
+grep -q 'rm -f pjcrm-manutencao' "$diario" \
+  && nao "o aviso fica" "sem 'rm -f pjcrm-manutencao'" "$(tr '\n' ';' < "$diario")" \
   || ok "o aviso fica de pe explicando por que o CRM nao voltou"
 
 echo "caso 27 — o aviso desce ANTES de o CRM subir, nunca depois"

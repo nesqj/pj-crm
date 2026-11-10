@@ -499,7 +499,7 @@ export async function confirmarVersaoDaInstalacao(
         runtime_confirmation: {
           schema: 1,
           collected_at: agora,
-          project: "deskcomm",
+          project: "pjcrm",
           supports_forced_update: true,
           published_release: publicada,
           services: (["app", "worker", "scheduler"] as const).map((role, i) => ({

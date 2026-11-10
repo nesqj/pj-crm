@@ -75,7 +75,7 @@ const CORPO = JSON.stringify({ nome: "Dora", email: "dora@example.com" });
 
 async function enviar(assinatura?: string): Promise<Response | Error> {
   const headers: Record<string, string> = { "content-type": "application/json" };
-  if (assinatura) headers["x-deskcomm-signature"] = assinatura;
+  if (assinatura) headers["x-pjcrm-signature"] = assinatura;
   const req = new NextRequest(`http://localhost/api/v1/webhooks/in/${TOKEN}`, { method: "POST", body: CORPO, headers });
   return POST(req, { params: Promise.resolve({ token: TOKEN }) }).catch((e: Error) => e);
 }

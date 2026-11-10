@@ -1,6 +1,6 @@
 # Defeitos achados na produção do curso em imagens
 
-**Data:** 24/10/2026 · **Código conferido:** checkout `DeskcommCRM-curso` em `469012ee6`
+**Data:** 24/10/2026 · **Código conferido:** checkout `pj-crm-curso` em `469012ee6`
 
 ## Contexto
 

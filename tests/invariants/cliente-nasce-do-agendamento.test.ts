@@ -1084,7 +1084,7 @@ describe("as três colunas são do sistema", () => {
 
   it("I37 · o trigger e o service role continuam gravando as três", async () => {
     // O par do I36, e a sabotagem que ele existe para pegar: uma guarda que
-    // recusasse TODA escrita (sem o anúncio `deskcomm.cliente_pela_agenda`)
+    // recusasse TODA escrita (sem o anúncio `pjcrm.cliente_pela_agenda`)
     // deixaria o I36 verde e impediria qualquer um de marcar horário — porque a
     // escrita do sistema também passa pelo trigger, com o `auth.uid()` da
     // sessão que marcou.

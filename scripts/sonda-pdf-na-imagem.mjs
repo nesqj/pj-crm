@@ -50,7 +50,7 @@
  *
  *   APP_DIR       raiz do standalone na imagem        (default: /app)
  *   PDF_FIXTURE   caminho do PDF de amostra           (default: /fixture.pdf)
- *   PDF_ESPERADO  texto exato que ele deve render     (default: DeskcommCRM RAG fixture)
+ *   PDF_ESPERADO  texto exato que ele deve render     (default: PJ CRM RAG fixture)
  */
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
@@ -58,7 +58,7 @@ import { createRequire } from "node:module";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const TEXTO_ESPERADO_PADRAO = "DeskcommCRM RAG fixture";
+export const TEXTO_ESPERADO_PADRAO = "PJ CRM RAG fixture";
 
 /** Onde ficam o runtime e os chunks do servidor no `output: standalone`. */
 export const DIR_CHUNKS = join(".next", "server", "chunks");

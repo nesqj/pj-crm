@@ -1,6 +1,6 @@
 # Sabotagens medidas — ondas 1 e 2 do épico "casos vivos"
 
-Régua: worktree `DeskcommCRM-casos-vivos`, branch `feat/casos-vivos`, HEAD `3ffeb8487`.
+Régua: worktree `pj-crm-casos-vivos`, branch `feat/casos-vivos`, HEAD `3ffeb8487`.
 Cada rodada desfaz UMA proteção, roda o invariante alvo com `pnpm test:db <arquivo>` e restaura
 o arquivo sabotado — com `md5` conferido antes e depois, e uma guarda que **aborta a rodada se o
 diff não tiver alcançado o arquivo** (a primeira tentativa não alcançou, e dois "verdes" que não

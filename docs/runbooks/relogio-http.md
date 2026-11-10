@@ -75,9 +75,9 @@ Se o workflow existir só numa branch de trabalho, o cron **nunca** dispara.
 
 ```bash
 # Via CLI (com permissão de secrets no repo)
-gh variable set RELOGIO_LIGADO -R SEU_USER/DeskcommCRM -b 1
-gh secret set RELOGIO_APP_URL -R SEU_USER/DeskcommCRM -b "https://SEU-DOMINIO"
-gh secret set RELOGIO_SECRET -R SEU_USER/DeskcommCRM -b "$INTERNAL_SECRET"
+gh variable set RELOGIO_LIGADO -R SEU_USER/pj-crm -b 1
+gh secret set RELOGIO_APP_URL -R SEU_USER/pj-crm -b "https://SEU-DOMINIO"
+gh secret set RELOGIO_SECRET -R SEU_USER/pj-crm -b "$INTERNAL_SECRET"
 ```
 
 ## Opção B — cron-job.org (grátis, a cada 1 minuto)

@@ -1,17 +1,17 @@
 # Atualizar o curso com IA
 
-`/deskcomm-curso` conduz a manutenção na sessão do Claude ou do Codex: lê mudanças, revisa
+`/pjcrm-curso` conduz a manutenção na sessão do Claude ou do Codex: lê mudanças, revisa
 material, corrige seletores, captura o app real e prepara a publicação. O programa
 `curso/planejar-atualizacao.ts` faz a triagem determinística; ele não chama modelos, não abre o
 app e não publica. Não existe um daemon ou uma cobrança de IA adicional implícita.
 
 **CONFIRMADO:** lições em `curso/licoes/*.json`, roteiros em `curso/demonstracoes/*.json`,
 capturadores em `curso/capturar.ts` e `curso/capturar-jornadas.ts`, montagem em `curso/montar.ts`.
-O site público pertence a **melgarafael/deskcomm-site**, em outro clone/PR. A fonte canônica da
-skill fica em `.agents/skills/deskcomm-curso/`; `pnpm skills:sync` gera o espelho Claude.
-`scripts/instalar-guias.sh` instala os guias `deskcomm-*` para Claude e Codex.
+O site público pertence a **nesqj/pjcrm-site**, em outro clone/PR. A fonte canônica da
+skill fica em `.agents/skills/pjcrm-curso/`; `pnpm skills:sync` gera o espelho Claude.
+`scripts/instalar-guias.sh` instala os guias `pjcrm-*` para Claude e Codex.
 
-Chame **`/deskcomm-curso` no Claude Code** ou **`$deskcomm-curso` no Codex**, seguido do pedido
+Chame **`/pjcrm-curso` no Claude Code** ou **`$pjcrm-curso` no Codex**, seguido do pedido
 de atualização. Para disponibilizar o guia fora do clone, rode
 `bash scripts/instalar-guias.sh --fonte .` na raiz e abra uma sessão nova do CLI. Ao desenvolver
 o guia, esse `--fonte` evita que uma cópia global antiga prevaleça sobre a versão do projeto.
@@ -32,7 +32,7 @@ O recibo público versionado tem este contrato (os valores abaixo são exemplos,
   "commit_fonte": "<SHA completo da fonte ensinada>",
   "idiomas": ["pt-BR", "es"],
   "publicado_em": "<data ISO real do deploy concluído>",
-  "site_commit": "<SHA completo publicado no deskcomm-site>"
+  "site_commit": "<SHA completo publicado no pjcrm-site>"
 }
 ```
 
@@ -216,7 +216,7 @@ Se a correção alcançou schema/RLS, use também o gate de banco exigido pela d
 
 ## 5. Integrar e publicar
 
-No clone do `deskcomm-site`, leia suas instruções e encontre os manifestos, traduções e assets
+No clone do `pjcrm-site`, leia suas instruções e encontre os manifestos, traduções e assets
 do curso. Preserve a equivalência de ids/rotas, inclua os arquivos ES próprios e complete o
 conteúdo nos dois idiomas. Não crie fallback silencioso para PT; tradução ausente ou asset
 faltante é pendência. Execute os checks do site e prove as páginas pela tela. Uma atualização de
@@ -226,7 +226,7 @@ Depois de sincronizar o conteúdo canônico e concluir **todas** as capturas exi
 
 ```bash
 pnpm exec tsx curso/exportar-capturas.ts --help
-pnpm exec tsx curso/exportar-capturas.ts --idioma es --saida curso/saida/es --site /caminho/do/clone/deskcomm-site
+pnpm exec tsx curso/exportar-capturas.ts --idioma es --saida curso/saida/es --site /caminho/do/clone/pjcrm-site
 ```
 
 O exportador lê os IDs de todos os módulos e jornadas locais, sem fixar uma contagem. Confere os

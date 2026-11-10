@@ -74,7 +74,7 @@ describe("a etiqueta de cliente", () => {
     // O anúncio da escrita do sistema. Sem ele a guarda barra o próprio trigger
     // e marcar um horário passa a dar 42501 — o pior desfecho possível, porque
     // o `update.sh` do clone aplicaria a guarda sem o anúncio.
-    expect(baseline).toContain("set_config('deskcomm.cliente_pela_agenda', 'on', true)");
+    expect(baseline).toContain("set_config('pjcrm.cliente_pela_agenda', 'on', true)");
     const constantesDoBaseline = [...baseline.matchAll(CONSTANTE)].map((m) => m[1]);
     expect(constantesDoBaseline).toEqual([TAG_DE_CLIENTE, TAG_DE_CLIENTE]);
   });

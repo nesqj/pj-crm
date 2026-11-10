@@ -286,7 +286,7 @@ export function delta(
    *
    * O checkpoint guarda o hash da lista, não os endereços, então a única forma
    * de DESconvidar alguém é o chamador dizer quem saiu — e ele sabe: o evento
-   * carrega os ids publicados em `deskcomm_guests` (`propriedadesPrivadas`).
+   * carrega os ids publicados em `pjcrm_guests` (`propriedadesPrivadas`).
    */
   opcoes?: { convidadosAnteriores?: readonly (string | null | undefined)[] | null },
 ): Record<string, unknown> {

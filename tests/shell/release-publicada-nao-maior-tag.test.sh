@@ -13,7 +13,7 @@
 # sem os checks obrigatórios.
 #
 # Nada aqui toca a rede: a "API" é um JSON local servido por `file://`, pelo
-# mesmo `DESKCOMM_RELEASES_LATEST_URL` que um fork usaria.
+# mesmo `PJCRM_RELEASES_LATEST_URL` que um fork usaria.
 set -uo pipefail
 # Zera o ambiente git herdado (GIT_DIR de hook ou rebase --exec) e passa a
 # identidade por variável: nada aqui escreve no repositório de quem roda.
@@ -46,16 +46,16 @@ rodar() {  # rodar <origin> [VAR=valor...] — devolve a resposta da função
 }
 
 echo '── 1. Com a API respondendo, a release vence a tag manual maior'
-R1="$(rodar https://github.com/exemplo/crm.git DESKCOMM_RELEASES_LATEST_URL="file://$WORK/latest.json")"
+R1="$(rodar https://github.com/exemplo/crm.git PJCRM_RELEASES_LATEST_URL="file://$WORK/latest.json")"
 check "responde v1.19.0 (a release), não v1.20.0 (a maior tag)" test "$R1" = "v1.19.0"
 
 echo '── 2. API fora do ar: "não sei", NUNCA a maior tag'
-R2="$(rodar https://github.com/exemplo/crm.git DESKCOMM_RELEASES_LATEST_URL="file://$WORK/nao-existe.json")"
+R2="$(rodar https://github.com/exemplo/crm.git PJCRM_RELEASES_LATEST_URL="file://$WORK/nao-existe.json")"
 check "responde vazio" test -z "$R2"
 
 echo '── 3. Resposta sem cara de versão é recusada, não confiada'
 printf '{"message":"Not Found"}\n' > "$WORK/erro.json"
-R3="$(rodar https://github.com/exemplo/crm.git DESKCOMM_RELEASES_LATEST_URL="file://$WORK/erro.json")"
+R3="$(rodar https://github.com/exemplo/crm.git PJCRM_RELEASES_LATEST_URL="file://$WORK/erro.json")"
 check "responde vazio" test -z "$R3"
 
 echo '── 4. Origin fora do GitHub (espelho, caminho local): sem API, vale a maior tag'

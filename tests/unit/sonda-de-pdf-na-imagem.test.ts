@@ -29,7 +29,7 @@ import { afterAll, describe, expect, it } from "vitest";
 const raiz = process.cwd();
 const sonda = join(raiz, "scripts", "sonda-pdf-na-imagem.mjs");
 const fixture = join(raiz, "tests", "fixtures", "sample-text.pdf");
-const TEXTO_DA_FIXTURE = "DeskcommCRM RAG fixture";
+const TEXTO_DA_FIXTURE = "PJ CRM RAG fixture";
 
 const executar = promisify(execFile);
 
@@ -186,9 +186,9 @@ describe("scripts/sonda-pdf-na-imagem.mjs", () => {
     const job = linhas.slice(inicio, fim === -1 ? undefined : fim).join("\n");
 
     // A imagem precisa existir antes de a sonda rodar.
-    expect(job.indexOf("deskcomm-smoke:pr")).toBeLessThan(job.indexOf("sonda-pdf-na-imagem.mjs"));
+    expect(job.indexOf("pjcrm-smoke:pr")).toBeLessThan(job.indexOf("sonda-pdf-na-imagem.mjs"));
     // ...e a sonda roda DENTRO dela: mesma tag, executando o script montado.
-    expect(job).toMatch(/deskcomm-smoke:pr node \/sonda-pdf-na-imagem\.mjs/);
+    expect(job).toMatch(/pjcrm-smoke:pr node \/sonda-pdf-na-imagem\.mjs/);
     // O PDF de amostra é o MESMO do teste de extração do repositório, montado do runner.
     expect(job).toContain("tests/fixtures/sample-text.pdf:/fixture.pdf");
     expect(job).toContain("scripts/sonda-pdf-na-imagem.mjs:/sonda-pdf-na-imagem.mjs");

@@ -121,7 +121,7 @@ describe("#4006 · o bloco do negócio", () => {
         { descricao: "Mensalidade", quantidade: 12 },
       ],
       cliente: { nome: "Rosa de Souza", telefone: "(11) 98765-4321" },
-      link: "https://app.deskcomm.test/app/leads/555",
+      link: "https://app.pjcrm.test/app/leads/555",
     });
 
     expect(bloco).toBe(
@@ -135,7 +135,7 @@ describe("#4006 · o bloco do negócio", () => {
         "</ul>",
         "<b>Cliente:</b> Rosa de Souza<br>",
         "<b>Telefone:</b> (11) 98765-4321<br>",
-        '<a href="https://app.deskcomm.test/app/leads/555">Abrir no CRM</a>',
+        '<a href="https://app.pjcrm.test/app/leads/555">Abrir no CRM</a>',
       ].join("\n"),
     );
   });
@@ -229,7 +229,7 @@ describe("#4006 · o e-mail do convite, resolvido pelo banco", () => {
           {
             user_id: U_SDR,
             organization_id: ORG,
-            account_email: "sdr.calendario@deskcomm.test",
+            account_email: "sdr.calendario@pjcrm.test",
             status: "healthy",
             updated_at: "2026-11-01T00:00:00Z",
           },
@@ -238,7 +238,7 @@ describe("#4006 · o e-mail do convite, resolvido pelo banco", () => {
       { [U_SDR]: { email: "sdr@login.test" } },
     );
     await expect(emailsDosConvidadosDaEquipe(db, ORG, [U_SDR])).resolves.toEqual([
-      { user_id: U_SDR, email: "sdr.calendario@deskcomm.test", nome: null },
+      { user_id: U_SDR, email: "sdr.calendario@pjcrm.test", nome: null },
     ]);
   });
 
@@ -306,7 +306,7 @@ describe("#4006 · quem sai do evento", () => {
           {
             user_id: U_SAIU,
             organization_id: ORG,
-            account_email: "saiu.calendario@deskcomm.test",
+            account_email: "saiu.calendario@pjcrm.test",
             status: "disconnected",
           },
         ],
@@ -314,7 +314,7 @@ describe("#4006 · quem sai do evento", () => {
       usuarios,
     );
     await expect(emailsDeQuemSaiuDoEvento(db, ORG, [U_SAIU], [U_SAIU])).resolves.toEqual([
-      "saiu.calendario@deskcomm.test",
+      "saiu.calendario@pjcrm.test",
       "saiu@login.test",
     ]);
   });

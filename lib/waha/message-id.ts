@@ -85,7 +85,7 @@ export function canonicalWahaExternalId(id: string): string {
  * (`app/api/v1/messages/_handler.ts`) também apaga pelo SUFIXO `_<bare>`, que
  * vale para qualquer formato de chat. O reenvio do watchdog ainda depende só
  * desta lista. O conserto de raiz segue sendo canonizar o id nas duas pontas —
- * desenho na issue #196 do DeskcommCRM.
+ * desenho na issue #196 do PJ CRM.
  */
 export function wahaEchoExternalIds(externalId: string, recipient: string): string[] {
   const bare = bareWaMessageId(externalId);

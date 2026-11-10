@@ -26,7 +26,7 @@ import { urlDoSupabaseNoServidor } from "@/lib/supabase/url-do-servidor";
 function opcoesDeCookie(sameSite: "strict" | "lax") {
   // D-01.01: cookie name canônico alinhado ao middleware.
   return {
-    name: "sb-deskcomm-auth",
+    name: "sb-pjcrm-auth",
     sameSite,
     httpOnly: true,
     secure: cookieSecure(),

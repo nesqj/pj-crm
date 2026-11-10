@@ -305,7 +305,7 @@ begin
   -- sem um sinal explícito a guarda da seção 4b barraria o próprio sistema. A
   -- chave é de TRANSAÇÃO (`set_config(..., true)`) e volta a 'off' na linha
   -- seguinte: a janela é o UPDATE, não o resto da transação.
-  perform set_config('deskcomm.cliente_pela_agenda', 'on', true);
+  perform set_config('pjcrm.cliente_pela_agenda', 'on', true);
 
   update public.contacts
      set first_service_at = v_depois,
@@ -316,7 +316,7 @@ begin
    where organization_id = p_org
      and id = p_contact;
 
-  perform set_config('deskcomm.cliente_pela_agenda', 'off', true);
+  perform set_config('pjcrm.cliente_pela_agenda', 'off', true);
 
   -- UMA VEZ POR CONTATO: só quando a etiqueta entra na primeira vez que a regra
   -- o reconhece.
@@ -388,7 +388,7 @@ revoke execute on function public.fn_recalcular_cliente_do_contato(uuid, uuid, b
 --     e a etiqueta passa a ser dela. Com o dono já nulo não há o que
 --     reconciliar, que é o caso da esmagadora maioria das edições de tag.
 --
--- A CHAVE `deskcomm.cliente_pela_agenda` é de transação e não é alcançável de
+-- A CHAVE `pjcrm.cliente_pela_agenda` é de transação e não é alcançável de
 -- fora: o PostgREST não envia SQL solto, e `set_config` mora em `pg_catalog`,
 -- fora do schema exposto. Ela existe porque `auth.uid()` continua preenchido
 -- dentro da `security definer` chamada pela sessão.
@@ -401,7 +401,7 @@ declare
   c_etiqueta constant text := 'cliente';
 begin
   if auth.uid() is not null
-     and coalesce(current_setting('deskcomm.cliente_pela_agenda', true), '') <> 'on'
+     and coalesce(current_setting('pjcrm.cliente_pela_agenda', true), '') <> 'on'
      and (old.first_service_at is distinct from new.first_service_at
        or old.client_recognized_at is distinct from new.client_recognized_at
        or old.client_tag_by_system is distinct from new.client_tag_by_system) then

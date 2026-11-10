@@ -1,4 +1,4 @@
-# DeskcommCRM single-server atrás do Coolify, numa VPS HostGator: medição de 06–07/10/2026
+# PJ CRM single-server atrás do Coolify, numa VPS HostGator: medição de 06–07/10/2026
 
 **Tipo: HISTÓRICA** (ver `evidence/README.md`). A VPS de teste será destruída: nada aqui
 pode ser regenerado. Uma medição nova vira pasta nova; esta não se sobrescreve.
@@ -26,7 +26,7 @@ o domínio de teste é `<ip-da-vps>.sslip.io`.
 | Kit com o conserto, rodada 1 (D4) | `docs/saas-guia-coolify@456c052599f806ee76d84ebca69dc25fb9e22dc7` sobre `main@8f220470b` — **sem** o conserto da saída do `setup.sh` | `20-r1-kit-sha.txt` |
 | Kit com o conserto, rodada 2 (G3), G5 e U1 Passo 3 | `docs/saas-guia-coolify@44c5df54161a6e0c527c9fdfbaaf570ec24be9c3` (o anterior + a saída do `setup.sh` em `.runtime/supabase-setup.log`, 600) | `24-r2-kit-sha.txt`, `43-g5-kit-sha.txt` |
 | Depois da medição | a branch recebeu a `main` `ce5b87a3c` (merge `2c7fc2426`); a `main` não tocou nenhum arquivo do kit do PR desde `8f220470b`; testes de shell refeitos sobre o merge | `50-h1-testes-shell.txt` |
-| Imagens do CRM | tag `1.76.0` (release `v1.76.0`, `^{commit}` = `3101682cdc9d1448304f6c613349281b2db6857d`, conferido no rótulo `revision` das três); digest `deskcommcrm` `sha256:52e1a5d3381e…`, `deskcomm-worker` `sha256:73dfbcaedbbd…`, `deskcomm-scheduler` `sha256:3596737e0371…` | `versoes-antes.txt`, `20-r1-versoes.txt` |
+| Imagens do CRM | tag `1.76.0` (release `v1.76.0`, `^{commit}` = `3101682cdc9d1448304f6c613349281b2db6857d`, conferido no rótulo `revision` das três); digest `pjcrm` `sha256:52e1a5d3381e…`, `pjcrm-worker` `sha256:73dfbcaedbbd…`, `pjcrm-scheduler` `sha256:3596737e0371…` | `versoes-antes.txt`, `20-r1-versoes.txt` |
 | Supabase self-hosted | ref `self-hosted/v0.8.1` (tag `690080884040…` → commit `8c7a4d9dbbaf…`); `setup.sh` sha256 `848973911bd5fa03…bc813c`, igual ao do GitHub nessa tag | `51-h3-supabase-ref.txt` |
 | As 11 imagens do Supabase | `supabase/postgres:17.6.1.136` `f371b5f3f2ac…`, `supabase/gotrue:v2.196.0` `c0c25187a6b8…`, `postgrest/postgrest:v14.17` `c9dc201e555f…`, `supabase/realtime:v2.134.10` `cbcc6a7986fc…`, `supabase/storage-api:v1.74.0` `f1546fac6d1c…`, `darthsim/imgproxy:v3.31.4` `73c5dda13199…`, `supabase/postgres-meta:v0.99.0` `9a079ac1c94d…`, `supabase/edge-runtime:v1.76.2` `edd22bef4477…`, `supabase/studio:2026.09.07-sha-7996410` `94a2a9d2906e…`, `supabase/supavisor:2.9.12` `464b93a60ba8…`, `envoyproxy/envoy:v1.39.1` `57e14a549d7b…` (todos `sha256:`) | `versoes-antes.txt` |
 | WAHA | `devlikeapro/waha:latest-2026.7.2` `sha256:65e593e30bb7…` | `versoes-antes.txt` |
@@ -43,12 +43,12 @@ Ubuntu 22.04.5 LTS, kernel `6.8.0-138-generic`, x86_64, 4 vCPU AMD EPYC 9J45, vi
 196 GB (4,8 GB usados), `cgroup2fs`, sem Docker, sem IPv6 global, sshd na porta 22022.
 
 **A VPS era uma bancada COMPARTILHADA** com outras sessões de teste (contêineres
-`deskcomm-test-db-*`, `typecheck`). Consequências:
+`pjcrm-test-db-*`, `typecheck`). Consequências:
 
 - toda janela de medição rodou dentro do `flock /root/.vps-teste.lock` das sessões, e em
   todas as amostras não havia contêiner de terceiro (`TOTAL-terceiros` nunca aparece);
 - **um `/swapfile` de 4 GiB, persistente no `/etc/fstab`, existia desde 13:46:10Z de 07/10**
-  (mtime em `swap-e-oom.txt`), antes da rodada 1. Ele é da sessão `deskcommcrm-07`, que o
+  (mtime em `swap-e-oom.txt`), antes da rodada 1. Ele é da sessão `pjcrm-07`, que o
   criou depois de 14 OOMs no typecheck dela (confirmado pela dona por mensagem ao controlador
   às ~16:5xZ; registrado nas notas do controlador do PR 4 — fonte é a mensagem, não um
   arquivo desta pasta). Os 14 `Out of memory` em processos `node` de `swap-e-oom.txt` (13:32–13:44Z)
@@ -103,7 +103,7 @@ done | sort
 
 `resumir.awk` (roda na máquina local, **sempre com `LC_ALL=C`**: em `pt_BR.UTF-8` o `awk`
 lê `1.1GiB` como `1` e a vírgula decimal estraga a CPU — medido no controle da Fase A). Quatro
-grupos: `coolify*`, `deskcommcrm-supabase-*`, `deskcommcrm-*` (CRM) e o resto (`terceiros`,
+grupos: `coolify*`, `pjcrm-supabase-*`, `pjcrm-*` (CRM) e o resto (`terceiros`,
 fora de todo total):
 
 ```awk
@@ -111,7 +111,7 @@ function mib(s,  v,u){ v=s; sub(/[A-Za-z]+$/,"",v); u=s; sub(/^[0-9.]+/,"",u)
   if(u=="GiB")return v*1024; if(u=="MiB")return v+0; if(u=="KiB")return v/1024; if(u=="B")return v/1048576; return -1 }
 BEGIN{FS="\t"}
 { split($3,m," / "); mem=mib(m[1]); cpu=$4; sub(/%/,"",cpu)
-  g=($2 ~ /^coolify/) ? "coolify" : (($2 ~ /^deskcommcrm-supabase-/) ? "supabase" : (($2 ~ /^deskcommcrm-/) ? "crm" : "terceiros"))
+  g=($2 ~ /^coolify/) ? "coolify" : (($2 ~ /^pjcrm-supabase-/) ? "supabase" : (($2 ~ /^pjcrm-/) ? "crm" : "terceiros"))
   c[$2]++; sm[$2]+=mem; if(mem>mx[$2])mx[$2]=mem; if(cpu+0>cx[$2])cx[$2]=cpu+0; sc[$2]+=cpu
   soma[$1 "|" g]+=mem; nomes[$2]=1 }
 END{ for(n in nomes) printf "%s\tn=%d\tmem_med=%.0f MiB\tmem_max=%.0f MiB\tcpu_med=%.1f%%\tcpu_max=%.1f%%\n", n, c[n], sm[n]/c[n], mx[n], sc[n]/c[n], cx[n]
@@ -129,11 +129,11 @@ guardadas antes de cada remoção, quantas vezes o VALOR aparece no arquivo. Imp
 ```bash
 #!/usr/bin/env bash
 set -u
-log=$1; arv=${2:-/root/pr4/deskcommcrm}
+log=$1; arv=${2:-/root/pr4/pjcrm}
 conta() { grep -cFf <(printf '%s\n' "$1") "$log"; }
-for arq in "$arv/.env" "$arv/.runtime/supabase/.env" "$arv/.runtime/admin-credentials" /root/deskcomm-guardado-*/env /root/deskcomm-guardado-*/env-supabase /root/deskcomm-guardado-*/admin-credentials; do
+for arq in "$arv/.env" "$arv/.runtime/supabase/.env" "$arv/.runtime/admin-credentials" /root/pjcrm-guardado-*/env /root/pjcrm-guardado-*/env-supabase /root/pjcrm-guardado-*/admin-credentials; do
   [ -r "$arq" ] || continue
-  case $arq in /root/deskcomm-guardado-*) r=${arq#/root/};; *) r=$(basename "$arq");; esac
+  case $arq in /root/pjcrm-guardado-*) r=${arq#/root/};; *) r=$(basename "$arq");; esac
   grep -E '^[A-Z0-9_]*(PASS|SECRET|KEY|TOKEN|DB_URL|ENC|JWKS?)[A-Z0-9_]*=' "$arq" | while IFS= read -r l; do
     k=${l%%=*}; v=${l#*=}; v=${v#\"}; v=${v%\"}; v=${v#\'}; v=${v%\'}
     [ "${#v}" -ge 12 ] || continue
@@ -151,10 +151,10 @@ printf 'padroes=%s\n' "$(grep -cE 'eyJ[A-Za-z0-9_-]{20,}|sb_secret_|sk-or-|sk-an
 
 ```bash
 #!/usr/bin/env bash
-t=$(docker ps --format '{{.Names}}' | grep -vcE '^(coolify|deskcommcrm-)')
+t=$(docker ps --format '{{.Names}}' | grep -vcE '^(coolify|pjcrm-)')
 a=$(free -m | awk 'NR==2{print $7}')
 l=$(flock -n /root/.vps-teste.lock true 2>/dev/null && echo livre || echo ocupado)
-x=$(docker ps -a --format '{{.Names}} {{.Label "com.docker.compose.project.working_dir"}}' | awk '$1 ~ /^deskcommcrm-/ && $2 !~ /^\/root\/pr4\/deskcommcrm/' | wc -l)
+x=$(docker ps -a --format '{{.Names}} {{.Label "com.docker.compose.project.working_dir"}}' | awk '$1 ~ /^pjcrm-/ && $2 !~ /^\/root\/pr4\/pjcrm/' | wc -l)
 echo "$(date -u +%FT%TZ) terceiros=$t available=$a lock=$l alheio=$x"
 ```
 

@@ -75,7 +75,7 @@ create index if not exists ai_agent_mcp_servers_org_agente_idx
 comment on table public.ai_agent_mcp_servers is
   'Servidores MCP externos de UM agente (até 5). Server-side only: RLS ligada sem policy e nenhum privilégio para anon/authenticated. Chave e client_secret cifrados com AES-256-GCM (AI_CRED_AES_KEY); a tela vê só chave_last4.';
 comment on column public.ai_agent_mcp_servers.modo_autenticacao is
-  'nenhuma | chave_estatica (Bearer fixo, com X-Deskcomm-* opcionais) | oauth_por_contato (cada contato autoriza com o login dele; um token por servidor × contato em contato_mcp_credenciais).';
+  'nenhuma | chave_estatica (Bearer fixo, com X-PJCRM-* opcionais) | oauth_por_contato (cada contato autoriza com o login dele; um token por servidor × contato em contato_mcp_credenciais).';
 comment on column public.ai_agent_mcp_servers.escrita_delegada is
   'Desligada por padrão. Ligada, uma ferramenta marcada como escrita pelo admin pode ser chamada durante a conversa COM A CREDENCIAL DO CONTATO do turno — dentro do que ele mesmo autorizou.';
 

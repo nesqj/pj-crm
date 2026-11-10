@@ -11,7 +11,7 @@ Não entram nesta mudança: migrar dados de outra VPS, obter credenciais/contas 
 
 ## Estado medido em 2026-09-29 e lacunas
 
-- As quatro imagens próprias (`deskcommcrm`, `deskcomm-worker`, `deskcomm-scheduler`, `deskcomm-voice-agent`) publicadas em `:stable` têm apenas `linux/amd64`. O workflow `.github/workflows/publish-image.yml` compila apenas essa plataforma. O job de `stable` espera as quatro imagens, mas a checagem do kit verifica presença de tags, não a plataforma dentro do manifesto.
+- As quatro imagens próprias (`pjcrm`, `pjcrm-worker`, `pjcrm-scheduler`, `pjcrm-voice-agent`) publicadas em `:stable` têm apenas `linux/amd64`. O workflow `.github/workflows/publish-image.yml` compila apenas essa plataforma. O job de `stable` espera as quatro imagens, mas a checagem do kit verifica presença de tags, não a plataforma dentro do manifesto.
 - `hostgator-setup-kit/_common.sh` recusa instalação nova em ARM64. Uma instalação ARM64 já existente pode entrar no caminho de recuperação por build local. Essa proteção deve ser preservada até existir release multi-arquitetura e então substituída por checagem da *versão alvo*.
 - O WAHA Core padrão `devlikeapro/waha:latest-2026.7.2` é somente AMD64; `devlikeapro/waha:noweb-arm-2026.7.2` é ARM64. O compose usa NOWEB. Imagem WAHA explicitamente escolhida pelo operador não pode ser trocada em silêncio; deve ser validada ou recusada com instrução de correção. Sessões e volumes não devem ser apagados na troca de imagem.
 - Os digests atuais de WaCalls e Asterisk, além de Redis, SRH e Caddy, já anunciam ARM64 e AMD64. Isso prova disponibilidade de imagem, não funcionamento completo de chamadas ou SIP na Oracle. O `voice-agent` próprio ainda precisa de build e smoke nativos ARM64.

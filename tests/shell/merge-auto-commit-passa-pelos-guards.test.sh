@@ -30,7 +30,7 @@
 #   M-DEL  a DELEÇÃO introduzida na RESOLUÇÃO do merge (o invariante que a main mantém
 #       apagado de carona no commit da resolução) é RECUSADA, e o HEAD fica parado — o
 #       caminho realista de um invariante incômodo sair do gate.
-#   M-VÁLVULA  a mesma deleção, com `DESKCOMM_GOV_INVARIANTS_EDIT=1`: passa.
+#   M-VÁLVULA  a mesma deleção, com `PJCRM_GOV_INVARIANTS_EDIT=1`: passa.
 #   M4   o sinal do outro lado é FORJÁVEL (`GITHEAD_*` é variável de ambiente e MERGE_HEAD
 #       se escreve à mão): um commit COMUM que apaga o invariante com o sinal apontado para
 #       a main continua RECUSADO — sinal nenhum lava uma deleção.
@@ -75,7 +75,7 @@ unset $(git rev-parse --local-env-vars)
 export GIT_CEILING_DIRECTORIES="$TMP"
 export GIT_AUTHOR_NAME="Teste" GIT_AUTHOR_EMAIL="teste@exemplo.invalid"
 export GIT_COMMITTER_NAME="Teste" GIT_COMMITTER_EMAIL="teste@exemplo.invalid"
-unset DESKCOMM_GOV_INVARIANTS_EDIT DESKCOMM_GOV_PLAN_EDIT DESKCOMM_GOV_MIGRATION_EDIT || true
+unset PJCRM_GOV_INVARIANTS_EDIT PJCRM_GOV_PLAN_EDIT PJCRM_GOV_MIGRATION_EDIT || true
 
 INV=tests/invariants/exemplo-congelado.test.ts
 commitar() { git -C "$1" add -A >/dev/null && git -C "$1" commit -q --no-verify -m "$2"; }
@@ -210,8 +210,8 @@ printf 'ponta da BRANCH\n' > "$mv/README.md"; commitar "$mv" "a branch reescreve
 git -C "$mv" merge --no-edit origin/main >/dev/null 2>&1 || true
 printf 'resolvido\n' > "$mv/README.md"; git -C "$mv" add README.md
 git -C "$mv" rm -qf "$INV"
-saida=$( cd "$mv" && DESKCOMM_GOV_INVARIANTS_EDIT=1 git commit --no-edit 2>&1 ); rc=$?
-assert_exit "$rc" 0 "M-VÁLVULA: com DESKCOMM_GOV_INVARIANTS_EDIT=1 a mesma resolução passa"
+saida=$( cd "$mv" && PJCRM_GOV_INVARIANTS_EDIT=1 git commit --no-edit 2>&1 ); rc=$?
+assert_exit "$rc" 0 "M-VÁLVULA: com PJCRM_GOV_INVARIANTS_EDIT=1 a mesma resolução passa"
 assert_igual "$(pais_de "$mv")" "2" "M-VÁLVULA: e o merge foi concluído (2 pais)"
 if [ -z "$(git -C "$mv" rev-parse -q --verify "HEAD:$INV")" ]; then ok "M-VÁLVULA: e o invariante saiu do HEAD, como pedido"
 else falha "M-VÁLVULA: o invariante saiu do HEAD" "segue lá"; fi

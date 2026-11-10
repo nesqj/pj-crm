@@ -4,7 +4,7 @@
  * ─── Por que a escrita saiu do aplicativo ──────────────────────────────────
  *
  * O PR #2864 fez esta ação reler `tags` antes de mesclar, e isso consertou o caso
- * que a correção pública jmpo/DeskcommCRM#89 descreve: o motor monta o contexto
+ * que a correção pública jmpo/pj-crm#89 descreve: o motor monta o contexto
  * UMA vez por evento, todas as regras daquele evento recebem a mesma foto, e a
  * segunda gravação apagava o que a primeira tinha acabado de gravar.
  *

@@ -14,7 +14,7 @@
  * que o inbound pode ter de furar. O `runDrainLoop` roda neste mesmo worker e é
  * quem transforma evento em job, então ele avisa (`SonecaDaFila.acordar`) e a
  * soneca sai na hora, em vez de o job esperar o fim dela — 49,25 s medidos pelo
- * @melgarafael numa chegada 125 s depois da fila esvaziar. O desenho e os
+ * @nesqj numa chegada 125 s depois da fila esvaziar. O desenho e os
  * contratos estão em `./soneca.ts`.
  *
  * Antes (issue #258), toda rodada abria uma transação de claim com 5 statements e

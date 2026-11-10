@@ -6,7 +6,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PORT="${SMOKE_DB_PORT:-54331}"
-CONTAINER="deskcomm-smoke-db-$$"
+CONTAINER="pjcrm-smoke-db-$$"
 IMAGE="pgvector/pgvector:pg15"
 
 # ═══ O INSTRUMENTO, ANTES DO CONTAINER ═══

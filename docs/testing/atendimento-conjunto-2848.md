@@ -4,11 +4,11 @@ Fonte: @webtecnica, head `8d28e3762f867a45a30bf4d6f76e055b3f35c844`; escopo deci
 
 ## Prova real do candidato integrado
 
-O [E2E3](https://github.com/melgarafael/DeskcommCRM/actions/runs/40426519144/job/121935888949) mediu `cefb0475cb9cf9199f6ebacab27cbf294e5449c1`, checkout CI `6288e3ee360e6bdddc66230eed83e064cc45f19f`, com main `7f1` integrada. O caso próprio passou em **51,9 s**; a parte terminou com **97 casos passando e um skip**. As quatro PNGs estão no [artefato 12702035532](https://github.com/melgarafael/DeskcommCRM/actions/runs/40426519144/artifacts/12702035532) e na evidência persistente da operação.
+O [E2E3](https://github.com/nesqj/pj-crm/actions/runs/40426519144/job/121935888949) mediu `cefb0475cb9cf9199f6ebacab27cbf294e5449c1`, checkout CI `6288e3ee360e6bdddc66230eed83e064cc45f19f`, com main `7f1` integrada. O caso próprio passou em **51,9 s**; a parte terminou com **97 casos passando e um skip**. As quatro PNGs estão no [artefato 12702035532](https://github.com/nesqj/pj-crm/actions/runs/40426519144/artifacts/12702035532) e na evidência persistente da operação.
 
 A jornada usa quatro contas sintéticas e tenant vizinho. Sem reload, o convite aparece em Minhas e a remoção retira o acesso na outra sessão aberta. Contagem pela API real e tela comprovam 0→1→0; o badge zero é omitido. A convidada responde sem assumir, com autoria preservada no banco e uma única saída no receiver HTTP controlado. Viewer não envia, colega sem convite não vê/envia, convidada não fecha nem altera status. Reconvidar reutiliza o vínculo e conserva responsável, status e auditoria. O receiver local não comprova entrega externa pelo provedor.
 
-O [PG17 do mesmo candidato](https://github.com/melgarafael/DeskcommCRM/actions/runs/40426519119/job/121935478126) executou 13 casos de `atendimento-conjunto-participantes.test.ts` e 16 de `participante-nao-herda-controle-da-conversa.test.ts`, todos passando. O job completo falhou em dois casos de `claim-respeita-hold-do-numero.test.ts` na fronteira das 22h; ele não é contado como PASS global.
+O [PG17 do mesmo candidato](https://github.com/nesqj/pj-crm/actions/runs/40426519119/job/121935478126) executou 13 casos de `atendimento-conjunto-participantes.test.ts` e 16 de `participante-nao-herda-controle-da-conversa.test.ts`, todos passando. O job completo falhou em dois casos de `claim-respeita-hold-do-numero.test.ts` na fronteira das 22h; ele não é contado como PASS global.
 
 ## Fixture central e preservação do schema
 

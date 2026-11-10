@@ -6,7 +6,7 @@
 -- ─── O defeito, e por que o #2864 não o fechou ──────────────────────────────
 --
 -- O #2864 fez `lib/automation/actions/add-tag.ts` reler `tags` do banco antes de
--- mesclar, consertando o caso que a correção pública jmpo/DeskcommCRM#89
+-- mesclar, consertando o caso que a correção pública jmpo/pj-crm#89
 -- descreve: o motor monta o contexto UMA vez por evento, e TODAS as regras
 -- daquele evento recebem a mesma foto; a segunda regra gravava `foto + as suas`
 -- e apagava o que a primeira tinha acabado de gravar.

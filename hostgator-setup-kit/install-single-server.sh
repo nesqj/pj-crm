@@ -162,7 +162,7 @@ if [[ ! -f "$SUPABASE_DIR/.env" ]]; then
   trap - EXIT
 fi
 
-cp "$KIT_DIR/supabase-single-server.override.yml" "$SUPABASE_DIR/docker-compose.deskcomm.yml"
+cp "$KIT_DIR/supabase-single-server.override.yml" "$SUPABASE_DIR/docker-compose.pjcrm.yml"
 docker network inspect "$SINGLE_SERVER_NETWORK" >/dev/null 2>&1 \
   || docker network create "$SINGLE_SERVER_NETWORK" >/dev/null
 
@@ -209,7 +209,7 @@ set_env_var "$supabase_env" SINGLE_SERVER_NETWORK "$SINGLE_SERVER_NETWORK"
 # modo; quem decide se o Traefik enxerga o Envoy é a chave gravada AQUI, ANTES
 # do `dc_supabase up -d --wait`: no primeiro boot o contêiner já nasce com a
 # rota, e numa re-execução o compose o recria porque o label mudou.
-compose_file="docker-compose.yml:docker-compose.deskcomm.yml"
+compose_file="docker-compose.yml:docker-compose.pjcrm.yml"
 if [ "${REVERSE_PROXY:-caddy}" = "traefik" ]; then
   set_env_var "$supabase_env" TRAEFIK_ENABLE true
   set_env_var "$supabase_env" TRAEFIK_HOST "$domain"
@@ -227,9 +227,9 @@ if [ "${REVERSE_PROXY:-caddy}" = "traefik" ]; then
   if [ -n "${TRAEFIK_NETWORK:-}" ]; then
     docker network inspect "$TRAEFIK_NETWORK" >/dev/null 2>&1 \
       || die "A rede Docker '${TRAEFIK_NETWORK}' (TRAEFIK_NETWORK) não existe. Confira o nome da rede do seu proxy com: docker network ls"
-    cp "$KIT_DIR/supabase-single-server.traefik.yml" "$SUPABASE_DIR/docker-compose.deskcomm-traefik.yml"
+    cp "$KIT_DIR/supabase-single-server.traefik.yml" "$SUPABASE_DIR/docker-compose.pjcrm-traefik.yml"
     set_env_var "$supabase_env" TRAEFIK_NETWORK "$TRAEFIK_NETWORK"
-    compose_file="${compose_file}:docker-compose.deskcomm-traefik.yml"
+    compose_file="${compose_file}:docker-compose.pjcrm-traefik.yml"
   fi
 else
   # Gravado explicitamente, não deixado em aberto: uma re-execução em modo
@@ -288,7 +288,7 @@ set_env_var "$app_env" SUPABASE_DB_URL "postgresql://postgres:${postgres_passwor
 # publicada das TRES imagens e grava numero de versao (nunca tag movel).
 set_env_var "$app_env" OWNER_EMAIL "$owner_email"
 set_env_var "$app_env" OWNER_PASSWORD "$owner_password"
-set_env_var "$app_env" APP_NAME DeskcommCRM
+set_env_var "$app_env" APP_NAME "PJ CRM"
 set_env_var "$app_env" APP_LOCALE pt-BR
 # IA: nenhuma chave e gravada, entao ela nasce sem credencial (desligada) e o
 # fim do install.sh aponta o caminho em IA > Credenciais. Chaves NAO sao

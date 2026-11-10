@@ -11,7 +11,7 @@ import {
   IMPERSONATE_COOKIE_NAME_EDGE,
 } from "@/lib/impersonate/cookie-edge";
 
-const COOKIE_NAME = "sb-deskcomm-auth";
+const COOKIE_NAME = "sb-pjcrm-auth";
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export async function proxy(request: NextRequest) {

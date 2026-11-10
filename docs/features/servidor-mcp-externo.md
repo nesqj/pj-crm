@@ -28,20 +28,20 @@ Quem é **admin** pode ligar, por agente, a opção **"Usar o servidor de
 ferramentas externo durante o atendimento"** (tela do agente; grava
 `ai_agents.config.mcp_externo_no_atendimento`, desligada de fábrica). Ligada,
 toda requisição ao servidor naquele turno — listar e chamar ferramentas — leva
-três cabeçalhos que o Deskcomm monta a partir do banco, nunca a partir do que
+três cabeçalhos que o PJ CRM monta a partir do banco, nunca a partir do que
 o modelo escreve:
 
 | Cabeçalho | Valor |
 |---|---|
-| `X-Deskcomm-Contato-Id` | id (uuid) do contato da conversa |
-| `X-Deskcomm-Contato-Telefone` | telefone do contato em dígitos E.164, sem `+` (ex.: `5511987654321`). Ausente se o contato não tem telefone. |
-| `X-Deskcomm-Canal` | canal da conversa do turno (ex.: `whatsapp`, `instagram`); ausente quando o turno não a informa |
+| `X-PJCRM-Contato-Id` | id (uuid) do contato da conversa |
+| `X-PJCRM-Contato-Telefone` | telefone do contato em dígitos E.164, sem `+` (ex.: `5511987654321`). Ausente se o contato não tem telefone. |
+| `X-PJCRM-Canal` | canal da conversa do turno (ex.: `whatsapp`, `instagram`); ausente quando o turno não a informa |
 
 **O servidor externo DEVE filtrar os dados por esses cabeçalhos e ignorar
 qualquer identificador que venha da conversa** (argumentos da ferramenta como
 "meu número é ..."). Os argumentos da ferramenta viajam só no corpo da
 chamada: eles não sobrescrevem, removem nem acrescentam cabeçalho, e os nomes
-`X-Deskcomm-*` são reservados ao Deskcomm. A autenticação continua sendo a
+`X-PJCRM-*` são reservados ao PJ CRM. A autenticação continua sendo a
 chave do cadastro (`Authorization: Bearer`).
 
 Se o contato não puder ser confirmado no banco naquele turno, o servidor fica

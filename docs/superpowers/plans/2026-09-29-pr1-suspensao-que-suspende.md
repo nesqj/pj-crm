@@ -16,8 +16,8 @@
 
 ## Global Constraints
 
-- Worktree `~/deskcomm-saas/pr1`, branch `feat/org-operante`, criada de `origin/main`; `node_modules` real via `pnpm install --frozen-lockfile`, **nunca** symlink nem emprestado; nunca em `/tmp`.
-- Todo comando começa com `cd ~/deskcomm-saas/pr1 || exit 1`.
+- Worktree `~/pjcrm-saas/pr1`, branch `feat/org-operante`, criada de `origin/main`; `node_modules` real via `pnpm install --frozen-lockfile`, **nunca** symlink nem emprestado; nunca em `/tmp`.
+- Todo comando começa com `cd ~/pjcrm-saas/pr1 || exit 1`.
 - Nunca `git reset --hard`, `--force`, `--no-verify`; para atualizar com a main: `git fetch origin && git merge origin/main`.
 - Migration: `supabase/migrations/20260929180000_0492_org_operante_e_suspensao_tipada.sql` — `0492` é o próximo livre **no merge** (main vai até `20260929115848_0491`; o teto é a main MAIS todo PR aberto). Renumerar = trocar em todos os lugares (`grep -rn 0492 supabase lib tests`).
 - Migration idempotente (`add column if not exists`, `drop constraint if exists` + backfill + `add`, `create or replace function`, `drop trigger if exists` + `create`), sem `BEGIN`/`COMMIT`, sem temp table.
@@ -64,15 +64,15 @@ Os 5 modos de falha mais prováveis que nenhuma tarefa dos rascunhos testava, e 
 
 **Files:** nenhum arquivo do repo.
 
-**Interfaces** — Consumes: `origin/main`. Produces: worktree `~/deskcomm-saas/pr1` na branch `feat/org-operante`, com `node_modules` real.
+**Interfaces** — Consumes: `origin/main`. Produces: worktree `~/pjcrm-saas/pr1` na branch `feat/org-operante`, com `node_modules` real.
 
 - [ ] **Passo 1: criar o worktree**
 
 ```bash
-cd ~/deskcomm-saas/spec || exit 1
+cd ~/pjcrm-saas/spec || exit 1
 git fetch origin main
-git worktree list | grep -q "deskcomm-saas/pr1" || git worktree add -b feat/org-operante ~/deskcomm-saas/pr1 origin/main
-cd ~/deskcomm-saas/pr1 || exit 1
+git worktree list | grep -q "pjcrm-saas/pr1" || git worktree add -b feat/org-operante ~/pjcrm-saas/pr1 origin/main
+cd ~/pjcrm-saas/pr1 || exit 1
 git status --short | wc -l        # esperado: 0
 pnpm install --frozen-lockfile    # node_modules REAL, nunca symlink
 test -L node_modules && echo "ERRO: symlink" || echo "node_modules real"
@@ -97,7 +97,7 @@ Esperado: `0`; `pnpm install` termina com `Done`; `node_modules real`.
 - [ ] **Passo 1: medir o número livre (main MAIS PRs abertos)**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git fetch origin main
 git ls-tree --name-only origin/main supabase/migrations/ | grep -oE '[0-9]{14}_[0-9]{4}' | sort | tail -1
 for n in $(gh pr list --state open --limit 200 --json number -q '.[].number'); do gh pr diff "$n" --name-only 2>/dev/null; done \
@@ -328,7 +328,7 @@ describe("fn_org_operante — a régua SQL do predicado", () => {
 - [ ] **Passo 4: rodar e ver falhar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts tests/invariants/vocabulario-banco-x-typescript.test.ts > /tmp/t1-red.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t1-red.log | tail -2
 grep -aE "fn_org_operante|suspended_kind|operante.ts" /tmp/t1-red.log | head -5
@@ -423,7 +423,7 @@ grant execute on function public.fn_org_operante(uuid) to service_role;
 - [ ] **Passo 7: o apêndice do baseline (rótulo + seção A)**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 grep -n "^-- ---- VARREDURA anon:" supabase/baseline.sql   # hoje: 42990
 ```
 
@@ -476,7 +476,7 @@ grant execute on function public.fn_org_operante(uuid) to service_role;
 - [ ] **Passo 9: rodar e ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts tests/invariants/vocabulario-banco-x-typescript.test.ts > /tmp/t1.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t1.log | tail -2
 ```
@@ -493,14 +493,14 @@ Esperado: `exit=0`; `Test Files  2 passed (2)`; `0 failed` (org-suspensa: 3 caso
 ```
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm typecheck; echo "exit=$?"   # esperado: exit=0
 ```
 
 - [ ] **Passo 11: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add supabase/migrations/20260929180000_0492_org_operante_e_suspensao_tipada.sql supabase/baseline.sql \
   supabase/migrations/MANIFEST.md lib/organizacao/operante.ts lib/database.types.ts \
   tests/invariants/org-suspensa.test.ts tests/invariants/vocabulario-banco-x-typescript.test.ts
@@ -599,7 +599,7 @@ describe("inv. 2 — status e suspensão só mudam pelo servidor", () => {
 - [ ] **Passo 2: rodar e ver falhar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts > /tmp/t2-red.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t2-red.log | tail -2
 ```
@@ -656,7 +656,7 @@ create trigger trg_organizacao_estado_so_pelo_servidor
 - [ ] **Passo 4: rodar e ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts > /tmp/t2.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t2.log | tail -2
 ```
@@ -666,7 +666,7 @@ Esperado: `exit=0`; `Tests  13 passed (13)`.
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add supabase/migrations/20260929180000_0492_org_operante_e_suspensao_tipada.sql supabase/baseline.sql tests/invariants/org-suspensa.test.ts
 git commit -F - <<'FIM'
 fix(org): status e suspensão da organização só mudam pelo servidor (0492)
@@ -811,7 +811,7 @@ describe("inv. 3 — com a org suspensa, o barramento e a LGPD seguem vivos", ()
 - [ ] **Passo 2: rodar e ver falhar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts > /tmp/t3-red.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t3-red.log | tail -2
 grep -a "fn_suspender_organizacao" /tmp/t3-red.log | head -3
@@ -912,7 +912,7 @@ grant execute on function public.fn_suspender_organizacao(uuid, text, text, uuid
 - [ ] **Passo 5: rodar e ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts tests/invariants/hardening-definer-varredura.test.ts tests/invariants/definer-membership-varredura.test.ts > /tmp/t3.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t3.log | tail -2
 pnpm typecheck; echo "exit=$?"
@@ -923,7 +923,7 @@ Esperado: `exit=0`; `Test Files  3 passed (3)`; org-suspensa com `22 passed`; ty
 - [ ] **Passo 6: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add supabase/migrations/20260929180000_0492_org_operante_e_suspensao_tipada.sql supabase/baseline.sql tests/invariants/org-suspensa.test.ts lib/database.types.ts
 git commit -F - <<'FIM'
 fix(org): suspender para a fila e grava o evento na mesma transação (0492)
@@ -992,7 +992,7 @@ por:
 - [ ] **Passo 3: rodar e ver falhar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/kind-check-migration-x-baseline.test.ts lib/ai/inbox-destino.test.ts > /tmp/t4-red.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t4-red.log | tail -2
 grep -aE "Faltando nela|org_reativada" /tmp/t4-red.log | head -4
@@ -1086,7 +1086,7 @@ por
 - [ ] **Passo 9: rodar e ver passar (unidade + vocabulário)**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/kind-check-migration-x-baseline.test.ts tests/unit/check-do-baseline-nao-diverge-da-cadeia.test.ts \
   tests/unit/baseline-constraint-reconstruida.test.ts tests/unit/migrations-nao-encolhem-vocabulario.test.ts \
   tests/unit/midia-nao-lida.test.ts lib/ai/inbox-destino.test.ts lib/ai/agent-inbox-copy.test.ts > /tmp/t4.log 2>&1; echo "exit=$?"
@@ -1101,7 +1101,7 @@ Esperado: vitest `exit=0`, `Test Files  7 passed (7)` (inclusive "toda categoria
 - [ ] **Passo 10: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add supabase/baseline.sql supabase/migrations/20260929180000_0492_org_operante_e_suspensao_tipada.sql \
   lib/agent-engine/db/repository.ts lib/ai/agent-inbox-copy.ts lib/ai/inbox-destino.ts lib/ai/inbox-destino.test.ts lib/i18n/dicionario.ts
 git commit -F - <<'FIM'
@@ -1219,7 +1219,7 @@ describe("inv. 4 — fn_reativar_organizacao volta sem rajada e chama o humano",
 - [ ] **Passo 2: rodar e ver falhar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts > /tmp/t5-red.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t5-red.log | tail -2
 ```
@@ -1324,7 +1324,7 @@ grant execute on function public.fn_reativar_organizacao(uuid, text, uuid) to se
 - [ ] **Passo 5: rodar e ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/org-suspensa.test.ts > /tmp/t5.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t5.log | tail -2
 pnpm typecheck; echo "exit=$?"
@@ -1335,7 +1335,7 @@ Esperado: `exit=0`; `Tests  29 passed (29)`; typecheck `exit=0`.
 - [ ] **Passo 6: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add supabase/migrations/20260929180000_0492_org_operante_e_suspensao_tipada.sql supabase/baseline.sql tests/invariants/org-suspensa.test.ts lib/database.types.ts
 git commit -F - <<'FIM'
 fix(org): reativar exige o tipo e chama o humano em vez de reprocessar (0492)
@@ -1360,7 +1360,7 @@ FIM
 - [ ] **Passo 1: o banco inteiro**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db > /tmp/t6-db.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t6-db.log | tail -2
 grep -aE "ERROR|FATAL" /tmp/t6-db.log | head -5
@@ -1371,7 +1371,7 @@ Esperado: `exit=0`; `0 failed`; `hardening-definer-varredura`, `definer-membersh
 - [ ] **Passo 2: sabotagem do gatilho** (depois do commit)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git status --short | wc -l   # esperado: 0
 perl -0pi -e 's/create trigger trg_organizacao_estado_so_pelo_servidor\n  before insert or update on public.organizations\n  for each row execute function public.fn_organizacao_estado_so_pelo_servidor\(\);//' supabase/baseline.sql
 grep -c "create trigger trg_organizacao_estado_so_pelo_servidor" supabase/baseline.sql   # esperado: 0
@@ -1385,7 +1385,7 @@ git status --short | wc -l   # esperado: 0
 - [ ] **Passo 3: sabotagem do anti-backlog**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 perl -0pi -e "s/(create or replace function public\.fn_suspender_organizacao.*?)update public\.job_queue\n     set status = 'failed', last_error = 'org_nao_operante'\n   where organization_id = p_org and status = 'pending';\n/\$1/s" supabase/baseline.sql
 pnpm test:db tests/invariants/org-suspensa.test.ts > /tmp/t6-sab2.log 2>&1; echo "exit=$?"
 grep -aE "Tests " /tmp/t6-sab2.log | tail -1          # esperado: ≥1 failed
@@ -1593,7 +1593,7 @@ export async function assertOrgOperante(db: SupabaseClient, orgId: string): Prom
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/organizacao/operante.ts lib/organizacao/operante.test.ts
 git commit -F - <<'FIM'
 feat(organizacao): régua única de org operante e o erro terminal org_suspended
@@ -1928,7 +1928,7 @@ export const resolveActiveOrg = cache(async (authUser: AuthUser): Promise<Active
 - [ ] **Passo 4: ver passar:**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/org-ativa-sem-portao.test.ts tests/unit/auth-falha-alto.test.ts \
   tests/unit/telas-falam-a-moeda-e-o-pais-da-organizacao.test.tsx tests/unit/auth-getuser-erro-mudo.test.ts lib/legal/operador.test.ts
 pnpm typecheck; echo "tsc=$?"
@@ -1939,7 +1939,7 @@ Esperado: todos `passed`; `tsc=0`.
 - [ ] **Passo 5: a suíte inteira, porque `resolveActiveOrg` agora falha fechado para membership sem `org_status`**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:unit > /tmp/t8-vt.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t8-vt.log | tail -2
 r=$(grep -aE "^ *Tests " /tmp/t8-vt.log | tail -1 | grep -oE "[0-9]+ failed" | head -1)
@@ -1952,7 +1952,7 @@ grep -a "redirect:/account-suspended\|Error: redirect$" /tmp/t8-vt.log | head
 Esperado: `rodapé: 0 failed | grep contou: 0` (se divergirem, `pnpm test:unit --reporter=verbose` antes de concluir). Receita para cada arquivo vermelho em que o `resolveActiveOrg` REAL passou a lançar `redirect:/account-suspended` (ou o `"redirect"` genérico do mock do arquivo) porque a fixture de membership não traz `org_status`: acrescente `org_status: "active",` a cada objeto `UserOrgMembership` da fixture (ou `status: "active",` ao objeto `organizations` da linha crua, quando o arquivo passa por `loadAuthUser`), rode o arquivo isolado (`pnpm exec vitest run <arquivo>` → `passed`) e commite separado:
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add <arquivo>
 git commit -F - <<'FIM'
 test(fixture): <arquivo> declara a organização operante
@@ -1966,7 +1966,7 @@ Vermelho de `lib/ai/dispatcher/rate-limit.test.ts` com 15 s de timeout é o Redi
 - [ ] **Passo 6: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/auth/types.ts lib/auth/server.ts lib/legal/operador.ts tests/unit/org-ativa-sem-portao.test.ts \
   tests/unit/auth-falha-alto.test.ts tests/unit/telas-falam-a-moeda-e-o-pais-da-organizacao.test.tsx
 git commit -F - <<'FIM'
@@ -2382,7 +2382,7 @@ export async function requireRole(min: Role, opts: RequireRoleOpts = {}): Promis
 - [ ] **Passo 5: suíte inteira** (outros dublês podem mockar só `resolveActiveOrg`):
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:unit > /tmp/t9-vt.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t9-vt.log | tail -2
 grep -aE "^ *FAIL " /tmp/t9-vt.log | sed 's/ > .*//' | sort | uniq -c
@@ -2393,7 +2393,7 @@ Arquivo vermelho com `No "orgAtivaSemPortao" export is defined on the mock` ou `
 - [ ] **Passo 6: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/api/errors.ts lib/i18n/dicionario.ts lib/auth tests/unit
 git commit -F - <<'FIM'
 feat(auth): requireRole barra org suspensa e o atalho de escrita exige scope full
@@ -2561,7 +2561,7 @@ Sonda de conferência: `grep -rn 'allowPlatformAdmin: true' app --include=route.
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add tests/unit/org-suspensa-so-nas-rotas-permitidas.test.ts app/api/v1
 git commit -F - <<'FIM'
 feat(lgpd): LGPD passa com a org suspensa; leitura de platform admin marcada como leitura
@@ -2764,7 +2764,7 @@ export function escreveComoPlatformAdmin(
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/auth/requirePlatformAdmin.ts lib/auth/requirePlatformAdmin.test.ts lib/auth/types.ts
 git commit -F - <<'FIM'
 feat(auth): requirePlatformAdminEscrita exige scope full e MFA da sessão
@@ -3016,7 +3016,7 @@ describe("controles do instrumento", () => {
 - [ ] **Passo 2: conferir a lista contra o repositório** — comente temporariamente as 32 entradas `PENDENTE` (17 das Tasks 13–15 + 15 da Task 15b) e rode:
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/admin-escrita-exige-scope-full.test.ts > /tmp/t12.log 2>&1; echo "exit=$?"
 grep -aoE "app/[^ \"']+#[ABC]:[A-Za-z-]+" /tmp/t12.log | sort -u | tee /tmp/t12-chaves.txt | wc -l
 ```
@@ -3028,7 +3028,7 @@ Esperado: `exit=1` e exatamente as 32 chaves `PENDENTE` (a sonda de `d03c2b2fd`,
 - [ ] **Passo 4: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add tests/unit/admin-escrita-exige-scope-full.test.ts
 git commit -F - <<'FIM'
 test(auth): cerca de escrita de platform admin exige scope full
@@ -3498,7 +3498,7 @@ Em `tests/unit/admin-escrita-exige-scope-full.test.ts`, apague as entradas `…/
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add 'app/api/v1/admin/tenants/[id]' tests/unit/admin-escrita-exige-scope-full.test.ts
 git commit -F - <<'FIM'
 fix(admin): suspender e reativar passam pelas funções SQL e exigem scope full
@@ -3711,7 +3711,7 @@ vi.mock("@/lib/auth/requirePlatformAdmin", async (importOriginal) => ({
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/api/v1 tests/unit
 git commit -F - <<'FIM'
 fix(admin): incidentes, criação de empresa, atualização e logo exigem escrita de platform admin
@@ -3744,7 +3744,7 @@ FIM
 - [ ] **Passo 3: implementar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 printf '%s\n' app/actions/settings/updateDestinosInternos.ts app/actions/settings/smtp.ts \
   app/actions/settings/updateMetaApp.ts app/actions/settings/updateComportamento.ts \
   app/actions/settings/updateGoogleOAuth.ts app/actions/settings/updateSignupMode.ts \
@@ -3775,7 +3775,7 @@ grep -rn "requirePlatformAdmin\b" app/actions | grep -v Escrita | grep -v '/lib/
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/actions tests/unit
 git commit -F - <<'FIM'
 fix(admin): server actions da instalação exigem escrita de platform admin
@@ -3820,7 +3820,7 @@ Por quê: 15 server actions liberam a escrita com `!authUser.is_platform_admin &
 - [ ] **Passo 3: implementar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 printf '%s\n' app/actions/integrations/connectNuvemshop.ts app/actions/integrations/disconnectNuvemshop.ts \
   app/actions/settings/acoesDeConversaoGoogle.ts app/actions/settings/apagarDadosOperacionaisDaOrganizacao.ts \
   app/actions/settings/atualizarInterfaceDaEmpresa.ts app/actions/settings/definirVendaPeloCanal.ts \
@@ -3853,7 +3853,7 @@ Em `tests/unit/admin-escrita-exige-scope-full.test.ts`, apague as 15 entradas `#
 - [ ] **Passo 4: ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/zona-de-perigo-apaga-so-a-propria-org.test.ts tests/unit/admin-escrita-exige-scope-full.test.ts \
   tests/unit/conversoes-formularios.test.tsx tests/unit/links-rastreaveis-action.test.ts tests/unit/google-regras-por-etapa-action.test.ts \
   tests/unit/captura-de-utm-na-tela.test.ts tests/unit/google-ads-cartao-sem-credenciais.test.tsx tests/unit/google-conexao-config.test.ts \
@@ -3870,7 +3870,7 @@ Esperado: `exit=0`, `tsc=0`, `lint=0`, `role-rank=0`. (São os testes que, em `d
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/actions tests/unit app/app/settings/tenant/pipelines/_client.test.tsx
 git status --short   # confira que só entrou o que esta tarefa tocou
 git commit -F - <<'FIM'
@@ -3922,7 +3922,7 @@ vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => undefined })
 vi.mock("@/lib/branding/instalacao", () => ({ marcaDaInstalacao: async () => ({}) }));
 vi.mock("@/lib/branding/organizacao", () => ({
   resolverMarcaDaOrganizacao: () => ({
-    name: "Deskcomm", logoUrl: null, cor: "#000000",
+    name: "PJ CRM", logoUrl: null, cor: "#000000",
     origens: { nome: "instalacao", logoUrl: "instalacao", cor: "instalacao" },
   }),
 }));
@@ -3988,7 +3988,7 @@ por
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/app/layout.tsx tests/unit/layout-app-suspensao-antes-do-onboarding.test.tsx
 git commit -F - <<'FIM'
 fix(app): suspensão vem antes do onboarding e leitura da org que falha não renderiza a casca
@@ -4108,7 +4108,7 @@ Em `lib/api/auth-dual.ts` (hoje `:107`) e `app/api/v1/contacts/route.ts` (hoje `
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/mcp lib/api/auth-dual.ts lib/api/auth-dual.test.ts app/api/v1/contacts/route.ts
 git commit -F - <<'FIM'
 fix(mcp): token de empresa suspensa recebe 403 sem debitar o teto de falhas
@@ -4255,7 +4255,7 @@ it('gate: organização não operante na leitura de elegibilidade → turno pula
 - [ ] **Passo 3: rodar e ver falhar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run lib/ai/elegibilidade/gate.test.ts lib/ai/elegibilidade/consulta-supabase.test.ts lib/agent-engine/edge/crm/drain.test.ts lib/followup/silence-sweep-pre-go-live.test.ts
 ```
 
@@ -4358,7 +4358,7 @@ e no montar de `requirePolicy`, primeira chave:
 - [ ] **Passo 7: rodar e ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run lib/ai/elegibilidade lib/agent-engine/edge/crm/drain.test.ts lib/followup lib/escalacao/atendimento-manual.test.ts tests/unit/gate-volta-a-autorizacao-por-origem.test.ts tests/unit/fronteira-exige-procedencia-e-o-backfill-cobre-o-legado.test.ts tests/unit/ai-response-worker-elegibilidade.test.ts tests/unit/ai-response-worker-model-routing.test.ts tests/unit/agente-pausado-nao-atende.test.ts tests/unit/orcamento-caminho-legado.test.ts tests/unit/ai-response-worker-sent-via.test.ts tests/unit/ai-response-bot-veto.test.ts tests/unit/telemetria-diz-o-modelo-do-painel.test.ts
 pnpm typecheck
 ```
@@ -4368,7 +4368,7 @@ Esperado: todos `passed`; `tsc` limpo (montador esquecido = `Property 'orgStatus
 - [ ] **Passo 8: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/ai/elegibilidade lib/followup/silence-sweep.ts lib/followup/silence-sweep-pre-go-live.test.ts lib/agenda/meet-delivery.ts lib/agent-engine/edge/crm/drain.test.ts lib/escalacao/atendimento-manual.test.ts tests/unit/gate-volta-a-autorizacao-por-origem.test.ts tests/unit/fronteira-exige-procedencia-e-o-backfill-cobre-o-legado.test.ts tests/unit/ai-response-worker-elegibilidade.test.ts tests/unit/ai-response-worker-model-routing.test.ts tests/unit/agente-pausado-nao-atende.test.ts tests/unit/orcamento-caminho-legado.test.ts tests/unit/ai-response-worker-sent-via.test.ts tests/unit/ai-response-bot-veto.test.ts tests/unit/telemetria-diz-o-modelo-do-painel.test.ts
 git commit -F - <<'FIM'
 fix(ia): organização parada é o primeiro veto do gate de elegibilidade
@@ -4740,7 +4740,7 @@ export const aiResponseHandler: EventHandler = {
 - [ ] **Passo 6: rodar e ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/dispatcher-org-parada.test.ts tests/unit/dreno-nao-perde-evento.test.ts tests/unit/evento-de-fato-nao-fica-pendente.test.ts tests/unit/evento-comando-tem-consumidor.test.ts tests/unit/event-log-drain-loop.test.ts tests/unit/drain-loop-carrega-deps-sob-tsx.test.ts
 pnpm typecheck
 # O dreno com a leitura de status do lote, no Postgres real (a consulta nova a
@@ -4754,7 +4754,7 @@ Esperado: todos `passed`; `tsc` limpo (handler sem classificação = `Property '
 - [ ] **Passo 7: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/event-log workers lib/followup lib/campanhas/resposta.handler.ts lib/leads/aviso-de-etapa.handler.ts lib/escalacao lib/automation/engine.handler.ts lib/notifications/push.handler.ts lib/propostas/aviso-no-whatsapp.handler.ts lib/conversoes tests/invariants/event-log-drain.test.ts tests/unit/dispatcher-org-parada.test.ts
 git status --short   # confira que só entrou o que esta tarefa tocou
 git commit -F - <<'FIM'
@@ -4824,7 +4824,7 @@ it('org não operante: evento vira done SEM job, antes de qualquer outra consult
 - [ ] **Passo 4: ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run lib/agent-engine/edge/crm/drain.test.ts tests/unit/despacho-da-ia-que-morre-avisa-a-central.test.ts
 # `processEvent` com a consulta nova (`status` junto do modo), no Postgres real:
 pnpm test:db tests/invariants/evento-morto-nao-inunda-a-central.test.ts tests/invariants/portao-de-capacidade-mede-quem-executa.test.ts \
@@ -4838,7 +4838,7 @@ Esperado: vitest `passed`; test:db `exit=0`, `Test Files  5 passed (5)` (são os
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/agent-engine/edge/crm/drain.ts lib/agent-engine/edge/crm/drain.test.ts
 git commit -F - <<'FIM'
 fix(agent-engine): mensagem de organização parada não vira turno
@@ -5087,7 +5087,7 @@ describe("tickCron × organização parada, no Postgres real", () => {
 (Colunas obrigatórias em `d03c2b2fd`: `organizations` exige `slug`, `legal_name`, `display_name` (`status` tem default `'active'`). Semeie como `postgres`, nunca como `authenticated` — o gatilho da Task 2 recusa org nascida pela sessão. O recorrente vencido em 2000 avança para depois de agora: `computeNextRunAt` colapsa os disparos perdidos (`schedule.ts:197-213`, `while (next <= nowMs) next += intervalMs`).)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db tests/invariants/cron-org-parada.test.ts > /tmp/t21-db.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t21-db.log | tail -2
 ```
@@ -5097,7 +5097,7 @@ Esperado: `exit=0`; `Tests  2 passed (2)`.
 - [ ] **Passo 6: commit** (antes da sabotagem, para ela não apagar o conserto)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/agent-engine/cron/scheduler.ts lib/agent-engine/cron/scheduler.test.ts tests/invariants/cron-org-parada.test.ts
 git commit -F - <<'FIM'
 fix(agent-engine): agendador avança o cron de organização parada sem enfileirar
@@ -5109,7 +5109,7 @@ FIM
 - [ ] **Passo 7: sabotagem — a invariante morde**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git status --short | wc -l   # esperado: 0
 perl -pi -e 's/if \(!cron\.operante\) \{/if (false) {/' lib/agent-engine/cron/scheduler.ts
 grep -c "if (!cron.operante)" lib/agent-engine/cron/scheduler.ts   # esperado: 0
@@ -5196,7 +5196,7 @@ describe("redrive × organização parada", () => {
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/agent-engine/edge/crm/session-reconciler.ts lib/agent-engine/edge/crm/session-reconciler.test.ts
 git commit -F - <<'FIM'
 fix(agent-engine): resgate de fila não reenvia mensagem de organização parada
@@ -5333,7 +5333,7 @@ export async function sendMessageHandler(
 - [ ] **Passo 5: ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/envio-recusa-org-parada.test.ts tests/unit/messages-handler-desfechos.test.ts tests/unit/messages-handler-canal-intermediado.test.ts tests/unit/messages-handler-silencio-ia-apos-humano.test.ts tests/unit/messages-handler-eco-duplicado.test.ts tests/unit/janela-24h-recusa-quem-envia-por-token.test.ts tests/unit/automacao-carimbo-de-origem.test.ts tests/unit/inbox-unread-send.test.ts tests/unit/falha-de-entrega-vira-evento.test.ts tests/unit/mensagem-escrita-pela-ia-segue-ia.test.ts tests/unit/duble-do-handler-compartilhado.test.ts \
   tests/unit/automacao-nao-diz-sucesso-para-envio-morto.test.ts tests/unit/rotulo-de-origem-tem-emissor.test.ts
 # O `sendMessageHandler` REAL sobre o Postgres (via `tests/pg-como-supabase.ts`):
@@ -5348,7 +5348,7 @@ Esperado: vitest todos `passed`; test:db `exit=0`, `Test Files  2 passed (2)`. V
 - [ ] **Passo 6: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/api/v1/messages/_handler.ts tests/helpers/duble-do-handler.ts tests/unit/envio-recusa-org-parada.test.ts
 git commit -F - <<'FIM'
 fix(mensagens): a porta de saída recusa organização parada com 403 org_suspended
@@ -5435,7 +5435,7 @@ it("org suspensa entre o gate e o envio → job encerrado (done), sem reenvio ne
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/agent-engine/edge/crm/send-ledger.ts lib/followup/enviar-texto-fixo.ts lib/followup/enviar-texto-fixo.test.ts tests/unit/followup-send-ledger.test.ts
 git commit -F - <<'FIM'
 fix(envio): suspensão não vira opt-out no ledger e encerra o texto fixo
@@ -5507,7 +5507,7 @@ export async function tickProspecting(pool: pg.Pool, admin: SupabaseClient) {
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/prospecting/worker.ts tests/unit/prospecting-worker.test.ts
 git commit -F - <<'FIM'
 fix(prospeccao): organização parada sai da escolha no SQL, antes do limite
@@ -5575,7 +5575,7 @@ e troque todos os demais `idsSuspensas` por `idsParadas` (o uso em `promoverAgen
 - [ ] **Passo 4: ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/suspensao-nao-dispara-campanha.test.ts lib/campanhas
 grep -n "idsSuspensas\|mesma da fila do agente\|SUSPENSA não prospecta" lib/campanhas/rodada.ts; echo "exit=$?"
 ```
@@ -5585,7 +5585,7 @@ Esperado: `passed`; o `grep` não imprime linha e mostra `exit=1`.
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/campanhas/rodada.ts tests/unit/suspensao-nao-dispara-campanha.test.ts
 git commit -F - <<'FIM'
 fix(campanhas): rodada usa a régua única de organização parada
@@ -5761,7 +5761,7 @@ export async function registrarExcecaoDoEnvio(
 - [ ] **Passo 4: ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/prospecting-worker.test.ts tests/unit/suspensao-nao-dispara-campanha.test.ts \
   tests/unit/cron-da-prospeccao-nao-engole-o-erro.test.ts lib/campanhas
 pnpm typecheck; echo "tsc=$?"
@@ -5772,7 +5772,7 @@ Esperado: todos `passed`; `tsc=0`. (`cron-da-prospeccao-nao-engole-o-erro` lê a
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add lib/prospecting/worker.ts lib/campanhas/rodada.ts tests/unit/prospecting-worker.test.ts tests/unit/suspensao-nao-dispara-campanha.test.ts
 git commit -F - <<'FIM'
 fix(envio): suspensão no meio do envio não pausa a prospecção nem queima o destinatário da campanha
@@ -5865,7 +5865,7 @@ e em `handleAudioSocketConnection`, entre o `if (error || !callRow) { … }` e `
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add workers/voice-agent/index.ts tests/unit/voz-nao-atende-org-parada.test.ts
 git commit -F - <<'FIM'
 fix(voz): chamada de organização parada é encerrada antes de abrir a sessão
@@ -5965,7 +5965,7 @@ e no laço de escolha: `if (seenOrgs.has(a.organization_id) || paradas.has(a.org
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/api/v1/cron/kb-conversations-batch/route.ts tests/unit/kb-conversas-pula-org-parada.test.ts
 git commit -F - <<'FIM'
 fix(rag): embedding de conversas pula organização parada
@@ -6216,7 +6216,7 @@ e no `catch (err) {` do envio, como primeira coisa:
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/api/v1/cron/agenda-reminder/route.ts tests/unit/lembrete-pula-org-parada.test.ts tests/unit/chamadores-do-envio-tratam-org-parada.test.ts
 git commit -F - <<'FIM'
 fix(agenda): lembrete não sai nem abre conversa para organização parada
@@ -6431,7 +6431,7 @@ describe("crons × organização parada", () => {
 - [ ] **Passo 3: provar que a cerca morde** (sem commitar)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 cp -p app/api/v1/cron/kb-conversations-batch/route.ts /tmp/kb-route.bak
 sed -i '' '/organizacao\/operante/d' app/api/v1/cron/kb-conversations-batch/route.ts
 pnpm exec vitest run tests/unit/cron-respeita-org-operante.test.ts > /tmp/t29.log 2>&1; echo "exit=$?"
@@ -6446,7 +6446,7 @@ Esperado: `exit=1`, `Tests  1 failed` (a rota `kb-conversations-batch`); depois 
 - [ ] **Passo 4: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add tests/unit/cron-respeita-org-operante.test.ts
 git commit -F - <<'FIM'
 test(cron): cerca de que todo cron respeita organização parada ou diz por quê
@@ -6677,7 +6677,7 @@ describe("o repositório", () => {
 - [ ] **Passo 2: rodar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run tests/unit/org-operante-uma-regua.test.ts > /tmp/t30.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/t30.log | tail -2
 grep -aE "app/|lib/|workers/" /tmp/t30.log | grep -a ":[0-9]" | head
@@ -6688,7 +6688,7 @@ Esperado: `exit=0`. Se aparecer arquivo fora da allowlist, converta a decisão p
 - [ ] **Passo 3: provar que a cerca morde** (sem commitar)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 cp -p lib/campanhas/rodada.ts /tmp/rodada.bak
 printf '\nexport async function sabotagem(admin: SupabaseClient) {\n  return admin.from("organizations").select("id").eq("status", "suspended");\n}\n' >> lib/campanhas/rodada.ts
 pnpm exec vitest run tests/unit/org-operante-uma-regua.test.ts > /tmp/t30-sab.log 2>&1; echo "exit=$?"
@@ -6703,7 +6703,7 @@ Esperado: `exit=1` com `lib/campanhas/rodada.ts:<linha>` no log; depois, `grep -
 - [ ] **Passo 4: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add tests/unit/org-operante-uma-regua.test.ts
 git commit -F - <<'FIM'
 test(organizacao): cerca de uma régua só para organização operante
@@ -6813,7 +6813,7 @@ interface Props {
 - [ ] **Passo 5: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/app/lgpd/requests/RequestsTable.tsx app/app/lgpd/requests/RequestsTable.test.tsx "app/app/lgpd/requests/[id]/_client.tsx"
 git commit -F - <<'FIM'
 refactor(lgpd): a lista e o detalhe recebem o endereço dos links
@@ -7199,7 +7199,7 @@ por
 - [ ] **Passo 8: ver passar**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm exec vitest run app/account-suspended/page.test.tsx tests/unit/lang-das-telas-fora-do-app.test.tsx tests/unit/i18n-espanhol-cobre-a-tela.test.ts
 pnpm typecheck; pnpm lint
 ```
@@ -7209,7 +7209,7 @@ Esperado: todos passam; `tsc` e `eslint` com código 0.
 - [ ] **Passo 9: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add app/account-suspended/page.tsx app/account-suspended/page.test.tsx tests/unit/lang-das-telas-fora-do-app.test.tsx lib/i18n/dicionario.ts docs/threat-model.md
 git commit -F - <<'FIM'
 feat(suspensao): /account-suspended vira o hub com LGPD e troca de empresa
@@ -7341,7 +7341,7 @@ FIM
 - [ ] **Passo 6: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add docs/architecture/suspensao-de-organizacao.architecture.json docs/architecture/README.md tests/unit/mapas-de-arquitetura.test.ts
 git commit -F - <<'FIM'
 docs(arquitetura): o mapa vivo da suspensão, com o laço de retorno pela Central
@@ -7717,7 +7717,7 @@ por
 - [ ] **Passo 4: rodar contra o ambiente fresco** (Supabase local com o `baseline.sql` da branch; `next build` + `next start`)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 supabase start -x studio,postgres-meta
 psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -q -f supabase/baseline.sql   # update: re-aplica sobre o banco local
 pnpm e2e:env && pnpm e2e:build
@@ -7730,7 +7730,7 @@ Esperado: `exit=0` e `1 passed`. Se falhar, a linha do `expect` diz qual grupo q
 - [ ] **Passo 5: commit** (as imagens entram na Task 36)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add tests/e2e/suspensao-administrativa.spec.ts .github/workflows/e2e.yml
 git commit -F - <<'FIM'
 test(e2e): a suspensão administrativa pela tela, do clique à volta sem rajada
@@ -7802,7 +7802,7 @@ Ao reativar, nada sai em rajada: a Central mostra um aviso com quantas conversas
 - [ ] **Passo 5: CLAUDE.md na fonte (pg15 × pg17, `GRANT MAINTAIN`)**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 grep -n "major_version" supabase/config.toml
 grep -c "MAINTAIN" supabase/baseline.sql
 grep -n "pg15\|pg17" CLAUDE.md AGENTS.md
@@ -7815,7 +7815,7 @@ Esperado (medido em `c31d421c5` e de novo em `d03c2b2fd`): `29:major_version = 1
 - [ ] **Passo 7: commit**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add docs/testing/user-journey-map.md .changes/suspensao-que-suspende.md
 git commit -F - <<'FIM'
 docs(suspensao): a jornada J37 e o fragmento da suspensão que suspende
@@ -7833,7 +7833,7 @@ FIM
 - [ ] **Passo 1: trazer a main e conferir o que só nasce na árvore mesclada** (Review Focus 5)
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git status --short | wc -l        # esperado: 0
 git fetch origin && git merge origin/main
 git diff --name-only --diff-filter=U   # conflito? resolva com cabeça: baseline/lock/types partem do lado AUTORITATIVO (main) e reaplicam o delta desta PR
@@ -7855,7 +7855,7 @@ pnpm typecheck; echo "typecheck=$?"
 - [ ] **Passo 2: cercas, tipos e lint**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm cercas; echo "cercas=$?"
 pnpm typecheck; echo "typecheck=$?"
 pnpm lint; echo "lint=$?"
@@ -7868,7 +7868,7 @@ Esperado: os cinco com `=0`.
 - [ ] **Passo 3: a suíte unitária inteira, reconciliando rodapé e `FAIL`**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:unit > /tmp/vt.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/vt.log | tail -2
 grep -aE "^ *FAIL " /tmp/vt.log | sed 's/ > .*//' | sort | uniq -c
@@ -7883,7 +7883,7 @@ Esperado: `exit=0`; `rodapé: 0 failed | grep contou: 0`. Se divergirem, rode `p
 - [ ] **Passo 4: banco real (install com `ON_ERROR_STOP=1` + update)**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 pnpm test:db > /tmp/tdb.log 2>&1; echo "exit=$?"
 grep -aE "Test Files|Tests " /tmp/tdb.log | tail -2
 ```
@@ -7893,7 +7893,7 @@ Esperado: `exit=0`, nenhum `failed`, inclusive `org-suspensa`, `cron-org-parada`
 - [ ] **Passo 5: e2e da spec nova sobre a árvore final**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -q -f supabase/baseline.sql
 pnpm e2e:env && pnpm e2e:build
 pnpm exec playwright test tests/e2e/suspensao-administrativa.spec.ts --reporter=list > /tmp/e2e-susp.log 2>&1; echo "exit=$?"
@@ -7918,7 +7918,7 @@ Esperado: `exit=0`, `1 passed` e os cinco arquivos `central-apos-reativar`, `hub
 - [ ] **Passo 7: commit da evidência**
 
 ```bash
-cd ~/deskcomm-saas/pr1 || exit 1
+cd ~/pjcrm-saas/pr1 || exit 1
 git add evidence/suspensao-administrativa docs/testing/user-journey-map.md
 git commit -F - <<'FIM'
 test(e2e): evidência da suspensão administrativa pela tela
@@ -7968,7 +7968,7 @@ Medido em `c31d421c5` e reconferido em `d03c2b2fd`. Cada item diz o que a spec a
 31. **e2e: a mensagem que conta para o item de revisão entra por `fn_mark_conversation_message`,** não por `webhooks/in/[token]`, que é captação de lead e não cria conversa (§12 fala em "mensagem por webhooks/in/[token]").
 32. **Nome do e2e:** `tests/e2e/suspensao-administrativa.spec.ts`, como a §14 PR 1 (um rascunho usava `suspensao-que-suspende.spec.ts`).
 33. **Mapa vivo próprio da PR 1** (`suspensao-de-organizacao.architecture.json`); o `cobranca-do-revendedor.architecture.json` da §13 é da capacidade inteira e nasce na PR 2+.
-34. **CLAUDE.md pg15 já está correto na main (§11 pede a correção).** `CLAUDE.md:555` e `:625` dizem pg15 desde `6bfb48d53`; `config.toml:29` = 15; `grep -c MAINTAIN supabase/baseline.sql` = 0. A Task 35 vira conferência. (O CLAUDE.md que ainda diz pg17 é o de outro checkout, `/Users/rafaelmelgaco/DeskcommCRM`.)
+34. **CLAUDE.md pg15 já está correto na main (§11 pede a correção).** `CLAUDE.md:555` e `:625` dizem pg15 desde `6bfb48d53`; `config.toml:29` = 15; `grep -c MAINTAIN supabase/baseline.sql` = 0. A Task 35 vira conferência. (O CLAUDE.md que ainda diz pg17 é o de outro checkout, `/Users/rafaelmelgaco/pj-crm`.)
 35. **Deriva de linhas desde `76355d4b9`:** VARREDURA anon segue em `baseline.sql:42990`; bloco do kind em `:9997-10110` (spec: ~9996-10000); `organizations` em `:1747-1772`; `orgs_write_platform_admin` em `:4195`; select do `drain.ts` em `:250` (spec: 257-284); voz em `workers/voice-agent/index.ts:237-243` (spec: :243); `sendMessageHandler` em `:363` (spec: 367-373); resolução de org no `require-role` em `:64-80` (spec: :62-79); select de `platform_admins` em `server.ts:174-179`. Nenhuma divergência de conteúdo. O apêndice 0491 está DEPOIS da VARREDURA (`:44374`) porque só cria índice; o 0492 cria função e vai acima de `:42990`. Reconferido em `d03c2b2fd`: o `baseline.sql` e as migrations não mudaram; `lib/auth/server.ts` ganhou `currency`/`country` no embed e a leitura por service role no ramo de acompanhamento (#1945), e a Task 8 foi reescrita sobre esse corpo; `platform_admins` passou a `:176-181` e `resolveActiveOrg` a `:283-324`; o dicionário andou 11 linhas (`"Ligar de volta"` em `:9999`, `"Solicitações LGPD"` em `:7818`).
 36. **Invariante extra `tests/invariants/cron-org-parada.test.ts`** (fora da lista da §12): a única prova no Postgres real do SQL novo do agendador.
 37. **O atalho de papel das server actions exige scope `full` (Task 15b).** A §4 só manda a regra B cobrar quem IMPORTA `requirePlatformAdmin`. Em `d03c2b2fd`, 15 server actions liberam a escrita com `!authUser.is_platform_admin && ROLE_RANK[…] < ROLE_RANK.admin` (ou `(user.is_platform_admin && !user.support)`); a sessão de acompanhamento já cai antes em `supportWriteError`, mas o `support_readonly` que é membro comum de uma empresa, fora de acompanhamento, escrevia nela — inclusive `apagarDadosOperacionaisDaOrganizacao`. O plano cria `escreveComoPlatformAdmin(user)` em `lib/auth/types.ts` (puro), troca os 15 atalhos por ele e estende a regra B (`#B:flag`): `"use server"` que lê `.is_platform_admin` precisa chamar `escreveComoPlatformAdmin(` ou `requirePlatformAdminEscrita(`. Exceção permanente: `app/actions/auth/politicaDeMfa.ts`, que lê a flag para decidir a política de MFA da PRÓPRIA conta. O que continua aberto é o do risco 2 da spec: escrita pelo PostgREST onde a policy aceita `fn_is_platform_admin()`.

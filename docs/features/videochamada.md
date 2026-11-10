@@ -65,7 +65,7 @@ gravado, nenhum estado novo no banco. Não é `crypto.randomUUID` cru: o
 navegador só o expõe em contexto seguro, e no self-host em `http://IP` o clique
 em **Vídeo** lançaria `TypeError`.
 
-O formato anterior era `deskcomm-<conversationId>`, e o review do #2441 trocou
+O formato anterior era `pjcrm-<conversationId>`, e o review do #2441 trocou
 as duas metades dele:
 
 - **O UUID da conversa saía para fora.** O link é dado sensível que vai parar na

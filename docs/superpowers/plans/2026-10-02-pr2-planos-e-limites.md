@@ -112,7 +112,7 @@ Artefatos concretos (nomes exatos): `lib/cobranca/vocabulario.ts`, `lib/cobranca
 - [ ] **Step 1: Criar o worktree da 2a**
 
 ```bash
-cd "D:/PROJETOS VIBE CODING/DeskcommCRM" && git fetch origin
+cd "D:/PROJETOS VIBE CODING/pj-crm" && git fetch origin
 git worktree add .claude/worktrees/cobranca-2a-banco -b feat/cobranca-planos-e-assinaturas origin/main
 cd .claude/worktrees/cobranca-2a-banco && pnpm install --frozen-lockfile
 ```

@@ -796,7 +796,7 @@ it('#2729: grupo só passa pela guarda do engine quando a chave por grupo libera
  *
  * O laço dorme até o teto de 60 s com a fila vazia (recuo exponencial). Sem
  * este aviso, o job que o drain acabou de criar espera o fim da soneca: 49,25 s
- * de atraso no claim, medidos pelo @melgarafael numa chegada 125 s depois de a
+ * de atraso no claim, medidos pelo @nesqj numa chegada 125 s depois de a
  * fila esvaziar. O teste dirige o `drainTick` inteiro e olha o EFEITO na fiação
  * (`knobs.acordarFila`) — reverter a chamada deixa os testes da soneca verdes,
  * porque eles exercitam o laço, não o produtor.

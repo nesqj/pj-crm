@@ -152,7 +152,7 @@ test.describe("kit visual da Agenda", () => {
     await page.goto(VITRINE);
     await page.evaluate(() => {
       try {
-        window.localStorage.removeItem("deskcomm-theme");
+        window.localStorage.removeItem("pjcrm-theme");
       } catch {
         /* modo privado: o tema já é o default */
       }
@@ -357,7 +357,7 @@ test.describe("kit visual da Agenda", () => {
   });
 
   test("ocupação vinda do Google é ocupação, não agendamento: não abre", async () => {
-    // `google_sync` e `ui`, e não `google`/`deskcomm`: o vocabulário de origem
+    // `google_sync` e `ui`, e não `google`/`pjcrm`: o vocabulário de origem
     // agora vem de `lib/agenda/tipos.ts`, que espelha o CHECK do banco. Os
     // valores em pt-br que estavam aqui eram um SEGUNDO vocabulário com os
     // mesmos nomes de símbolo — pegado pelo Arquiteto antes de a tela ligar.

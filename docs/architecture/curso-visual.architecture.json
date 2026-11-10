@@ -51,8 +51,8 @@
     {
       "id": "skill",
       "lane": "manutencao",
-      "label": "deskcomm-curso · Claude e Codex",
-      "sublabel": ".agents/skills/deskcomm-curso/SKILL.md + espelho gerado .claude/skills",
+      "label": "pjcrm-curso · Claude e Codex",
+      "sublabel": ".agents/skills/pjcrm-curso/SKILL.md + espelho gerado .claude/skills",
       "type": "lib",
       "dot": "violet"
     },
@@ -92,7 +92,7 @@
       "id": "site",
       "lane": "saida",
       "label": "deskcomm.com.br/curso · /es/curso",
-      "sublabel": "Leitura, busca, simulador e demonstrações do deskcomm-site",
+      "sublabel": "Leitura, busca, simulador e demonstrações do pjcrm-site",
       "type": "ui",
       "dot": "emerald"
     },

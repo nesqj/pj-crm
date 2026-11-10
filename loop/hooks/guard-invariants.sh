@@ -6,7 +6,7 @@
 #
 # `tests/invariants/**` nasceu como o eval do épico (G1-03): editar um invariante
 # era editar a régua que media o próprio épico, então o diretório era congelado —
-# ADICIONAR passava, MODIFICAR/DELETAR exigiam `DESKCOMM_GOV_INVARIANTS_EDIT=1`.
+# ADICIONAR passava, MODIFICAR/DELETAR exigiam `PJCRM_GOV_INVARIANTS_EDIT=1`.
 #
 # O épico terminou. O diretório virou a suíte geral de invariantes do projeto
 # (526 `*.test.ts`), atrás do check obrigatório `invariants` (`pnpm test:db`), e
@@ -52,7 +52,7 @@
 #                                   irmão que fecha o caminho do agente.
 set -euo pipefail
 
-[ "${DESKCOMM_GOV_INVARIANTS_EDIT:-0}" = "1" ] && exit 0
+[ "${PJCRM_GOV_INVARIANTS_EDIT:-0}" = "1" ] && exit 0
 
 # `D` (delete) e `R` (rename = delete disfarçado) em tests/invariants/ pedem ordem.
 # `-c core.quotepath=false`: sem isso um nome acentuado sai citado em octal e o
@@ -72,7 +72,7 @@ if ! git rev-parse --quiet --verify "origin/main^{commit}" >/dev/null 2>&1; then
   echo "pre-commit BLOQUEADO: este commit apaga invariante e não há 'origin/main' para dizer se ele já saiu da main." >&2
   echo "$apagados" >&2
   echo "Conserto: git fetch origin main  (a ponta da main é a régua da deleção)." >&2
-  echo "Se você PRECISA commitar sem a ref: DESKCOMM_GOV_INVARIANTS_EDIT=1, e diga no commit por quê." >&2
+  echo "Se você PRECISA commitar sem a ref: PJCRM_GOV_INVARIANTS_EDIT=1, e diga no commit por quê." >&2
   exit 1
 fi
 
@@ -102,7 +102,7 @@ if [ -n "$violacoes" ]; then
   echo "DELEÇÃO: apagar tira o teste do gate sem ninguém decidir nada. Renomear conta como apagar." >&2
   echo "Invariante incômodo = ou o código está errado, ou o invariante está mal-escrito — o segundo" >&2
   echo "caso vai pra inbox (loop/INBOX.md) ou se conserta no lugar, não no rm." >&2
-  echo "Deleção deliberada (duplicata, invariante substituído): DESKCOMM_GOV_INVARIANTS_EDIT=1 e a" >&2
+  echo "Deleção deliberada (duplicata, invariante substituído): PJCRM_GOV_INVARIANTS_EDIT=1 e a" >&2
   echo "razão escrita no commit. Válvula usada fora de caso declarado vira válvula de rotina." >&2
   echo "RESOLVENDO CONFLITO DE MERGE e caiu aqui? A resolução escolheu APAGAR o lado que a main" >&2
   echo "mantém — resolva mantendo o arquivo e faça a remoção que você queria num commit próprio." >&2

@@ -158,7 +158,7 @@ test.describe("fonte de captação — assinatura pela tela", () => {
       const assinaturaErrada = await request.post(sourceUrl, {
         headers: {
           "Content-Type": "application/json",
-          "X-Deskcomm-Signature": assinar(corpo, "segredo-que-nao-e-o-da-tela"),
+          "X-PJCRM-Signature": assinar(corpo, "segredo-que-nao-e-o-da-tela"),
         },
         data: corpo,
       });
@@ -169,7 +169,7 @@ test.describe("fonte de captação — assinatura pela tela", () => {
       const assinado = await request.post(sourceUrl, {
         headers: {
           "Content-Type": "application/json",
-          "X-Deskcomm-Signature": assinar(corpoBom, segredo),
+          "X-PJCRM-Signature": assinar(corpoBom, segredo),
         },
         data: corpoBom,
       });

@@ -24,7 +24,7 @@
 #        editar invariante é manutenção normal de teste, e o caso M mede isso pelo
 #        caminho de PRODUÇÃO, com a válvula AUSENTE do ambiente.
 #     · M, A — modificar invariante existente e adicionar invariante novo passam sem
-#       `DESKCOMM_GOV_INVARIANTS_EDIT`.
+#       `PJCRM_GOV_INVARIANTS_EDIT`.
 #     · D, R, D-ACENTO — a deleção do que a main tem segue barrada, e a mensagem nomeia
 #       o arquivo. É o caso que fica vermelho se o hook virar `exit 0`.
 #     · D-VÁLVULA — a saída declarada continua existindo.
@@ -97,7 +97,7 @@ unset $(git rev-parse --local-env-vars)
 export GIT_CEILING_DIRECTORIES="$TMP"
 export GIT_AUTHOR_NAME="Teste" GIT_AUTHOR_EMAIL="teste@exemplo.invalid"
 export GIT_COMMITTER_NAME="Teste" GIT_COMMITTER_EMAIL="teste@exemplo.invalid"
-unset DESKCOMM_GOV_INVARIANTS_EDIT DESKCOMM_GOV_PLAN_EDIT || true
+unset PJCRM_GOV_INVARIANTS_EDIT PJCRM_GOV_PLAN_EDIT || true
 
 INV=tests/invariants/exemplo-congelado.test.ts
 FEAT=plan/features.json
@@ -192,10 +192,10 @@ printf '\nguard-invariants.sh — o congelamento saiu, a deleção ficou\n'
 m1="$TMP/m1"; preparar "$m1" "$principal" "$BASE_DA_BRANCH"
 printf 'import { it } from "vitest";\nit("MARCADOR-REESCRITO", () => {});\n' > "$m1/$INV"
 git -C "$m1" add "$INV"
-if [ -z "${DESKCOMM_GOV_INVARIANTS_EDIT:-}" ]; then ok "M: a válvula NÃO está no ambiente (a premissa)"
-else falha "M: a válvula NÃO está no ambiente" "DESKCOMM_GOV_INVARIANTS_EDIT=${DESKCOMM_GOV_INVARIANTS_EDIT}"; fi
+if [ -z "${PJCRM_GOV_INVARIANTS_EDIT:-}" ]; then ok "M: a válvula NÃO está no ambiente (a premissa)"
+else falha "M: a válvula NÃO está no ambiente" "PJCRM_GOV_INVARIANTS_EDIT=${PJCRM_GOV_INVARIANTS_EDIT}"; fi
 r=$(commitar_pelo_dispatcher "$m1" "ajusta a asserção do invariante")
-assert_exit "$(exit_de "$r")" 0 "M: editar invariante que a main tem PASSA sem DESKCOMM_GOV_INVARIANTS_EDIT"
+assert_exit "$(exit_de "$r")" 0 "M: editar invariante que a main tem PASSA sem PJCRM_GOV_INVARIANTS_EDIT"
 assert_contains "$(git -C "$m1" show "HEAD:$INV")" "MARCADOR-REESCRITO" "M: e a edição está no HEAD (não foi um commit vazio)"
 
 # ── A · ADICIONAR invariante novo segue livre (o controle que impede bloqueio cego) ──
@@ -222,8 +222,8 @@ else falha "D: o HEAD ficou parado com o invariante no lugar" "HEAD=$(git -C "$d
 # ── D-VÁLVULA · a deleção deliberada continua com a saída declarada ─────────────────
 dv="$TMP/dv"; preparar "$dv" "$principal" "$BASE_DA_BRANCH"
 git -C "$dv" rm -q "$INV"
-saida=$( cd "$dv" && DESKCOMM_GOV_INVARIANTS_EDIT=1 git commit -q -m "apaga invariante duplicado" 2>&1 ); rc=$?
-assert_exit "$rc" 0 "D-VÁLVULA: com DESKCOMM_GOV_INVARIANTS_EDIT=1 a deleção passa"
+saida=$( cd "$dv" && PJCRM_GOV_INVARIANTS_EDIT=1 git commit -q -m "apaga invariante duplicado" 2>&1 ); rc=$?
+assert_exit "$rc" 0 "D-VÁLVULA: com PJCRM_GOV_INVARIANTS_EDIT=1 a deleção passa"
 if [ -z "$(git -C "$dv" rev-parse -q --verify "HEAD:$INV")" ]; then ok "D-VÁLVULA: e o invariante saiu do HEAD de fato"
 else falha "D-VÁLVULA: o invariante saiu do HEAD" "segue lá"; fi
 
@@ -526,7 +526,7 @@ g="$TMP/mig-grande"; mkdir -p "$g/supabase/migrations" "$g/scripts" "$g/loop/hoo
 git -C "$g" init -q -b main
 cp "$RAIZ/scripts/migration-populacao.sh" "$g/scripts/"
 cp "$HOOKS_ORIGEM/check-migration-triple.sh" "$g/loop/hooks/"
-cp "$RAIZ/.agents/skills/deskcomm-contribuir/scripts/hooks/check-migration-triple.sh" "$g/contrib/"
+cp "$RAIZ/.agents/skills/pjcrm-contribuir/scripts/hooks/check-migration-triple.sh" "$g/contrib/"
 printf -- '-- baseline\n' > "$g/supabase/baseline.sql"
 printf '| base |\n' > "$g/supabase/migrations/MANIFEST.md"
 commitar "$g" "base"

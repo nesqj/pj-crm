@@ -32,7 +32,7 @@ Tests       8 passed (8)
 Start at    17:41:07
 Duration    11.90s
 ==> test:db verde
-==> teardown: removendo container deskcomm-test-db-11839
+==> teardown: removendo container pjcrm-test-db-11839
 ```
 
 O executor instalou e reaplicou o baseline com `ON_ERROR_STOP=1`, conferindo

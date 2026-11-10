@@ -126,7 +126,7 @@ const CELULAR = /(?:\+?55[\s-]?)?(?:\(\d{2}\)|\d{2})[\s-]?9\d{4}[-\s]?\d{4}\b/g;
  * O TLD negativo é o que separa dado de cliente de semente de teste: `e2e-*@…test`
  * e `*.invalid` são as convenções do repo para e-mail que não existe
  * (`scripts/seed-e2e-credentials.ts`), e `.test` é reservado por RFC 2606.
- * Os endereços `@deskcomm.com.br`/`@deskcomm.app` são o **produto** — estão em
+ * Os endereços `@deskcomm.com.br`/`@pjcrm.app` são o **produto** — estão em
  * tela, é o contato público, e não é dado de cliente.
  *
  * **Os domínios de JID ficam de fora de propósito.** `5500…@s.whatsapp.net`
@@ -136,7 +136,7 @@ const CELULAR = /(?:\+?55[\s-]?)?(?:\(\d{2}\)|\d{2})[\s-]?9\d{4}[-\s]?\d{4}\b/g;
  * JID (onde a entropia o reconhece) sem virar falso positivo aqui.
  */
 const EMAIL_REAL =
-  /\b[\w.%+-]+@(?!deskcomm\.(?:com\.br|app)\b)(?!(?:s\.whatsapp\.net|c\.us)\b)[\w-]+(?:\.[\w-]+)*\.(?!test\b|invalid\b|example\b|local\b)[A-Za-z]{2,}\b/g;
+  /\b[\w.%+-]+@(?!(?:pjcrm|deskcomm)\.(?:com\.br|app)\b)(?!(?:s\.whatsapp\.net|c\.us)\b)[\w-]+(?:\.[\w-]+)*\.(?!test\b|invalid\b|example\b|local\b)[A-Za-z]{2,}\b/g;
 /** Referência de projeto Supabase: vinte letras minúsculas entre crases. */
 const REF_PROJETO = /`[a-z]{20}`/g;
 

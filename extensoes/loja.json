@@ -1,7 +1,7 @@
 {
-  "deskcomm/retorno-de-paciente": {
-    "publisher_label": "Deskcomm",
-    "repository": "https://github.com/melgarafael/DeskcommCRM",
+  "pjcrm/retorno-de-paciente": {
+    "publisher_label": "PJ CRM",
+    "repository": "https://github.com/nesqj/pj-crm",
     "tags": [
       "clinica",
       "retorno",
@@ -9,9 +9,9 @@
     ],
     "published_at": "2026-09-18"
   },
-  "deskcomm/carrinho-abandonado": {
-    "publisher_label": "Deskcomm",
-    "repository": "https://github.com/melgarafael/DeskcommCRM",
+  "pjcrm/carrinho-abandonado": {
+    "publisher_label": "PJ CRM",
+    "repository": "https://github.com/nesqj/pj-crm",
     "tags": [
       "ecommerce",
       "vendas",
@@ -19,9 +19,9 @@
     ],
     "published_at": "2026-09-18"
   },
-  "deskcomm/primeira-semana": {
-    "publisher_label": "Deskcomm",
-    "repository": "https://github.com/melgarafael/DeskcommCRM",
+  "pjcrm/primeira-semana": {
+    "publisher_label": "PJ CRM",
+    "repository": "https://github.com/nesqj/pj-crm",
     "tags": [
       "equipe",
       "treinamento"

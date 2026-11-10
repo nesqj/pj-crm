@@ -12,7 +12,7 @@ inicio=2026-10-07T14:36:08Z
   SMTP do CRM. Depois de salvar na tela, rode:
 Credenciais iniciais (arquivo protegido com permissao 600):
   usuario: dono-teste@exemplo.com.br
-  arquivo: /root/pr4/deskcommcrm/.runtime/admin-credentials
+  arquivo: /root/pr4/pjcrm/.runtime/admin-credentials
 A IA inicia desativada; configure um provedor depois em Agente de IA.
 ATENCAO: sem SMTP, 'esqueci a senha' e a confirmacao de cadastro NAO enviam e-mail.
 exit=0

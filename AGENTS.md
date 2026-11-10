@@ -174,7 +174,7 @@ O CI tem cinco checks obrigatórios na `main`: `verify`, `build-and-size`, `inva
 `imagens-ok`. Não confie nesta lista — reconte antes de citar:
 
 ```bash
-gh api repos/melgarafael/DeskcommCRM/branches/main/protection \
+gh api repos/nesqj/pj-crm/branches/main/protection \
   --jq '.required_status_checks.contexts|join(", ")'
 ```
 
@@ -197,16 +197,16 @@ cite cada um:
 **Os cinco são checks obrigatórios** na branch protection da `main` — medido em 2026-08-14 @ `741c4ec8` (o comando exige permissão de **admin** no repositório: com token de contribuidor ele devolve `404`, medido em 2026-09-13):
 | Situação                                                                            | Guia                    |
 | ----------------------------------------------------------------------------------- | ----------------------- |
-| Instalar, atualizar ou consertar a instalação numa VPS; domínio, Supabase, WhatsApp | `deskcomm-instalar`     |
-| Usar o CRM no dia a dia; encontrar telas, fluxos e configurações pela interface     | `deskcomm-operacao`     |
-| Atualizar aulas, traduções e capturas do curso com as mudanças do produto           | `deskcomm-curso`        |
-| Configurar o CRM para um cliente ou nicho: agentes, roteadores, follow-ups, base    | `deskcomm-cliente-novo` |
-| Revender como SaaS: planos, cobrança pela Stripe ou Asaas, régua, contrato          | `deskcomm-saas`         |
-| Desempenho, conversão, custo de IA, funil, relatório                                | `deskcomm-metricas`     |
-| O agente responde errado, passa tudo para humano, não usa a agenda; afinar o prompt | `deskcomm-prompt`       |
-| Contribuir: corrigir bug, abrir ou atualizar PR, migration, conflito com a `main`   | `deskcomm-contribuir`   |
-| Criar extensão/plugin/módulo de nicho, ou transformar um PR de nicho em pacote      | `deskcomm-extensao`     |
-| Escrever ou revisar código aqui                                                     | `deskcomm-doutrina`     |
+| Instalar, atualizar ou consertar a instalação numa VPS; domínio, Supabase, WhatsApp | `pjcrm-instalar`     |
+| Usar o CRM no dia a dia; encontrar telas, fluxos e configurações pela interface     | `pjcrm-operacao`     |
+| Atualizar aulas, traduções e capturas do curso com as mudanças do produto           | `pjcrm-curso`        |
+| Configurar o CRM para um cliente ou nicho: agentes, roteadores, follow-ups, base    | `pjcrm-cliente-novo` |
+| Revender como SaaS: planos, cobrança pela Stripe ou Asaas, régua, contrato          | `pjcrm-saas`         |
+| Desempenho, conversão, custo de IA, funil, relatório                                | `pjcrm-metricas`     |
+| O agente responde errado, passa tudo para humano, não usa a agenda; afinar o prompt | `pjcrm-prompt`       |
+| Contribuir: corrigir bug, abrir ou atualizar PR, migration, conflito com a `main`   | `pjcrm-contribuir`   |
+| Criar extensão/plugin/módulo de nicho, ou transformar um PR de nicho em pacote      | `pjcrm-extensao`     |
+| Escrever ou revisar código aqui                                                     | `pjcrm-doutrina`     |
 
 O gate de arquitetura de qualquer peça que atende pessoas é a skill `sistema-vivo` (lei em
 [`docs/doctrine/sistema-vivo.md`](docs/doctrine/sistema-vivo.md)).
@@ -260,7 +260,7 @@ função aparece várias vezes, e quem vale é a **última**. Pergunte ao banco 
 Contar no arquivo responde "o arquivo menciona", não "o banco faz".
 
 **Marca própria (white-label)** — o produto é revendido e o nome não é seu. **Nunca** escreva
-"Deskcomm"/"DeskcommCRM" em código que alcança o usuário: `tests/unit/branding.test.ts` varre
+"PJ CRM"/"PJ CRM" em código que alcança o usuário: `tests/unit/branding.test.ts` varre
 `app|components|lib|workers|hooks` e reprova (a allowlist só encolhe). A marca resolve do banco
 (`platform_branding`, `organizations.settings.branding`); `APP_NAME`/`APP_LOGO_URL`/`APP_ACCENT_HEX`
 no `.env` são semente e piso de rollback. Fora do DOM (e-mail, ícone, `issuer` do MFA) use
@@ -546,19 +546,19 @@ casar, mesmo que a pessoa não saiba que ele existe. Fora de um clone (ou num cl
 
 | situação | guia |
 |---|---|
-| instalar, atualizar ou consertar a instalação numa VPS; domínio, Supabase, WhatsApp que não conecta | `deskcomm-instalar` |
-| configurar o CRM para um cliente ou nicho: agentes, roteadores, follow-ups, base de conhecimento | `deskcomm-cliente-novo` |
-| revender como SaaS: painel do dono, planos, cobrança pela Stripe ou pelo Asaas, régua, contrato com o cliente final | `deskcomm-saas` |
-| desempenho, conversão, custo de IA, funil, relatório | `deskcomm-metricas` |
-| atualizar aulas, traduções e capturas do curso com as mudanças do produto | `deskcomm-curso` |
-| o agente responde errado, passa tudo para humano, não usa a agenda; melhorar o prompt | `deskcomm-prompt` |
-| contribuir: corrigir bug, abrir ou atualizar PR, migration, conflito com a `main` | `deskcomm-contribuir` — que fica quieto quando `bash .agents/skills/deskcomm-contribuir/scripts/quem-sou.sh` responde `mantenedor` |
-| escrever ou revisar código aqui | `deskcomm-doutrina` (as três regras que mais custam) e `sistema-vivo` (o gate de arquitetura) |
+| instalar, atualizar ou consertar a instalação numa VPS; domínio, Supabase, WhatsApp que não conecta | `pjcrm-instalar` |
+| configurar o CRM para um cliente ou nicho: agentes, roteadores, follow-ups, base de conhecimento | `pjcrm-cliente-novo` |
+| revender como SaaS: painel do dono, planos, cobrança pela Stripe ou pelo Asaas, régua, contrato com o cliente final | `pjcrm-saas` |
+| desempenho, conversão, custo de IA, funil, relatório | `pjcrm-metricas` |
+| atualizar aulas, traduções e capturas do curso com as mudanças do produto | `pjcrm-curso` |
+| o agente responde errado, passa tudo para humano, não usa a agenda; melhorar o prompt | `pjcrm-prompt` |
+| contribuir: corrigir bug, abrir ou atualizar PR, migration, conflito com a `main` | `pjcrm-contribuir` — que fica quieto quando `bash .agents/skills/pjcrm-contribuir/scripts/quem-sou.sh` responde `mantenedor` |
+| escrever ou revisar código aqui | `pjcrm-doutrina` (as três regras que mais custam) e `sistema-vivo` (o gate de arquitetura) |
 
 Os guias têm vitrine pública em [deskcomm.com.br/guias](https://www.deskcomm.com.br/guias) (pt-BR,
-en, es), escrita à mão no repositório `deskcomm-site` (`conteudo/guias.ts`). Guia criado,
+en, es), escrita à mão no repositório `pjcrm-site` (`conteudo/guias.ts`). Guia criado,
 renomeado ou com comando novo → o PR avisa que aquela página precisa acompanhar. Ela sai do mesmo
-PR do `deskcomm-site` que a página de changelog; quem quiser saber se já está no ar usa o `curl` da
+PR do `pjcrm-site` que a página de changelog; quem quiser saber se já está no ar usa o `curl` da
 seção "A vitrine" em [`docs/doctrine/versionamento.md`](docs/doctrine/versionamento.md).
 
 ## Regra final — não invente

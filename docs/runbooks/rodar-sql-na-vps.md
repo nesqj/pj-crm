@@ -12,7 +12,7 @@ e **de onde tirar a connection string**.
 - **`docker compose` só encontra o arquivo de dentro da pasta da instalação.**
   `-f docker-compose.prod.yml` é caminho **relativo**: rodado em `/root`, devolve
   `no such file or directory` mesmo com o arquivo existindo na pasta onde o
-  instalador clonou (`/root/deskcommcrm` no caminho padrão).
+  instalador clonou (`/root/pjcrm` no caminho padrão).
 - **A VPS instalada pelo kit não tem `psql`.** O kit não instala cliente de
   Postgres no host — quem aplica o schema é um contêiner efêmero (`pg_container`,
   em `hostgator-setup-kit/_common.sh`). Por isso o comando responde

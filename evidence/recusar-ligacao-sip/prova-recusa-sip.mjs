@@ -10,7 +10,7 @@ const [out, rotulo] = process.argv.slice(2);
 const BASE = "http://localhost:3000";
 fs.mkdirSync(out, { recursive: true });
 const psql = (sql) =>
-  execFileSync("docker", ["exec", "supabase_db_deskcomm-crm", "psql", "-U", "postgres", "-Atc", sql]).toString().trim();
+  execFileSync("docker", ["exec", "supabase_db_pj-crm", "psql", "-U", "postgres", "-Atc", sql]).toString().trim();
 
 (async () => {
   // Limpa toques anteriores para a tela ter UMA ligação tocando: esta.

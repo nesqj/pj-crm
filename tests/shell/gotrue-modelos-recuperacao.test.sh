@@ -179,9 +179,9 @@ bloco_auth() { awk '/^  auth:$/{d=1;next} d&&/^  [^ #]/{exit} d' "$OVERRIDE"; }
 check "auth permanece na rede padrão do Supabase" \
   bash -c 'grep -qxF "      default: {}" <<<"$1"' _ "$(bloco_auth)"
 check "auth alcança o app pela rede privada" \
-  bash -c 'grep -qxF "      deskcomm_private: {}" <<<"$1"' _ "$(bloco_auth)"
+  bash -c 'grep -qxF "      pjcrm_private: {}" <<<"$1"' _ "$(bloco_auth)"
 check "a rede privada que o auth usa é a declarada no topo do override" \
-  bash -c 'awk "/^networks:\$/{d=1;next} d" "$1" | grep -qxF "  deskcomm_private:"' _ "$OVERRIDE"
+  bash -c 'awk "/^networks:\$/{d=1;next} d" "$1" | grep -qxF "  pjcrm_private:"' _ "$OVERRIDE"
 
 # (7) QUEM JÁ INSTALOU: o update.sh chama `atualizar_supabase_single_server`
 #     (_common.sh), e é no CORPO dela que a gravação tem de acontecer — numa
@@ -262,7 +262,7 @@ check "assunto: uma linha por chave, também depois da segunda execução" \
   test "$(conta GOTRUE_MAILER_SUBJECTS_CONFIRMATION)" = 1 -a \
        "$(conta GOTRUE_MAILER_SUBJECTS_RECOVERY)" = 1
 check "assunto: sem o nome do produto (a marca do revendedor mora no banco)" \
-  bash -c '! grep -qi "^GOTRUE_MAILER_SUBJECTS_.*deskcomm" "$1"' _ "$ENV_SB"
+  bash -c '! grep -qi "^GOTRUE_MAILER_SUBJECTS_.*pjcrm" "$1"' _ "$ENV_SB"
 check "assunto: override entrega o da confirmação ao serviço auth (default vazio)" \
   grep -qxF '      GOTRUE_MAILER_SUBJECTS_CONFIRMATION: "${GOTRUE_MAILER_SUBJECTS_CONFIRMATION:-}"' "$OVERRIDE"
 check "assunto: override entrega o da recuperação ao serviço auth (default vazio)" \

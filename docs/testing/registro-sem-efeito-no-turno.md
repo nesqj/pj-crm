@@ -37,7 +37,7 @@ substitui o CI do head publicado nem mede um turno completo com modelo.
 
 A prova visual específica passou no caso existente “o papel que confere
 mostra a lista inteira, aberta, e sem interruptor decorativo”, em
-`agente-papeis-operador.spec.ts`, no [job da parte 1](https://github.com/melgarafael/DeskcommCRM/actions/runs/40499697633/job/122174067862)
+`agente-papeis-operador.spec.ts`, no [job da parte 1](https://github.com/nesqj/pj-crm/actions/runs/40499697633/job/122174067862)
 do head `1041c3e7`: 1,9 segundo, com login e agente semeado reais. O caso
 confere a linha, o motivo fixo e zero interruptores, sem `page.route`.
 

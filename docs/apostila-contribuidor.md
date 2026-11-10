@@ -1,4 +1,4 @@
-# Apostila do Contribuidor — DeskcommCRM
+# Apostila do Contribuidor — PJ CRM
 
 > **Do zero até o seu primeiro Pull Request**, passo a passo, sem pressupor que você já programou.
 > Serve para duas leituras: **você**, que segue os capítulos em ordem, e **o seu assistente de IA**
@@ -38,7 +38,7 @@ Preferimos ensinar o *comando que mede* a escrever um número que envelhece.
 
 ## 0. O mapa: o que você vai montar
 
-O DeskcommCRM é um CRM com agentes de IA que atendem pelo WhatsApp. Para mexer no código, você
+O PJ CRM é um CRM com agentes de IA que atendem pelo WhatsApp. Para mexer no código, você
 vai montar no seu computador uma cópia pequena e completa do sistema:
 
 ```
@@ -83,7 +83,7 @@ Os scripts do projeto são escritos para o terminal do Linux (`bash`). No Window
    *Resources › WSL integration* para a distribuição Ubuntu.
 4. Daqui em diante, siga as instruções marcadas como **Linux** — dentro do terminal do Ubuntu.
 
-Guarde o código **dentro** do Linux (ex.: `~/code/DeskcommCRM`), não em `/mnt/c/...`: o disco do
+Guarde o código **dentro** do Linux (ex.: `~/code/pj-crm`), não em `/mnt/c/...`: o disco do
 Windows visto pelo WSL é muitas vezes mais lento e quebra a recarga automática.
 
 ### A lista de ferramentas
@@ -138,19 +138,19 @@ aparecer, o Docker Desktop não está aberto). O `openssl` já vem no Mac e no L
 
 ### 2.1 Fork e clone
 
-O código mora em <https://github.com/melgarafael/DeskcommCRM>. Você não escreve direto nele: cria
+O código mora em <https://github.com/nesqj/pj-crm>. Você não escreve direto nele: cria
 uma **cópia sua** (o *fork*), trabalha nela e propõe as mudanças de volta (o *Pull Request*).
 
 ```bash
 gh auth login                                  # entra na sua conta do GitHub (uma vez só)
-gh repo fork melgarafael/DeskcommCRM --clone   # cria o fork E baixa para o computador
-cd DeskcommCRM
+gh repo fork nesqj/pj-crm --clone   # cria o fork E baixa para o computador
+cd pj-crm
 git remote -v                                  # origin = o seu fork; upstream = o projeto
 ```
 
 Sem o `gh`: clique em **Fork** no site do GitHub, depois
-`git clone https://github.com/<seu-usuario>/DeskcommCRM.git` e
-`git remote add upstream https://github.com/melgarafael/DeskcommCRM.git`.
+`git clone https://github.com/<seu-usuario>/pj-crm.git` e
+`git remote add upstream https://github.com/nesqj/pj-crm.git`.
 
 ### 2.2 Assine os seus commits com o seu nome
 
@@ -165,7 +165,7 @@ git config --global user.email "o-email-da-sua-conta@github.com"
 
 ```bash
 pnpm install
-bash .agents/skills/deskcomm-contribuir/scripts/armar-hooks.sh
+bash .agents/skills/pjcrm-contribuir/scripts/armar-hooks.sh
 ```
 
 O segundo comando instala três guardas do git que evitam os erros mais caros: commit de
@@ -193,7 +193,7 @@ documentação, `chore/...` para manutenção.
 ## 3. Subir o banco de dados local
 
 Fonte: o mesmo roteiro que o CI usa, em
-[`receita-e2e-local.md`](../.agents/skills/deskcomm-contribuir/references/receita-e2e-local.md).
+[`receita-e2e-local.md`](../.agents/skills/pjcrm-contribuir/references/receita-e2e-local.md).
 
 ### 3.1 Por que não "rodar as migrations"
 
@@ -323,7 +323,7 @@ psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=
 
 ## 5. Criar o dono e abrir o sistema
 
-O DeskcommCRM **não tem tela de cadastro aberta**: o primeiro usuário (o "dono") é criado por um
+O PJ CRM **não tem tela de cadastro aberta**: o primeiro usuário (o "dono") é criado por um
 script, exatamente como o instalador faz numa VPS.
 
 ```bash
@@ -347,7 +347,7 @@ opcionais.
 Para conferir a saúde do sistema: <http://localhost:3000/api/v1/health>. Sem WhatsApp e sem Redis
 configurados, é normal ele apontar essas duas peças como indisponíveis.
 
-**Pronto: você tem o DeskcommCRM rodando no seu computador.** O resto da apostila é sobre mexer
+**Pronto: você tem o PJ CRM rodando no seu computador.** O resto da apostila é sobre mexer
 nele com segurança.
 
 ---
@@ -459,7 +459,7 @@ docs/                documentação — o mapa é docs/index.md
 
 ### 8.2 Antes de codar
 
-1. **Escolha uma issue** em <https://github.com/melgarafael/DeskcommCRM/issues> (procure as
+1. **Escolha uma issue** em <https://github.com/nesqj/pj-crm/issues> (procure as
    etiquetas `good first issue` e `help wanted`) e comente **"pego esta"**. Um mantenedor atribui a
    você. Sem resposta em 48 h, comece e diga isso no PR.
 2. **Leia a doutrina** do que vai tocar: [`CLAUDE.md`](../CLAUDE.md) é a lei do projeto;
@@ -558,7 +558,7 @@ trabalho não salvo já apagou consertos neste projeto mais de uma vez.
 O Playwright é um robô que abre um navegador de verdade, clica e lê a tela como uma pessoa faria.
 Neste projeto, ele é a **prova de que a experiência funciona** — chamada de API (`curl`) prova o
 servidor, não o que o usuário vê. Fonte da receita:
-[`receita-e2e-local.md`](../.agents/skills/deskcomm-contribuir/references/receita-e2e-local.md) e,
+[`receita-e2e-local.md`](../.agents/skills/pjcrm-contribuir/references/receita-e2e-local.md) e,
 acima dela, o próprio [`.github/workflows/e2e.yml`](../.github/workflows/e2e.yml).
 
 ### 10.1 Preparar (uma vez)
@@ -568,7 +568,7 @@ banco errado. Faça numa cópia de trabalho própria (*worktree*), ao lado do pr
 que o sistema limpa sozinho:
 
 ```bash
-git worktree add ../deskcomm-e2e HEAD && cd ../deskcomm-e2e
+git worktree add ../pjcrm-e2e HEAD && cd ../pjcrm-e2e
 pnpm install                                         # node_modules de verdade, nunca um atalho
 pnpm exec playwright install --with-deps chromium    # o navegador do robô
 ```
@@ -581,7 +581,7 @@ pnpm e2e:build   # compila o app em modo produção, como na VPS
 cp .env.e2e .env.local && pnpm exec tsx scripts/seed-e2e-credentials.ts   # cria os usuários de teste
 ```
 
-Os usuários de teste têm e-mails `e2e-admin@deskcomm.test`, `e2e-manager@…`, `e2e-agent@…`,
+Os usuários de teste têm e-mails `e2e-admin@pjcrm.test`, `e2e-manager@…`, `e2e-agent@…`,
 `e2e-viewer@…` e `e2e-dono@…`. Algumas specs pedem dados extras; o cabeçalho de cada uma diz qual
 `scripts/seed-e2e-*.ts` rodar. O CI sempre roda estes três:
 
@@ -673,7 +673,7 @@ A prova de tela fica com quem mantém o projeto — é o combinado público, nã
 Antes de abrir, rode o script que mede o mesmo que a revisão vai medir:
 
 ```bash
-bash .agents/skills/deskcomm-contribuir/scripts/pre-voo.sh
+bash .agents/skills/pjcrm-contribuir/scripts/pre-voo.sh
 ```
 
 Ele aponta: ramo atrasado em relação à `main`, arquivos que não são do produto (sua marca, seu
@@ -701,7 +701,7 @@ Se esquecer o fragmento, tudo bem — quem tria escreve, com o seu nome.
 
 ```bash
 git push -u origin fix/o-que-voce-conserta
-gh pr create --repo melgarafael/DeskcommCRM --fill --web
+gh pr create --repo nesqj/pj-crm --fill --web
 ```
 
 O formulário do PR já traz o checklist. No texto, escreva:
@@ -731,14 +731,14 @@ A pasta `.agents/skills/` traz **guias** que os assistentes carregam sozinhos ao
 
 | Guia | Quando entra em ação |
 |---|---|
-| `deskcomm-contribuir` | Contribuir: régua do PR, pré-voo, sabotagem, prova de tela |
-| `deskcomm-doutrina` | Escrever ou revisar código: as regras do `CLAUDE.md` |
+| `pjcrm-contribuir` | Contribuir: régua do PR, pré-voo, sabotagem, prova de tela |
+| `pjcrm-doutrina` | Escrever ou revisar código: as regras do `CLAUDE.md` |
 | `sistema-vivo` | Criar uma peça nova do sistema (tela, worker, métrica…) |
-| `deskcomm-instalar` | Instalar numa VPS |
-| `deskcomm-prompt`, `deskcomm-metricas`, `deskcomm-cliente-novo`… | Operar e afinar uma instalação |
+| `pjcrm-instalar` | Instalar numa VPS |
+| `pjcrm-prompt`, `pjcrm-metricas`, `pjcrm-cliente-novo`… | Operar e afinar uma instalação |
 
-No Claude Code, chame pelo nome com `/deskcomm-contribuir`; no Codex, `$deskcomm-contribuir`; nos
-demais, peça em português ("quero contribuir com o DeskcommCRM").
+No Claude Code, chame pelo nome com `/pjcrm-contribuir`; no Codex, `$pjcrm-contribuir`; nos
+demais, peça em português ("quero contribuir com o PJ CRM").
 
 Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code) ou o
 [`AGENTS.md`](../AGENTS.md) (os demais). Você não precisa colar a doutrina.
@@ -753,7 +753,7 @@ Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code)
 
 **Implementar uma issue:**
 
-> Quero resolver a issue #<N> do DeskcommCRM. Carregue o guia `deskcomm-contribuir`. Antes de
+> Quero resolver a issue #<N> do PJ CRM. Carregue o guia `pjcrm-contribuir`. Antes de
 > codar: leia a issue, o `CLAUDE.md` e o código que ela toca, e me mostre um plano curto com os
 > arquivos que vão mudar e o teste que vai ficar vermelho sem o conserto. Só codifique depois que
 > eu aprovar o plano.
@@ -767,7 +767,7 @@ Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code)
 
 **Revisar antes do PR:**
 
-> Rode o pré-voo (`.agents/skills/deskcomm-contribuir/scripts/pre-voo.sh`) e a escada do
+> Rode o pré-voo (`.agents/skills/pjcrm-contribuir/scripts/pre-voo.sh`) e a escada do
 > capítulo 9 da apostila. Para cada item, mostre o comando e o rodapé da saída. Depois escreva o
 > corpo do PR com as seções "o que muda", "o que medi" e "o que NÃO medi".
 
@@ -776,8 +776,8 @@ Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code)
 Se o seu assistente não carrega os guias, cole este bloco no início da conversa:
 
 ```text
-CONTEXTO — DeskcommCRM (contribuição)
-- Repo: github.com/melgarafael/DeskcommCRM. Doutrina: CLAUDE.md (autoridade) e AGENTS.md. Mapa: docs/index.md.
+CONTEXTO — PJ CRM (contribuição)
+- Repo: github.com/nesqj/pj-crm. Doutrina: CLAUDE.md (autoridade) e AGENTS.md. Mapa: docs/index.md.
 - Stack: Next.js 16 App Router + React 19 + TypeScript estrito + Tailwind + shadcn/ui; Supabase (Postgres+RLS);
   Zod; Vitest; Playwright. Node 22, pnpm 9.15.9.
 - Banco local: `supabase start` SEM supabase/migrations + `psql -f supabase/baseline.sql`. A cadeia de
@@ -832,8 +832,8 @@ CONTEXTO — DeskcommCRM (contribuição)
 | WAHA muito lento no Mac | Emulação `amd64` no chip Apple | Normal; use WhatsApp só quando a mudança precisar |
 
 Não achou aqui? O guia [`SETUP.md`](SETUP.md) tem uma seção de *Troubleshooting* por integração.
-Dúvidas abertas: [GitHub Discussions](https://github.com/melgarafael/DeskcommCRM/discussions).
-Bug: [abra uma issue](https://github.com/melgarafael/DeskcommCRM/issues/new/choose).
+Dúvidas abertas: [GitHub Discussions](https://github.com/nesqj/pj-crm/discussions).
+Bug: [abra uma issue](https://github.com/nesqj/pj-crm/issues/new/choose).
 
 ---
 
@@ -856,7 +856,7 @@ Bug: [abra uma issue](https://github.com/melgarafael/DeskcommCRM/issues/new/choo
 | **Seed** | Script que cria dados de teste (usuários, organizações) |
 | **Spec** | Um arquivo de teste do Playwright (`tests/e2e/*.spec.ts`) |
 | **Supabase** | O conjunto banco + login + arquivos + tempo real que o sistema usa |
-| **VPS** | Um servidor alugado, onde o cliente instala o DeskcommCRM |
+| **VPS** | Um servidor alugado, onde o cliente instala o PJ CRM |
 | **WAHA** | O serviço que conecta o sistema ao WhatsApp |
 | **Worktree** | Uma segunda pasta de trabalho do mesmo repositório, com outro ramo |
 | **Zod** | A biblioteca que valida dados que chegam de fora |

@@ -3,7 +3,7 @@
  *
  * ## Por que este arquivo existe
  *
- * O DeskcommCRM chama modelo de linguagem em vários lugares — quantos, quem
+ * O PJ CRM chama modelo de linguagem em vários lugares — quantos, quem
  * responde é `PONTOS_DE_IA.length`, não esta frase. Até aqui, QUAL modelo
  * cada um usava estava espalhado por três pilhas que não se falavam
  * (`runModelCall` com BYOK por org, `lib/ai/gateway.ts` por variável de

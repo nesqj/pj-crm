@@ -55,7 +55,7 @@ if (r.stderr) fs.writeFileSync(opt.out + ".err", r.stderr);
 
 const linhas = (r.stdout || "").split("\n").filter(Boolean).map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
 const tools = []; let final = ""; let turns = 0; let custo = null; let uso = null;
-const ehSkill = (s) => /SKILL\.md|\.claude\/skills|\.agents\/skills|\.codex\/skills|\.opencode\/skill|\.cursor\/(rules|skills)|\.agent\/(skills|rules|workflows)|deskcomm-[a-z-]+/i.test(s || "");
+const ehSkill = (s) => /SKILL\.md|\.claude\/skills|\.agents\/skills|\.codex\/skills|\.opencode\/skill|\.cursor\/(rules|skills)|\.agent\/(skills|rules|workflows)|pjcrm-[a-z-]+/i.test(s || "");
 
 if (opt.cli === "claude") {
   for (const m of linhas) {

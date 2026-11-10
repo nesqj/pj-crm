@@ -53,7 +53,7 @@
  * que este arquivo novo precisa detectar. Cada valor foi conferido contra o
  * fixture do seu arquivo (nenhum dos três tem linha `deleted` de retenção com
  * mais de 90 dias, logo `expurgadas` é 0 nos três), e a justificativa está no
- * corpo do PR, com a válvula `DESKCOMM_GOV_INVARIANTS_EDIT=1` exportada.
+ * corpo do PR, com a válvula `PJCRM_GOV_INVARIANTS_EDIT=1` exportada.
  *
  * O último caso deste arquivo é a prova de que a lei do congelado continua
  * valendo: ele roda a MESMA sequência do `poda-de-midia.test.ts:99-103` e cobra

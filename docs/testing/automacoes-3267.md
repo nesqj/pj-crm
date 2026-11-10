@@ -10,11 +10,11 @@ Contra os tipos da main, o delta é de 67 linhas acrescentadas: `automation_rule
 
 ## Falhas de harness e reparos
 
-No head de origem `d4c35ceb0c37c7065e38f84c83c02788b36f4585`, o [verify](https://github.com/melgarafael/DeskcommCRM/actions/runs/40422574182/job/121920325929) parou porque o `fetch` nativo expõe `ok` como booleano. O teste agora lê essa propriedade; chamadas `APIResponse.ok()` do Playwright permanecem com sua API original.
+No head de origem `d4c35ceb0c37c7065e38f84c83c02788b36f4585`, o [verify](https://github.com/nesqj/pj-crm/actions/runs/40422574182/job/121920325929) parou porque o `fetch` nativo expõe `ok` como booleano. O teste agora lê essa propriedade; chamadas `APIResponse.ok()` do Playwright permanecem com sua API original.
 
-A [parte 3 do E2E](https://github.com/melgarafael/DeskcommCRM/actions/runs/40422574146/job/121921396931) recusou `trace` e `video` dentro de `describe`. A derivação de `test` no escopo do arquivo desliga esses registros somente no cenário que emite bearers sintéticos. A captura de tela explícita e todas as asserções permanecem. A coleção pelo Playwright instalado 1.64.1, com configuração própria e credenciais sintéticas, reproduziu a recusa e passou a listar os dois casos; não iniciou navegador, servidor ou seed.
+A [parte 3 do E2E](https://github.com/nesqj/pj-crm/actions/runs/40422574146/job/121921396931) recusou `trace` e `video` dentro de `describe`. A derivação de `test` no escopo do arquivo desliga esses registros somente no cenário que emite bearers sintéticos. A captura de tela explícita e todas as asserções permanecem. A coleção pelo Playwright instalado 1.64.1, com configuração própria e credenciais sintéticas, reproduziu a recusa e passou a listar os dois casos; não iniciou navegador, servidor ou seed.
 
-Os [PG15](https://github.com/melgarafael/DeskcommCRM/actions/runs/40422574182/job/121924084076) e [PG17](https://github.com/melgarafael/DeskcommCRM/actions/runs/40422574182/job/121924084070) tiveram uma falha de parser no novo invariante de recibos históricos. Um controle real de `json_agg` no Postgres confirmou newline legítimo entre os registros. O parser agora lê o JSON completo entre os marcadores de recibo e auditoria, preservando os dois registros e as duas passadas. O SQL do produto e as asserções de conteúdo, concorrência e auditoria não mudaram.
+Os [PG15](https://github.com/nesqj/pj-crm/actions/runs/40422574182/job/121924084076) e [PG17](https://github.com/nesqj/pj-crm/actions/runs/40422574182/job/121924084070) tiveram uma falha de parser no novo invariante de recibos históricos. Um controle real de `json_agg` no Postgres confirmou newline legítimo entre os registros. O parser agora lê o JSON completo entre os marcadores de recibo e auditoria, preservando os dois registros e as duas passadas. O SQL do produto e as asserções de conteúdo, concorrência e auditoria não mudaram.
 
 ## Limites atuais
 

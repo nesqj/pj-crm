@@ -78,7 +78,7 @@ describe("servidor de videochamada (Jitsi)", () => {
 /**
  * A SALA É ALEATÓRIA E A CADA CHAMADA (#2441).
  *
- * O formato anterior era `deskcomm-<conversationId>`, e o review do #2441
+ * O formato anterior era `pjcrm-<conversationId>`, e o review do #2441
  * derrubou as duas metades dele:
  *
  *  - **O UUID da conversa saía para fora.** O link vai para o cliente final e
@@ -87,7 +87,7 @@ describe("servidor de videochamada (Jitsi)", () => {
  *    a conversa existir — e o segundo clique no botão reenviava a MESMA sala
  *    já aberta.
  *
- * O prefixo também mudou, de `deskcomm-` para `sala-`: este link cai na tela
+ * O prefixo também mudou, de `pjcrm-` para `sala-`: este link cai na tela
  * de quem revende a instalação, e a sala não é lugar de marca.
  */
 describe("a sala é aleatória e por chamada", () => {
@@ -96,7 +96,7 @@ describe("a sala é aleatória e por chamada", () => {
     expect(sala.startsWith("sala-")).toBe(true);
     // Regra de marca: nada do nome do produto na sala (#2441 — entrou na
     // conversa do cliente final). Se isto falhar, é o prefixo que mudou.
-    expect(sala.toLowerCase()).not.toContain("deskcomm");
+    expect(sala.toLowerCase()).not.toContain("pjcrm");
     expect(sala.toLowerCase()).not.toContain("upsay");
     expect(sala.toLowerCase()).not.toContain("webtecnica");
   });

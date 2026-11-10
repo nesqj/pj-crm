@@ -10,4 +10,4 @@
  * Módulo sem dependência de propósito: ele é importado por um client component,
  * e `lib/webhooks/inbound.ts` (que faz o HMAC) puxa `node:crypto`.
  */
-export const HEADER_ASSINATURA_DE_ENTRADA = "x-deskcomm-signature";
+export const HEADER_ASSINATURA_DE_ENTRADA = "x-pjcrm-signature";

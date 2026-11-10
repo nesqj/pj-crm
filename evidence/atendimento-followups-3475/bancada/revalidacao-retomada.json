@@ -35,7 +35,7 @@
   "ci_review": {
     "head": "b6504197729e4ceadb679151ead8eb10e4149e71",
     "verify_part_7": {
-      "url": "https://github.com/melgarafael/DeskcommCRM/actions/runs/40389060936/job/121804952038",
+      "url": "https://github.com/nesqj/pj-crm/actions/runs/40389060936/job/121804952038",
       "state": "failure",
       "cause": "evidencia-citada: 28 PNGs sem citação canônica e dois links relativos não reconhecidos no README do lote",
       "tests_passed": 3330,
@@ -49,7 +49,7 @@
       }
     },
     "e2e_part_6": {
-      "url": "https://github.com/melgarafael/DeskcommCRM/actions/runs/40389060840/job/121805190746",
+      "url": "https://github.com/nesqj/pj-crm/actions/runs/40389060840/job/121805190746",
       "state": "failure",
       "failed_step_number": 22,
       "failed_step": "Instalar o ffmpeg e sondar os encoders (áudio no celular, F2)",

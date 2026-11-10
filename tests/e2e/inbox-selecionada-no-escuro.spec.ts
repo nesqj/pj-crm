@@ -185,7 +185,7 @@ test.describe("Inbox — a conversa selecionada é legível no tema escuro", () 
   test("no tema escuro, nome e prévia da conversa aberta têm contraste ≥ 4,5, também marcada no lote", async ({ page }) => {
     await page.addInitScript(() => {
       try {
-        window.localStorage.setItem("deskcomm-theme", "dark");
+        window.localStorage.setItem("pjcrm-theme", "dark");
       } catch {
         /* sem storage o teste reprova no poll abaixo, que é o que deve acontecer */
       }

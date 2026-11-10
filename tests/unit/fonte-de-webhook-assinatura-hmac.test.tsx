@@ -255,11 +255,11 @@ describe("fonte de webhook — assinatura (HMAC)", () => {
     // A seção "Para desenvolvedores" existe para ensinar a integrar. Um exemplo
     // sem o cabeçalho, numa fonte que exige assinatura, ensina a levar 401.
     const { unmount } = renderPainel({ has_secret: true });
-    expect(document.body.textContent).toContain("x-deskcomm-signature");
+    expect(document.body.textContent).toContain("x-pjcrm-signature");
     unmount();
 
     renderPainel({ has_secret: false });
-    expect(document.body.textContent).not.toContain("x-deskcomm-signature:");
+    expect(document.body.textContent).not.toContain("x-pjcrm-signature:");
   });
 
   it("⭐ quem não gere webhooks não vê botão de assinatura nenhum", () => {

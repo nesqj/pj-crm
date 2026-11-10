@@ -64,7 +64,7 @@ type Caso = {
   assinatura: string | null;
   /** `X-Webhook-Timestamp`, que NÃO é assinado; ausente = não veio. */
   carimbo?: number;
-  /** `X-Deskcomm-Signature` legado; ausente = não veio. */
+  /** `X-PJCRM-Signature` legado; ausente = não veio. */
   legada?: string;
   esperado: boolean;
 };
@@ -163,7 +163,7 @@ function cabecalhosDoCaso(c: Caso): Record<string, string> {
   const cab: Record<string, string> = { "x-webhook-delivery": c.entrega };
   if (c.assinatura !== null) cab["x-webhook-signature"] = c.assinatura;
   if (c.carimbo !== undefined) cab["x-webhook-timestamp"] = String(c.carimbo);
-  if (c.legada !== undefined) cab["x-deskcomm-signature"] = c.legada;
+  if (c.legada !== undefined) cab["x-pjcrm-signature"] = c.legada;
   return cab;
 }
 

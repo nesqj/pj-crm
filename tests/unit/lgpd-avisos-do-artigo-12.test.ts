@@ -216,7 +216,7 @@ describe("o texto é o de FORA do Brasil — o ramo brasileiro saiu inteiro", ()
         aviso({ desfecho, motivo: desfecho === "apagamento" ? null : "motivo declarado" }),
       );
       expect(t.html).toContain("Silva &amp; Filhos");
-      expect(`${t.subject}${t.html}${t.text}`).not.toContain("Deskcomm");
+      expect(`${t.subject}${t.html}${t.text}`).not.toContain("PJ CRM");
     }
   });
 

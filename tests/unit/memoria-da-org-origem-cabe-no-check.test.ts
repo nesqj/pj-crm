@@ -95,14 +95,14 @@ describe("org_memory_entries.source — o que o código grava cabe no CHECK", ()
     // recorte cru devolve `lib\mcp\tools\evolucao.ts` e não casa com o literal,
     // que é exatamente o `expect.arrayContaining` vazio que reprovava na
     // Windows. Se alguém tirar o `.replaceAll`, este caso fica vermelho.
-    const raizWindows = "C:\\deskcomm";
+    const raizWindows = "C:\\pjcrm";
     const caminhoWindows = win32.join(raizWindows, "lib", "mcp", "tools", "evolucao.ts");
-    const caminhoLinux = join("/srv/deskcomm", "lib", "mcp", "tools", "evolucao.ts");
+    const caminhoLinux = join("/srv/pjcrm", "lib", "mcp", "tools", "evolucao.ts");
 
     expect(separadorPosix(caminhoWindows.slice(raizWindows.length + 1))).toBe(
       "lib/mcp/tools/evolucao.ts",
     );
-    expect(separadorPosix(caminhoLinux.slice("/srv/deskcomm".length + 1))).toBe(
+    expect(separadorPosix(caminhoLinux.slice("/srv/pjcrm".length + 1))).toBe(
       "lib/mcp/tools/evolucao.ts",
     );
     // NEGATIVO: o recorte sem normalizar é justamente o que reprovava na Windows.

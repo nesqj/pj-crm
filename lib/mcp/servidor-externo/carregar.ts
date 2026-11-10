@@ -27,7 +27,7 @@
  * o turno é exatamente o de antes da opção: `null`, sem banco e sem rede).
  *
  * Ligada, a carga resolve o contato NO BANCO (id + organização do turno) e
- * amarra ao servidor montado os cabeçalhos `X-Deskcomm-*`
+ * amarra ao servidor montado os cabeçalhos `X-PJCRM-*`
  * (`CABECALHOS_DO_CONTATO`), que vão em toda requisição — listar e chamar. O
  * valor nunca vem de argumento de ferramenta. Contato que não resolve (erro,
  * outra organização) = `null`: falha fechada na ação. Cobre o Conversador e o
@@ -80,7 +80,7 @@ export interface OpcoesDeCarga {
   contatoDoTurno?: string;
   /** `ai_agents.config.mcp_externo_no_atendimento` do agente do turno. */
   noAtendimento?: boolean;
-  /** A CONVERSA deste turno — de onde sai `X-Deskcomm-Canal`. */
+  /** A CONVERSA deste turno — de onde sai `X-PJCRM-Canal`. */
   conversaDoTurno?: string;
   /** `fetch` de saída para a descoberta — teste stuba o ERP em `127.0.0.1`. */
   fetch?: FetchLike;

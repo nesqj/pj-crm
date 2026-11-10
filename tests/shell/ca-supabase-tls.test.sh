@@ -77,7 +77,7 @@ mkdir -p "$PROJ"
 printf 'services:\n  app:\n    image: ${APP_IMAGE:-x}\n  worker:\n    image: ${WORKER_IMAGE:-x}\n  scheduler:\n    image: ${SCHEDULER_IMAGE:-x}\n' \
   > "$PROJ/docker-compose.prod.yml"
 cat > "$PROJ/.env" <<'ENV'
-APP_IMAGE=exemplo/deskcommcrm:1.0.0
+APP_IMAGE=exemplo/pjcrm:1.0.0
 SUPABASE_DB_URL=postgresql://postgres.ref:SENHA-SUPER-SECRETA@aws-0.sa-east-1.pooler.supabase.com:5432/postgres
 NEXT_PUBLIC_SUPABASE_URL=https://ref.supabase.co
 ENV
@@ -107,9 +107,9 @@ check "ca_do_supabase sem variável explica o que falta, com o nome da variável
 echo "── 2. Com a CA declarada, o cliente efêmero recebe o arquivo"
 saida="$(roda_kit SUPABASE_SSL_ROOT_CERT="$CA" -- "pg_container postgres:17-alpine psql 'postgresql://u:***@h:5432/pg' -tAc 'select 1'")"
 check "monta a CA somente-leitura no caminho fixo do contêiner" \
-  grep -q -- "-v $CA:/etc/deskcomm/ca/supabase-ca.crt:ro" "$DOCKER_LOG"
+  grep -q -- "-v $CA:/etc/pjcrm/ca/supabase-ca.crt:ro" "$DOCKER_LOG"
 check "passa PGSSLROOTCERT para o libpq" \
-  grep -q -- "-e PGSSLROOTCERT=/etc/deskcomm/ca/supabase-ca.crt" "$DOCKER_LOG"
+  grep -q -- "-e PGSSLROOTCERT=/etc/pjcrm/ca/supabase-ca.crt" "$DOCKER_LOG"
 check "a ordem dos argumentos preserva o comando (psql por último)" \
   bash -c "grep -q 'psql postgresql://u:\*\*\*@h:5432/pg -tAc select 1' '$DOCKER_LOG'"
 check "a senha da connection string NÃO aparece no que foi para o docker" \
@@ -166,7 +166,7 @@ for svc in app worker scheduler; do
   check "declara o serviço $svc" grep -q "^  $svc:" "$OVERLAY"
 done
 check "NODE_EXTRA_CA_CERTS aponta para o caminho fixo dentro do contêiner" \
-  grep -q "NODE_EXTRA_CA_CERTS: /etc/deskcomm/ca/supabase-ca.crt" "$OVERLAY"
+  grep -q "NODE_EXTRA_CA_CERTS: /etc/pjcrm/ca/supabase-ca.crt" "$OVERLAY"
 check "o volume é somente-leitura" grep -q "read_only: true" "$OVERLAY"
 check "a fonte do bind vem da MESMA variável declarada" \
   grep -q 'source: ${SUPABASE_SSL_ROOT_CERT}' "$OVERLAY"
@@ -201,7 +201,7 @@ saida="$(roda_healthcheck)"
 check "com CA, o teste TLS do kit roda com sslmode=verify-full" \
   grep -q "sslmode=verify-full" "$DOCKER_LOG"
 check "com sslrootcert apontando para o arquivo montado" \
-  grep -q "sslrootcert=/etc/deskcomm/ca/supabase-ca.crt" "$DOCKER_LOG"
+  grep -q "sslrootcert=/etc/pjcrm/ca/supabase-ca.crt" "$DOCKER_LOG"
 check "e a tela diz que o TLS foi verificado" \
   bash -c 'printf "%s" "$1" | grep -q "TLS do banco verificado"' _ "$saida"
 check "sem ecoar a senha do banco na tela do diagnóstico" \

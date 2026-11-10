@@ -3,20 +3,22 @@
 [🇧🇷 Português](README.md) · [🇺🇸 English](README.en.md) · 🇪🇸 Español
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/deskcomm-logo-dark.svg">
-  <img src="docs/brand/deskcomm-logo.svg" alt="Deskcomm CRM" width="420">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/pjcrm-logo-dark.svg">
+  <img src="docs/brand/pjcrm-logo.svg" alt="PJ CRM" width="420">
 </picture>
 
-# 🛠️ DeskcommCRM — el Sistema Operativo de Ventas con IA, open source, para WhatsApp
+# 🛠️ PJ CRM — el Sistema Operativo de Ventas con IA, open source, para WhatsApp
 
 **Agentes de IA que atienden, califican y venden en WhatsApp — dentro de un CRM open source que corre en tu propio servidor.**
 **Sin mensualidad, sin funciones bloqueadas, tus datos siguen siendo tuyos. La alternativa abierta a Kommo, Octadesk e Intercom.**
+
+<sub>PJ CRM es un fork de [DeskcommCRM](https://github.com/melgarafael/DeskcommCRM), de Rafael Melgaço, bajo licencia MIT.</sub>
 
 [![Next.js 16](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6?logo=typescript)](https://www.typescriptlang.org)
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres%2BAuth%2BStorage-3ecf8e?logo=supabase)](https://supabase.com)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-1%20comando-orange)](hostgator-setup-kit/)
-[![CI](https://github.com/melgarafael/DeskcommCRM/actions/workflows/ci.yml/badge.svg)](https://github.com/melgarafael/DeskcommCRM/actions/workflows/ci.yml)
+[![CI](https://github.com/nesqj/pj-crm/actions/workflows/ci.yml/badge.svg)](https://github.com/nesqj/pj-crm/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-ea4aaa?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/melgarafael)
@@ -25,7 +27,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [**⚡ Instalar**](#-instalar-en-tu-vps-el-camino-principal) · [**🔄 Actualizar**](#-actualizar) · [**🧭 Visión**](VISION.md) · [**🏗️ Arquitectura**](ARCHITECTURE.md) · [**🤝 Contribuir**](CONTRIBUTING.md) · [**🗺️ Roadmap**](#%EF%B8%8F-roadmap)
 
-<img src="docs/assets/demo-deskcomm.gif" alt="Demostración de DeskcommCRM: agentes de IA, embudo de ventas y prospección" width="800">
+<img src="docs/assets/demo-pjcrm.gif" alt="Demostración de PJ CRM: agentes de IA, embudo de ventas y prospección" width="800">
 
 </div>
 
@@ -33,7 +35,7 @@
 
 > ### ☁️ Corre este CRM en producción con 1 comando
 >
-> DeskcommCRM se desarrolla en **alianza con HostGator**: el [`hostgator-setup-kit/`](hostgator-setup-kit/)
+> PJ CRM se desarrolla en **alianza con HostGator**: el [`hostgator-setup-kit/`](hostgator-setup-kit/)
 > instala el CRM completo (app + WhatsApp + base de datos) en un VPS con un único comando, y el
 > [runbook de producción](docs/runbooks/waha-hostgator.md) ya asume ese entorno.
 >
@@ -45,7 +47,7 @@
 > devuelve el comando exacto para tu caso:
 >
 > ```bash
-> curl -fsSL https://raw.githubusercontent.com/melgarafael/DeskcommCRM/main/hostgator-setup-kit/comecar.sh | bash
+> curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/hostgator-setup-kit/comecar.sh | bash
 > ```
 >
 > *(¿prefieres leer antes de ejecutar? clona el repo y corre `bash hostgator-setup-kit/comecar.sh` —
@@ -79,8 +81,8 @@ presiona Enter.
 Ya dentro del VPS:
 
 ```bash
-git clone https://github.com/melgarafael/DeskcommCRM.git
-cd DeskcommCRM
+git clone https://github.com/nesqj/pj-crm.git
+cd pj-crm
 bash hostgator-setup-kit/install.sh
 ```
 
@@ -138,7 +140,7 @@ onboarding, escanea el código QR con el WhatsApp de tu número.
 ### 🤖 ¿Prefieres que una IA lo instale por ti?
 
 Suelta la carpeta `hostgator-setup-kit/` en el chat de **Claude Code** corriendo dentro del VPS
-y dile *"instálame el DeskcommCRM"*. Lee el [`CLAUDE.md`](hostgator-setup-kit/CLAUDE.md) del kit
+y dile *"instálame el PJ CRM"*. Lee el [`CLAUDE.md`](hostgator-setup-kit/CLAUDE.md) del kit
 — que trae el paso a paso y las trampas ya mapeadas — y conduce todo.
 
 ---
@@ -165,7 +167,7 @@ vuelta en el `.env` — sin eso, el siguiente reinicio traería la app rota de n
 ### Desde la terminal
 
 ```bash
-cd /ruta/al/DeskcommCRM
+cd /ruta/al/pj-crm
 bash hostgator-setup-kit/update.sh
 ```
 
@@ -216,7 +218,7 @@ base de datos en uso: solo restaura en una base de datos vacía (ver [`hostgator
 
 ## ✨ Qué es
 
-**Deskcomm** viene de **Desk** (escritorio) + **comm** (comercio): toda la operación de ventas de tu negocio en un solo escritorio, operada por personas y agentes de IA trabajando juntos.
+**PJ CRM** viene de **Desk** (escritorio) + **comm** (comercio): toda la operación de ventas de tu negocio en un solo escritorio, operada por personas y agentes de IA trabajando juntos.
 
 El proyecto nació como CRM de e-commerce y la comunidad lo llevó mucho más lejos: hoy corre en **clínicas, inmobiliarias, infoproductos, agencias, tiendas y prestadores de servicios** — cualquier negocio que venda por WhatsApp. El producto acompañó ese giro y se convirtió en un **sistema operativo de ventas**: agentes de IA con RAG por tenant atienden, califican, mueven leads en el embudo, disparan automatizaciones y saben cuándo pasarle la conversación a una persona — con todo el CRM expuesto vía **MCP** para que los agentes lo operen de verdad. La historia completa está en [`VISION.md`](VISION.md).
 
@@ -285,8 +287,8 @@ Detalles: [`ARCHITECTURE.md`](ARCHITECTURE.md).
 > Esta sección es para quien va a tocar el código.
 
 ```bash
-git clone https://github.com/melgarafael/DeskcommCRM.git
-cd DeskcommCRM
+git clone https://github.com/nesqj/pj-crm.git
+cd pj-crm
 
 nvm use                     # Node 22
 npm install -g pnpm && pnpm install
@@ -324,7 +326,7 @@ pnpm test:e2e      # Playwright (requiere dev server)
 **Estos checks son obligatorios** para mergear en `main`. Esta lista ya dijo "cuatro" y después "cinco" — **medí, no confíes en ella**:
 
 ```bash
-gh api repos/melgarafael/DeskcommCRM/branches/main/protection \
+gh api repos/nesqj/pj-crm/branches/main/protection \
   --jq '.required_status_checks.contexts|join(", ")'
 # el 2026-08-14: verify, build-and-size, invariants, e2e, imagens-ok
 ```
@@ -397,7 +399,7 @@ Dos gates obligatorios **no** entran ahí y solo corren en CI: `e2e` (necesita u
 
 <a id="contributors-"></a>
 
-## 🙌 Quienes construyen DeskcommCRM
+## 🙌 Quienes construyen PJ CRM
 
 Gracias a cada persona que ya contribuyó con código, un bug bien reportado, una idea, documentación o una traducción. Para entrar en esta lista, mira [cómo contribuir](CONTRIBUTING.md) ([leyenda de los íconos](https://allcontributors.org/docs/en/emoji-key)).
 
@@ -634,9 +636,9 @@ Gracias a cada persona que ya contribuyó con código, un bug bien reportado, un
 
 ## 🐛 Reportar bugs
 
-Abre un [issue](https://github.com/melgarafael/DeskcommCRM/issues/new/choose) — la plantilla pide lo que necesitamos (entorno, `/api/v1/health`, pasos). Correr `bash hostgator-setup-kit/healthcheck.sh` y pegar la salida ayuda mucho.
+Abre un [issue](https://github.com/nesqj/pj-crm/issues/new/choose) — la plantilla pide lo que necesitamos (entorno, `/api/v1/health`, pasos). Correr `bash hostgator-setup-kit/healthcheck.sh` y pegar la salida ayuda mucho.
 
-Para **vulnerabilidades de seguridad**, **NO abras un issue público** — usa el [reporte privado de vulnerabilidades](https://github.com/melgarafael/DeskcommCRM/security/advisories/new). Detalles en [`SECURITY.md`](SECURITY.md).
+Para **vulnerabilidades de seguridad**, **NO abras un issue público** — usa el [reporte privado de vulnerabilidades](https://github.com/nesqj/pj-crm/security/advisories/new). Detalles en [`SECURITY.md`](SECURITY.md).
 
 ---
 
@@ -658,7 +660,7 @@ Para **vulnerabilidades de seguridad**, **NO abras un issue público** — usa e
 
 ### 🔮 Próximo
 
-- **MCP público** — capacidades del CRM expuestas al ecosistema de agentes: enchufa el agente que quieras y opera el Deskcomm.
+- **MCP público** — capacidades del CRM expuestas al ecosistema de agentes: enchufa el agente que quieras y opera el PJ CRM.
 - **Plantillas por nicho** — embudos y vocabularios listos para clínicas, inmobiliarias, infoproductos y servicios (e-commerce ya entregado).
 - **Integraciones** — VTEX y Shopify vía adapter pattern (Nuvemshop ya entregado).
 - **Identidad probabilística** — unificación de contactos entre canales.
@@ -667,9 +669,9 @@ Para **vulnerabilidades de seguridad**, **NO abras un issue público** — usa e
 
 ## 💬 Comunidad
 
-- **Discusiones:** [GitHub Discussions](https://github.com/melgarafael/DeskcommCRM/discussions)
-- **Issues:** [GitHub Issues](https://github.com/melgarafael/DeskcommCRM/issues)
-- **Instagram:** [@melgarafael](https://www.instagram.com/melgarafael)
+- **Discusiones:** [GitHub Discussions](https://github.com/nesqj/pj-crm/discussions)
+- **Issues:** [GitHub Issues](https://github.com/nesqj/pj-crm/issues)
+- **Instagram:** [@nesqj](https://www.instagram.com/melgarafael)
 - **YouTube:** [youtube.com/@melgarafael](https://www.youtube.com/@melgarafael)
 
 ---

@@ -144,7 +144,7 @@ c="$(cenario)"
   git fetch -q origin main
   git checkout -q -
 )
-( cd "$c" && DESKCOMM_GOV_HOOKS_ATRASADOS_OK=1 bash loop/hooks/guard-hooks-atualizados.sh >/dev/null 2>&1 )
+( cd "$c" && PJCRM_GOV_HOOKS_ATRASADOS_OK=1 bash loop/hooks/guard-hooks-atualizados.sh >/dev/null 2>&1 )
 checa "a válvula libera o atrasado quando declarada" 0 $?
 rm -rf "$c"
 

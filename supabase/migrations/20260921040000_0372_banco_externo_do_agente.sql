@@ -5,7 +5,7 @@
 -- momento do recorte — o conteúdo é o dele, sem uma linha alterada.
 --
 -- ─── O buraco que isto fecha ────────────────────────────────────────────────
--- O DeskcommCRM fala com o banco dele, e só. Quando o dono tem um SEGUNDO CRM
+-- O PJ CRM fala com o banco dele, e só. Quando o dono tem um SEGUNDO CRM
 -- (ou qualquer sistema) que escreve num PostgreSQL à parte, esses dados eram
 -- invisíveis para o agente que atende no WhatsApp — e é justamente ali que mora
 -- o que o cliente pergunta (pedido, assinatura, matrícula, saldo).

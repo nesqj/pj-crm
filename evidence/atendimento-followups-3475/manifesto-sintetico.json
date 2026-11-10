@@ -13,12 +13,12 @@
   "users": {
     "manager": {
       "id": "33c67bfd-e622-457b-b788-ece49d1835c2",
-      "email": "e2e-manager@deskcomm.test",
+      "email": "e2e-manager@pjcrm.test",
       "password_env": "QA_3475_MANAGER_PASSWORD"
     },
     "viewer": {
       "id": "b3a161fd-419f-4c2d-8c64-e8eb06cb3582",
-      "email": "e2e-viewer@deskcomm.test",
+      "email": "e2e-viewer@pjcrm.test",
       "password_env": "QA_3475_VIEWER_PASSWORD"
     },
     "other_tenant": {

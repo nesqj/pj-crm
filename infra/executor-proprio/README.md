@@ -42,9 +42,9 @@ real é maior). 8 vagas cobrem os picos.
 ## Operação
 
 ```bash
-journalctl -u deskcomm-vaga@1 -f                          # log de uma vaga
-sudo bash /opt/deskcomm-executor/instalar.sh atualizar    # reconstrói a imagem agora
-systemctl list-timers deskcomm-executor-atualizar.timer   # próxima atualização automática
+journalctl -u pjcrm-vaga@1 -f                          # log de uma vaga
+sudo bash /opt/pjcrm-executor/instalar.sh atualizar    # reconstrói a imagem agora
+systemctl list-timers pjcrm-executor-atualizar.timer   # próxima atualização automática
 ```
 
 Vigiado por `tests/unit/executor-proprio-so-roda-o-que-e-nosso.test.ts`.

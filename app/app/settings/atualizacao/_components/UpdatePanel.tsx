@@ -14,7 +14,7 @@ import { useT } from "@/hooks/i18n/useT";
 import { irAoDesafioDeMfa } from "@/lib/auth/ir-ao-desafio-de-mfa";
 
 // Sem `cd <pasta>`: o instalador não fixa o nome da pasta do clone
-// (REPO_DIR é configurável, default "deskcommcrm" minúsculo) — quem tem
+// (REPO_DIR é configurável, default "pjcrm" minúsculo) — quem tem
 // acesso ao servidor já sabe entrar na pasta onde instalou.
 const COMANDO_MANUAL = "bash hostgator-setup-kit/update.sh";
 

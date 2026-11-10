@@ -4,23 +4,23 @@ coolify-proxy	145 MiB
 coolify-realtime	91 MiB
 coolify-redis	20 MiB
 coolify-sentinel	20 MiB
-deskcommcrm-app-1	284 MiB
-deskcommcrm-redis-1	11 MiB
-deskcommcrm-scheduler-1	30 MiB
-deskcommcrm-srh-1	98 MiB
-deskcommcrm-supabase-api-gw-1	35 MiB
-deskcommcrm-supabase-auth-1	39 MiB
-deskcommcrm-supabase-db-1	283 MiB
-deskcommcrm-supabase-functions-1	41 MiB
-deskcommcrm-supabase-imgproxy-1	76 MiB
-deskcommcrm-supabase-meta-1	172 MiB
-deskcommcrm-supabase-realtime-1	254 MiB
-deskcommcrm-supabase-rest-1	55 MiB
-deskcommcrm-supabase-storage-1	240 MiB
-deskcommcrm-supabase-studio-1	325 MiB
-deskcommcrm-supabase-supavisor-1	308 MiB
-deskcommcrm-waha-1	487 MiB
-deskcommcrm-worker-1	360 MiB
+pjcrm-app-1	284 MiB
+pjcrm-redis-1	11 MiB
+pjcrm-scheduler-1	30 MiB
+pjcrm-srh-1	98 MiB
+pjcrm-supabase-api-gw-1	35 MiB
+pjcrm-supabase-auth-1	39 MiB
+pjcrm-supabase-db-1	283 MiB
+pjcrm-supabase-functions-1	41 MiB
+pjcrm-supabase-imgproxy-1	76 MiB
+pjcrm-supabase-meta-1	172 MiB
+pjcrm-supabase-realtime-1	254 MiB
+pjcrm-supabase-rest-1	55 MiB
+pjcrm-supabase-storage-1	240 MiB
+pjcrm-supabase-studio-1	325 MiB
+pjcrm-supabase-supavisor-1	308 MiB
+pjcrm-waha-1	487 MiB
+pjcrm-worker-1	360 MiB
                total        used        free      shared  buff/cache   available
 Mem:            7940        1431        3611         110        2897        6094
 Swap:           4095        1679        2416

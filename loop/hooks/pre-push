@@ -13,7 +13,7 @@
 #    O que precisa de ritual é a MAIN, que é produção. Feature branch existe para
 #    ser revisada antes de chegar lá — o PR e o CI são o gate, e este hook não
 #    precisa duplicá-los. Escape SÓ para esta regra: o ritual de virada de fase
-#    (loop/CHECKPOINT.md) exporta DESKCOMM_GOV_PHASE_MERGE=1.
+#    (loop/CHECKPOINT.md) exporta PJCRM_GOV_PHASE_MERGE=1.
 #
 # 2) O FORK DE CONTRIBUIDOR (qualquer remoto que não seja o origin). Um agente
 #    preparou uma branch que NÃO continha os 12 commits do contribuidor, e só a
@@ -69,7 +69,7 @@ while read -r _local_ref local_sha remote_ref remote_sha; do
   if [ "$eh_origin" = "1" ]; then
     case "$remote_ref" in
       refs/heads/main | refs/heads/master)
-        [ "${DESKCOMM_GOV_PHASE_MERGE:-0}" = "1" ] || bloqueadas="$bloqueadas $remote_ref"
+        [ "${PJCRM_GOV_PHASE_MERGE:-0}" = "1" ] || bloqueadas="$bloqueadas $remote_ref"
         ;;
     esac
     continue
@@ -110,7 +110,7 @@ done
 if [ -n "$bloqueadas" ]; then
   echo "pre-push BLOQUEADO:$bloqueadas — a main é produção e não recebe push direto." >&2
   echo "Abra uma branch e um PR; o merge acontece pelo review + CI." >&2
-  echo "Virada de fase do gov-loop: loop/CHECKPOINT.md exporta DESKCOMM_GOV_PHASE_MERGE=1." >&2
+  echo "Virada de fase do gov-loop: loop/CHECKPOINT.md exporta PJCRM_GOV_PHASE_MERGE=1." >&2
   exit 1
 fi
 [ "$recusas" -gt 0 ] && exit 1

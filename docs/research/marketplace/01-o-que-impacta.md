@@ -219,21 +219,21 @@ no prompt de nenhum agente.
 | Espelho | `.claude/skills/<nome>/` — as mesmas 7 | gerado por `pnpm skills:sync` (`scripts/sincronizar-skills.ts`, `package.json:33`) |
 | Forma portátil | `.agents/skills/<nome>/agents/openai.yaml` — 1 por skill | (`diff -rq` mostra que o espelho `.claude/` **não** leva a pasta `agents/`) |
 | Gate | `tests/unit/skills-embutidas.test.ts` (229 linhas) | reprova espelho divergente, skill escondida por `.gitignore`, frontmatter fora do padrão, orçamento de 8 000 caracteres do Codex e skill dentro da imagem Docker |
-| Registro | `.agents/rules/deskcomm-guias.md` (`trigger: always_on`) | a tabela "quando usar cada guia" |
-| **Distribuição** | **`scripts/instalar-guias.sh`** (280 linhas) + `tests/shell/instalar-guias.test.sh` (21 casos) | `curl -fsSL …/scripts/instalar-guias.sh \| bash` mantém um **clone esparso da `main` em `~/.deskcomm/guias`** e liga cada `deskcomm-*` por link simbólico em `~/.claude/skills`, `~/.agents/skills` e `~/.gemini/config/skills` |
+| Registro | `.agents/rules/pjcrm-guias.md` (`trigger: always_on`) | a tabela "quando usar cada guia" |
+| **Distribuição** | **`scripts/instalar-guias.sh`** (280 linhas) + `tests/shell/instalar-guias.test.sh` (21 casos) | `curl -fsSL …/scripts/instalar-guias.sh \| bash` mantém um **clone esparso da `main` em `~/.pjcrm/guias`** e liga cada `pjcrm-*` por link simbólico em `~/.claude/skills`, `~/.agents/skills` e `~/.gemini/config/skills` |
 
 **Este é o achado mais reusável do inventário.** Já existe, provado por teste de shell, um canal de
 distribuição de artefatos do projeto para a máquina de quem usa, com: não-sobrescrita de artefato
-alheio, marca de procedência (`.deskcomm-fonte`), atualização por reexecução, `--remover` que só
+alheio, marca de procedência (`.pjcrm-fonte`), atualização por reexecução, `--remover` que só
 apaga o que ele criou, e fallback de cópia onde não há link simbólico. Uma skill nova de
 "criar extensão" **entra por esse caminho sem construir nada**.
 
 **O que isto obriga:** skill nova exige (a) pasta em `.agents/skills/`, (b) `pnpm skills:sync` para
-o espelho, (c) linha em `.agents/rules/deskcomm-guias.md`, (d) caber no orçamento de 8 000
+o espelho, (c) linha em `.agents/rules/pjcrm-guias.md`, (d) caber no orçamento de 8 000
 caracteres de descrição somadas, (e) o `--help` de `instalar-guias.sh` cita os guias **pelo nome**
 (`scripts/instalar-guias.sh:7-9`) — acrescentar um sem atualizar ali deixa o texto mentindo.
 
-**INFERIDO:** a prosa de `.agents/rules/deskcomm-guias.md:6` diz *"guias para cinco situações"* e
+**INFERIDO:** a prosa de `.agents/rules/pjcrm-guias.md:6` diz *"guias para cinco situações"* e
 lista 5 bullets + 2 no fim (7 skills no disco). Uma skill nova de extensões torna esse "cinco" uma
 afirmação de estado vencida (DoD 16). Não medi se algum gate lê esse número.
 
@@ -250,12 +250,12 @@ estático.** Uma vitrine pública não nasce daqui sem trabalho novo — ou nasc
 ### 5.3 A "vitrine" pública já existe, com esse nome, **e mora em outro repositório** — CONFIRMADO
 
 `docs/doctrine/versionamento.md:198` abre a seção **"A vitrine"**: a LP em
-`www.deskcomm.com.br`, repositório **`deskcomm-site`**, com `/changelog`, `/en/changelog`,
+`www.deskcomm.com.br`, repositório **`pjcrm-site`**, com `/changelog`, `/en/changelog`,
 `/es/changelog` (página por versão em `/changelog/X.Y.Z`) e **`/guias`**. Ela lê o `CHANGELOG.md`
 da `main` deste repo e revalida a cada 10 minutos; ninguém escreve release no site.
 
 O acoplamento é auditado dos dois lados: `tests/unit/release-chega-na-lp.test.ts` guarda a FORMA do
-cabeçalho `## [X.Y.Z] — AAAA-MM-DD` que `deskcomm-site/lib/changelog.ts` lê, e o job `cortar-tag`
+cabeçalho `## [X.Y.Z] — AAAA-MM-DD` que `pjcrm-site/lib/changelog.ts` lê, e o job `cortar-tag`
 **reprova a release** se a versão não aparecer nas três páginas em ~35 tentativas.
 
 Para saber se as páginas estão no ar (comando, não frase — `versionamento.md:213-217`):
@@ -274,7 +274,7 @@ transferência, e tira a régua do próprio `CHANGELOG.md` em vez de um número 
 verificações verdes (`run.txt`).
 
 **Consequência dura para o épico:** *"vitrine"* já é um termo ocupado, e o lugar natural de uma
-vitrine pública de extensões é o `deskcomm-site` — **fora deste repositório e fora do alcance dos
+vitrine pública de extensões é o `pjcrm-site` — **fora deste repositório e fora do alcance dos
 gates deste CI**. Qualquer item do épico que diga "página pública" atravessa uma fronteira de
 repositório.
 
@@ -389,13 +389,13 @@ coluna diz "não existe".
 
 | O épico quer… | Existe hoje | O que ele obrigatoriamente toca | Lei que o amarra |
 |---|---|---|---|
-| **1. Vitrine onde qualquer um descobre extensões** | `components/extensions/ExtensionCatalog.tsx` lista **só catálogos já admitidos na instalação** — não há descoberta pública | **Fora deste repo:** `deskcomm-site` (o `/guias` e `/changelog` são o molde). **Dentro:** `public/llms.txt` para descoberta por IA; nenhuma geração estática existe aqui (`generateStaticParams` → 0) | Não-neg. **11** (não anunciar marketplace público antes da prova); DEC-004 §1 (selo oficial ≠ catálogo alternativo) |
+| **1. Vitrine onde qualquer um descobre extensões** | `components/extensions/ExtensionCatalog.tsx` lista **só catálogos já admitidos na instalação** — não há descoberta pública | **Fora deste repo:** `pjcrm-site` (o `/guias` e `/changelog` são o molde). **Dentro:** `public/llms.txt` para descoberta por IA; nenhuma geração estática existe aqui (`generateStaticParams` → 0) | Não-neg. **11** (não anunciar marketplace público antes da prova); DEC-004 §1 (selo oficial ≠ catálogo alternativo) |
 | **1a. Botão "instalar na minha VPS" a partir da vitrine** | Impossível hoje: `install` só aceita `catalog_id` de catálogo **admitido por arquivo** (`lib/extensions/requests.ts:11`) | `POST /api/v1/extensions/catalogs` + `ExtensionCatalog.tsx` (fluxo de admissão); ou um caminho novo de admissão, que muda o modelo de confiança | Não-neg. **8** (admissão manual não é TUF; distribuição pública espera o verificador); spec :88-94 |
 | **1b. Contagem de downloads na vitrine** | **Não existe** — `grep -rnwiE "rating\|avaliacao\|review\|download_count\|downloads\|install_count"` sobre toda a feature devolve **1 linha, e é um comentário** (`components/extensions/ExtensionsManager.test.tsx:1334`) | Servidor de catálogo (processo separado, SQLite — spec :98), **nunca** a VPS | DEC-004 §3: métrica com método publicado; "downloads não são usuários ativos" impresso no painel |
 | **1c. Avaliações / estrelas** | **Não existe** (mesmo comando acima) | Servidor de catálogo + moderação | Não-neg. **11** (não prometer avaliações antes da prova) + DEC-004 §1 |
 | **1d. Página/descrição rica de cada extensão** | **Impossível com o contrato atual**: `ExtensionManifest` não tem homepage, repositório, autor, screenshot, tags, changelog nem README (`lib/extensions/manifest.ts:29-57`) | `lib/extensions/manifest.ts` (schema `.strict()`), `CatalogEntry`, a migration (manifesto persistido é revalidado) e **toda instalação existente** | Não-neg. **6** (troca de ponteiro com precondição) + doutrina de migrations (tripla) |
-| **2. Doutrina + skill embutida que ensine a criar extensão** | 7 skills em `.agents/skills/`; `deskcomm-contribuir` é o molde (`references/` + `scripts/` + `agents/openai.yaml`); doutrina já escrita em `docs/doctrine/extensoes.md` | `.agents/skills/<nova>/SKILL.md`; `pnpm skills:sync`; `.agents/rules/deskcomm-guias.md`; `tests/unit/skills-embutidas.test.ts` (orçamento de 8 000 caracteres); `scripts/instalar-guias.sh` (o `--help` nomeia os guias) | DoD 16 (o "cinco situações" do rules vira afirmação vencida) |
-| **2a. Redirecionar contribuidor de PR-no-núcleo para extensão** | `triagem/TRIAGEM.md:137` (2-bis) já classifica; `deskcomm-contribuir` é "o espelho da triagem" | `triagem/TRIAGEM.md` §2-bis **e** `docs/doctrine/extensoes.md` (a tabela está duplicada — mudar uma sem a outra as faz divergir) | DoD 18 |
+| **2. Doutrina + skill embutida que ensine a criar extensão** | 7 skills em `.agents/skills/`; `pjcrm-contribuir` é o molde (`references/` + `scripts/` + `agents/openai.yaml`); doutrina já escrita em `docs/doctrine/extensoes.md` | `.agents/skills/<nova>/SKILL.md`; `pnpm skills:sync`; `.agents/rules/pjcrm-guias.md`; `tests/unit/skills-embutidas.test.ts` (orçamento de 8 000 caracteres); `scripts/instalar-guias.sh` (o `--help` nomeia os guias) | DoD 16 (o "cinco situações" do rules vira afirmação vencida) |
+| **2a. Redirecionar contribuidor de PR-no-núcleo para extensão** | `triagem/TRIAGEM.md:137` (2-bis) já classifica; `pjcrm-contribuir` é "o espelho da triagem" | `triagem/TRIAGEM.md` §2-bis **e** `docs/doctrine/extensoes.md` (a tabela está duplicada — mudar uma sem a outra as faz divergir) | DoD 18 |
 | **2b. Um SDK / kit de criação de pacote** | **Não existe.** O único artefato de autoria é o JSON do manifesto | — | Não-neg. **11** proíbe **anunciar** SDK antes da prova |
 | **3. Jornada de instalar/ativar/usar excelente para leigo** | Implementada e provada: `ExtensionsManager.tsx`, `InstalledExtensionCard.tsx`, `ExtensionOperations.tsx`, `ExtensionGuide.tsx`; E2E `tests/e2e/extensoes-declarativas.spec.ts`, `extensoes-recuperacao.spec.ts`, `extensoes-versao.spec.ts` (J25/J26) | Esses componentes + `docs/testing/user-journey-map.md` (jornada nova) + evidência visual | DoD 12 (banco fresco do `baseline.sql`, envs opcionais ausentes) |
 | **3a. Porta na navegação para a vitrine** | `lib/navigation/catalogo.ts:697` já tem `/app/extensions` (grupo Organização) | `NAV_CATALOG` (`catalogo.ts`) + `lib/navigation/registry.ts` (ícone) + `tests/unit/navegacao-completude.test.ts` | DoD 14 |
@@ -453,14 +453,14 @@ Explícito, para que ninguém leia ausência como negativa:
 6. **Não li os 10 relatórios de `docs/research/extensoes/`** além do `README.md`. Em particular, o
    `01-o-que-impacta.md` daquela pasta responde a uma pergunta parecida com a minha, num SHA
    anterior (`25edc35b0`), e **não reconciliei** meus achados com os dele.
-7. **Não abri `deskcomm-site`.** Tudo que digo sobre a LP vem de `docs/doctrine/versionamento.md`,
+7. **Não abri `pjcrm-site`.** Tudo que digo sobre a LP vem de `docs/doctrine/versionamento.md`,
    de `tests/unit/release-chega-na-lp.test.ts` e da evidência em `evidence/lp-guias-changelog/`.
    Não rodei o `curl` das quatro páginas; **não sei se elas respondem 200 hoje**.
 8. **Não li os documentos internos de decisão** (PROG-016 a PROG-021, DEC-004). Eles estão **fora
    deste repositório** e a doutrina diz que o que vale para PR é a lei em `docs/doctrine/extensoes.md`.
    Onde cito "PROG-017 §11" estou repetindo o ponteiro da doutrina, não o conteúdo.
 9. **Não verifiquei a branch protection.** Repito a lista do `CLAUDE.md`; o comando que a mede é
-   `gh api repos/melgarafael/DeskcommCRM/branches/main/protection --jq '.required_status_checks.contexts|join(", ")'`.
+   `gh api repos/nesqj/pj-crm/branches/main/protection --jq '.required_status_checks.contexts|join(", ")'`.
 10. **Não li `scripts/sincronizar-skills.ts` nem `scripts/skills-embutidas/espelho.ts`.** Descrevi o
     espelho pelo cabeçalho do teste e por `diff -rq` de uma única skill.
 11. **Não medi o estoque de `.changes/`** (só vi que o diretório existe e tem fragmentos), nem rodei

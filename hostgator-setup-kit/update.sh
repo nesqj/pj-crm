@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Atualiza o DeskcommCRM na VPS: código novo + banco + app — com BACKUP antes e
+# Atualiza o PJ CRM na VPS: código novo + banco + app — com BACKUP antes e
 # CHECAGEM DE SAÚDE depois. Um comando só, pensado pra quem não é técnico:
 #
 #   bash hostgator-setup-kit/update.sh
@@ -32,7 +32,7 @@ aviso_rede_do_supabase
 # SUBSTITUI este — e de lá para baixo quem escreve o mesmo arquivo é
 # `restaurar_servicos`, que chama esta mesma função. Os dois caminhos escrevem
 # no MESMO arquivo, e o diagnóstico é silencioso: nunca na stdout.
-DIAGNOSTICO_ARQUIVO="$PROJECT_DIR/.deskcomm-update-diagnostico.log"
+DIAGNOSTICO_ARQUIVO="$PROJECT_DIR/.pjcrm-update-diagnostico.log"
 UPDATE_STATUS="em andamento"
 UPDATE_ETAPA="início, antes de decidir a versão"
 trap diagnostico_de_atualizacao EXIT
@@ -217,7 +217,7 @@ fi
 # backup, checkout, banco ou contêiner: recusar aqui não deixa nada pela metade.
 # Em AMD64 não há este pré-voo: toda imagem publicada tem amd64, e o preflight
 # geral abaixo (#1955) já confere as quatro imagens em toda arquitetura.
-# Com DESKCOMM_BUILD_LOCAL o escape da #1955 vale aqui também: quem pediu
+# Com PJCRM_BUILD_LOCAL o escape da #1955 vale aqui também: quem pediu
 # construção local não depende do registro, e recusá-la aqui a anularia
 # justamente com o registro fora.
 PLATAFORMA_HOST="$(plataforma_oci_do_host "$(uname -m 2>/dev/null || true)" 2>/dev/null || true)"
@@ -256,7 +256,7 @@ if ! MOTIVO_PREFLIGHT="$(preflight_atualizacao "$TARGET_TAG")"; then
     bash hostgator-setup-kit/update.sh"
 fi
 if build_local_pedido; then
-  c_grn "✓ preflight — o Docker respondeu; construção local pedida (DESKCOMM_BUILD_LOCAL), sem depender do registro."
+  c_grn "✓ preflight — o Docker respondeu; construção local pedida (PJCRM_BUILD_LOCAL), sem depender do registro."
 else
   c_grn "✓ preflight — as quatro imagens da $TARGET_TAG estão prontas no registro."
 fi
@@ -305,7 +305,7 @@ if [ -z "$SKIP_BACKUP" ]; then
   if bash "$KIT_DIR/backup.sh"; then
     c_grn "✓ backup feito. Ele só volta num banco VAZIO, não por cima deste (restore.sh; ver hostgator-setup-kit/README.md)."
   else
-    if [ -n "${DESKCOMM_AGENT_REPORT:-}" ] || [ ! -t 0 ]; then
+    if [ -n "${PJCRM_AGENT_REPORT:-}" ] || [ ! -t 0 ]; then
       die "O backup preventivo falhou. Atualização automática interrompida para proteger os dados."
     fi
     c_ylw "⚠ o backup falhou. A atualização NÃO apaga dados (só reorganiza os contatos),"
@@ -316,7 +316,7 @@ if [ -z "$SKIP_BACKUP" ]; then
 fi
 # Avisa o agente do host (se for ele quem está dirigindo) — é o que faz a tela
 # de atualização avançar passo a passo enquanto o app ainda está de pé.
-[ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" backup
+[ -n "${PJCRM_AGENT_REPORT:-}" ] && eval "${PJCRM_AGENT_REPORT_CMD}" backup
 
 # ── 3. Código novo ───────────────────────────────────────────────────────────
 step "Baixando o código novo"
@@ -356,7 +356,7 @@ if [ "${SINGLE_SERVER:-0}" = "1" ]; then
   atualizar_supabase_single_server || die "O Supabase desta VPS não subiu (erro acima). NÃO mexi no banco do CRM."
 fi
 
-[ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" codigo
+[ -n "${PJCRM_AGENT_REPORT:-}" ] && eval "${PJCRM_AGENT_REPORT_CMD}" codigo
 
 # ── 4. Banco: schema + correções de dados (schema ANTES do app) ──────────────
 # O baseline é idempotente e auto-curativo. Re-aplicar numa base que JÁ existe
@@ -445,7 +445,7 @@ if [ -f supabase/baseline.sql ]; then
   #
   # O segundo argumento de `reaplicar_baseline` já existe para isto e recebe
   # TODAS as passadas, cada uma com cabeçalho — melhor que a saída da última.
-  if reaplicar_baseline "$PROJECT_DIR/supabase/baseline.sql" "$PROJECT_DIR/.deskcomm-banco.log"; then
+  if reaplicar_baseline "$PROJECT_DIR/supabase/baseline.sql" "$PROJECT_DIR/.pjcrm-banco.log"; then
     if [ "$BASELINE_PASSADAS" -gt 1 ]; then
       c_grn "✓ banco atualizado na passada $BASELINE_PASSADAS — as anteriores não aplicaram tudo (banco ocupado ou conexão instável; o que faltou está listado acima)."
     else
@@ -593,7 +593,7 @@ if [ -f supabase/baseline.sql ]; then
     # E não é uma segunda cópia das 92 declarações: o comando sai do PRÓPRIO
     # `baseline.sql`, recortado dele. Nada aqui sabe o que uma regra diz.
     c_ylw "⚠ Faltaram regras de isolamento. Recriando exatamente as que faltam…"
-    faltam_arq="$PROJECT_DIR/.deskcomm-regras-faltando.txt"
+    faltam_arq="$PROJECT_DIR/.pjcrm-regras-faltando.txt"
     printf '%s\n' "$faltando" > "$faltam_arq"
 
     # A régua junta o comando INTEIRO — uma regra real ocupa várias linhas, e
@@ -622,7 +622,7 @@ if [ -f supabase/baseline.sql ]; then
 
     if [ -n "$recria" ]; then
       printf '%s\n' "$recria" | pg_container -i postgres:17-alpine \
-        psql "$(url_do_schema)" >> "$PROJECT_DIR/.deskcomm-banco.log" 2>&1 || true
+        psql "$(url_do_schema)" >> "$PROJECT_DIR/.pjcrm-banco.log" 2>&1 || true
     fi
     rm -f "$faltam_arq"
 
@@ -639,7 +639,7 @@ if [ -f supabase/baseline.sql ]; then
     c_red "   Sem elas o banco NEGA a leitura em silêncio: telas aparecem VAZIAS,"
     c_red "   sem erro nenhum, e isso é indistinguível de 'não há dados'."
     printf '%s\n' "$faltando" | sed 's/|/ na tabela /; s/^/   • /' | head -20
-    c_ylw "   O log do banco está em .deskcomm-banco.log — mande-o para o suporte."
+    c_ylw "   O log do banco está em .pjcrm-banco.log — mande-o para o suporte."
     c_ylw "   O backup NÃO volta por cima deste banco (restore.sh só em banco vazio): peça ajuda."
     # ⛔ E A ATUALIZAÇÃO PARA AQUI.
     #
@@ -681,7 +681,7 @@ fi
 # faltam e, se não conseguir, mantém o CRM parado. Sair antes dela deixaria o
 # trap subir o app sem regra — tela vazia para todo mundo.
 [ -z "$BANCO_RESTANTE" ] || die "O banco NÃO terminou limpo e os erros acima repetir não cura: a migration NÃO chegou. A atualização PARA aqui."
-[ -n "${DESKCOMM_AGENT_REPORT:-}" ] && eval "${DESKCOMM_AGENT_REPORT_CMD}" banco
+[ -n "${PJCRM_AGENT_REPORT:-}" ] && eval "${PJCRM_AGENT_REPORT_CMD}" banco
 
 # ── 4.5 E-mails de acesso, para quem já estava instalado ────────────────────
 # Só COM o token no ambiente, e por isso duas coisas:
@@ -705,7 +705,7 @@ fi
 # configurou à mão está certo, e ler "seus e-mails estão quebrados" numa
 # atualização que correu bem seria alarme falso na cara de quem fez tudo certo.
 AVISO_SITE_URL=""
-MARCA_AVISO_SITE_URL="$PROJECT_DIR/.deskcomm-site-url-avisado"
+MARCA_AVISO_SITE_URL="$PROJECT_DIR/.pjcrm-site-url-avisado"
 if [ -n "${SUPABASE_ACCESS_TOKEN:-}" ]; then
   bash "$KIT_DIR/marca-emails.sh" --projeto "$PROJECT_DIR" || true
   : > "$MARCA_AVISO_SITE_URL" 2>/dev/null || true   # o passo automático rodou
@@ -856,15 +856,15 @@ if ! subir_o_parque; then
   #
   # Quem tem registro respondendo continua se recuperando sozinho — é a
   # recuperação de arquitetura do #1060/#1143 e ela não pode sumir. Quem quer
-  # construir de propósito pede com DESKCOMM_BUILD_LOCAL=1.
+  # construir de propósito pede com PJCRM_BUILD_LOCAL=1.
   if ! build_local_permitido "$VERSAO_ALVO"; then
     c_red "✖ A atualização não terminou: o registro de imagens não responde, e a construção local está DESLIGADA por padrão."
     c_ylw "  Sem resposta do registro (DNS/rede) a construção local gastaria a memória"
     c_ylw "  desta VPS e deixaria os serviços parados — é exatamente o defeito da #1955."
     c_ylw "  A versão anterior volta sozinha no fim desta saída; o diagnóstico fica em:"
-    c_ylw "    .deskcomm-update-diagnostico.log"
+    c_ylw "    .pjcrm-update-diagnostico.log"
     c_ylw "  Para construir as imagens aqui DE PROPÓSITO (mais lento, exige memória):"
-    c_ylw "    DESKCOMM_BUILD_LOCAL=1 bash hostgator-setup-kit/update.sh --to $TARGET_TAG --force"
+    c_ylw "    PJCRM_BUILD_LOCAL=1 bash hostgator-setup-kit/update.sh --to $TARGET_TAG --force"
     exit 1
   fi
   if construir_aqui_e_subir "$VERSAO_ALVO"; then

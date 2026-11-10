@@ -3,7 +3,7 @@
 ✅ Seed completo. Credenciais escritas em .e2e-creds.json
 org: 896aac55-b412-44f2-abcd-bd47f76b2aba
 agent default: 62c305a0-03c1-4da3-9cb8-e81ebc1153c3
-users: admin(admin)=e2e-admin@deskcomm.test, manager(manager)=e2e-manager@deskcomm.test, agent(agent)=e2e-agent@deskcomm.test, viewer(viewer)=e2e-viewer@deskcomm.test, dono(admin)=e2e-dono@deskcomm.test
+users: admin(admin)=e2e-admin@pjcrm.test, manager(manager)=e2e-manager@pjcrm.test, agent(agent)=e2e-agent@pjcrm.test, viewer(viewer)=e2e-viewer@pjcrm.test, dono(admin)=e2e-dono@pjcrm.test
 ## seed-crm-vivo.ts (exit 0)
 
 ✅ Seed CRM Vivo completo: 12 leads em 6 estágios.

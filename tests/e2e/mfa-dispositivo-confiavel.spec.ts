@@ -24,7 +24,7 @@ import { generateTotp, msUntilNextTotpWindow } from "./utils/totp";
 const URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const svc = createClient(URL, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
 
-const SENHA = "Confiavel!2026#Deskcomm";
+const SENHA = "Confiavel!2026#PJ CRM";
 const email = `confiavel-${randomUUID().slice(0, 8)}@qa.local`;
 const EVIDENCIA = path.join(process.cwd(), ".superpowers", "evidence", "mfa-dispositivo-confiavel");
 const COOKIE = "mfa_dispositivo_confiavel";

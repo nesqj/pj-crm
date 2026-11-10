@@ -86,7 +86,7 @@ A prospecção é núcleo; o núcleo não deve importar de dentro de um módulo.
 
 ### 1.6 Busca de trabalho paralelo
 
-`gh search` no `melgarafael/DeskcommCRM` por "prospecção planilha", "prospecção csv",
+`gh search` no `nesqj/pj-crm` por "prospecção planilha", "prospecção csv",
 "importar prospecção", "lista própria prospecção", "prospecting import", "prospecção xlsx"
 (issues e PRs): **nenhum resultado** em 27/10, 21h.
 

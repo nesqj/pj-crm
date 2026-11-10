@@ -67,7 +67,7 @@
  * Em `/login` não há controle nenhum: a fachada é anterior à sessão. Lá o estado
  * é semeado em `localStorage` ANTES do primeiro byte (`addInitScript`), que é
  * exatamente o que o navegador de quem já escolheu escuro e saiu da conta faz —
- * `THEME_INIT_SCRIPT` (`app/layout.tsx:122`) lê `deskcomm-theme` no `<head>`.
+ * `THEME_INIT_SCRIPT` (`app/layout.tsx:122`) lê `pjcrm-theme` no `<head>`.
  */
 import { execFileSync } from "node:child_process";
 import * as fs from "node:fs";
@@ -457,7 +457,7 @@ test.describe("a moldura do logo no tema escuro", () => {
       contexto.on("page", esperarARevelacaoNasCargas);
       try {
         const pagina = await contexto.newPage();
-        await pagina.addInitScript((t) => window.localStorage.setItem("deskcomm-theme", t), tema);
+        await pagina.addInitScript((t) => window.localStorage.setItem("pjcrm-theme", t), tema);
         await pagina.goto("/login");
         expect(await temaDaPagina(pagina), `a fachada não ficou em ${tema}`).toBe(tema);
 
@@ -531,7 +531,7 @@ test.describe("a moldura do logo no tema escuro", () => {
       "ainda há um <img> na barra — o logo enviado não foi removido, e o caso mediria outra coisa",
     ).toHaveCount(0, { timeout: 15_000 });
 
-    const marca = barra.getByRole("img", { name: "DeskcommCRM" });
+    const marca = barra.getByRole("img", { name: "PJ CRM" });
     await expect(
       marca,
       "a barra não caiu no ramo `marcaDoProduto` — sem ele não há fronteira para medir",
@@ -632,7 +632,7 @@ test.describe("a moldura do logo no tema escuro", () => {
       contexto.on("page", esperarARevelacaoNasCargas);
       try {
         const fachada = await contexto.newPage();
-        await fachada.addInitScript((t) => localStorage.setItem("deskcomm-theme", t), tema);
+        await fachada.addInitScript((t) => localStorage.setItem("pjcrm-theme", t), tema);
         await fachada.goto("/login");
         const logoPublico = fachada.getByTestId(
           tema === "dark" ? "logo-escuro-da-fachada" : "logo-da-fachada",

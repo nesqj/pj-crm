@@ -186,7 +186,7 @@ reprovações espera — reprovar menos que o previsto denuncia mecanismo redund
 
 #### Ambiente de prova (montado pelo maestro, pronto antes da 1ª entrega)
 
-- **Banco**: Supabase local `pg17` já de pé (`supabase_db_deskcomm-crm`), que era o alvo
+- **Banco**: Supabase local `pg17` já de pé (`supabase_db_pj-crm`), que era o alvo
   que a doutrina exigia então (o `baseline.sql` usava `GRANT MAINTAIN`, privilégio pg17+).
   ⚠️ **Superado em 2026-09:** os 9 `GRANT … MAINTAIN` saíram do baseline (#422) e a doutrina
   hoje manda medir no PISO, pg15 (`supabase/config.toml`, `scripts/test-db.sh`); pg17 segue
@@ -199,7 +199,7 @@ reprovações espera — reprovar menos que o previsto denuncia mecanismo redund
   (`pnpm e2e:env` + `pnpm e2e:build`, que ainda prova que o host de produção não
   sobreviveu no bundle do browser); estou usando essa receita, não uma minha.
 - **Porta**: `E2E_PORT=3101`. Há um `next` vivo de **outra sessão** no worktree
-  `DeskcommCRM-qa-main`; porta própria para não colidir, e não matei processo nenhum —
+  `pj-crm-qa-main`; porta própria para não colidir, e não matei processo nenhum —
   `pkill` amplo nesta máquina mata o trabalho alheio.
 - **Ressalva declarada**: o Supabase local é **compartilhado** entre sessões. Não vou
   resetá-lo. As specs semeiam a própria org por rodada; se um vizinho rodar o seed no
@@ -366,7 +366,7 @@ para quem definir a convenção.
 O hook de pre-commit reprova commit de **merge** alegando `NNNN já existe na branch
 de origem` — condição que **todo merge satisfaz por definição**, já que o arquivo
 vem de lá. Conferido que não havia colisão real (`0145` só em `fv/fila`) antes de
-usar `DESKCOMM_GOV_MIGRATION_EDIT=1`. Falso positivo em gate treina a equipe a
+usar `PJCRM_GOV_MIGRATION_EDIT=1`. Falso positivo em gate treina a equipe a
 driblar o gate; vale consertar.
 
 #### Quando rodar o conjunto — a regra que faltava

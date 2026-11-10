@@ -2,7 +2,7 @@
  * Smoke da Stripe, FORA do CI: prova o adaptador contra a conta de TESTE real,
  * na STRIPE_VERSION fixada. Recusa chave de produção — sempre.
  *
- * Uso: STRIPE_TEST_SECRET_KEY="$(cat ~/.config/deskcomm/stripe-teste.key)" pnpm exec tsx scripts/smoke-stripe.ts
+ * Uso: STRIPE_TEST_SECRET_KEY="$(cat ~/.config/pjcrm/stripe-teste.key)" pnpm exec tsx scripts/smoke-stripe.ts
  *
  * Efeito na conta de teste: cria e apaga um cliente e uma assinatura, arquiva
  * dois produtos, e cria um endpoint de webhook de example.com com uma marca

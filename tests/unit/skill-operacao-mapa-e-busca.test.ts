@@ -1,7 +1,7 @@
 /**
  * O MAPA DA SKILL ACOMPANHA O MENU — E A BUSCA PERGUNTA NA HORA.
  *
- * A skill deskcomm-operacao ensinava só parte das telas do menu porque
+ * A skill pjcrm-operacao ensinava só parte das telas do menu porque
  * nada comparava o menu (lib/navigation/catalogo.ts) com o mapa dela. O script
  * scripts/conferir-mapa.sh faz essa comparação e AVISA (nunca reprova); o
  * scripts/buscar.sh lista o menu e procura nele, no CHANGELOG e na skill.
@@ -23,7 +23,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 
 const RAIZ = process.cwd();
-const SKILL = join(RAIZ, ".agents/skills/deskcomm-operacao");
+const SKILL = join(RAIZ, ".agents/skills/pjcrm-operacao");
 const BUSCAR = join(SKILL, "scripts/buscar.sh");
 const CONFERIR = join(SKILL, "scripts/conferir-mapa.sh");
 const CATALOGO = readFileSync(join(RAIZ, "lib/navigation/catalogo.ts"), "utf8");
@@ -42,7 +42,7 @@ function roda(script: string, args: string[], raiz: string): { saida: string; rc
     const saida = execFileSync("bash", [script, ...args], {
       cwd: raiz,
       encoding: "utf8",
-      env: { ...process.env, DESKCOMM_REPO: raiz },
+      env: { ...process.env, PJCRM_REPO: raiz },
     });
     return { saida, rc: 0 };
   } catch (erro: unknown) {
@@ -57,7 +57,7 @@ function roda(script: string, args: string[], raiz: string): { saida: string; rc
 function raizFalsa(citadas: string[], nomes: Record<string, string> = {}): string {
   const dir = mkdtempSync(join(tmpdir(), "mapa-"));
   mkdirSync(join(dir, "lib/navigation"), { recursive: true });
-  mkdirSync(join(dir, ".agents/skills/deskcomm-operacao/references"), { recursive: true });
+  mkdirSync(join(dir, ".agents/skills/pjcrm-operacao/references"), { recursive: true });
   const telas = [
     { href: "/app/inbox", label: "Inbox" },
     { href: "/app/radar", label: "Radar" },
@@ -74,7 +74,7 @@ function raizFalsa(citadas: string[], nomes: Record<string, string> = {}): strin
       .map((h) => `| ${nomes[h] ?? telas.find((x) => x.href === h)?.label ?? "Tela"} | Caminho \`${h}\` |\n`)
       .join("") +
     "\n";
-  writeFileSync(join(dir, ".agents/skills/deskcomm-operacao/references/mapa-da-interface.md"), mapa);
+  writeFileSync(join(dir, ".agents/skills/pjcrm-operacao/references/mapa-da-interface.md"), mapa);
   return dir;
 }
 

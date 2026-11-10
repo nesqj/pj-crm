@@ -59,7 +59,7 @@
 - Consumes: `manifesto_tem_plataforma` from Task 1 in the release job.
 - Produces: a failure if any of the four versioned public indexes lacks either platform; a voice smoke that distinguishes expected external-service failure from import/startup failure.
 
-- [ ] **Step 1: Write failing tests** that assert the workflow verifies four indexes *after* `juntar-manifestos` and *before* `promover-stable`, and that each native runner actually starts `deskcomm-voice-agent:pr` rather than only builds it. The shell test drives the smoke classifier with healthy-listener, missing-module and unexpected-exit fixtures.
+- [ ] **Step 1: Write failing tests** that assert the workflow verifies four indexes *after* `juntar-manifestos` and *before* `promover-stable`, and that each native runner actually starts `pjcrm-voice-agent:pr` rather than only builds it. The shell test drives the smoke classifier with healthy-listener, missing-module and unexpected-exit fixtures.
 - [ ] **Step 2: Run** targeted Vitest and `bash tests/shell/sonda-voice-agent-na-imagem.test.sh`; expected failure.
 - [ ] **Step 3: Add verification and smoke** while preserving `imagens-ok` as the required aggregate and fork-PR read-only permissions. Re-check both architectures on every versioned tag and never promote on an unverified/skipped job. Do not treat lack of real ARI as proof of a live call.
 - [ ] **Step 4: Run** targeted tests, `pnpm test:shell`, `pnpm gov:verify`; expected pass. Review the actual workflow graph and the next upstream Actions run before claiming publication success.

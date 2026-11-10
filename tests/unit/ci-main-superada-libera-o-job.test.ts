@@ -71,7 +71,7 @@ function contexto(workflow: string, alteracoes: Partial<Contexto> = {}): Context
     head: "novo",
     tentativa: "1",
     perna: "1",
-    imagem: "deskcommcrm",
+    imagem: "pjcrm",
     arquitetura: "amd64",
     ...alteracoes,
   };

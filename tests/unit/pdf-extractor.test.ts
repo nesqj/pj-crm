@@ -31,7 +31,7 @@ afterEach(() => {
 describe("extractPdfText", () => {
   it("extrai texto de um PDF real", async () => {
     const { extractPdfText } = await import("@/lib/ai/rag/extractors/pdf");
-    expect(await extractPdfText(fixture("sample-text.pdf"))).toBe("DeskcommCRM RAG fixture");
+    expect(await extractPdfText(fixture("sample-text.pdf"))).toBe("PJ CRM RAG fixture");
   });
 
   it("preserva a acentuação do português", async () => {
@@ -119,7 +119,7 @@ describe("extractPdfText", () => {
 /**
  * A SEGUNDA ESTRATÉGIA É A MESMA ENGINE NOUTRO PROCESSO.
  *
- * Medido na imagem `deskcomm-worker:1.27.1`: sob `tsx`, extrair a fixture de
+ * Medido na imagem `pjcrm-worker:1.27.1`: sob `tsx`, extrair a fixture de
  * 1 KB custa 117 MB de heap (o tsx transforma `pdf.mjs` + `pdf.worker.mjs`
  * inteiros); em `node` puro, 19 MB. Um PDF real de 18 KB passava dos 227 MB e
  * matava o worker (`heap limit`) — 313 reinícios em 2026-09-15.
@@ -172,7 +172,7 @@ describe("extractPdfText — estratégia `processo-a-parte`", () => {
     expect((erro as Error).message).toMatch(/sem responder/);
     expect((erro as Error).message).toMatch(/teto de heap 4 MB/);
     // O pai continua vivo e extraindo.
-    expect(await extractPdfText(fixture("sample-text.pdf"), A_PARTE)).toBe("DeskcommCRM RAG fixture");
+    expect(await extractPdfText(fixture("sample-text.pdf"), A_PARTE)).toBe("PJ CRM RAG fixture");
   });
 
   it("o filho que não responde a tempo é morto e vira PdfExtractError", async () => {

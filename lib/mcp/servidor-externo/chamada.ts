@@ -107,15 +107,15 @@ export interface OpcoesDeChamada {
  * eles e ignorar qualquer identificador vindo da conversa.
  */
 export const CABECALHOS_DO_CONTATO = {
-  id: "X-Deskcomm-Contato-Id",
-  telefone: "X-Deskcomm-Contato-Telefone",
-  canal: "X-Deskcomm-Canal",
+  id: "X-PJCRM-Contato-Id",
+  telefone: "X-PJCRM-Contato-Telefone",
+  canal: "X-PJCRM-Canal",
 } as const;
 
 const TIMEOUT_PADRAO_MS = 15_000;
 
 /** O `clientInfo.name` que o cliente MCP declara no `initialize` (identificador técnico). */
-export const NOME_DO_CLIENTE_MCP = "deskcomm-crm";
+export const NOME_DO_CLIENTE_MCP = "pj-crm";
 
 /**
  * O que a saída do processo confere antes de sair byte — injetável para o
@@ -213,7 +213,7 @@ async function comOCliente<T>(
     : {};
   const transporte = new StreamableHTTPClientTransport(new URL(servidor.endpoint), {
     // Identidade do contato antes, autenticação por último: nada do executor troca a chave.
-    // ponytail: sem HMAC extra — a chave Bearer do cadastro já autentica o Deskcomm perante o servidor.
+    // ponytail: sem HMAC extra — a chave Bearer do cadastro já autentica o PJ CRM perante o servidor.
     requestInit: { headers: { ...cabecalhos, ...autenticacao } },
     // O guard anti-SSRF entra POR AQUI (item 4): o SDK aceita `fetch` próprio e
     // é por ele que toda requisição deste transporte passa. Sem opção nenhuma o

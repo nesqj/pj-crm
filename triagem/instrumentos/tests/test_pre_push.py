@@ -24,7 +24,7 @@ class Mundo:
         self.env = dict(os.environ, GIT_CONFIG_GLOBAL="/dev/null", GIT_CONFIG_SYSTEM="/dev/null",
                         GIT_AUTHOR_NAME="t", GIT_AUTHOR_EMAIL="t@t", GIT_COMMITTER_NAME="t",
                         GIT_COMMITTER_EMAIL="t@t")
-        self.env.pop("DESKCOMM_GOV_PHASE_MERGE", None)
+        self.env.pop("PJCRM_GOV_PHASE_MERGE", None)
         up, fork, trab, autor = (os.path.join(self.dir, x) for x in ("upstream.git", "fork.git", "trab", "autor"))
         self.up, self.fork, self.trab, self.autor = up, fork, trab, autor
         self.g(self.dir, "init", "-q", "--bare", "-b", "main", up)
@@ -127,7 +127,7 @@ class PrePush(unittest.TestCase):
     def test_escape_do_gov_loop_nao_vale_para_fork(self):
         self.m.g(self.m.trab, "checkout", "-q", "-b", "certo", "contrib/feat/pr")
         self.m.g(self.m.trab, "commit", "-q", "--allow-empty", "-m", "x")
-        env = dict(self.m.env, DESKCOMM_GOV_PHASE_MERGE="1")
+        env = dict(self.m.env, PJCRM_GOV_PHASE_MERGE="1")
         r = self.m.push("--force", "contrib", "certo:feat/pr", env=env)
         self.assertNotEqual(r.returncode, 0)
 

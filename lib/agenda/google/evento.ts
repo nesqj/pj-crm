@@ -58,10 +58,10 @@ import { descricaoDoEvento } from "@/lib/agenda/contexto-do-negocio";
  * dali, todo evento criado antes da troca de marca deixaria de ser reconhecido.
  * O sintoma seria compromisso fantasma ocupando horário, sem erro nenhum.
  */
-export const SUFIXO_ICAL_UID = "deskcomm.app";
+export const SUFIXO_ICAL_UID = "pjcrm.app";
 
 /** Prefixo das `extendedProperties.private` que carregam a identidade do tenant. */
-export const PREFIXO_PROPRIEDADE = "deskcomm";
+export const PREFIXO_PROPRIEDADE = "pjcrm";
 
 /** Versão do formato das propriedades privadas — permite migrar sem adivinhar. */
 const VERSAO_DA_PROPRIEDADE = "1";
@@ -184,7 +184,7 @@ export interface AgendamentoParaGoogle {
   /**
    * Os convidados da equipe (#4006) — ids e e-mails resolvidos pelo executor.
    *
-   * Os IDs vão para `extendedProperties.private` do evento (`deskcomm_guests`):
+   * Os IDs vão para `extendedProperties.private` do evento (`pjcrm_guests`):
    * é como a passada seguinte sabe QUEM nós convidamos e consegue DESconvidar
    * quem foi tirado da lista. Sem esse registro, um convidado removido no CRM
    * continuaria no evento, porque os checkpoints guardam hashes, não e-mails.
@@ -375,7 +375,7 @@ function instanteValido(iso: string, campo: string): Date {
  * Uma função só, usada pelo POST e pelo PATCH (#4006): o PATCH que atualiza a
  * lista de convidados da equipe precisa reenviar as MESMAS chaves, senão o
  * evento deixaria de ser reconhecido como nosso na passada seguinte. O
- * `deskcomm_guests` só aparece quando há convidados da equipe a registrar.
+ * `pjcrm_guests` só aparece quando há convidados da equipe a registrar.
  */
 export function propriedadesPrivadas(a: {
   organization_id: string;

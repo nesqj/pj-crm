@@ -177,13 +177,13 @@ Para conferir o que os fragmentos de agora produziriam, sem escrever nada:
 pnpm release:conferir
 ```
 
-**O fragmento e o mapa da skill de operação.** A skill `deskcomm-operacao`
+**O fragmento e o mapa da skill de operação.** A skill `pjcrm-operacao`
 ensina ao operador onde fica cada tela, e um fragmento de `capacidade_nova`
 costuma trazer tela ou botão novo. Por isso, quando um PR traz fragmento (ou
 mexe no menu), o pré-voo e o CI conferem se toda tela do `catalogo.ts` está no
 mapa da skill e AVISAM (nunca reprovam). O conserto é acrescentar a tela em
 `references/mapa-da-interface.md` e rodar `pnpm skills:sync`. Comando:
-`bash .agents/skills/deskcomm-operacao/scripts/conferir-mapa.sh`.
+`bash .agents/skills/pjcrm-operacao/scripts/conferir-mapa.sh`.
 
 Três propriedades, e cada uma resolve um defeito medido:
 
@@ -240,7 +240,7 @@ Toda versão publicada aparece na página de changelog da LP, nos três idiomas:
 mudou sem abrir o GitHub.
 
 **Enquanto as três páginas não responderem 200, o parágrafo acima descreve o alvo e não o estado.**
-Elas nascem num PR do repositório `deskcomm-site`, e o corte depende delas: com a vitrine fora do
+Elas nascem num PR do repositório `pjcrm-site`, e o corte depende delas: com a vitrine fora do
 ar, o passo abaixo reprova **toda** release depois de 35 tentativas, cerca de meia hora de espera. Quem for cortar confere
 antes — o comando não envelhece, a frase envelheceria:
 
@@ -253,7 +253,7 @@ done
 Quatro `200` e esta seção vale como está escrita. Qualquer `404` e a ordem é a inversa: a vitrine
 entra no ar primeiro, o corte depois.
 
-**Ninguém escreve release no site.** A LP (repositório `deskcomm-site`) lê o `CHANGELOG.md` da
+**Ninguém escreve release no site.** A LP (repositório `pjcrm-site`) lê o `CHANGELOG.md` da
 `main` e revalida a cada 10 minutos. Então a regra de quem corta release não é "lembre de
 atualizar a LP" — regra que não protege quem a escreve —, e sim:
 
@@ -261,7 +261,7 @@ atualizar a LP" — regra que não protege quem a escreve —, e sim:
    seção que chegou à `main` de outro jeito também aparece: a LP lê o arquivo, não as Releases
    do GitHub. Foi o que salvou a v1.20.0, cuja tag foi criada à mão e nunca ganhou Release.
 2. **O cabeçalho da seção é contrato.** `## [X.Y.Z] — AAAA-MM-DD`, subseções em `###`. O leitor
-   da LP (`deskcomm-site/lib/changelog.ts`, outro repositório) usa a mesma expressão que
+   da LP (`pjcrm-site/lib/changelog.ts`, outro repositório) usa a mesma expressão que
    `tests/unit/release-chega-na-lp.test.ts` cobra aqui. Mudar o formato é mudar os dois
    repositórios no mesmo movimento.
 3. **O corte confere a consequência.** O último passo do job `cortar-tag` —

@@ -48,7 +48,7 @@ begin
                         (old.organization_id,old.contact_id,old.created_at)) end) then
     if current_user <> pg_get_userbyid((select proowner from pg_catalog.pg_proc
          where oid = 'public.fn_nascer_lead_da_mensagem(uuid,uuid,uuid,uuid,text,text,jsonb,text[],uuid,uuid)'::regprocedure))
-       or current_setting('deskcomm.meta_capi_birth_lead_id', true) is distinct from new.id::text then
+       or current_setting('pjcrm.meta_capi_birth_lead_id', true) is distinct from new.id::text then
       raise exception 'meta_capi_lead_birth_v1_reserved';
     end if;
   end if;
@@ -108,7 +108,7 @@ begin
      ) then
     -- O gatilho exige simultaneamente o owner da RPC e este ID temporário.
     -- Mesmo service_role/postgres fora deste nascimento não pode forjar a prova.
-    perform set_config('deskcomm.meta_capi_birth_lead_id', v_lead::text, true);
+    perform set_config('pjcrm.meta_capi_birth_lead_id', v_lead::text, true);
     update public.crm_leads set source_metadata =
       coalesce(source_metadata, '{}'::jsonb) ||
       jsonb_build_object('meta_capi_lead_birth_v1',
@@ -116,7 +116,7 @@ begin
           'ctwa_clid',v_click,'message_id',p_message,
           'conversation_id',p_conversation,'captured_at',v_msg.created_at))
       where organization_id = p_org and id = v_lead;
-    perform set_config('deskcomm.meta_capi_birth_lead_id', '', true);
+    perform set_config('pjcrm.meta_capi_birth_lead_id', '', true);
   end if;
 
   perform public.emit_event('lead.created','crm_lead',v_lead,

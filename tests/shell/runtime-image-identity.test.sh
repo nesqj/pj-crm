@@ -20,7 +20,7 @@ nome_do_projeto_atual() { printf 'example-crm'; }
 esc() { printf '%s' "$1"; }
 git() {
   if [ "${1:-}" = fetch ]; then
-    command git update-ref refs/deskcomm-runtime-tags/v1.2.0 "$BASE"
+    command git update-ref refs/pjcrm-runtime-tags/v1.2.0 "$BASE"
   else command git "$@"; fi
 }
 dc() {

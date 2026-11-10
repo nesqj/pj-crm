@@ -46,7 +46,7 @@ function pasta(): string {
   return dir;
 }
 
-/** Roda um trecho de bash com `_i18n.sh` carregado; `env` NÃO herda DESKCOMM_IDIOMA_CLI. */
+/** Roda um trecho de bash com `_i18n.sh` carregado; `env` NÃO herda PJCRM_IDIOMA_CLI. */
 function bash(script: string, opts: { cwd?: string; env?: Record<string, string> } = {}) {
   const env: NodeJS.ProcessEnv = { NODE_ENV: "test", PATH: process.env.PATH ?? "", HOME: process.env.HOME ?? "", KIT, ...opts.env };
   const r = spawnSync("bash", ["-c", `set -euo pipefail\nsource "$KIT/_i18n.sh"\n${script}`], {
@@ -88,52 +88,52 @@ describe("perguntar_idioma_cli: a ordem de decisão sem terminal", () => {
 
   it("lê o .env da pasta atual: a reexecução mantém o espanhol em vez de sobrescrevê-lo", () => {
     const dir = pasta();
-    writeFileSync(path.join(dir, ".env"), "OUTRA_CHAVE=1\nDESKCOMM_IDIOMA_CLI=es\n");
+    writeFileSync(path.join(dir, ".env"), "OUTRA_CHAVE=1\nPJCRM_IDIOMA_CLI=es\n");
     expect(idioma(dir)).toBe("es");
   });
 
   it("lê o .env de $REPO_DIR quando o script roda fora do repositório", () => {
     const dir = pasta();
     mkdirSync(path.join(dir, "meu-crm"));
-    writeFileSync(path.join(dir, "meu-crm", ".env"), "DESKCOMM_IDIOMA_CLI=es\n");
+    writeFileSync(path.join(dir, "meu-crm", ".env"), "PJCRM_IDIOMA_CLI=es\n");
     expect(idioma(dir, { REPO_DIR: "meu-crm" })).toBe("es");
   });
 
   it("aceita o valor entre aspas e ignora valor inválido", () => {
     const aspas = pasta();
-    writeFileSync(path.join(aspas, ".env"), 'DESKCOMM_IDIOMA_CLI="es"\n');
+    writeFileSync(path.join(aspas, ".env"), 'PJCRM_IDIOMA_CLI="es"\n');
     expect(idioma(aspas)).toBe("es");
     const invalido = pasta();
-    writeFileSync(path.join(invalido, ".env"), "DESKCOMM_IDIOMA_CLI=$(touch /tmp/nao-executa)\n");
+    writeFileSync(path.join(invalido, ".env"), "PJCRM_IDIOMA_CLI=$(touch /tmp/nao-executa)\n");
     expect(idioma(invalido)).toBe("pt-BR");
   });
 
   it("com a chave repetida vale a ÚLTIMA (como load_env), e um .env com CRLF é lido", () => {
     const repetida = pasta();
-    writeFileSync(path.join(repetida, ".env"), "DESKCOMM_IDIOMA_CLI=pt-BR\nDESKCOMM_IDIOMA_CLI=es\n");
+    writeFileSync(path.join(repetida, ".env"), "PJCRM_IDIOMA_CLI=pt-BR\nPJCRM_IDIOMA_CLI=es\n");
     expect(idioma(repetida)).toBe("es");
     const crlf = pasta();
-    writeFileSync(path.join(crlf, ".env"), "OUTRA_CHAVE=1\r\nDESKCOMM_IDIOMA_CLI=es\r\n");
+    writeFileSync(path.join(crlf, ".env"), "OUTRA_CHAVE=1\r\nPJCRM_IDIOMA_CLI=es\r\n");
     expect(idioma(crlf)).toBe("es");
   });
 
   it("a variável de ambiente vence o .env, e o .env nunca é executado", () => {
     const dir = pasta();
-    writeFileSync(path.join(dir, ".env"), "DESKCOMM_IDIOMA_CLI=es\n");
-    expect(idioma(dir, { DESKCOMM_IDIOMA_CLI: "pt-BR" })).toBe("pt-BR");
-    expect(idioma(dir, { DESKCOMM_IDIOMA_CLI: "es" })).toBe("es");
+    writeFileSync(path.join(dir, ".env"), "PJCRM_IDIOMA_CLI=es\n");
+    expect(idioma(dir, { PJCRM_IDIOMA_CLI: "pt-BR" })).toBe("pt-BR");
+    expect(idioma(dir, { PJCRM_IDIOMA_CLI: "es" })).toBe("es");
   });
 });
 
 describe("recarregar _i18n.sh (o que update.sh faz depois de load_env) não muda o idioma", () => {
-  it("com DESKCOMM_IDIOMA_CLI=es vindo do .env, sem perguntar_idioma_cli o idioma segue pt-BR", () => {
-    const r = bash(`export DESKCOMM_IDIOMA_CLI=es\nsource "$KIT/_i18n.sh"\nprintf '%s|%s' "$IDIOMA_CLI" "$(t "Gerando segredos")"`);
+  it("com PJCRM_IDIOMA_CLI=es vindo do .env, sem perguntar_idioma_cli o idioma segue pt-BR", () => {
+    const r = bash(`export PJCRM_IDIOMA_CLI=es\nsource "$KIT/_i18n.sh"\nprintf '%s|%s' "$IDIOMA_CLI" "$(t "Gerando segredos")"`);
     expect(r.saida).toBe("pt-BR|Gerando segredos");
   });
 
   it("depois de perguntar_idioma_cli (install.sh), recarregar mantém o es escolhido", () => {
     const dir = pasta();
-    writeFileSync(path.join(dir, ".env"), "DESKCOMM_IDIOMA_CLI=es\n");
+    writeFileSync(path.join(dir, ".env"), "PJCRM_IDIOMA_CLI=es\n");
     const r = bash(`perguntar_idioma_cli\nsource "$KIT/_i18n.sh"\nprintf '%s|%s' "$IDIOMA_CLI" "$(t "Gerando segredos")"`, {
       cwd: dir,
       env: { NONINTERACTIVE: "1" },
@@ -157,7 +157,7 @@ describe("bash antigo (< 4.4): sem tabela, sem espanhol, sem erro", () => {
   });
 
   it("quem pediu es recebe o aviso bilíngue e a instalação segue em pt-BR", () => {
-    const r = bash(`perguntar_idioma_cli; printf '%s' "$IDIOMA_CLI"`, { env: { ...antigo, NONINTERACTIVE: "1", DESKCOMM_IDIOMA_CLI: "es" } });
+    const r = bash(`perguntar_idioma_cli; printf '%s' "$IDIOMA_CLI"`, { env: { ...antigo, NONINTERACTIVE: "1", PJCRM_IDIOMA_CLI: "es" } });
     expect(r.saida).toBe("pt-BR");
     expect(r.erro).toMatch(/exige bash 4\.4/);
     expect(r.erro).toMatch(/requiere bash 4\.4/);
@@ -165,7 +165,7 @@ describe("bash antigo (< 4.4): sem tabela, sem espanhol, sem erro", () => {
 
   it("o es guardado no .env também gera o aviso; quem não pediu nada não vê ruído novo", () => {
     const guardado = pasta();
-    writeFileSync(path.join(guardado, ".env"), "DESKCOMM_IDIOMA_CLI=es\n");
+    writeFileSync(path.join(guardado, ".env"), "PJCRM_IDIOMA_CLI=es\n");
     const com = bash(`perguntar_idioma_cli; printf '%s' "$IDIOMA_CLI"`, { cwd: guardado, env: { ...antigo, NONINTERACTIVE: "1" } });
     expect(com.saida).toBe("pt-BR");
     expect(com.erro).toMatch(/requiere bash 4\.4/);

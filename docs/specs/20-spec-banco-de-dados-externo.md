@@ -143,4 +143,4 @@ externos** avisa em destaque até a coluna ser escolhida. Fora do turno, nada mu
 
 - Sincronizar/importar tabelas externas para entidades do CRM.
 - Console SQL livre pelo operador.
-- Escrita no banco externo pelo DeskcommCRM.
+- Escrita no banco externo pelo PJ CRM.
