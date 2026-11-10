@@ -457,4 +457,54 @@ describe("fetchInboundMedia não busca onde o payload mandar", () => {
     expect(r.mime).toBe("image/png");
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
+
+  it("não segue redirecionamento para endereço interno", async () => {
+    // Um host público que passou na guarda devolve 302 para o metadado de
+    // nuvem. Com o `fetch` seguindo 3xx sozinho, o salto acontecia DEPOIS da
+    // conferência; agora cada `Location` passa pela guarda de novo.
+    credsRef.current = CREDS;
+    fetchMock.mockClear();
+    fetchMock.mockResolvedValueOnce({
+      ok: false,
+      status: 302,
+      arrayBuffer: async () => new ArrayBuffer(0),
+      headers: new Headers({ location: "http://169.254.169.254/latest/meta-data/" }),
+    });
+    await expect(
+      zernioAdapter.fetchInboundMedia!({
+        organizationId: ORG,
+        sessionRef: CREDS.accountId,
+        url: "https://zernio.com/api/v1/media/abc123",
+      }),
+    ).rejects.toThrow();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0]?.[1]).toMatchObject({ redirect: "manual" });
+  });
+
+  it("segue o redirecionamento para CDN pública sem levar a credencial", async () => {
+    credsRef.current = CREDS;
+    fetchMock.mockClear();
+    fetchMock
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 302,
+        arrayBuffer: async () => new ArrayBuffer(0),
+        headers: new Headers({ location: "https://example.com/arquivo.png" }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        status: 200,
+        arrayBuffer: async () => new ArrayBuffer(4),
+        headers: new Headers({ "content-type": "image/png" }),
+      });
+    const r = await zernioAdapter.fetchInboundMedia!({
+      organizationId: ORG,
+      sessionRef: CREDS.accountId,
+      url: "https://zernio.com/api/v1/media/abc123",
+    });
+    expect(r.mime).toBe("image/png");
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const segundo = fetchMock.mock.calls[1]?.[1] as RequestInit | undefined;
+    expect(JSON.stringify(segundo?.headers ?? {})).not.toContain("Bearer");
+  });
 });

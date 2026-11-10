@@ -54,6 +54,9 @@ import type {
   RecipientInput,
 } from "../types";
 
+/** Quantos saltos de redirecionamento a mídia recebida ainda segue (http→https, CDN). */
+const MAXIMO_DE_SALTOS_DA_MIDIA = 3;
+
 /** Só dígitos. `+595 (99) 173-3685` → `595991733685`. */
 function toE164Digits(raw: string): string {
   return raw.replace(/\D/g, "");
@@ -386,10 +389,31 @@ export const zernioAdapter: ChannelAdapter = {
     // já usa em `lib/automation/actions/call-webhook.ts`: o textual recusa de
     // graça o que dá (esquema, http em produção, literal IPv6, faixa privada)
     // e o outro paga o DNS e julga o IP resolvido, fechando o rebinding.
-    assertSafeOutboundUrl(input.url);
-    await assertDestinoResolvidoSeguro(new URL(input.url).hostname);
-
-    const res = await fetch(input.url, zernioMediaFetchInit(creds.apiKey));
+    //
+    // E o redirecionamento é seguido À MÃO, com a guarda rodando de novo em cada
+    // `Location`: o `fetch` padrão segue 3xx sozinho, e um host que passou na
+    // conferência poderia devolver `302 → http://169.254.169.254/...` e o salto
+    // aconteceria depois dela (mesmo molde de `lib/catalogo/fotos-por-url.ts`).
+    // A credencial só vai ao host da URL original — o salto para uma CDN de
+    // outro host segue sem o `Authorization`.
+    const hostOriginal = new URL(input.url).host;
+    let alvo = input.url;
+    let res: Response | null = null;
+    for (let salto = 0; salto <= MAXIMO_DE_SALTOS_DA_MIDIA; salto += 1) {
+      assertSafeOutboundUrl(alvo);
+      await assertDestinoResolvidoSeguro(new URL(alvo).hostname);
+      const init: RequestInit =
+        new URL(alvo).host === hostOriginal ? zernioMediaFetchInit(creds.apiKey) : {};
+      const resposta = await fetch(alvo, { ...init, redirect: "manual" });
+      const desvio = resposta.headers?.get("location");
+      if (resposta.status >= 300 && resposta.status < 400 && desvio) {
+        alvo = new URL(desvio, alvo).toString();
+        continue;
+      }
+      res = resposta;
+      break;
+    }
+    if (!res) throw new Error("zernio_media_failed: redirecionamentos demais.");
     if (!res.ok) {
       // 400 costuma ser mídia já descartada pela plataforma, e 401 credencial —
       // desfechos diferentes, e o status no erro é o que distingue os dois para

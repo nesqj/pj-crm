@@ -48,6 +48,8 @@ describe("ipEhEspecial — faixas que um webhook nunca deve alcançar", () => {
     ["IPv6 ULA", "fc00::1"],
     ["IPv6 link-local", "fe80::1"],
     ["IPv4-mapped escondendo loopback", "::ffff:127.0.0.1"],
+    ["IPv4-mapped em hexadecimal escondendo loopback", "::ffff:7f00:1"],
+    ["IPv4-mapped por extenso escondendo metadado de nuvem", "0:0:0:0:0:ffff:a9fe:a9fe"],
     ["NAT64 (alcança IPv4 privado)", "64:ff9b::a00:1"],
     ["lixo", "não-é-ip"],
   ])("recusa %s", (_rotulo, ip) => {
