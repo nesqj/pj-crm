@@ -3,6 +3,7 @@ import { NavHub } from "@/components/shell/NavHub";
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
 import { traduzir } from "@/lib/i18n/dicionario";
 import { modulosLigados } from "@/lib/instalacao/modulos";
+import { capacidadesDaOrganizacao } from "@/lib/organizacao/capacidades";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export const dynamic = "force-dynamic";
@@ -29,10 +30,16 @@ export default async function SettingsHubPage() {
   const user = await requireAuth();
   const activeOrg = await resolveActiveOrg(user);
   const idioma = user.idioma;
+  // Sem isto o hub não filtra por capacidade, e o cartão "Modelos de proposta"
+  // aparecia com as propostas desligadas — e levava ao 404 do layout delas.
+  const capacidadesLigadas = activeOrg
+    ? await capacidadesDaOrganizacao(createAdminClient(), activeOrg.orgId)
+    : [];
 
   return (
     <NavHub
       group="organizacao"
+      capacidadesLigadas={capacidadesLigadas}
       isPlatformAdmin={user.is_platform_admin && !user.support}
       role={activeOrg?.role ?? null}
       interfaceSettings={activeOrg?.interface_settings}

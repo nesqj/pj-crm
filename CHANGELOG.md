@@ -8,6 +8,16 @@ Se você roda o PJ CRM numa VPS, **leia a seção da versão para a qual está a
 
 ## [Não lançado]
 
+## [2.0.2] — 2026-11-10
+
+Atualiza a partir da 2.0.1 pela tela de atualização, sem ação manual.
+
+### Corrigido
+
+- **"Modelos de proposta" não leva mais a uma página de erro.** Com as Propostas
+  desligadas, o cartão aparecia em Configurações e abria uma página 404. Agora ele só
+  aparece quando as Propostas estão ligadas na instalação e na empresa.
+
 ## [2.0.1] — 2026-11-10
 
 Atualiza a partir da 2.0.0 pela tela de atualização, sem ação manual.
