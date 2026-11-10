@@ -83,6 +83,23 @@ fi
 if [ -z "$release" ]; then
   release="$(cd "$ROOT" && bash -c 'source "$1/_common.sh" >/dev/null 2>&1; ultima_release_estavel' _ "$KIT" || true)"
 fi
+# O PJ CRM nasceu de um snapshot do DeskcommCRM, não de um fork do GitHub: não há
+# `parent` para perguntar, e o histórico (a v1.63.0 inclusive) não veio junto.
+# Sem release própria, a pergunta vai ao projeto de origem pelo nome.
+UPSTREAM="melgarafael/DeskcommCRM"
+case "$release" in
+  v[0-9]*) ;;
+  *)
+    if [ -n "${GH_TOKEN:-}" ] && command -v gh >/dev/null 2>&1; then
+      release="$(gh release view -R "$UPSTREAM" --json tagName -q .tagName 2>/dev/null || true)"
+    fi
+    if [ -z "$release" ]; then
+      release="$(curl -fsSL "https://api.github.com/repos/$UPSTREAM/releases/latest" 2>/dev/null \
+        | sed -nE 's/^ *"tag_name": *"(v[0-9][^"]*)".*/\1/p' | head -1 || true)"
+    fi
+    [ -n "$release" ] && origem_das_tags="https://github.com/$UPSTREAM.git"
+    ;;
+esac
 case "$release" in
   v[0-9]*) ;;
   *) echo "FATAL: não consegui saber qual é a última release publicada (sem rede? API fora?)." >&2
@@ -100,7 +117,8 @@ update_sh_da() {  # update_sh_da <tag> — caminho de uma cópia do update.sh da
   if ! git -C "$ROOT" rev-parse -q --verify "refs/tags/$1^{commit}" >/dev/null; then
     local profundidade=""
     [ "$(git -C "$ROOT" rev-parse --is-shallow-repository)" = true ] && profundidade="--depth=1"
-    git -C "$ROOT" fetch -q --no-tags $profundidade "$origem_das_tags" "+refs/tags/$1:refs/tags/$1"
+    git -C "$ROOT" fetch -q --no-tags $profundidade "$origem_das_tags" "+refs/tags/$1:refs/tags/$1" 2>/dev/null \
+      || git -C "$ROOT" fetch -q --no-tags $profundidade "https://github.com/$UPSTREAM.git" "+refs/tags/$1:refs/tags/$1"
   fi
   git -C "$ROOT" show "$1:hostgator-setup-kit/update.sh" > "$TMP/$1"
   printf '%s' "$TMP/$1"
