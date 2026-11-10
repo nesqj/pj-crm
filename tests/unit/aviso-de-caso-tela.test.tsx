@@ -1,0 +1,564 @@
+/**
+ * A TELA "AVISO NO WHATSAPP" — o que ela mostra e o que ela recusa a oferecer.
+ *
+ * ## O que este arquivo prova que o teste da regra não prova
+ *
+ * `aviso-de-caso-estado-da-tela.test.ts` mede os CÓDIGOS. Aqui mede-se que cada
+ * código vira uma frase legível na tela, que o seletor não oferece conexão que
+ * não manda texto livre, que o switch fica travado quando a regra diz que não
+ * dá para ligar, e que o botão de teste não aparece ativo antes de haver
+ * configuração salva.
+ *
+ * Os dois existem separados porque apagar uma frase e apagar uma regra são
+ * defeitos diferentes: o primeiro deixa a pessoa sem explicação, o segundo
+ * deixa o switch ligável quando ele não devia.
+ *
+ * ## Os hooks são mocados; o componente é renderizado de VERDADE
+ *
+ * Mocar o componente esconderia a peça do único teste que monta esta árvore.
+ */
+import { fireEvent, render, screen } from "@testing-library/react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import userEvent from "@testing-library/user-event";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+
+// jsdom não implementa captura de ponteiro; o gatilho do Select do Radix lê
+// `hasPointerCapture` antes de abrir (mesmo remédio do editor de regras).
+beforeAll(() => {
+  const proto = window.HTMLElement.prototype as unknown as Record<string, unknown>;
+  proto.hasPointerCapture ??= () => false;
+  proto.setPointerCapture ??= () => undefined;
+  proto.releasePointerCapture ??= () => undefined;
+  proto.scrollIntoView ??= () => undefined;
+});
+
+import type { EstadoDoAviso } from "@/hooks/ai/useAvisoDeCaso";
+
+const consulta = vi.fn();
+/**
+ * O `salvar` é módulo, e não um `vi.fn()` novo a cada render: o que este arquivo
+ * precisa medir, desde o #3935, é o CORPO que a tela manda — e um dublê que só
+ * existe dentro do render é uma caixa-preta.
+ */
+const salvarRegistrado = vi.fn(async (_corpo: Record<string, unknown>) => undefined);
+vi.mock("@/hooks/ai/useAvisoDeCaso", () => ({
+  CHAVE_DO_AVISO: ["ai-aviso-de-caso"],
+  useAvisoDeCaso: () => consulta(),
+  useSalvarAvisoDeCaso: () => ({ mutateAsync: salvarRegistrado, isPending: false }),
+  useRemoverAvisoDeCaso: () => ({ mutateAsync: vi.fn(), isPending: false }),
+  useTestarAvisoDeCaso: () => ({ mutateAsync: vi.fn(), isPending: false, data: undefined }),
+}));
+
+beforeEach(() => salvarRegistrado.mockClear());
+
+import { AvisoNoWhatsApp } from "@/app/app/ai/cases/avisos/_components/AvisoNoWhatsApp";
+
+const CANAL_QR = "11111111-1111-4111-8111-111111111111";
+const CANAL_OFICIAL = "22222222-2222-4222-8222-222222222222";
+
+const LACO_VAZIO = {
+  comAviso: { casos: 0, respondidos: 0, medianaMinutos: null },
+  semAviso: { casos: 0, respondidos: 0, medianaMinutos: null },
+  medianaAteOAvisoMinutos: null,
+};
+
+function estado(patch: Partial<EstadoDoAviso> = {}): EstadoDoAviso {
+  return {
+    config: {
+      channel_session_id: CANAL_QR,
+      telefone: "+5531998966398",
+      rotulo: "Plantão da Ana",
+      ligado: true,
+      resposta_whatsapp_habilitada: false,
+      atualizado_em: "2026-09-18T12:00:00.000Z",
+      destino_modo: "fixo",
+    },
+    // A equipe e o WhatsApp de cada um (#3803). Vazia nestes casos, que são
+    // sobre conexão, switch e remoção — no modo `fixo` ninguém é consultado.
+    equipe: [],
+    conexoes: [
+      { id: CANAL_QR, nome: "Plantão", status: "WORKING", aceitaMensagemLivre: true, atendeClientes: false },
+      { id: CANAL_OFICIAL, nome: "Oficial", status: "WORKING", aceitaMensagemLivre: false, atendeClientes: true },
+    ],
+    avisos: [],
+    pode_ligar: true,
+    entregas: [],
+    laco: LACO_VAZIO,
+    ...patch,
+  };
+}
+
+function montar(dados: EstadoDoAviso | undefined, extra: { isLoading?: boolean; error?: unknown } = {}) {
+  consulta.mockReturnValue({ data: dados, isLoading: extra.isLoading ?? false, error: extra.error ?? null });
+  return render(
+    <QueryClientProvider client={new QueryClient()}>
+      <AvisoNoWhatsApp />
+    </QueryClientProvider>,
+  );
+}
+
+describe("o seletor de conexão", () => {
+  it("só oferece quem manda texto livre — a capacidade, nunca o provedor", () => {
+    montar(estado());
+    // O canal oficial está na lista de conexões e NÃO está no seletor: ele
+    // aceitaria a configuração e nunca entregaria um aviso.
+    expect(screen.queryByText("Oficial")).toBeNull();
+  });
+
+  it("sem nenhuma conexão que sirva, o seletor fica desabilitado", () => {
+    montar(
+      estado({
+        conexoes: [
+          { id: CANAL_OFICIAL, nome: "Oficial", status: "WORKING", aceitaMensagemLivre: false, atendeClientes: true },
+        ],
+        config: null,
+      }),
+    );
+    // O seletor da CONEXÃO, pelo rótulo: desde o #3803 há um segundo combobox
+    // na tela (o modo do destino), e `getByRole("combobox")` passou a achar dois.
+    expect(screen.getByLabelText("Conexão que envia os avisos")).toBeDisabled();
+  });
+});
+
+describe("o número oficial com modelo aprovado (migration 9094)", () => {
+  const MODELO = {
+    id: "33333333-3333-4333-8333-333333333333",
+    nome: "aviso_da_equipe",
+    idioma: "pt_BR",
+    corpo: "🔔 Aviso do CRM\n\n{{1}}\n\nAbra o CRM.",
+  };
+  const oficialComModelo = {
+    id: CANAL_OFICIAL,
+    nome: "Oficial",
+    status: "WORKING",
+    aceitaMensagemLivre: false,
+    atendeClientes: false,
+    modelos: [MODELO],
+  };
+  const configOficial = (modelo_id: string | null) => ({
+    channel_session_id: CANAL_OFICIAL,
+    telefone: "+5531900000001",
+    rotulo: null,
+    ligado: false,
+    resposta_whatsapp_habilitada: false,
+    modelo_id,
+    atualizado_em: "2026-10-23T12:00:00.000Z",
+    destino_modo: "fixo" as const,
+  });
+
+  it("escolhido, ele pede o modelo e mostra a prévia do texto que vai sair", () => {
+    montar(estado({ conexoes: [oficialComModelo], config: configOficial(MODELO.id) }));
+    expect(screen.getByTestId("bloco-do-modelo")).toBeInTheDocument();
+    expect(screen.getByTestId("previa-do-modelo").textContent).toContain("{{1}}");
+    // Com o modelo que serve, o switch destrava como numa conexão de texto livre.
+    expect(screen.getByRole("switch", { name: "Receber avisos no WhatsApp" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeEnabled();
+  });
+
+  it("sem o modelo escolhido, nem liga nem salva", () => {
+    montar(estado({ conexoes: [oficialComModelo], config: configOficial(null) }));
+    expect(screen.getByTestId("bloco-do-modelo")).toBeInTheDocument();
+    expect(screen.queryByTestId("previa-do-modelo")).toBeNull();
+    expect(screen.getByRole("switch", { name: "Receber avisos no WhatsApp" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
+  });
+
+  it("a conexão SALVA cujo modelo saiu de vigor continua no seletor, e diz o que falta", () => {
+    montar(estado({ conexoes: [{ ...oficialComModelo, modelos: [] }], config: configOficial(MODELO.id) }));
+    expect(screen.getByTestId("conexao-sem-modelo").textContent).toContain("nenhum modelo aprovado");
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
+    expect(screen.getByRole("switch", { name: "Receber avisos no WhatsApp" })).toBeDisabled();
+  });
+
+  it("a conexão de texto livre não pede modelo nenhum", () => {
+    montar(estado({ conexoes: [estado().conexoes[0]!, oficialComModelo] }));
+    expect(screen.queryByTestId("bloco-do-modelo")).toBeNull();
+  });
+
+  it("o bloqueio do modelo vira frase, com o caminho para criar um", () => {
+    montar(
+      estado({
+        conexoes: [oficialComModelo],
+        config: configOficial(null),
+        avisos: [{ codigo: "oficial_sem_modelo", bloqueia: true, dados: { conexao: "Oficial", modelos: 1 } }],
+      }),
+    );
+    const bloco = screen.getByTestId("alerta-oficial_sem_modelo");
+    expect(bloco.dataset.bloqueia).toBe("sim");
+    expect(bloco.textContent).toContain("modelo dela com uma variável");
+  });
+});
+
+describe("os avisos de estado viram frase", () => {
+  it("cada código tem um bloco próprio, e o bloqueio é marcado no DOM", () => {
+    montar(
+      estado({
+        avisos: [
+          { codigo: "sem_endereco_publico", bloqueia: true },
+          { codigo: "conexao_atende_clientes", bloqueia: false, dados: { conexao: "Plantão" } },
+        ],
+      }),
+    );
+    const bloqueio = screen.getByTestId("alerta-sem_endereco_publico");
+    expect(bloqueio.dataset.bloqueia).toBe("sim");
+    expect(bloqueio.textContent).toContain("endereço público do sistema ainda não foi configurado");
+
+    const alerta = screen.getByTestId("alerta-conexao_atende_clientes");
+    expect(alerta.dataset.bloqueia).toBe("nao");
+    // Permitido, com alerta — é decisão registrada do dono do produto.
+    expect(alerta.textContent).toContain("mais seguro");
+  });
+
+  it("o aquecimento mostra os NÚMEROS, que é a informação que faltava", () => {
+    montar(
+      estado({
+        avisos: [
+          {
+            codigo: "aquecimento",
+            bloqueia: false,
+            // Meio-dia UTC de propósito: à meia-noite UTC esta data renderiza
+            // no DIA ANTERIOR em qualquer fuso a oeste, e o caso reprovaria por
+            // fuso da máquina — não por defeito da tela.
+            dados: { enviadosHoje: 7, teto: 20, fimEm: "2026-10-12T12:00:00.000Z" },
+          },
+        ],
+      }),
+    );
+    const bloco = screen.getByTestId("aquecimento-de-hoje");
+    expect(bloco.textContent).toContain("7");
+    expect(bloco.textContent).toContain("20");
+    expect(bloco.textContent).toContain("12/10");
+  });
+
+  it("o descarte diz o total e a data — nunca um número que o banco não guarda", () => {
+    montar(
+      estado({
+        avisos: [
+          {
+            codigo: "descarte_acontecendo",
+            bloqueia: false,
+            dados: { ignoradas: 3, ultimaEm: "2026-09-17T15:30:00.000Z" },
+          },
+        ],
+      }),
+    );
+    const bloco = screen.getByTestId("descarte-de-hoje");
+    expect(bloco.textContent).toContain("3");
+    expect(bloco.textContent).toContain("17/09");
+  });
+
+  it("o texto do descarte segue a opção de responder casos pelo WhatsApp", () => {
+    const descarte = (comandos: number) =>
+      estado({
+        avisos: [
+          {
+            codigo: "descarte_acontecendo",
+            bloqueia: false,
+            dados: { ignoradas: 3, ultimaEm: "2026-09-17T15:30:00.000Z", comandos },
+          },
+        ],
+      });
+    const { unmount } = montar(descarte(0));
+    expect(screen.getByTestId("alerta-descarte_acontecendo").textContent).toContain(
+      "não chega ao CRM",
+    );
+    expect(screen.getByTestId("alerta-descarte_acontecendo").textContent).not.toContain("RESPONDER");
+    unmount();
+    montar(descarte(1));
+    expect(screen.getByTestId("alerta-descarte_acontecendo").textContent).toContain("RESPONDER");
+  });
+
+  it("instalação saudável não mostra bloco de alerta nenhum", () => {
+    montar(estado());
+    expect(screen.queryByTestId("alertas-do-aviso")).toBeNull();
+  });
+});
+
+describe("o switch e o botão de teste", () => {
+  it("o switch fica travado quando a regra diz que não dá para ligar", () => {
+    montar(estado({ pode_ligar: false, config: null }));
+    expect(screen.getByRole("switch", { name: "Receber avisos no WhatsApp" })).toBeDisabled();
+  });
+
+  it("sem endereço público o switch fica travado MESMO com conexão e número salvos", () => {
+    // O caso que um `||` entre "o servidor deixa" e "o rascunho está completo"
+    // deixaria passar: o aviso nasceria ligado com um link que não abre nada.
+    montar(
+      estado({
+        pode_ligar: false,
+        avisos: [{ codigo: "sem_endereco_publico", bloqueia: true }],
+      }),
+    );
+    expect(screen.getByRole("switch", { name: "Receber avisos no WhatsApp" })).toBeDisabled();
+  });
+
+  it("com tudo em ordem o switch destrava", () => {
+    montar(estado());
+    expect(screen.getByRole("switch", { name: "Receber avisos no WhatsApp" })).toBeEnabled();
+  });
+
+  it("o botão de teste só fica ativo com configuração SALVA", () => {
+    montar(estado({ config: null }));
+    expect(screen.getByRole("button", { name: /teste/i })).toBeDisabled();
+
+    montar(estado());
+    expect(screen.getAllByRole("button", { name: /teste/i }).at(-1)).toBeEnabled();
+  });
+
+  it("o preço do teste está escrito ANTES do clique", () => {
+    montar(estado());
+    expect(screen.getByText(/conta no limite diário desse número/i)).toBeInTheDocument();
+  });
+});
+
+describe("a lista de entregas", () => {
+  it("vazia, explica o que vai aparecer ali — e não finge que está tudo bem", () => {
+    montar(estado());
+    const vazia = screen.getByTestId("entregas-vazias");
+    expect(vazia.textContent).toContain("Ainda não há avisos de casos nesta lista");
+    expect(vazia.textContent).toContain("inclusive se falharem");
+    expect(screen.getByRole("heading", { name: "Últimos avisos de casos" })).toBeInTheDocument();
+    expect(screen.getByText(/o resultado dos avisos de transferência para atendimento humano/i).textContent)
+      .toContain("respectivo item da Central de alertas");
+  });
+
+  it("mostra a situação, o destino MASCARADO e a frase do erro", () => {
+    montar(
+      estado({
+        entregas: [
+          {
+            id: "e1",
+            case_id: "c1",
+            update_event_id: null,
+            destino_mascarado: "••••6398",
+            status: "falhou",
+            erro_codigo: "teto_diario_do_numero",
+            tentativas: 3,
+            enviado_em: null,
+            created_at: "2026-09-17T10:00:00.000Z",
+          },
+          {
+            id: "e2",
+            case_id: "c1",
+            update_event_id: "u1",
+            destino_mascarado: "••••6398",
+            status: "enviado",
+            erro_codigo: null,
+            tentativas: 1,
+            enviado_em: "2026-09-17T11:00:00.000Z",
+            created_at: "2026-09-17T11:00:00.000Z",
+          },
+        ],
+      }),
+    );
+    const lista = screen.getByTestId("lista-de-entregas");
+    expect(lista.textContent).toContain("••••6398");
+    expect(lista.textContent).toContain("limite diário do período de aquecimento");
+    expect(lista.querySelectorAll("li")[0]?.textContent).toContain("Abertura");
+    expect(lista.querySelectorAll("li")[1]?.textContent).toContain("Resposta do cliente");
+    // O número inteiro nunca entra nesta lista: quem a lê pode ser `manager`.
+    expect(lista.textContent).not.toContain("998966398");
+  });
+});
+
+describe("o que a tela diz sem ninguém perguntar", () => {
+  it("diz quando o aviso de caso sai de novo, quando não sai, e separa do episódio de transferência", () => {
+    montar(estado());
+    const avisoDeCaso = screen.getByText(/sai de novo quando ele registra a resposta do cliente/i);
+    expect(avisoDeCaso.textContent).toContain("esse segundo aviso não sai");
+    expect(avisoDeCaso.textContent).toContain("a cobrança segue pela Central de alertas");
+    const transferencia = screen.getByText(/nas transferências para atendimento humano/i);
+    expect(transferencia.textContent).toContain("uma tentativa de aviso por episódio");
+    expect(transferencia.textContent).toContain("sem resumo da conversa");
+    expect(transferencia.textContent).toContain(
+      "Depois de retomar o atendimento automático, uma nova transferência pode gerar outro aviso",
+    );
+    expect(transferencia.textContent).toContain("Consulte o resultado na Central de alertas");
+    expect(transferencia.textContent).toContain("responda ao cliente pelo CRM");
+  });
+
+  it("o laço de retorno sem amostra diz que não há amostra, e não mostra zero", () => {
+    montar(estado());
+    const laco = screen.getByTestId("laco-do-aviso");
+    expect(laco.textContent).toContain("Ainda não há casos suficientes");
+    expect(laco.textContent).not.toContain("0 min");
+  });
+
+  it("com amostra, os dois grupos aparecem lado a lado", () => {
+    montar(
+      estado({
+        laco: {
+          comAviso: { casos: 4, respondidos: 3, medianaMinutos: 12 },
+          semAviso: { casos: 6, respondidos: 5, medianaMinutos: 190 },
+          medianaAteOAvisoMinutos: 1,
+        },
+      }),
+    );
+    const laco = screen.getByTestId("laco-do-aviso");
+    expect(laco.textContent).toContain("12 min");
+    expect(laco.textContent).toContain("190 min");
+  });
+});
+
+describe("a remoção do destinatário (issue #3338)", () => {
+  it("só aparece com configuração SALVA — antes disso não há o que remover", () => {
+    montar(estado({ config: null }));
+    expect(screen.queryByRole("button", { name: /remover destinatário/i })).toBeNull();
+
+    montar(estado());
+    expect(
+      screen.getAllByRole("button", { name: /remover destinatário/i }).at(-1),
+    ).toBeInTheDocument();
+  });
+
+  it("a confirmação diz a consequência ANTES de apagar, e dá como voltar atrás", () => {
+    montar(estado());
+    fireEvent.click(screen.getByRole("button", { name: "Remover destinatário" }));
+
+    const bloco = screen.getByTestId("confirmar-remocao");
+    expect(bloco.textContent).toContain("volta a ser um número comum");
+    // A configuração apagada também é lida pela Agenda e pela ação "Mensagem
+    // para a equipe": a confirmação tem de dizer que esses envios param junto.
+    expect(bloco.textContent).toContain("Agenda");
+    expect(bloco.textContent).toContain("Mensagem para a equipe");
+    expect(screen.getByRole("button", { name: "Manter" })).toBeInTheDocument();
+
+    // Desistir fecha a pergunta e não é remoção nenhuma.
+    fireEvent.click(screen.getByRole("button", { name: "Manter" }));
+    expect(screen.queryByTestId("confirmar-remocao")).toBeNull();
+  });
+
+  it("a remoção é OUTRA coisa que o switch: a tela diz isso", () => {
+    montar(estado());
+    expect(screen.getByText(/sai da configuração e volta a entrar no Inbox/i)).toBeInTheDocument();
+  });
+});
+
+describe("a tela degrada sem mentir", () => {
+  it("falha de leitura não vira formulário vazio ligável", () => {
+    montar(undefined, { error: new Error("boom") });
+    expect(screen.queryByRole("switch")).toBeNull();
+    expect(screen.getByText(/Não foi possível abrir esta tela agora/i)).toBeInTheDocument();
+  });
+});
+
+describe("o membro da equipe que também é cliente (#3900)", () => {
+  it("o bloco da equipe diz que o número dele CONTINUA entrando no CRM", () => {
+    // A tela é o único lugar em que a pessoa vê a diferença entre "só recebe
+    // avisos" e "número interno". Sem esta frase, quem configura o modo
+    // `responsavel` lê o aviso de um membro da equipe como se fosse o plantão.
+    montar(
+      estado({
+        config: {
+          channel_session_id: CANAL_QR,
+          telefone: "+5531998966398",
+          rotulo: "Plantão da Ana",
+          ligado: true,
+          resposta_whatsapp_habilitada: false,
+          atualizado_em: "2026-09-18T12:00:00.000Z",
+          destino_modo: "responsavel",
+        },
+        equipe: [
+          {
+            user_id: "5f000000-0000-4000-8000-00000000a001",
+            nome: "Ana",
+            whatsapp: "+5531998887777",
+          },
+        ],
+      }),
+    );
+    const frase = screen.getByTestId("membro-que-tambem-e-cliente");
+    expect(frase.textContent).toContain("continua entrando no CRM");
+    expect(frase.textContent).toContain("número interno");
+  });
+});
+
+/**
+ * #3935 — A TELA QUE NÃO MOSTROU NÃO PODE APAGAR O WHATSAPP DA EQUIPE.
+ *
+ * O defeito não estava no banco sozinho: quando não havia configuração salva, o
+ * rascunho voltava com o mapa de números vazio, os campos nasciam em branco e o
+ * corpo mandava `null` para cada membro da equipe — apagando do banco o número
+ * de quem a tela nem exibiu. Estes casos medem o CORPO que sai da tela, que é
+ * onde o dado se perdia.
+ */
+describe("o WhatsApp da equipe quando ainda não há configuração salva (#3935)", () => {
+  const ATENDENTE = "5f000000-0000-4000-8000-00000000b001";
+  const NUMERO_DA_ATENDENTE = "+5531988883935";
+  const NUMERO_DO_AVISO = "+5531977773935";
+
+  function semConfiguracao(patch: Partial<EstadoDoAviso> = {}) {
+    return montar(
+      estado({
+        config: null,
+        equipe: [{ user_id: ATENDENTE, nome: "Ana", whatsapp: NUMERO_DA_ATENDENTE }],
+        ...patch,
+      }),
+    );
+  }
+
+  /** O caminho da issue: escolher a conexão, digitar o número do aviso e salvar. */
+  async function preencherESalvar() {
+    const user = userEvent.setup({ delay: null });
+    await user.click(screen.getByLabelText("Conexão que envia os avisos"));
+    await user.click(await screen.findByRole("option", { name: "Plantão" }));
+    fireEvent.change(screen.getByLabelText("Número que recebe os avisos"), {
+      target: { value: NUMERO_DO_AVISO },
+    });
+    await user.click(screen.getByRole("button", { name: "Salvar" }));
+  }
+
+  function corpoEnviado() {
+    return salvarRegistrado.mock.calls[0]![0] as unknown as {
+      responsaveis: Array<{ user_id: string; whatsapp?: string | null }>;
+    };
+  }
+
+  it("o rascunho parte dos números GRAVADOS, e não de campos vazios", async () => {
+    semConfiguracao();
+    await preencherESalvar();
+
+    const corpo = corpoEnviado();
+    expect(corpo.responsaveis).toHaveLength(1);
+    expect(corpo.responsaveis[0]!.user_id).toBe(ATENDENTE);
+    // Antes do #3935 este campo ia `null`: a tela apagava o número de quem nunca
+    // pediu, e ninguém era avisado.
+    expect(corpo.responsaveis[0]!.whatsapp).toBe(NUMERO_DA_ATENDENTE);
+  });
+
+  it("quem está sem número vai como `null` — apagar de propósito segue possível", async () => {
+    semConfiguracao({ equipe: [{ user_id: ATENDENTE, nome: "Ana", whatsapp: null }] });
+    await preencherESalvar();
+
+    expect(corpoEnviado().responsaveis[0]!.whatsapp).toBeNull();
+  });
+
+  it("a equipe que não pôde ser lida aparece como falha, e não como \"não há ninguém\"", () => {
+    montar(
+      estado({
+        config: { ...estado().config!, destino_modo: "responsavel" },
+        equipe: [],
+        equipe_indisponivel: true,
+      }),
+    );
+
+    expect(screen.getByTestId("equipe-indisponivel").textContent).toContain("Atualize a página");
+    // Sem saber quem tem número, o modo `responsavel` não se salva às cegas.
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeDisabled();
+    expect(screen.queryByText("Ainda não há outras pessoas nesta organização.")).toBeNull();
+  });
+
+  it("controle: com a equipe LIDA e vazia, a frase é a de sempre e o salvar funciona", () => {
+    montar(
+      estado({
+        config: { ...estado().config!, destino_modo: "responsavel" },
+        equipe: [],
+        equipe_indisponivel: false,
+      }),
+    );
+
+    expect(screen.queryByTestId("equipe-indisponivel")).toBeNull();
+    expect(screen.getByText("Ainda não há outras pessoas nesta organização.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Salvar" })).toBeEnabled();
+  });
+});
