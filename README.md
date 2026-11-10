@@ -3,8 +3,8 @@
 🇧🇷 Português · [🇺🇸 English](README.en.md) · [🇪🇸 Español](README.es.md)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/pjcrm-logo-dark.svg">
-  <img src="docs/brand/pjcrm-logo.svg" alt="PJ CRM" width="420">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-escuro.png">
+  <img src="docs/brand/logo-claro.png" alt="PJ CRM" width="240">
 </picture>
 
 # 🛠️ PJ CRM — o Sistema Operacional de Vendas com IA, open source, pro WhatsApp

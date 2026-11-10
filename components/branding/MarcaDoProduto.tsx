@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
  * ninguém configurou marca própria (`marcaEhADoProduto`, em `lib/branding.ts`).
  *
  * Inline, e não `<img src="/algo.svg">`, por três motivos:
- *  - as cores seguem o TEMA: sálvia mais clara e nome em creme no escuro, como
- *    a régua do produto já define — um arquivo estático teria uma cor só;
+ *  - as cores seguem o TEMA: corpo preto no claro e branco no escuro — um
+ *    arquivo estático teria uma cor só;
  *  - nada em `public/`: um `.svg` fixo ali seria servido na instalação de um
  *    revendedor que configurou a marca dele (ver `lib/branding/desenho.ts`);
  *  - a barra lateral já usa `<img>` para o logo CONFIGURADO, e o e2e
@@ -26,18 +26,16 @@ type Props = {
   readonly decorativo?: boolean;
 };
 
-const SIMBOLO_CLARO_ESCURO = "fill-[#0023fa] dark:fill-[#5287ff]";
-const NOME_CLARO_ESCURO = "fill-[#1c1a16] dark:fill-[#f5f4ef]";
-const SUFIXO_CLARO_ESCURO = "fill-[#5d594f] dark:fill-[#8e8b7f]";
+const CORPO_CLARO_ESCURO = "fill-[#040303] dark:fill-[#fffdfd]";
+const DESTAQUE_CLARO_ESCURO = "fill-[#0026fd] dark:fill-[#0026fd]";
 
 // As classes acima repetem os hexes de `CORES_DA_MARCA` porque o Tailwind só
 // gera utilitário para valor LITERAL no fonte. Quem impede os dois de divergirem
 // é `tests/unit/marca-do-produto.test.tsx`, que compara as classes à paleta —
 // e não uma asserção em runtime: um throw aqui derrubaria a casca inteira.
 export const CLASSES_DE_COR = {
-  simbolo: SIMBOLO_CLARO_ESCURO,
-  nome: NOME_CLARO_ESCURO,
-  sufixo: SUFIXO_CLARO_ESCURO,
+  corpo: CORPO_CLARO_ESCURO,
+  destaque: DESTAQUE_CLARO_ESCURO,
 } as const;
 
 function acessibilidade(nome: string, decorativo: boolean) {
@@ -54,15 +52,13 @@ export function SimboloDoProduto({ nome, className, decorativo = false }: Props)
       className={cn("shrink-0", className)}
       {...acessibilidade(nome, decorativo)}
     >
-      <g className={SIMBOLO_CLARO_ESCURO} transform={SIMBOLO.transform}>
-        <path d={SIMBOLO.d} />
-        <rect {...SIMBOLO.modulo} />
-      </g>
+      <path className={CORPO_CLARO_ESCURO} d={SIMBOLO.d} />
+      <path className={DESTAQUE_CLARO_ESCURO} d={SIMBOLO.destaque} />
     </svg>
   );
 }
 
-/** Símbolo + nome — para a barra aberta e a fachada de entrada. */
+/** O logotipo — para a barra aberta e a fachada de entrada. */
 export function LogotipoDoProduto({ nome, className, decorativo = false }: Props) {
   return (
     <svg
@@ -70,20 +66,8 @@ export function LogotipoDoProduto({ nome, className, decorativo = false }: Props
       className={cn("shrink-0", className)}
       {...acessibilidade(nome, decorativo)}
     >
-      <g className={SIMBOLO_CLARO_ESCURO} transform={LOGOTIPO.simbolo.transform}>
-        <path d={LOGOTIPO.simbolo.d} />
-        <rect {...LOGOTIPO.simbolo.modulo} />
-      </g>
-      <g className={NOME_CLARO_ESCURO}>
-        {LOGOTIPO.nome.map((g) => (
-          <path key={g.transform} transform={g.transform} d={g.d} />
-        ))}
-      </g>
-      <g className={SUFIXO_CLARO_ESCURO}>
-        {LOGOTIPO.sufixo.map((g) => (
-          <path key={g.transform} transform={g.transform} d={g.d} />
-        ))}
-      </g>
+      <path className={CORPO_CLARO_ESCURO} d={LOGOTIPO.d} />
+      <path className={DESTAQUE_CLARO_ESCURO} d={LOGOTIPO.destaque} />
     </svg>
   );
 }

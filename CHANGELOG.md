@@ -8,6 +8,17 @@ Se você roda o PJ CRM numa VPS, **leia a seção da versão para a qual está a
 
 ## [Não lançado]
 
+## [2.0.1] — 2026-11-10
+
+Atualiza a partir da 2.0.0 pela tela de atualização, sem ação manual.
+
+### Alterado
+
+- **Nova marca padrão do PJ CRM.** O "P" inclinado com destaque azul passa a ser a marca
+  que aparece antes de qualquer personalização: no cabeçalho, no menu lateral, na tela de
+  entrada, no onboarding e no ícone da aba e do app instalado. Preto no tema claro, branco
+  no escuro. Quem já subiu a própria logo em Marca continua vendo a sua.
+
 ## [2.0.0] — 2026-11-10
 
 Primeira versão da linha própria do PJ CRM. Atualiza a partir da 1.104.0 pela tela
