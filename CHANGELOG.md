@@ -8,6 +8,24 @@ Se você roda o PJ CRM numa VPS, **leia a seção da versão para a qual está a
 
 ## [Não lançado]
 
+## [2.0.0] — 2026-11-10
+
+Primeira versão da linha própria do PJ CRM. Atualiza a partir da 1.104.0 pela tela
+de atualização, sem ação manual.
+
+### Segurança
+
+- **Download de mídia do canal Zernio não segue redirecionamento para endereço
+  interno.** Cada salto passa de novo pela proteção de endereços internos, e a chave
+  do canal só vai ao servidor original.
+- **Endereço interno escrito em IPv6 hexadecimal é bloqueado.** A proteção de
+  webhooks, mídia e integrações reconhece `::ffff:7f00:1` e grafias equivalentes.
+
+### Corrigido
+
+- **Conferência de isolamento do kit no CI** busca a release no projeto de origem
+  quando o repositório ainda não tem release própria.
+
 ## [1.104.0] — 2026-11-07
 
 ### ⚠️ Requer atenção
