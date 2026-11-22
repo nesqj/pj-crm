@@ -52,7 +52,7 @@ export function SimboloDoProduto({ nome, className, decorativo = false }: Props)
       className={cn("shrink-0", className)}
       {...acessibilidade(nome, decorativo)}
     >
-      <path className={CORPO_CLARO_ESCURO} d={SIMBOLO.d} />
+      <path data-marca-parte="nome" className={CORPO_CLARO_ESCURO} d={SIMBOLO.d} />
       <path className={DESTAQUE_CLARO_ESCURO} d={SIMBOLO.destaque} />
     </svg>
   );
@@ -66,7 +66,7 @@ export function LogotipoDoProduto({ nome, className, decorativo = false }: Props
       className={cn("shrink-0", className)}
       {...acessibilidade(nome, decorativo)}
     >
-      <path className={CORPO_CLARO_ESCURO} d={LOGOTIPO.d} />
+      <path data-marca-parte="nome" className={CORPO_CLARO_ESCURO} d={LOGOTIPO.d} />
       <path className={DESTAQUE_CLARO_ESCURO} d={LOGOTIPO.destaque} />
     </svg>
   );

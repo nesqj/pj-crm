@@ -1,0 +1,184 @@
+#!/usr/bin/env bash
+# marca-pjcrm.sh — aplica a marca PJ CRM sobre uma árvore do DeskcommCRM.
+#
+# O PJ CRM é o DeskcommCRM (github.com/melgarafael/DeskcommCRM) com outra
+# marca. A cada sincronização (merge de uma tag nova do original), a árvore que
+# chega fala "DeskcommCRM"; este script reproduz as trocas MECÂNICAS do commit
+# de rebrand 99d9b72 para que ela volte a falar "PJ CRM". O roteiro completo da
+# sincronização está em docs/sincronizar-com-o-original.md.
+#
+# O que ele troca:
+#   - caminhos com "deskcomm" no nome (skills .agents/skills/deskcomm-* etc.);
+#   - DeskcommCRM → "PJ CRM" no texto e "pj-crm" em caminho/repositório;
+#     deskcommcrm/deskcomm → pjcrm; DESKCOMM → PJCRM; X-Deskcomm- → X-PJCRM-;
+#   - melgarafael/DeskcommCRM → nesqj/pj-crm; imagens do GHCR → nesqj/pjcrm*;
+#     contêineres deskcommcrm-* → pjcrm-*;
+#   - a cor da marca (#506d48 → #0023fa), só nos arquivos da lista
+#     ARQUIVOS_DA_COR; a rampa e a paleta vivem nos arquivos de marca abaixo;
+#   - o LICENSE: mantém o copyright do original e acrescenta o do fork;
+#   - os derivados que dependem dos bytes trocados: o selo das traduções de
+#     docs/white-label.md e o sha256 de extensoes/catalogo.json.
+#
+# O que ele preserva de propósito (aponta para o original ou para terceiros):
+#   - links de commits, comparações, PRs, issues e releases do original (são
+#     histórico de lá: o número não existe aqui);
+#   - forks de terceiros (github.com/<outro>/DeskcommCRM), .mailmap/e-mails,
+#     logins e perfis de contribuidores, Sponsors/Instagram/YouTube do autor;
+#   - os domínios do original (*.deskcomm.com.br, admin.deskcomm.com);
+#   - a nota de fork dos README ([DeskcommCRM](https://github.com/melgarafael/DeskcommCRM)),
+#     "DeskcommCRM" seguido de número de versão ou de "o projeto de origem"
+#     (o CHANGELOG fala do original assim) e qualquer linha marcada com
+#     <!-- marca-pjcrm:preservar -->.
+#
+# O que ele NÃO faz (são arquivos de marca e voltam do PJ CRM, não do original):
+#   lib/branding/desenho.ts, components/branding/MarcaDoProduto.tsx,
+#   app/icon.tsx, lib/branding/icone-do-app.tsx, docs/brand/*, o <picture> dos
+#   README e tests/unit/branding-contraste.test.ts. Ver o roteiro.
+#
+# Idempotente: rodar duas vezes dá o mesmo resultado que rodar uma.
+#
+# Uso (na raiz do repositório):
+#   bash scripts/marca-pjcrm.sh           # aplica
+#   bash scripts/marca-pjcrm.sh --check   # só lista o que mudaria (sai 1 se algo)
+set -euo pipefail
+
+raiz="$(git rev-parse --show-toplevel)"
+cd "$raiz"
+
+modo="aplicar"
+case "${1:-}" in
+  "") ;;
+  --check) modo="checar" ;;
+  *) echo "uso: bash scripts/marca-pjcrm.sh [--check]" >&2; exit 2 ;;
+esac
+
+# Arquivos que as trocas de texto nunca reescrevem: este script, o roteiro da
+# sincronização (fala do original de propósito) e o LICENSE (tratado no passo 3).
+ignorados_re='^(scripts/marca-pjcrm\.sh|docs/sincronizar-com-o-original\.md|LICENSE)$'
+
+# Os únicos arquivos em que a cor da marca é trocada. Fora deles o hex sálvia
+# aparece como histórico (docs de design, evidências, curso) e fica como está.
+ARQUIVOS_DA_COR=(
+  .env.example
+  hostgator-setup-kit/marca-emails.sh
+  hostgator-setup-kit/test-validators.sh
+  supabase/templates/confirmation.html
+  supabase/templates/recovery.html
+)
+
+read -r -d '' TROCAS <<'PERL' || true
+# ---- trechos preservados (voltam intactos no fim) ----
+my @g; my $p = sub { push @g, $_[0]; "\x01" . $#g . "\x02" };
+my $fim = qr{[^\s)\]"'`>|,]*};
+s{(?:https?://)?(?:[\w-]+\.)*deskcomm\.com\.br$fim}{$p->($&)}ge;
+s{(?:https?://)?www-deskcomm-com-br\.translate\.goog$fim}{$p->($&)}ge;
+s{\badmin\.deskcomm\.com\b}{$p->($&)}ge;
+s{github\.com/melgarafael/DeskcommCRM/(?:commits?|compare|pull/\d|issues/\d|releases/tag)$fim}{$p->($&)}ge;
+s{github\.com/(?:jmpo|oianmaxdev|webtecnica|saraivabr)/DeskcommCRM$fim}{$p->($&)}ge;
+s{github\.com/(?!melgarafael/|nesqj/)[\w.-]+/DeskcommCRM/(?:pull|commit|issues)/$fim}{$p->($&)}ge;
+s{\[DeskcommCRM\]\(https://github\.com/melgarafael/DeskcommCRM\)}{$p->($&)}ge;
+s{(?:github\.com/sponsors/|instagram\.com/|youtube\.com/\@)melgarafael}{$p->($&)}ge;
+s{github\.com/melgarafael(?![/\w])}{$p->($&)}ge;
+s{#[a-z]+-melgarafael\b}{$p->($&)}ge;
+if ($ARGV =~ m{(?:^|/)\.all-contributorsrc$}) { s{"login":\s*"melgarafael"}{$p->($&)}ge; }
+if ($ARGV =~ m{(?:^|/)\.mailmap$}) { s{(?<![\w/])\@?melgarafael(?!/)}{$p->($&)}ge; }
+s{^.*<!-- marca-pjcrm:preservar -->.*$}{$p->($&)}gme;
+# O nome do projeto de origem quando o texto fala DELE ("do DeskcommCRM, o projeto
+# de origem", "o DeskcommCRM 1.123.0") e a regex que aceita os dois domínios.
+s{DeskcommCRM(?=,? (?:o projeto de origem|\d+\.\d+))}{$p->($&)}ge;
+s{\(\?:pjcrm\|deskcomm\)}{$p->($&)}ge;
+# ---- trocas ----
+s{(?<=ghcr\.io/)melgarafael/deskcommcrm|(?<=ghcr\.io/v2/)melgarafael/deskcommcrm|(?<=repository:)melgarafael/deskcommcrm}{nesqj/pjcrm}g;
+s{melgarafael/deskcommcrm}{nesqj/pj-crm}g;
+s{melgarafael/DeskcommCRM}{nesqj/pj-crm}g;
+s{melgarafael}{nesqj}g;
+s{X-Deskcomm-}{X-PJCRM-}g;
+s{Deskcomm CRM}{PJ CRM}g;
+s{DeskComm}{PJ CRM}g;
+s{(?<=APP_NAME )DeskcommCRM\b}{"PJ CRM"}g;
+s{deskcomm-crm}{pj-crm}g;
+s{(?<=[/\\])DeskcommCRM|DeskcommCRM(?=\.git\b|/|-[\w`*])|(?<=\bcd )DeskcommCRM|(?<="projectName": ")DeskcommCRM}{pj-crm}g;
+s{DeskcommCRM}{PJ CRM}g;
+s{Deskcomm}{PJ CRM}g;
+s{deskcommcrm}{pjcrm}g;
+s{deskcomm}{pjcrm}g;
+s{DESKCOMMCRM}{PJCRM}g;
+s{DESKCOMM}{PJCRM}g;
+s{\x01(\d+)\x02}{$g[$1]}g;
+PERL
+
+read -r -d '' COR <<'PERL' || true
+# A cor da marca: sálvia #506d48 (DeskcommCRM) → azul #0023fa (PJ CRM).
+s{#506d48\b}{#0023fa}g; s{#506D48\b}{#0023FA}g;
+PERL
+
+mudou=0
+reportar() { printf '%s\n' "$1"; mudou=1; }
+
+# ---------------------------------------------------------------- 1. caminhos
+while IFS= read -r -d '' arq; do
+  novo="$(printf '%s' "$arq" | sed -E 's/deskcommcrm/pjcrm/g; s/deskcomm/pjcrm/g')"
+  [ "$novo" = "$arq" ] && continue
+  if [ "$modo" = "checar" ]; then reportar "renomear: $arq -> $novo"; continue; fi
+  mkdir -p "$(dirname "$novo")"
+  git mv -f "$arq" "$novo"
+  mudou=1
+done < <(git ls-files -z | grep -zE 'deskcomm' || true)
+
+# O selo das traduções só é refeito se estava em dia ANTES das trocas: um selo
+# já defasado no original continua defasado (re-selar esconderia tradução velha).
+selo_em_dia=0
+if [ "$modo" = "aplicar" ] && [ -d node_modules ]; then
+  pnpm exec tsx scripts/selar-traducao.ts >/dev/null 2>&1 && selo_em_dia=1
+fi
+
+# ---------------------------------------------------------------- 2. conteúdo
+aplicar_perl() {  # aplicar_perl <programa> <arquivo>...
+  local prog="$1"; shift
+  local a
+  for a in "$@"; do
+    [ -f "$a" ] || continue
+    if [ "$modo" = "checar" ]; then
+      diff -q <(perl -0777 -pe "$prog" "$a") "$a" >/dev/null || reportar "conteudo: $a"
+    fi
+  done
+  if [ "$modo" = "aplicar" ] && [ "$#" -gt 0 ]; then
+    printf '%s\0' "$@" | xargs -0 perl -0777 -pi -e "$prog"
+    mudou=1
+  fi
+}
+
+mapfile -d '' achados < <(git grep -z -I -l -i -E 'deskcomm|melgarafael' -- . || true)
+alvos=()
+for a in "${achados[@]}"; do
+  [[ "$a" =~ $ignorados_re ]] && continue
+  alvos+=("$a")
+done
+aplicar_perl "$TROCAS" "${alvos[@]}"
+aplicar_perl "$COR" "${ARQUIVOS_DA_COR[@]}"
+
+# ---------------------------------------------------------------- 3. LICENSE
+if [ -f LICENSE ] && ! grep -q 'nesqj (PJ CRM, fork)' LICENSE; then
+  if [ "$modo" = "checar" ]; then
+    reportar "conteudo: LICENSE"
+  else
+    perl -0777 -pi -e 's{^Copyright \(c\) (\d{4}) Rafael Melgaço$}{Copyright (c) $1 Rafael Melgaço (DeskcommCRM, projeto original)\nCopyright (c) $1 nesqj (PJ CRM, fork)}m' LICENSE
+  fi
+fi
+
+# ---------------------------------------------------------------- 4. derivados
+if [ "$modo" = "aplicar" ]; then
+  if [ -d node_modules ]; then
+    [ "$selo_em_dia" = 1 ] && pnpm exec tsx scripts/selar-traducao.ts --todas >/dev/null
+    [ -f scripts/gerar-catalogo-de-extensoes.ts ] && pnpm exec tsx scripts/gerar-catalogo-de-extensoes.ts >/dev/null
+  else
+    echo "marca-pjcrm: sem node_modules — rode 'pnpm install' e depois:" >&2
+    echo "  pnpm exec tsx scripts/selar-traducao.ts --todas   (se o selo estava em dia no original)" >&2
+    echo "  pnpm exec tsx scripts/gerar-catalogo-de-extensoes.ts" >&2
+  fi
+  echo "marca-pjcrm: marca aplicada (${#alvos[@]} arquivo(s) com a marca original)"
+  exit 0
+fi
+
+if [ "$mudou" = 0 ]; then echo "marca-pjcrm: nada a trocar"; exit 0; fi
+exit 1

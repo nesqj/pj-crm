@@ -11,7 +11,7 @@
  */
 
 /** As três visões da grade. A semana é o padrão de quem atende. */
-export type VisaoDaAgenda = "dia" | "semana" | "mes";
+export type VisaoDaAgenda = "dia" | "semana" | "mes" | "quadro";
 
 /**
  * Índice da trilha de cor, 1..8 — casa com `--agenda-pessoa-N` no globals.css.
@@ -67,6 +67,14 @@ export type Agendamento = {
   comeca: string;
   termina: string;
   tipo?: string;
+  /** `calendar_event_types.id` — remarcar segue o tipo DO compromisso. Ausente no Google. */
+  tipoId?: string | null;
+  /**
+   * A duração é a da agenda do SERVIÇO (tipo com `service_enabled` ou vaga de
+   * uma ocorrência): a rota recusa `duration_minutes` com
+   * `agenda_duracao_do_servico`, então a grade não oferece a borda (#4450).
+   */
+  duracaoFixa?: boolean;
   local?: string;
   origem: OrigemDoAgendamento;
   situacao: SituacaoDoAgendamento;

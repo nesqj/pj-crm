@@ -2099,7 +2099,7 @@ verify, build-and-size, invariants, e2e, imagens-ok
 **Mede com:**
 
 ```bash
-TOKEN=$(curl -s 'https://ghcr.io/token?scope=repository:nesqj/pj-crm:pull&service=ghcr.io' | python3 -c 'import sys,json;print(json.load(sys.stdin)["token"])'); curl -s -H "Authorization: Bearer $TOKEN" https://ghcr.io/v2/nesqj/pj-crm/tags/list | python3 -c 'import sys,json;t=json.load(sys.stdin)["tags"];print(len(t),sorted(t))' ; curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $TOKEN" https://ghcr.io/v2/nesqj/pj-crm/manifests/latest
+TOKEN=$(curl -s 'https://ghcr.io/token?scope=repository:nesqj/pjcrm:pull&service=ghcr.io' | python3 -c 'import sys,json;print(json.load(sys.stdin)["token"])'); curl -s -H "Authorization: Bearer $TOKEN" https://ghcr.io/v2/nesqj/pjcrm/tags/list | python3 -c 'import sys,json;t=json.load(sys.stdin)["tags"];print(len(t),sorted(t))' ; curl -s -o /dev/null -w '%{http_code}\n' -H "Authorization: Bearer $TOKEN" https://ghcr.io/v2/nesqj/pjcrm/manifests/latest
 ```
 
 **Deu:**

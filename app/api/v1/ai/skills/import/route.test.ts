@@ -26,7 +26,16 @@ import type { AuthUser } from "@/lib/auth/types";
  */
 
 vi.mock("@/lib/auth/require-role", () => ({ requireRole: vi.fn() }));
-vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn(() => ({})) }));
+vi.mock("@/lib/supabase/server", () => ({ createClient: vi.fn(async () => ({})) }));
+vi.mock("@/lib/mcp/auth", () => ({
+  validateBearerToken: vi.fn(),
+  // Mesma lógica pura de lib/mcp/auth.ts: o ramo de token do resolveAuthDual a usa.
+  extractBearer: (authHeader: string | null) => {
+    if (!authHeader) return null;
+    const m = /^Bearer\s+(.+)$/i.exec(authHeader.trim());
+    return m ? m[1]!.trim() : null;
+  },
+}));vi.mock("@/lib/supabase/admin", () => ({ createAdminClient: vi.fn(() => ({})) }));
 vi.mock("@/lib/audit", () => ({ audit: vi.fn(async () => undefined) }));
 vi.mock("@/lib/ai/skills/db", () => ({ getSkillsPool: vi.fn(() => ({})) }));
 vi.mock("@/lib/ai/skills/install", () => ({ importSkillPackage: vi.fn() }));
@@ -126,6 +135,88 @@ describe("POST /api/v1/ai/skills/import", () => {
     expect(body.error.code).toBe("skill_md_missing");
     expect(importSkillPackage).not.toHaveBeenCalled();
     expect(audit).not.toHaveBeenCalled();
+  });
+
+  it("#4203: pacote embrulhado num diretório de topo → 201, com os caminhos da skill (sem o embrulho)", async () => {
+    mockAuthzOk();
+    vi.mocked(importSkillPackage).mockResolvedValue({ versionId: "ver-1", name: "frete-gratis" });
+
+    const { POST } = await import("./route");
+    const res = await POST(
+      await postReq(
+        makeZip({
+          "humanizer-main/SKILL.md": validSkillMd,
+          "humanizer-main/README.md": "# humanizer",
+          "humanizer-main/references/tabela.md": "# Tabela de frete",
+        }),
+      ),
+    );
+
+    expect(res.status).toBe(201);
+    const body = (await res.json()) as { data: { name: string; version_id: string } };
+    expect(body.data).toEqual({ name: "frete-gratis", version_id: "ver-1" });
+    const [, input] = vi.mocked(importSkillPackage).mock.calls[0]!;
+    expect(input.pkg.files.map((f) => f.path)).toEqual(["references/tabela.md"]);
+  });
+
+  it("#4203: ambiguidade (dois diretórios de topo com SKILL.md) → 422 com o MESMO code, sem importar", async () => {
+    mockAuthzOk();
+    const { POST } = await import("./route");
+    const res = await POST(
+      await postReq(
+        makeZip({
+          "humanizer-main/SKILL.md": validSkillMd,
+          "outra-skill/SKILL.md": validSkillMd,
+        }),
+      ),
+    );
+
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { error: { code: string; message: string } };
+    expect(body.error.code).toBe("skill_md_missing");
+    expect(body.error.message).toContain("outra-skill");
+    expect(importSkillPackage).not.toHaveBeenCalled();
+    expect(audit).not.toHaveBeenCalled();
+  });
+
+  it("#4458: SKILL.md do ecossistema (sem matcher) → 201, com matcher {} entregue ao importador", async () => {
+    mockAuthzOk();
+    vi.mocked(importSkillPackage).mockResolvedValue({ versionId: "ver-1", name: "reescreve-prosa" });
+
+    const semMatcher = `---
+name: reescreve-prosa
+description: Reescreve texto com cara de IA para soar como a pessoa que escreveu.
+license: MIT
+---
+Reescreva o texto mantendo o que ele diz.`;
+
+    const { POST } = await import("./route");
+    const res = await POST(await postReq(makeZip({ "humanizer-main/SKILL.md": semMatcher })));
+
+    expect(res.status).toBe(201);
+    const [, input] = vi.mocked(importSkillPackage).mock.calls[0]!;
+    expect(input.pkg.matcher).toEqual({});
+    expect(input.pkg.matcher.any_keywords).toBeUndefined();
+  });
+
+  it("#4458: matcher inválido (any_keywords: [\"\"]) → 422 nomeando o campo, sem importar", async () => {
+    mockAuthzOk();
+    const invalido = `---
+name: frete-gratis
+description: Explica a política de frete grátis ao cliente.
+matcher:
+  any_keywords: [""]
+---
+corpo`;
+
+    const { POST } = await import("./route");
+    const res = await POST(await postReq(makeZip({ "SKILL.md": invalido })));
+
+    expect(res.status).toBe(422);
+    const body = (await res.json()) as { error: { code: string; message: string } };
+    expect(body.error.code).toBe("skill_frontmatter_invalid");
+    expect(body.error.message).toContain("any_keywords");
+    expect(importSkillPackage).not.toHaveBeenCalled();
   });
 
   it("campo 'file' ausente → 400 invalid_request", async () => {
