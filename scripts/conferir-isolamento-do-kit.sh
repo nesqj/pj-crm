@@ -97,13 +97,18 @@ ANTES_DO_FILTRO="v1.63.0"
 TMP="$(mktemp -d "${TMPDIR:-/tmp}/pjcrm-update-sh.XXXXXX")"
 trap 'rm -rf "$TMP"' EXIT
 update_sh_da() {  # update_sh_da <tag> — caminho de uma cópia do update.sh da tag
+  # Versão antiga guardada no repositório (tests/fixtures/update-sh/<tag>.sh): as tags
+  # 1.x, como a v1.63.0 desta conferência, não existem aqui, e a cópia evita depender
+  # de outro repositório para conferir.
+  local guardada="$ROOT/tests/fixtures/update-sh/$1.sh"
+  if [ -f "$guardada" ]; then
+    printf '%s' "$guardada"
+    return 0
+  fi
   if ! git -C "$ROOT" rev-parse -q --verify "refs/tags/$1^{commit}" >/dev/null; then
     local profundidade=""
     [ "$(git -C "$ROOT" rev-parse --is-shallow-repository)" = true ] && profundidade="--depth=1"
-    # As tags 1.x (a v1.63.0 desta conferência) são do projeto de origem e não
-    # existem neste repositório: sem elas aqui, a busca vai lá, só para leitura.
-    git -C "$ROOT" fetch -q --no-tags $profundidade "$origem_das_tags" "+refs/tags/$1:refs/tags/$1" 2>/dev/null \
-      || git -C "$ROOT" fetch -q --no-tags $profundidade "https://github.com/melgarafael/DeskcommCRM.git" "+refs/tags/$1:refs/tags/$1"  # marca-pjcrm:preservar
+    git -C "$ROOT" fetch -q --no-tags $profundidade "$origem_das_tags" "+refs/tags/$1:refs/tags/$1"
   fi
   git -C "$ROOT" show "$1:hostgator-setup-kit/update.sh" > "$TMP/$1"
   printf '%s' "$TMP/$1"
