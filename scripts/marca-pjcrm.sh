@@ -63,8 +63,10 @@ case "${1:-}" in
 esac
 
 # Arquivos que as trocas de texto nunca reescrevem: este script, o roteiro da
-# sincronização (fala do original de propósito) e o LICENSE (tratado no passo 3).
-ignorados_re='^(scripts/marca-pjcrm\.sh|docs/sincronizar-com-o-original\.md|LICENSE)$'
+# sincronização (fala do original de propósito), o LICENSE (tratado no passo 3) e
+# as cópias de update.sh antigos que a conferência de isolamento lê (ficam iguais
+# ao original, byte a byte).
+ignorados_re='^(scripts/marca-pjcrm\.sh|docs/sincronizar-com-o-original\.md|LICENSE|tests/fixtures/update-sh/.*)$'
 
 # Os únicos arquivos em que a cor da marca é trocada. Fora deles o hex sálvia
 # aparece como histórico (docs de design, evidências, curso) e fica como está.
@@ -148,6 +150,7 @@ done
 # voltam do HEAD (o commit do PJ CRM de onde a sincronização partiu).
 PROPRIOS=(
   docs/sincronizar-com-o-original.md
+  tests/fixtures/update-sh/v1.63.0.sh
   docs/brand/icone.png
   docs/brand/logo-claro.png
   docs/brand/logo-escuro.png

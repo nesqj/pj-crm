@@ -29,10 +29,11 @@ no original.
    `lib/automation/outbound-ip.ts`, com os testes `tests/unit/channel-adapter-zernio.test.ts`
    e `tests/unit/outbound-ip.test.ts`. Quando o original trouxer correção equivalente,
    fique com a dele e tire esta linha.
-4. **A conferência de isolamento do CI busca as tags 1.x no original**
-   (`scripts/conferir-isolamento-do-kit.sh`, linha marcada `marca-pjcrm:preservar`): ela
-   compara com o `update.sh` da v1.63.0, tag que só existe no DeskcommCRM. Sem isso o check
-   obrigatório `invariants` reprova. É a parte que ainda vale do antigo commit `75fb69b`.
+4. **A conferência de isolamento do CI lê uma cópia guardada do `update.sh` da v1.63.0**
+   (`tests/fixtures/update-sh/v1.63.0.sh`, igual ao original byte a byte, e a função
+   `update_sh_da` de `scripts/conferir-isolamento-do-kit.sh`). A tag v1.63.0 só existe no
+   DeskcommCRM; com a cópia, o check obrigatório `invariants` não depende do repositório
+   do original. O script de marca não mexe na cópia e a devolve se a sincronização a apagar.
 5. **Os README são do PJ CRM** (`README.md`, `README.en.md`, `README.es.md`, com a marca
    `<!-- readme-pjcrm -->`): não acompanham o original. O script devolve a versão do PJ CRM
    quando a sincronização traz a do original, e apaga o `.all-contributorsrc`, que só servia
@@ -102,11 +103,12 @@ git add -A
 git diff "$REF" HEAD -- . ':!scripts/marca-pjcrm.sh' ':!README*.md' \
   ':!docs/sincronizar-com-o-original.md' ':!docs/brand/*.png' ':!docs/brand/*.svg' \
   ':!docs/brand/og-*' ':!evidence/marca/*' ':!.all-contributorsrc' \
+  ':!tests/fixtures/update-sh/*' \
   | git apply -3 --index
 ```
 
 Os arquivos excluídos do `git diff` são os que o script já cuidou no passo 2 (README,
-logos, roteiro, marca antiga do original). Testado em 22/11/2026 refazendo a própria
+logos, roteiro, cópia do update.sh antigo, marca antiga do original). Testado em 22/11/2026 refazendo a própria
 sincronização da 1.123.0: o resultado saiu idêntico ao `main`.
 
 Onde o original mexeu no mesmo trecho que o PJ CRM, o `git apply` deixa conflito para
