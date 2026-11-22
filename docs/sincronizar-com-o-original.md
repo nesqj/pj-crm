@@ -51,42 +51,79 @@ coluna tem a marca no nome. Confira a cada sincronização:
 git diff -U0 --word-diff=porcelain refs/upstream/vNOVA HEAD -- '*.sql' | grep -E '^[-+]' | sort | uniq -c
 ```
 
+## A versão é sua
+
+A sincronização traz arquivos, nunca número de versão. O original numera as versões dele
+(1.124.0, 1.125.0…), e essas seções entram no `CHANGELOG.md` abaixo das do PJ CRM, só como
+histórico. O número do PJ CRM é você quem escolhe: escreva a seção nova no topo do
+`CHANGELOG.md` com o número que quiser (no formato `## [X.Y.Z] — AAAA-MM-DD`, que o painel
+de atualização lê) e, depois do merge, publique a Release `vX.Y.Z` no GitHub. Mesclar um PR
+não cria versão: o `release.yml` só corta versão por um PR de release aberto pelo robô
+dele, e o PJ CRM publica as Releases à mão.
+
 ## Passo a passo
 
-Troque `vANTERIOR` pela tag do original da última sincronização e `vNOVA` pela nova.
+`vANTERIOR` é a tag do original da última sincronização (hoje `v1.123.0`) e `vNOVA` é a
+nova. A ideia: a diferença entre "o original da última vez, com a marca" e o `main` do
+PJ CRM é tudo o que é do PJ CRM. Ela é recalculada e reaplicada por cima do original novo.
 
 ```bash
-git fetch https://github.com/melgarafael/DeskcommCRM.git refs/tags/vNOVA:refs/upstream/vNOVA
+git fetch https://github.com/melgarafael/DeskcommCRM.git \
+  refs/tags/vANTERIOR:refs/upstream/vANTERIOR refs/tags/vNOVA:refs/upstream/vNOVA
 git checkout -b sync/deskcomm-NOVA origin/main
+pnpm install
+```
+
+1. **A referência (o original da última vez, com a marca):**
+
+```bash
+git worktree add --detach ../ref refs/upstream/vANTERIOR
+git show HEAD:scripts/marca-pjcrm.sh > ../ref/scripts/marca-pjcrm.sh
+ln -s "$PWD/node_modules" ../ref/node_modules
+(cd ../ref && bash scripts/marca-pjcrm.sh && rm node_modules && git add -A)
+REF=$(git -C ../ref write-tree)
+```
+
+2. **O original novo, com a marca:**
+
+```bash
 git merge --no-commit --no-ff refs/upstream/vNOVA
+git rev-parse refs/upstream/vNOVA^{commit} > .git/MERGE_HEAD
 git read-tree -u --reset refs/upstream/vNOVA^{tree}
 git clean -fd
-pnpm install
+git checkout HEAD -- scripts/marca-pjcrm.sh
 bash scripts/marca-pjcrm.sh
 git add -A
 ```
 
-Depois disso a árvore é a do original com as trocas mecânicas. Para cada arquivo de marca
-do item 2, junte o que o original mudou nele com a versão do PJ CRM (três vias: a base é o
-arquivo da tag anterior com a marca aplicada):
+3. **O que é do PJ CRM, reaplicado por cima:**
 
 ```bash
-f=lib/branding/desenho.ts   # repita para cada arquivo do item 2
-git show refs/upstream/vANTERIOR:"$f" > /tmp/base && perl -0777 -pi -e "$(sed -n '/^read -r -d .. TROCAS/,/^PERL$/p' scripts/marca-pjcrm.sh | sed '1d;$d')" /tmp/base
-git show origin/main:"$f" > /tmp/pjcrm
-git merge-file -L original -L base -L pjcrm "$f" /tmp/base /tmp/pjcrm
+git diff "$REF" HEAD -- . ':!scripts/marca-pjcrm.sh' ':!README*.md' \
+  ':!docs/sincronizar-com-o-original.md' ':!docs/brand/*.png' ':!docs/brand/*.svg' \
+  ':!docs/brand/og-*' ':!evidence/marca/*' ':!.all-contributorsrc' \
+  | git apply -3 --index
 ```
 
-Os PNG de `docs/brand/` voltam com `git show origin/main:<arquivo> > <arquivo>`. Reaplique
-as correções do item 3 (`git diff 4f8f8a4^ 4f8f8a4 | git apply -3 --index`), acrescente a
-seção nova no topo do `CHANGELOG.md` e confira:
+Os arquivos excluídos do `git diff` são os que o script já cuidou no passo 2 (README,
+logos, roteiro, marca antiga do original). Testado em 22/11/2026 refazendo a própria
+sincronização da 1.123.0: o resultado saiu idêntico ao `main`.
+
+Onde o original mexeu no mesmo trecho que o PJ CRM, o `git apply` deixa conflito para
+resolver à mão — no último sync foi só `components/branding/MarcaDoProduto.tsx`. O
+`CHANGELOG.md` também deve conflitar: mantenha as seções 2.x do PJ CRM acima das seções 1.x
+novas do original. Se o
+original passou a trazer uma das correções do item 3, fique com a dele.
+
+4. **A seção nova do `CHANGELOG.md`**, com o número que você escolheu (ver acima).
+
+5. **Conferir e fechar:**
 
 ```bash
 bash scripts/marca-pjcrm.sh --check          # "nada a trocar"
-git diff --stat refs/upstream/vNOVA HEAD     # só marca, arquivos de marca e item 3
+git diff --stat refs/upstream/vNOVA HEAD     # só marca e o que é do PJ CRM
 git grep -n -i deskcomm -- app components lib workers hooks   # só o que branding.test.ts aceita
+pnpm typecheck && pnpm test:unit && pnpm test:shell && pnpm test:db
+git commit                                   # fecha o merge: o original novo vira base comum
+git worktree remove ../ref
 ```
-
-O commit fecha o merge (o `MERGE_HEAD` tem de ser o commit da tag, não o objeto da tag:
-`git rev-parse refs/upstream/vNOVA^{commit} > .git/MERGE_HEAD`). Assim a próxima
-sincronização tem base comum com o original.

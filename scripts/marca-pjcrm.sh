@@ -17,13 +17,17 @@
 #     ARQUIVOS_DA_COR; a rampa e a paleta vivem nos arquivos de marca abaixo;
 #   - o LICENSE: mantém o copyright do original e acrescenta o do fork;
 #   - os derivados que dependem dos bytes trocados: o selo das traduções de
-#     docs/white-label.md e o sha256 de extensoes/catalogo.json.
+#     docs/white-label.md e o sha256 de extensoes/catalogo.json;
+#   - nos testes de shell do kit, a pasta de instalação /…/DeskcommCRM vira
+#     /…/pjcrm, para o nome de projeto do compose continuar o esperado.
+#
+# Ele NÃO define versão: o número do PJ CRM é decidido pelo dono, no CHANGELOG
+# e na Release (ver o roteiro).
 #
 # O que ele preserva de propósito (aponta para o original ou para terceiros):
 #   - links de commits, comparações, PRs, issues e releases do original (são
 #     histórico de lá: o número não existe aqui);
-#   - forks de terceiros (github.com/<outro>/DeskcommCRM), .mailmap/e-mails,
-#     logins e perfis de contribuidores, Sponsors/Instagram/YouTube do autor;
+#   - forks de terceiros (github.com/<outro>/DeskcommCRM) e o .mailmap;
 #   - os domínios do original (*.deskcomm.com.br, admin.deskcomm.com);
 #   - "DeskcommCRM" seguido de número de versão ou de "o projeto de origem"
 #     (o CHANGELOG fala do original assim) e qualquer linha marcada com
@@ -33,6 +37,7 @@
 #   - os README.md, README.en.md e README.es.md são escritos para o PJ CRM (têm a
 #     marca <!-- readme-pjcrm -->): se a sincronização trouxe o README do original,
 #     o script devolve o do PJ CRM que está no HEAD;
+#   - arquivos que só o PJ CRM tem (lista PROPRIOS) voltam do HEAD quando faltam;
 #   - arquivos do original que o PJ CRM não usa (lista NAO_USADOS) são apagados.
 #
 # O que ele NÃO faz (são arquivos de marca e voltam do PJ CRM, não do original):
@@ -81,9 +86,6 @@ s{\badmin\.deskcomm\.com\b}{$p->($&)}ge;
 s{github\.com/melgarafael/DeskcommCRM/(?:commits?|compare|pull/\d|issues/\d|releases/tag)$fim}{$p->($&)}ge;
 s{github\.com/(?:jmpo|oianmaxdev|webtecnica|saraivabr)/DeskcommCRM$fim}{$p->($&)}ge;
 s{github\.com/(?!melgarafael/|nesqj/)[\w.-]+/DeskcommCRM/(?:pull|commit|issues)/$fim}{$p->($&)}ge;
-s{(?:github\.com/sponsors/|instagram\.com/|youtube\.com/\@)melgarafael}{$p->($&)}ge;
-s{github\.com/melgarafael(?![/\w])}{$p->($&)}ge;
-s{#[a-z]+-melgarafael\b}{$p->($&)}ge;
 if ($ARGV =~ m{(?:^|/)\.mailmap$}) { s{(?<![\w/])\@?melgarafael(?!/)}{$p->($&)}ge; }
 s{^.*marca-pjcrm:preservar.*$}{$p->($&)}gme;
 # O nome do projeto de origem quando o texto fala DELE ("do DeskcommCRM, o projeto
@@ -142,14 +144,21 @@ for f in README.md README.en.md README.es.md; do
   mudou=1
 done
 
-# Arquivos do original que o PJ CRM não usa.
-NAO_USADOS=(
-  .all-contributorsrc   # alimentava a tabela de contribuidores do README do original
+# Arquivos que só o PJ CRM tem: a árvore do original não os traz. Se sumiram,
+# voltam do HEAD (o commit do PJ CRM de onde a sincronização partiu).
+PROPRIOS=(
+  docs/sincronizar-com-o-original.md
+  docs/brand/icone.png
+  docs/brand/logo-claro.png
+  docs/brand/logo-escuro.png
 )
-for f in "${NAO_USADOS[@]}"; do
-  git ls-files --error-unmatch -- "$f" >/dev/null 2>&1 || continue
-  if [ "$modo" = "checar" ]; then reportar "nao usado: $f"; continue; fi
-  git rm -q -f -- "$f"
+for f in "${PROPRIOS[@]}"; do
+  [ -e "$f" ] && continue
+  git cat-file -e "HEAD:$f" 2>/dev/null || continue
+  if [ "$modo" = "checar" ]; then reportar "proprio ausente: $f"; continue; fi
+  mkdir -p "$(dirname "$f")"
+  git show "HEAD:$f" > "$f"
+  git add -- "$f"
   mudou=1
 done
 
@@ -162,6 +171,24 @@ while IFS= read -r -d '' arq; do
   git mv -f "$arq" "$novo"
   mudou=1
 done < <(git ls-files -z | grep -zE 'deskcomm' || true)
+
+# Arquivos do original que o PJ CRM não usa (nomes já com a marca trocada): a
+# tabela de contribuidores do README do original e a marca antiga.
+NAO_USADOS=(
+  .all-contributorsrc
+  docs/brand/pjcrm-icon.svg
+  docs/brand/pjcrm-logo.svg
+  docs/brand/pjcrm-logo-dark.svg
+  docs/brand/og-card.html
+  docs/brand/og-social-preview.png
+)
+mapfile -t marca_antiga < <(git ls-files -- 'evidence/marca/*')
+for f in "${NAO_USADOS[@]}" "${marca_antiga[@]}"; do
+  git ls-files --error-unmatch -- "$f" >/dev/null 2>&1 || continue
+  if [ "$modo" = "checar" ]; then reportar "nao usado: $f"; continue; fi
+  git rm -q -f -- "$f"
+  mudou=1
+done
 
 # O selo das traduções só é refeito se estava em dia ANTES das trocas: um selo
 # já defasado no original continua defasado (re-selar esconderia tradução velha).
