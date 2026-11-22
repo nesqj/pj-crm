@@ -29,11 +29,15 @@ no original.
    `lib/automation/outbound-ip.ts`, com os testes `tests/unit/channel-adapter-zernio.test.ts`
    e `tests/unit/outbound-ip.test.ts`. Quando o original trouxer correção equivalente,
    fique com a dele e tire esta linha.
-4. **Os README são do PJ CRM** (`README.md`, `README.en.md`, `README.es.md`, com a marca
+4. **A conferência de isolamento do CI busca as tags 1.x no original**
+   (`scripts/conferir-isolamento-do-kit.sh`, linha marcada `marca-pjcrm:preservar`): ela
+   compara com o `update.sh` da v1.63.0, tag que só existe no DeskcommCRM. Sem isso o check
+   obrigatório `invariants` reprova. É a parte que ainda vale do antigo commit `75fb69b`.
+5. **Os README são do PJ CRM** (`README.md`, `README.en.md`, `README.es.md`, com a marca
    `<!-- readme-pjcrm -->`): não acompanham o original. O script devolve a versão do PJ CRM
    quando a sincronização traz a do original, e apaga o `.all-contributorsrc`, que só servia
    à tabela de contribuidores do README do original.
-5. **`CHANGELOG.md`**: as seções 2.x do PJ CRM no topo, acima do histórico 1.x do original.
+6. **`CHANGELOG.md`**: as seções 2.x do PJ CRM no topo, acima do histórico 1.x do original.
 
 ## O banco
 

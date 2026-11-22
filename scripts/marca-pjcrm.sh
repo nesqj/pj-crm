@@ -27,7 +27,7 @@
 #   - os domínios do original (*.deskcomm.com.br, admin.deskcomm.com);
 #   - "DeskcommCRM" seguido de número de versão ou de "o projeto de origem"
 #     (o CHANGELOG fala do original assim) e qualquer linha marcada com
-#     <!-- marca-pjcrm:preservar -->.
+#     marca-pjcrm:preservar (em comentário: <!-- … --> ou # …).
 #
 # O que é do PJ CRM e não do original (passo 0):
 #   - os README.md, README.en.md e README.es.md são escritos para o PJ CRM (têm a
@@ -85,7 +85,7 @@ s{(?:github\.com/sponsors/|instagram\.com/|youtube\.com/\@)melgarafael}{$p->($&)
 s{github\.com/melgarafael(?![/\w])}{$p->($&)}ge;
 s{#[a-z]+-melgarafael\b}{$p->($&)}ge;
 if ($ARGV =~ m{(?:^|/)\.mailmap$}) { s{(?<![\w/])\@?melgarafael(?!/)}{$p->($&)}ge; }
-s{^.*<!-- marca-pjcrm:preservar -->.*$}{$p->($&)}gme;
+s{^.*marca-pjcrm:preservar.*$}{$p->($&)}gme;
 # O nome do projeto de origem quando o texto fala DELE ("do DeskcommCRM, o projeto
 # de origem", "o DeskcommCRM 1.123.0") e a regex que aceita os dois domínios.
 s{DeskcommCRM(?=,? (?:o projeto de origem|\d+\.\d+))}{$p->($&)}ge;
