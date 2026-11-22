@@ -93,13 +93,13 @@ check "volume nomeado: vale o nome físico da montagem, não o da pasta" \
 check "bind: vale a pasta do host, onde o .Name vem vazio" \
   igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='bind||/srv/waha-sessoes' volume_de /root/pj-crm)" /srv/waha-sessoes
 check "contêiner sem a montagem /app/.sessions cai no nome do projeto" \
-  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='' volume_de /root/pj-crm)" pjcrm_waha-data
-check "sem contêiner, pasta /root/pj-crm dá pjcrm_waha-data" \
-  igual "$(volume_de /root/pj-crm)" pjcrm_waha-data
+  igual "$(WAHA_ID=abc123 WAHA_MONTAGEM='' volume_de /root/pjcrm)" pjcrm_waha-data
+check "sem contêiner, pasta /root/pjcrm dá pjcrm_waha-data" \
+  igual "$(volume_de /root/pjcrm)" pjcrm_waha-data
 check "sem contêiner, pasta com hífen mantém o hífen, como o compose" \
   igual "$(volume_de /root/pj-crm)" pj-crm_waha-data
 check "sem contêiner, COMPOSE_PROJECT_NAME vence o nome da pasta" \
-  igual "$(COMPOSE_PROJECT_NAME=pjcrm-prod volume_de /root/pj-crm)" pjcrm-prod_waha-data
+  igual "$(COMPOSE_PROJECT_NAME=pjcrm-prod volume_de /root/pjcrm)" pjcrm-prod_waha-data
 
 echo "tar_tem_sessao:"
 mkdir -p "$WORK/vazio" "$WORK/cheio/noweb"

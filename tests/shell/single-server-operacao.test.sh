@@ -75,7 +75,7 @@ case " $* " in
       *" pg_dump "*) echo "-- dump" ;;
       *" tar czf - "*)
         # o snapshot sai pela saída padrão; quem grava o arquivo é o host
-        [ "${STORAGE_FALHA:-0}" = "1" ] && case " $* " in *volumes/storage:*) printf 'cortado'; exit 1;; esac
+        [ "${STORAGE_FALHA:-0}" = "1" ] && case " $* " in *volumes/storage*) printf 'cortado'; exit 1;; esac
         printf 'tgz' ;;
     esac ;;
 esac
@@ -101,7 +101,7 @@ dump_de_mentira() {
 }
 
 # Uma instalação single-server falsa, com o que o install-single-server.sh deixa.
-PROJ="$WORK/root/pj-crm"
+PROJ="$WORK/root/pjcrm"
 SB="$PROJ/.runtime/supabase"
 mkdir -p "$SB/volumes/storage" "$PROJ/backups"
 touch "$PROJ/docker-compose.prod.yml" "$SB/docker-compose.yml"
@@ -132,7 +132,7 @@ check "pausa do banco segue achando o Supabase próprio pelos nomes de sempre" \
   igual "$(PS_NOMES='supabase-rest\nsupabase-db\nrealtime-dev.supabase-realtime\nsupabase-studio\noutro\n' \
     kit 'supabase_local_containers' | tr '\n' ' ')" 'supabase-rest realtime-dev.supabase-realtime supabase-studio '
 
-APROJ="$WORK/root/comum/pj-crm"
+APROJ="$WORK/root/comum/pjcrm"
 mkdir -p "$APROJ"; touch "$APROJ/docker-compose.prod.yml"
 printf '%s\n' 'SUPABASE_DB_URL="postgresql://postgres:x@db.exemplo.supabase.co:5432/postgres"' \
   'NEXT_PUBLIC_SUPABASE_URL="https://exemplo.supabase.co"' > "$APROJ/.env"
@@ -198,7 +198,7 @@ check "o Supabase leva o nome do projeto do CRM" \
 check "COMPOSE_PROJECT_NAME do CRM chega ao Supabase" \
   igual "$(COMPOSE_PROJECT_NAME=pjcrm-prod PROJECT_DIR="$PROJ" kit 'projeto_do_supabase')" 'pjcrm-prod-supabase'
 
-IRMA="$WORK/root/apagar6/pj-crm"
+IRMA="$WORK/root/apagar6/pjcrm"
 mkdir -p "$IRMA/.runtime/supabase"; touch "$IRMA/.runtime/supabase/docker-compose.yml"
 guarda_sb() { DONOS="$*" PROJECT_DIR="$PROJ" kit 'recusar_supabase_de_outra_arvore' 2>&1; }
 guarda_sb >/dev/null; rc=$?
@@ -278,7 +278,8 @@ echo "(b) backup e restore levam os anexos:"
 : > "$LOG"
 (cd "$PROJ" && bash "$KIT_DIR/backup.sh") > "$WORK/bk.out" 2>&1; rc=$?
 check "backup.sh single-server termina bem" test "$rc" -eq 0
-check "backup.sh salva o Storage do Supabase (somente leitura)" contem "$LOG" "-v $SB/volumes/storage:/data:ro"
+check "backup.sh salva o Storage do Supabase (somente leitura)" \
+  contem "$LOG" "--mount type=bind,\"source=$SB/volumes/storage\",target=/data,readonly"
 check "o arquivo dos anexos existe ao lado do dump" \
   bash -c 'ls "$1"/backups/storage-*.tgz >/dev/null 2>&1' _ "$PROJ"
 rm -f "$PROJ"/backups/storage-*.tgz

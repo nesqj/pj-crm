@@ -5,7 +5,7 @@ const BASE = "http://127.0.0.1:3100";
 const creds = JSON.parse(readFileSync("/Users/rafaelmelgaco/pj-crm/.e2e-creds.json", "utf8"));
 const EMAIL = creds.users.manager.email;
 const SENHA = creds.password;
-const OUT = "/private/tmp/claude-501/-Users-rafaelmelgaco-PJ CRM/10ffaf65-ac1a-4b1b-b62d-368cbdeef6c5/scratchpad";
+const OUT = "/private/tmp/claude-501/-Users-rafaelmelgaco-pj-crm/10ffaf65-ac1a-4b1b-b62d-368cbdeef6c5/scratchpad";
 
 async function main() {
   const browser = await chromium.launch();

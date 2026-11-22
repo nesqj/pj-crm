@@ -7,7 +7,7 @@
 #
 # ── O defeito que ele guarda, medido numa VPS de verdade ────────────────────
 #
-# `/root/pj-crm` e `/root/apagar6/pj-crm` — o clone de produção e um
+# `/root/pjcrm` e `/root/apagar6/pjcrm` — o clone de produção e um
 # de teste ao lado — têm o mesmo basename, logo o mesmo nome de projeto compose
 # (`pjcrm`). O cron rodava o agent.sh das DUAS a cada 5 minutos. Em
 # 21/08 13:30 o clone de teste recriou o contêiner do WhatsApp com a chave do
@@ -50,8 +50,8 @@ PATH="$WORK/bin:$PATH"
 # ainda está no disco — quem apenas moveu a pasta deixa contêineres apontando
 # para um caminho morto, e travar esse caso seria um gate nascendo vermelho em
 # quem não fez nada de errado.
-PROD="$WORK/root/pj-crm"
-TESTE="$WORK/root/apagar6/pj-crm"
+PROD="$WORK/root/pjcrm"
+TESTE="$WORK/root/apagar6/pjcrm"
 MUDOU_DE_PASTA="$WORK/root/endereco-antigo"   # de propósito: NÃO é criado
 mkdir -p "$PROD" "$TESTE"
 touch "$PROD/docker-compose.prod.yml" "$TESTE/docker-compose.prod.yml"

@@ -28,7 +28,7 @@ async function main() {
     };
   })()`);
   console.log(JSON.stringify(m, null, 2));
-  await p.screenshot({ path: "/private/tmp/claude-501/-Users-rafaelmelgaco-PJ CRM/10ffaf65-ac1a-4b1b-b62d-368cbdeef6c5/scratchpad/atrito-final.png", fullPage: false });
+  await p.screenshot({ path: "/private/tmp/claude-501/-Users-rafaelmelgaco-pj-crm/10ffaf65-ac1a-4b1b-b62d-368cbdeef6c5/scratchpad/atrito-final.png", fullPage: false });
   await b.close();
 }
 main().catch((e) => { console.error(e); process.exit(1); });

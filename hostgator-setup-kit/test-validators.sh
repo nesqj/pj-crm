@@ -815,6 +815,43 @@ saude_ok "unhealthy AINDA QUE o redis esteja ok" nao      unhealthy "$UNHEALTHY"
 saude_ok "porta aberta, app mudo"                nao      ''        ''
 saude_ok "proxy devolveu HTML de erro"           nao      ''        '<html>502 Bad Gateway</html>'
 
+wait_recovers_after_probe_timeout() (
+  local dir deadline body rc=0
+  deadline="$(command -v timeout)"
+  dir="$(mktemp -d)" || return 1
+  [ -n "$dir" ] && [ "$dir" != / ] && [ -d "$dir" ] || return 1
+  trap 'rm -rf "$dir"' EXIT
+  # The first Docker invocation stalls. Scale the per-probe deadline down so
+  # the test finishes quickly, using the real timeout to stop the child.
+  cat > "$dir/docker" <<'STUB'
+#!/usr/bin/env bash
+if mkdir "$PROBE_TEST_DIR/first-attempt" 2>/dev/null; then
+  exec sleep 12
+fi
+printf 'healthy\n%s\n' "$PROBE_TEST_BODY"
+STUB
+  cat > "$dir/timeout" <<'STUB'
+#!/usr/bin/env bash
+[ "$1" = 30 ] || exit 2
+shift
+exec "$PROBE_TEST_TIMEOUT" 1s "$@"
+STUB
+  chmod +x "$dir/docker" "$dir/timeout"
+  # An outer deadline keeps the test bounded even if the first probe regresses.
+  body="$(PROBE_TEST_DIR="$dir" PROBE_TEST_TIMEOUT="$deadline" PROBE_TEST_BODY="$HEALTHY" \
+    PATH="$dir:$PATH" "$deadline" 6s bash -c '. ./_common.sh; wait_app_healthy 2 0')" || rc=$?
+  if [ "$rc" -ne 0 ] || [ "$body" != "$HEALTHY" ]; then
+    printf '  ✗ the second health probe should recover after the first stalls (exit %s)\n' "$rc"
+    return 1
+  fi
+  printf '  ✓ the second health probe recovered after the first timed out\n'
+)
+if command -v timeout >/dev/null 2>&1; then
+  wait_recovers_after_probe_timeout || fail=1
+else
+  printf '  - skipped the stalled Docker probe fixture because coreutils timeout is unavailable\n'
+fi
+
 echo "healthcheck.sh: veredito pelo status GERAL e código de saída (#4087)"
 # O defeito: o healthcheck procurava `"status":"ok"` no JSON cru. `ok` é o
 # vocabulário dos CHECKS individuais, então um app com o BANCO FORA (status
@@ -1124,7 +1161,7 @@ echo "cron: instalar uma instância não pode silenciar a outra"
 # apagava as duas linhas da primeira, em silêncio.
 CRONTAB_VIZINHO='0 8 * * * /root/trend-radar/run_full_vps.sh
 * * * * * curl -fsS -H "Authorization: Bearer SEGREDO" "https://crm.deskcomm.com.br/api/v1/cron/event-log-drain" >/dev/null 2>&1
-*/5 * * * * cd /root/Aula-Youtube/pj-crm && bash hostgator-setup-kit/agent.sh >/dev/null 2>&1'
+*/5 * * * * cd /root/Aula-Youtube/pjcrm && bash hostgator-setup-kit/agent.sh >/dev/null 2>&1'
 
 cron_ok() {  # cron_ok <descrição> <esperado_no_resultado> <marcador> <legado> <linha_nova>
   local desc="$1" espera="$2" marcador="$3" legado="$4" nova="$5" out
@@ -1136,7 +1173,7 @@ NOVO_TAG='# pjcrm:/root/instalacao-nova'
 NOVA_URL='https://crm-novo.exemplo.com.br/api/v1/cron/event-log-drain'
 cron_ok "o drain do vizinho sobrevive"  'crm.deskcomm.com.br/api/v1/cron/event-log-drain' \
         "$NOVO_TAG" "$NOVA_URL" "* * * * * curl \"$NOVA_URL\" $NOVO_TAG"
-cron_ok "o agente do vizinho sobrevive" 'cd /root/Aula-Youtube/pj-crm && bash hostgator-setup-kit/agent.sh' \
+cron_ok "o agente do vizinho sobrevive" 'cd /root/Aula-Youtube/pjcrm && bash hostgator-setup-kit/agent.sh' \
         "$NOVO_TAG" "cd /root/instalacao-nova && bash hostgator-setup-kit/agent.sh" \
         "*/5 * * * * cd /root/instalacao-nova && bash hostgator-setup-kit/agent.sh $NOVO_TAG"
 cron_ok "a linha alheia (trend-radar) sobrevive" '/root/trend-radar/run_full_vps.sh' \
@@ -1144,9 +1181,9 @@ cron_ok "a linha alheia (trend-radar) sobrevive" '/root/trend-radar/run_full_vps
 
 # Re-executar a MESMA instalação substitui a própria linha em vez de empilhar —
 # inclusive a legada, escrita antes de o marcador existir.
-reexec="$(printf '%s\n' "$CRONTAB_VIZINHO" | cron_merge '# pjcrm:/root/Aula-Youtube/pj-crm' \
-          'cd /root/Aula-Youtube/pj-crm && bash hostgator-setup-kit/agent.sh' \
-          '*/5 * * * * cd /root/Aula-Youtube/pj-crm && bash hostgator-setup-kit/agent.sh # pjcrm:/root/Aula-Youtube/pj-crm')"
+reexec="$(printf '%s\n' "$CRONTAB_VIZINHO" | cron_merge '# pjcrm:/root/Aula-Youtube/pjcrm' \
+          'cd /root/Aula-Youtube/pjcrm && bash hostgator-setup-kit/agent.sh' \
+          '*/5 * * * * cd /root/Aula-Youtube/pjcrm && bash hostgator-setup-kit/agent.sh # pjcrm:/root/Aula-Youtube/pjcrm')"
 n_agent="$(printf '%s\n' "$reexec" | grep -cF 'hostgator-setup-kit/agent.sh')"
 if [ "$n_agent" = 1 ]; then printf '  ✓ re-executar a mesma instalação não duplica a linha\n'
 else printf '  ✗ re-executar duplicou: %s linhas de agent.sh\n' "$n_agent"; fail=1; fi
@@ -1208,8 +1245,16 @@ TMP_CRON="$(mktemp -d)"
     '! grep -qF "segredo-novo-9f8e7d" "$TMP_CRON/crontab"'
   checa "a linha legada, com o segredo velho, foi substituída" \
     '! grep -qF "segredo-velho-a1b2c3" "$TMP_CRON/crontab"'
-  checa "a linha lê o cabeçalho do arquivo" \
-    'grep -F "$URL" "$TMP_CRON/crontab" | grep -qF -- "-H @\"$CAB\""'
+  # Desde a #2235 a linha do host não carrega mais o `curl`: ela chama o VIGIA
+  # (`hostgator-setup-kit/drain-watchdog.sh`), que só dispara o dreno quando o
+  # contêiner `scheduler` desta instalação não está de pé. O segredo continua
+  # fora da linha — quem lê o cabeçalho passou a ser o script, e as duas metades
+  # são cobradas separadamente para o segredo não voltar para o crontab por
+  # ninguém ter olhado o outro lado.
+  checa "a linha chama o vigia do dreno (e não um curl solto)" \
+    'grep -F "$URL" "$TMP_CRON/crontab" | grep -qF "drain-watchdog.sh" && ! grep -F "$URL" "$TMP_CRON/crontab" | grep -q "curl "'
+  checa "o vigia lê o cabeçalho do arquivo" \
+    'grep -qF -- "-H @\"\$cabecalho\"" ./drain-watchdog.sh' 
   checa "o arquivo tem o cabeçalho que a rota espera" \
     '[ "$(cat "$CAB")" = "Authorization: Bearer segredo-novo-9f8e7d" ]'
   # `stat -c` é GNU; no macOS o equivalente é `stat -f '%Lp'` (mesma forma usada mais
@@ -1667,26 +1712,26 @@ dec_ok "Caddy de OUTRO PJ CRM → bloqueia" bloqueia "80 e 443" "outro"     "crm
 # "crm") — e é justamente o nome do projeto que NÃO difere no caso real: o
 # projeto do compose é o basename da pasta, e toda cópia do repo se chama
 # PJ CRM. Medido numa VPS de produção em 2026-08-24: a instalação de uma
-# aula em /root/apagar7/pj-crm viu o Caddy da produção em
-# /root/pj-crm com o MESMO projeto `pjcrm`, concluiu "é a
+# aula em /root/apagar7/pjcrm viu o Caddy da produção em
+# /root/pjcrm com o MESMO projeto `pjcrm`, concluiu "é a
 # re-execução" e subiu por cima — trocando o banco do CRM no ar sem um aviso.
 # Quem distingue as duas é a ÁRVORE (label com.docker.compose.project.working_dir),
 # não o nome.
 dec_ok "cópia irmã: mesmo projeto, OUTRA árvore → bloqueia" \
   bloqueia "80 e 443" "pjcrm" "pjcrm" "caddy:2-alpine" "pjcrm-caddy-1" \
-  "/root/pj-crm" "/root/apagar7/pj-crm"
+  "/root/pjcrm" "/root/apagar7/pjcrm"
 # O outro lado da mesma moeda: re-execução DE VERDADE é mesma árvore, e tem de
 # seguir passando (é o caminho que o kit manda usar para corrigir uma resposta).
 dec_ok "re-execução real: mesmo projeto, MESMA árvore → segue" \
   caddy "80 e 443" "pjcrm" "pjcrm" "caddy:2-alpine" "pjcrm-caddy-1" \
-  "/root/pj-crm" "/root/pj-crm"
+  "/root/pjcrm" "/root/pjcrm"
 # Contêiner sem o label de árvore (não foi o compose que criou, ou é antigo):
 # não dá para afirmar que é cópia irmã, e fechar aqui quebraria re-execução
 # legítima. Mantém o comportamento anterior — a varredura de portas continua
 # sendo a rede que pega o resto.
 dec_ok "sem árvore conhecida: mantém o comportamento anterior" \
   caddy "80 e 443" "pjcrm" "pjcrm" "caddy:2-alpine" "pjcrm-caddy-1" \
-  "" "/root/apagar7/pj-crm"
+  "" "/root/apagar7/pjcrm"
 dec_ok "Traefik da hospedagem → por ele"    traefik  "80 e 443" "coolify"   "crm" "traefik:v3.3"   "coolify-proxy"
 dec_ok "ocupante não identificado → bloqueia" bloqueia "80"     ""          "crm" ""              ""
 dec_ok "projeto vazio não casa projeto vazio" bloqueia "80"     ""          ""    "nginx"         "web"
@@ -2753,8 +2798,15 @@ echo "integração: consentimento de telemetria no --yes (issue #668)"
 # O que este bloco acrescenta aos testes de presença de texto: ele RODA o
 # install.sh e lê o `.env` que sobrou, que é o arquivo com que a pessoa fica. A
 # distinção que a issue pede é entre "nunca decidiu" (chave AUSENTE) e "aceitou"
-# (chave declarada e VAZIA) — as duas viram texto igual em qualquer grep do
-# fonte, e só aparecem no comportamento.
+# (chave DECLARADA com o token `comunidade`) — as duas viram texto igual em
+# qualquer grep do fonte, e só aparecem no comportamento.
+#
+# A #4936 mudou o token do aceite: vazio deixou de significar "Sentry do
+# projeto" e passou a significar DESLIGADO (lib/sentry/dsn.ts), então o que o
+# install.sh grava no "sim" é `SENTRY_DSN=comunidade`. A chave vazia que ficou
+# de quem instalou antes continua sendo PRESERVADA na reexecução (é escolha
+# registrada, não lacuna) e quem a converte é o update.sh — por isso o cenário
+# dela está aqui, esperando o vazio e não o token.
 #
 # O caso (a) COPIA do template as linhas do Sentry em vez de reescrevê-las: é
 # assim que reativar a chave lá reprova aqui. Sem isso, o cenário mediria o
@@ -2802,7 +2854,14 @@ STUB
   }
   telemetria_ok "template copiado (sem escolha): o --yes grava off, não consente por ninguém" \
     "$SENTRY_DO_TEMPLATE" '"off"'
-  telemetria_ok "quem ACEITOU (chave declarada e vazia) continua aceitando na reexecução" \
+  # `comunidade` é o token do "sim" desde a #4936: vazio passou a significar
+  # DESLIGADO (lib/sentry/dsn.ts), então quem aceitou precisa de valor próprio —
+  # e o DSN do projeto não vai para o .env do cliente.
+  telemetria_ok "quem ACEITOU (SENTRY_DSN=comunidade) continua aceitando na reexecução" \
+    "SENTRY_DSN='comunidade'" '"comunidade"'
+  # E quem aceitou ANTES desta versão (chave declarada e vazia) não é convertido
+  # aqui: o install preserva o que está escrito e quem converte é o update.sh.
+  telemetria_ok "chave vazia legada é preservada pelo install (a conversão é do update.sh)" \
     "SENTRY_DSN=''" '""'
   telemetria_ok "DSN próprio sobrevive à reexecução" \
     "SENTRY_DSN='https://abc123@o0.ingest.sentry.io/42'" '"https://abc123@o0.ingest.sentry.io/42"'
@@ -2945,7 +3004,7 @@ echo "integração: instalar de uma CÓPIA IRMÃ, com o CRM já no ar (2026-08-2
 # teste só da função fica verde enquanto o produto instala por cima da produção.
 #
 # A VPS deste teste é a que aconteceu de verdade: um PJ CRM no ar em
-# /root/pj-crm (Caddy publicando 80/443, projeto `pjcrm`), e o
+# /root/pjcrm (Caddy publicando 80/443, projeto `pjcrm`), e o
 # instalador rodando de OUTRA cópia — cuja pasta também se chama PJ CRM,
 # então o projeto colide e a versão anterior dizia "é a re-execução, siga".
 TMP_IRMA="$(mktemp -d)"
@@ -2963,7 +3022,7 @@ case "$1" in
            printf 'pjcrm-caddy-1|pjcrm|caddy:2-alpine|0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp\n'
            exit 0 ;;
   # A árvore que pariu aquele contêiner — o dado que separa irmã de re-execução.
-  inspect) case "$*" in *working_dir*) printf '/root/pj-crm\n' ;; esac; exit 0 ;;
+  inspect) case "$*" in *working_dir*) printf '/root/pjcrm\n' ;; esac; exit 0 ;;
   network) case "$2" in inspect) exit 1 ;; esac; exit 0 ;;
 esac
 exit 0
@@ -2980,7 +3039,7 @@ STUB
     printf '     últimas linhas: %s\n' "$(printf '%s' "$saida" | tail -3 | tr '\n' ' ')"; exit 1
   fi
   # 2. Nomeia a árvore do OUTRO — sem isso quem lê não sabe qual pasta usar.
-  if ! grep -q '/root/pj-crm' <<<"$saida"; then
+  if ! grep -q '/root/pjcrm' <<<"$saida"; then
     printf '  ✗ a recusa não diz ONDE está a instalação que já existe\n'; exit 1
   fi
   # 3. Ensina a saída acionável (atualizar a que existe).
@@ -3856,12 +3915,12 @@ np_ok() {  # np_ok <caminho> <esperado>
   else printf '  ✗ %s → deu [%s], esperava [%s]\n' "$1" "$real" "$2"; fail=1; fi
 }
 np_ok /root/pjcrm  pjcrm
-np_ok /root/pj-crm  pjcrm
+np_ok /root/pjcrm  pjcrm
 np_ok /root/_pjcrm    pjcrm
 np_ok /root/-pjcrm    pjcrm
 np_ok /root/_-_crm       crm
 np_ok /root/_123         123
-np_ok /root/pjcrm.crm pjcrm
+np_ok /root/pjcrm.crm pjcrmcrm
 np_ok /root/crm_cliente  crm_cliente
 
 echo "re-execução: o kit é chamado por caminho RELATIVO, como o README manda"

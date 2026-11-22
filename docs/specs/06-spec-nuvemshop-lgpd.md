@@ -255,7 +255,7 @@ export class NuvemshopAdapter implements EcommercePlatformAdapter {
     const url = `${NS_API_BASE}/${storeId}${path}`;
     const headers: Record<string, string> = {
       'Authentication': `bearer ${ctx.credentials.accessToken}`,
-      'User-Agent': 'PJ CRM/1.0 (rafael@maudibrasil.com.br)',
+      'User-Agent': 'pj-crm/1.0 (rafael@maudibrasil.com.br)',
       'Content-Type': 'application/json',
       ...(init.idempotencyKey ? { 'Idempotency-Key': init.idempotencyKey } : {}),
     };

@@ -124,7 +124,7 @@ Triggers de domínio implementados:
 
 Tudo decidido durante a sessão autônoma está documentado em:
 
-- **Memórias persistentes do projeto** em `~/.claude/projects/-Users-rafaelmelgaco-PJ CRM/memory/`
+- **Memórias persistentes do projeto** em `~/.claude/projects/-Users-rafaelmelgaco-pj-crm/memory/`
   - `project_tenancy_model.md` — Multi-tenant clássico desde dia 1 (Opção A)
   - `project_mvp_scope.md` — Opção B (com IA core)
   - `project_ecommerce_integration.md` — Nuvemshop only no MVP
