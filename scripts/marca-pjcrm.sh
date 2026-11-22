@@ -25,15 +25,20 @@
 #   - forks de terceiros (github.com/<outro>/DeskcommCRM), .mailmap/e-mails,
 #     logins e perfis de contribuidores, Sponsors/Instagram/YouTube do autor;
 #   - os domínios do original (*.deskcomm.com.br, admin.deskcomm.com);
-#   - a nota de fork dos README ([DeskcommCRM](https://github.com/melgarafael/DeskcommCRM)),
-#     "DeskcommCRM" seguido de número de versão ou de "o projeto de origem"
+#   - "DeskcommCRM" seguido de número de versão ou de "o projeto de origem"
 #     (o CHANGELOG fala do original assim) e qualquer linha marcada com
 #     <!-- marca-pjcrm:preservar -->.
 #
+# O que é do PJ CRM e não do original (passo 0):
+#   - os README.md, README.en.md e README.es.md são escritos para o PJ CRM (têm a
+#     marca <!-- readme-pjcrm -->): se a sincronização trouxe o README do original,
+#     o script devolve o do PJ CRM que está no HEAD;
+#   - arquivos do original que o PJ CRM não usa (lista NAO_USADOS) são apagados.
+#
 # O que ele NÃO faz (são arquivos de marca e voltam do PJ CRM, não do original):
 #   lib/branding/desenho.ts, components/branding/MarcaDoProduto.tsx,
-#   app/icon.tsx, lib/branding/icone-do-app.tsx, docs/brand/*, o <picture> dos
-#   README e tests/unit/branding-contraste.test.ts. Ver o roteiro.
+#   app/icon.tsx, lib/branding/icone-do-app.tsx, docs/brand/* e os testes de
+#   marca (tests/unit/branding*.test.ts e afins). Ver o roteiro.
 #
 # Idempotente: rodar duas vezes dá o mesmo resultado que rodar uma.
 #
@@ -76,11 +81,9 @@ s{\badmin\.deskcomm\.com\b}{$p->($&)}ge;
 s{github\.com/melgarafael/DeskcommCRM/(?:commits?|compare|pull/\d|issues/\d|releases/tag)$fim}{$p->($&)}ge;
 s{github\.com/(?:jmpo|oianmaxdev|webtecnica|saraivabr)/DeskcommCRM$fim}{$p->($&)}ge;
 s{github\.com/(?!melgarafael/|nesqj/)[\w.-]+/DeskcommCRM/(?:pull|commit|issues)/$fim}{$p->($&)}ge;
-s{\[DeskcommCRM\]\(https://github\.com/melgarafael/DeskcommCRM\)}{$p->($&)}ge;
 s{(?:github\.com/sponsors/|instagram\.com/|youtube\.com/\@)melgarafael}{$p->($&)}ge;
 s{github\.com/melgarafael(?![/\w])}{$p->($&)}ge;
 s{#[a-z]+-melgarafael\b}{$p->($&)}ge;
-if ($ARGV =~ m{(?:^|/)\.all-contributorsrc$}) { s{"login":\s*"melgarafael"}{$p->($&)}ge; }
 if ($ARGV =~ m{(?:^|/)\.mailmap$}) { s{(?<![\w/])\@?melgarafael(?!/)}{$p->($&)}ge; }
 s{^.*<!-- marca-pjcrm:preservar -->.*$}{$p->($&)}gme;
 # O nome do projeto de origem quando o texto fala DELE ("do DeskcommCRM, o projeto
@@ -114,6 +117,30 @@ PERL
 
 mudou=0
 reportar() { printf '%s\n' "$1"; mudou=1; }
+
+# ---------------------------------------------------------------- 0. arquivos do PJ CRM
+# Os README do PJ CRM não vêm do original: se o que está no disco não é o do PJ
+# CRM (sem a marca readme-pjcrm) e o HEAD tem o do PJ CRM, devolve o do HEAD.
+for f in README.md README.en.md README.es.md; do
+  [ -f "$f" ] && grep -q 'readme-pjcrm' "$f" && continue
+  git cat-file -e "HEAD:$f" 2>/dev/null || continue
+  git show "HEAD:$f" | grep -q 'readme-pjcrm' || continue
+  if [ "$modo" = "checar" ]; then reportar "readme do original: $f"; continue; fi
+  git show "HEAD:$f" > "$f"
+  git add -- "$f"
+  mudou=1
+done
+
+# Arquivos do original que o PJ CRM não usa.
+NAO_USADOS=(
+  .all-contributorsrc   # alimentava a tabela de contribuidores do README do original
+)
+for f in "${NAO_USADOS[@]}"; do
+  git ls-files --error-unmatch -- "$f" >/dev/null 2>&1 || continue
+  if [ "$modo" = "checar" ]; then reportar "nao usado: $f"; continue; fi
+  git rm -q -f -- "$f"
+  mudou=1
+done
 
 # ---------------------------------------------------------------- 1. caminhos
 while IFS= read -r -d '' arq; do
