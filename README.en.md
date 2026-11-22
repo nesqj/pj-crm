@@ -69,6 +69,29 @@ If you did not choose a password, the initial one is in `.env`, under `OWNER_PAS
 
 Details and common problems: [`hostgator-setup-kit/README.md`](hostgator-setup-kit/README.md).
 
+### Rather have an AI install it for you?
+
+The repository ships guides that Claude Code, Codex, Cursor, OpenCode and Antigravity load on
+their own: install, set up a client per niche, analyze metrics, tune the agent prompt and
+contribute. To have them in any folder, run once:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/scripts/instalar-guias.sh | bash
+```
+
+Then, in a new session, say *"quero instalar o CRM na minha VPS"*. To call a guide by name:
+`/pjcrm-instalar` in Claude Code, Cursor and Antigravity; `$pjcrm-instalar` in Codex; in
+OpenCode, ask for it by name.
+
+The guides do **not** update themselves: running the command again brings the new version. To undo:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/scripts/instalar-guias.sh | bash -s -- --remover
+```
+
+With the repository cloned, the guides already come inside it (`.agents/skills/`). If you ran the
+command anyway, in Claude Code the installed guide wins over the clone's until you run it again or undo.
+
 ---
 
 ## Update

@@ -91,6 +91,12 @@ s{^.*marca-pjcrm:preservar.*$}{$p->($&)}gme;
 s{DeskcommCRM(?=,? (?:o projeto de origem|\d+\.\d+))}{$p->($&)}ge;
 s{\(\?:pjcrm\|deskcomm\)}{$p->($&)}ge;
 # ---- trocas ----
+# Testes de shell do kit: uma pasta de instalação /…/DeskcommCRM tem como projeto
+# do compose o nome em minúsculas (deskcommcrm → pjcrm). A pasta vira /…/pjcrm para
+# o esperado continuar sendo o que o compose calcula dela.
+if ($ARGV =~ m{(?:^|/)(?:tests/shell/[^/]+\.test\.sh|hostgator-setup-kit/test-[^/]+\.sh)$}) {
+  s{((?<![\w.-])[/\$~][\w.\$~/{}-]*/)DeskcommCRM(?![\w.-])}{ my ($t, $c) = ($&, $1); $c =~ m{(?:github\.com/[^/]*/|melgarafael/)$} ? $t : "${c}pjcrm" }ge;
+}
 s{(?<=ghcr\.io/)melgarafael/deskcommcrm|(?<=ghcr\.io/v2/)melgarafael/deskcommcrm|(?<=repository:)melgarafael/deskcommcrm}{nesqj/pjcrm}g;
 s{melgarafael/deskcommcrm}{nesqj/pj-crm}g;
 s{melgarafael/DeskcommCRM}{nesqj/pj-crm}g;
@@ -107,6 +113,11 @@ s{deskcommcrm}{pjcrm}g;
 s{deskcomm}{pjcrm}g;
 s{DESKCOMMCRM}{PJCRM}g;
 s{DESKCOMM}{PJCRM}g;
+# O teste do nome de projeto do compose (tests do kit) mede a REGRA, não a marca:
+# trocado o nome da pasta, o esperado acompanha o que o compose calcula dela.
+if ($ARGV =~ m{(?:^|/)hostgator-setup-kit/test-validators\.sh$}) {
+  s{^np_ok /root/pjcrm\.crm pjcrm$}{np_ok /root/pjcrm.crm pjcrmcrm}m;
+}
 s{\x01(\d+)\x02}{$g[$1]}g;
 PERL
 

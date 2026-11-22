@@ -423,7 +423,7 @@ esac
 
 echo "caso 24 — com o Caddy do kit, o aviso atende onde o Caddy procura"
 : > "$diario"; duble_diario
-REVERSE_PROXY=caddy PROJECT_DIR="/root/pj-crm" manutencao_sobe >/dev/null 2>&1
+REVERSE_PROXY=caddy PROJECT_DIR="/root/pjcrm" manutencao_sobe >/dev/null 2>&1
 linha_caddy="$(cat "$diario")"
 case "$linha_caddy" in
   *"--network-alias app"*) ok "assume o apelido 'app' na rede interna" ;;

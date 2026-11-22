@@ -68,6 +68,29 @@ A senha inicial, se você não escolheu uma, fica no `.env`, em `OWNER_PASSWORD`
 
 Detalhes e problemas comuns: [`hostgator-setup-kit/README.md`](hostgator-setup-kit/README.md).
 
+### Prefere que uma IA instale para você?
+
+O repositório traz guias que o Claude Code, o Codex, o Cursor, o OpenCode e o Antigravity
+carregam sozinhos: instalar, montar um cliente por nicho, analisar métricas, afinar o prompt do
+agente e contribuir. Para tê-los em qualquer pasta, rode uma vez:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/scripts/instalar-guias.sh | bash
+```
+
+Depois, numa sessão nova, diga *"quero instalar o CRM na minha VPS"*. Para chamar um guia pelo
+nome: `/pjcrm-instalar` no Claude Code, no Cursor e no Antigravity; `$pjcrm-instalar` no Codex;
+no OpenCode, peça pelo nome.
+
+Os guias **não** se atualizam sozinhos: rodar o comando de novo traz a versão nova. Para desfazer:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/nesqj/pj-crm/main/scripts/instalar-guias.sh | bash -s -- --remover
+```
+
+Com o repositório clonado, os guias já vêm nele (`.agents/skills/`). Se rodou o comando mesmo
+assim, no Claude Code o guia instalado vale mais que o do clone, até você rodar de novo ou desfazer.
+
 ---
 
 ## Atualizar
