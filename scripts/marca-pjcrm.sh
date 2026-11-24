@@ -41,7 +41,7 @@
 #   - arquivos do original que o Umbu CRM não usa (lista NAO_USADOS) são apagados.
 #
 # O que ele NÃO faz (são arquivos de marca e voltam do Umbu CRM, não do original):
-#   lib/branding/desenho.ts, components/branding/MarcaDoProduto.tsx,
+#   lib/branding/desenho.ts, lib/branding/fruta.tsx, components/branding/MarcaDoProduto.tsx,
 #   app/icon.tsx, lib/branding/icone-do-app.tsx, docs/brand/* e os testes de
 #   marca (tests/unit/branding*.test.ts e afins). Ver o roteiro.
 #
@@ -154,6 +154,7 @@ PROPRIOS=(
   docs/brand/icone.png
   docs/brand/logo-claro.png
   docs/brand/logo-escuro.png
+  lib/branding/fruta.tsx
 )
 for f in "${PROPRIOS[@]}"; do
   [ -e "$f" ] && continue

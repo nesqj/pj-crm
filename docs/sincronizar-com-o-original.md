@@ -14,15 +14,17 @@ no original.
    `LICENSE` e os derivados: o selo das traduções e o `extensoes/catalogo.json`).
 2. **Arquivos de marca desenhados à mão** — o script não os gera; voltam do Umbu CRM,
    juntando o que o original tiver mudado neles:
-   - `lib/branding/desenho.ts`, `components/branding/MarcaDoProduto.tsx`,
-     `app/icon.tsx`, `lib/branding/icone-do-app.tsx`, `lib/branding/regua-do-produto.ts`
-   - `app/globals.css` (a rampa azul de `--color-accent-*` e `--color-accent-soft`)
+   - `lib/branding/desenho.ts`, `lib/branding/fruta.tsx` (só existe no Umbu CRM),
+     `components/branding/MarcaDoProduto.tsx`, `app/icon.tsx`, `lib/branding/icone-do-app.tsx`,
+     `lib/branding/regua-do-produto.ts`
+   - `app/globals.css` (a rampa verde de `--color-accent-*` e `--color-accent-soft`, e o bloco
+     `[data-casca="menu"]` do menu verde-escuro, no fim do arquivo)
    - `docs/brand/README.md`, `docs/brand/icone.png`, `docs/brand/logo-claro.png` e
      `docs/brand/logo-escuro.png` (os SVG, o og-card e a imagem social de `docs/brand/`
      e as capturas de `evidence/marca/` do original são apagados)
    - os testes de marca: `tests/unit/branding.test.ts`, `branding-contraste.test.ts`,
      `branding-rampa.test.ts`, `handoff-na-raiz-nao-volta.test.ts`,
-     `marca-do-produto-nao-se-edita-no-codigo.test.ts`
+     `marca-do-produto-nao-se-edita-no-codigo.test.ts`, `marca-do-produto.test.tsx`
 3. **Correções de segurança anti-SSRF** (commit `4f8f8a4`): redirecionamento da mídia do
    Zernio conferido salto a salto, com a credencial só no host original
    (`lib/channels/adapters/zernio.ts`), e IPv4-mapped em hexadecimal/por extenso em
