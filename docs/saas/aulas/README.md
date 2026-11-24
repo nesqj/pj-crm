@@ -1,4 +1,4 @@
-# Roteiros de aula: o seu SaaS com o PJ CRM
+# Roteiros de aula: o seu SaaS com o Umbu CRM
 
 Cinco aulas, na ordem da [jornada do revendedor](../README.md). Cada roteiro diz o que a aula
 entrega, o que preparar antes de gravar, as cenas, o que mostrar na tela, o erro que vale a

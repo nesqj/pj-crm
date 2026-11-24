@@ -1,4 +1,4 @@
-# PJ CRM — Handoff Autônomo
+# Umbu CRM — Handoff Autônomo
 
 **Data**: 2026-04-28 (entrega overnight pra apresentação SP 2026-04-29 cedo)
 **Sessão**: autônoma via Claude Opus 4.7 + 11 subagentes paralelos
@@ -130,7 +130,7 @@ Tudo decidido durante a sessão autônoma está documentado em:
   - `project_ecommerce_integration.md` — Nuvemshop only no MVP
   - `project_target_tenant_profile.md` — PME médio
   - `project_adopted_architecture.md` — bundle integral da Aula CRM Nichado WAHA
-  - `project_naming_and_timeline.md` — PJ CRM, MVP-B 8-12 semanas
+  - `project_naming_and_timeline.md` — Umbu CRM, MVP-B 8-12 semanas
 
 - **CLAUDE.md** na raiz do projeto — convenções operacionais pra futuras sessões
 - **docs/business-rules/00-business-rules-catalog.md** — 60 regras canônicas com IDs lookup-able
@@ -193,7 +193,7 @@ Tudo decidido durante a sessão autônoma está documentado em:
   npx @marp-team/marp-cli docs/presentation/pitch-deck.md -o pitch.pdf
   ```
 - GitHub repo: https://github.com/nesqj/pj-crm (mostre as docs)
-- Supabase Studio: dashboard.supabase.com → projeto PJ CRM → Database → Tables (31 tabelas com RLS verde)
+- Supabase Studio: dashboard.supabase.com → projeto Umbu CRM → Database → Tables (31 tabelas com RLS verde)
 
 ---
 

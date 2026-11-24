@@ -152,7 +152,7 @@ volumes:
 
 ### 2.2 Variáveis de ambiente
 
-A `WAHA_API_KEY` do servidor é o **hash SHA512 hex (lowercase) do plaintext**. O backend PJ CRM guarda **só** o plaintext no `.env` da instalação (modo 0600, como o `install.sh` o grava); nunca a hash duplicada. Geração:
+A `WAHA_API_KEY` do servidor é o **hash SHA512 hex (lowercase) do plaintext**. O backend Umbu CRM guarda **só** o plaintext no `.env` da instalação (modo 0600, como o `install.sh` o grava); nunca a hash duplicada. Geração:
 
 ```bash
 # Gerar plaintext seguro (nunca commitar; guardar num gerenciador de senhas)
@@ -176,7 +176,7 @@ WAHA_S3_BUCKET=pjcrm-waha-media
 WAHA_S3_ACCESS_KEY_ID=<r2/s3 access key>
 WAHA_S3_SECRET_ACCESS_KEY=<r2/s3 secret>
 
-# === Backend PJ CRM (`.env` da instalação) ===
+# === Backend Umbu CRM (`.env` da instalação) ===
 WAHA_API_KEY=<plaintext — só aqui>
 WAHA_BASE_URL=https://waha.pjcrm.internal
 WAHA_WEBHOOK_PUBLIC_BASE_URL=https://api.pjcrm.com

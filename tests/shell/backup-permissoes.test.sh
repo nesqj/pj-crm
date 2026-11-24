@@ -89,7 +89,7 @@ chmod +x "$WORK/bin/docker"
 PATH="$WORK/bin:$PATH"
 
 # Uma instalação single-server falsa: os três tipos de arquivo saem num backup só.
-PROJ="$WORK/root/PJ CRM, cliente"
+PROJ="$WORK/root/Umbu CRM, cliente"
 export STORAGE_DIR="$PROJ/.runtime/supabase/volumes/storage"
 mkdir -p "$STORAGE_DIR/stub"
 printf 'foto' > "$STORAGE_DIR/stub/anexo.jpg"

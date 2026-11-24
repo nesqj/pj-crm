@@ -1,4 +1,4 @@
-# Apostila do Contribuidor — PJ CRM
+# Apostila do Contribuidor — Umbu CRM
 
 > **Do zero até o seu primeiro Pull Request**, passo a passo, sem pressupor que você já programou.
 > Serve para duas leituras: **você**, que segue os capítulos em ordem, e **o seu assistente de IA**
@@ -38,7 +38,7 @@ Preferimos ensinar o *comando que mede* a escrever um número que envelhece.
 
 ## 0. O mapa: o que você vai montar
 
-O PJ CRM é um CRM com agentes de IA que atendem pelo WhatsApp. Para mexer no código, você
+O Umbu CRM é um CRM com agentes de IA que atendem pelo WhatsApp. Para mexer no código, você
 vai montar no seu computador uma cópia pequena e completa do sistema:
 
 ```
@@ -323,7 +323,7 @@ psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -v ON_ERROR_STOP=
 
 ## 5. Criar o dono e abrir o sistema
 
-O PJ CRM **não tem tela de cadastro aberta**: o primeiro usuário (o "dono") é criado por um
+O Umbu CRM **não tem tela de cadastro aberta**: o primeiro usuário (o "dono") é criado por um
 script, exatamente como o instalador faz numa VPS.
 
 ```bash
@@ -347,7 +347,7 @@ opcionais.
 Para conferir a saúde do sistema: <http://localhost:3000/api/v1/health>. Sem WhatsApp e sem Redis
 configurados, é normal ele apontar essas duas peças como indisponíveis.
 
-**Pronto: você tem o PJ CRM rodando no seu computador.** O resto da apostila é sobre mexer
+**Pronto: você tem o Umbu CRM rodando no seu computador.** O resto da apostila é sobre mexer
 nele com segurança.
 
 ---
@@ -738,7 +738,7 @@ A pasta `.agents/skills/` traz **guias** que os assistentes carregam sozinhos ao
 | `pjcrm-prompt`, `pjcrm-metricas`, `pjcrm-cliente-novo`… | Operar e afinar uma instalação |
 
 No Claude Code, chame pelo nome com `/pjcrm-contribuir`; no Codex, `$pjcrm-contribuir`; nos
-demais, peça em português ("quero contribuir com o PJ CRM").
+demais, peça em português ("quero contribuir com o Umbu CRM").
 
 Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code) ou o
 [`AGENTS.md`](../AGENTS.md) (os demais). Você não precisa colar a doutrina.
@@ -753,7 +753,7 @@ Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code)
 
 **Implementar uma issue:**
 
-> Quero resolver a issue #<N> do PJ CRM. Carregue o guia `pjcrm-contribuir`. Antes de
+> Quero resolver a issue #<N> do Umbu CRM. Carregue o guia `pjcrm-contribuir`. Antes de
 > codar: leia a issue, o `CLAUDE.md` e o código que ela toca, e me mostre um plano curto com os
 > arquivos que vão mudar e o teste que vai ficar vermelho sem o conserto. Só codifique depois que
 > eu aprovar o plano.
@@ -776,7 +776,7 @@ Os assistentes também leem sozinhos o [`CLAUDE.md`](../CLAUDE.md) (Claude Code)
 Se o seu assistente não carrega os guias, cole este bloco no início da conversa:
 
 ```text
-CONTEXTO — PJ CRM (contribuição)
+CONTEXTO — Umbu CRM (contribuição)
 - Repo: github.com/nesqj/pj-crm. Doutrina: CLAUDE.md (autoridade) e AGENTS.md. Mapa: docs/index.md.
 - Stack: Next.js 16 App Router + React 19 + TypeScript estrito + Tailwind + shadcn/ui; Supabase (Postgres+RLS);
   Zod; Vitest; Playwright. Node 22, pnpm 9.15.9.
@@ -856,7 +856,7 @@ Bug: [abra uma issue](https://github.com/nesqj/pj-crm/issues/new/choose).
 | **Seed** | Script que cria dados de teste (usuários, organizações) |
 | **Spec** | Um arquivo de teste do Playwright (`tests/e2e/*.spec.ts`) |
 | **Supabase** | O conjunto banco + login + arquivos + tempo real que o sistema usa |
-| **VPS** | Um servidor alugado, onde o cliente instala o PJ CRM |
+| **VPS** | Um servidor alugado, onde o cliente instala o Umbu CRM |
 | **WAHA** | O serviço que conecta o sistema ao WhatsApp |
 | **Worktree** | Uma segunda pasta de trabalho do mesmo repositório, com outro ramo |
 | **Zod** | A biblioteca que valida dados que chegam de fora |

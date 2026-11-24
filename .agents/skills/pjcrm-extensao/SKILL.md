@@ -1,12 +1,12 @@
 ---
 name: pjcrm-extensao
-description: 'Guia para criar uma extensão do PJ CRM — o pacote declarativo — em vez de abrir um PR no núcleo. Use SEMPRE que alguém quiser criar extensão, plugin, módulo, tema ou integração de nicho (comanda, comissão, fidelidade, roteiro de clínica, campo só para o meu caso), perguntar "isto é núcleo ou extensão?", "como publico no catálogo?", "dá para adicionar uma tela para o meu segmento?", ou quando a triagem mandar transformar um PR de nicho em extensão. Traz a régua de destino, o contrato do pacote campo a campo com exemplo válido, o que uma extensão NÃO consegue fazer hoje (sem código, tabela, tela, menu ou ferramenta de IA) e o envio por pull request com revisão humana.'
+description: 'Guia para criar uma extensão do Umbu CRM — o pacote declarativo — em vez de abrir um PR no núcleo. Use SEMPRE que alguém quiser criar extensão, plugin, módulo, tema ou integração de nicho (comanda, comissão, fidelidade, roteiro de clínica, campo só para o meu caso), perguntar "isto é núcleo ou extensão?", "como publico no catálogo?", "dá para adicionar uma tela para o meu segmento?", ou quando a triagem mandar transformar um PR de nicho em extensão. Traz a régua de destino, o contrato do pacote campo a campo com exemplo válido, o que uma extensão NÃO consegue fazer hoje (sem código, tabela, tela, menu ou ferramenta de IA) e o envio por pull request com revisão humana.'
 metadata:
   publico: contribuidor de nicho, agência, criador de pacote
   lei: docs/doctrine/extensoes.md
 ---
 
-# Criar uma extensão do PJ CRM
+# Criar uma extensão do Umbu CRM
 
 Alguém chega com uma ideia de nicho — comanda de barbearia, comissão de vendedor, um roteiro de
 pós-atendimento de clínica — e o instinto é abrir um PR no núcleo, acrescentando um campo, uma

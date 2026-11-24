@@ -54,7 +54,7 @@ ENV
   # O `.env` é o que liga os ganchos: o runner não pode reescrevê-lo.
   chown root:root /home/gh-runner/runner-$r/.env
   chmod 644 /home/gh-runner/runner-$r/.env
-  systemctl restart actions.runner.nesqj-PJ CRM.vps-devops-$r.service
+  systemctl restart actions.runner.nesqj-Umbu CRM.vps-devops-$r.service
 done
 ```
 

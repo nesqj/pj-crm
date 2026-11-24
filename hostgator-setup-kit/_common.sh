@@ -208,14 +208,14 @@ verificar_arquitetura_do_kit() {
       # recusa logo abaixo). O aviso vai para o STDERR, como a recusa: o
       # agent.sh manda a saída do update.sh para arquivo e o dono lê o fim dela.
       printf '%s\n' \
-        "⚠ $(t "Este servidor usa arquitetura '{1}', e as imagens publicadas do PJ CRM são linux/amd64 e linux/arm64." "$arch")" \
+        "⚠ $(t "Este servidor usa arquitetura '{1}', e as imagens publicadas do Umbu CRM são linux/amd64 e linux/arm64." "$arch")" \
         "  $(t "Como esta instalação JÁ EXISTE, sigo em frente: as imagens da versão alvo serão construídas nesta própria VPS.")" \
         "  $(t "Leva de 15 a 25 minutos. Uma instalação NOVA exige x86_64/amd64 ou ARM64/aarch64 com imagens publicadas.")" >&2
       return 0 ;;
   esac
 
   printf '%s\n' \
-    "✖ $(t "Este servidor usa arquitetura '{1}', mas o PJ CRM não publica imagens para ela (linux/amd64 e linux/arm64 estão disponíveis)." "$arch")" \
+    "✖ $(t "Este servidor usa arquitetura '{1}', mas o Umbu CRM não publica imagens para ela (linux/amd64 e linux/arm64 estão disponíveis)." "$arch")" \
     "  $(t '  Use uma VPS x86_64/amd64 ou ARM64/aarch64. Repetir o download não resolve.' | sed 's/^  //')" >&2
   return 1
 }
@@ -224,7 +224,7 @@ verificar_arquitetura_do_kit() {
 # deve bloquear os dois caminhos que realmente instalam/atualizam contêineres.
 # update.sh sourceia aqui antes de qualquer trabalho; install.sh sourceia depois
 # de localizar/clonar o repo, mas ainda antes de consultar ou baixar imagens do
-# PJ CRM.
+# Umbu CRM.
 _pjcrm_chamador="${BASH_SOURCE[1]:-}"
 _pjcrm_chamador="${_pjcrm_chamador##*/}"
 case "$_pjcrm_chamador" in
@@ -502,7 +502,7 @@ sincronizar_smtp_do_gotrue() {
   set_env_var "$env_sb" SMTP_USER "$(valor_compose "$usuario")"
   set_env_var "$env_sb" SMTP_PASS "$(valor_compose "$senha")"
   set_env_var "$env_sb" SMTP_ADMIN_EMAIL "$(valor_compose "$remetente")"
-  set_env_var "$env_sb" SMTP_SENDER_NAME "$(valor_compose "${nome:-${APP_NAME:-PJ CRM}}")"
+  set_env_var "$env_sb" SMTP_SENDER_NAME "$(valor_compose "${nome:-${APP_NAME:-Umbu CRM}}")"
 }
 
 # A Resend também fala SMTP (smtp.resend.com:465, usuário `resend`, senha = a
@@ -1769,7 +1769,7 @@ diagnostico_de_atualizacao() {
     status="concluído"
   fi
   {
-    printf '══ diagnóstico da atualização do PJ CRM ══\n'
+    printf '══ diagnóstico da atualização do Umbu CRM ══\n'
     printf 'quando:     %s\n' "$(date -u '+%Y-%m-%d %H:%M:%S UTC' 2>/dev/null || date)"
     printf 'diretório:  %s\n' "${PROJECT_DIR:-$PWD}"
     printf 'status:     %s\n' "$status"

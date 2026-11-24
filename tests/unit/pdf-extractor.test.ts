@@ -31,7 +31,7 @@ afterEach(() => {
 describe("extractPdfText", () => {
   it("extrai texto de um PDF real", async () => {
     const { extractPdfText } = await import("@/lib/ai/rag/extractors/pdf");
-    expect(await extractPdfText(fixture("sample-text.pdf"))).toBe("PJ CRM RAG fixture");
+    expect(await extractPdfText(fixture("sample-text.pdf"))).toBe("Umbu CRM RAG fixture");
   });
 
   it("preserva a acentuação do português", async () => {
@@ -179,7 +179,7 @@ describe("extractPdfText — estratégia `processo-a-parte`", () => {
     expect((erro as Error).message).toMatch(/sem responder/);
     expect((erro as Error).message).toMatch(/teto de heap 4 MB/);
     // O pai continua vivo e extraindo.
-    expect(await extractPdfText(fixture("sample-text.pdf"), A_PARTE)).toBe("PJ CRM RAG fixture");
+    expect(await extractPdfText(fixture("sample-text.pdf"), A_PARTE)).toBe("Umbu CRM RAG fixture");
   });
 
   it("o filho que não responde a tempo é morto e vira PdfExtractError", async () => {

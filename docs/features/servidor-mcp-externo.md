@@ -28,7 +28,7 @@ Quem é **admin** pode ligar, por agente, a opção **"Usar o servidor de
 ferramentas externo durante o atendimento"** (tela do agente; grava
 `ai_agents.config.mcp_externo_no_atendimento`, desligada de fábrica). Ligada,
 toda requisição ao servidor naquele turno — listar e chamar ferramentas — leva
-três cabeçalhos que o PJ CRM monta a partir do banco, nunca a partir do que
+três cabeçalhos que o Umbu CRM monta a partir do banco, nunca a partir do que
 o modelo escreve:
 
 | Cabeçalho | Valor |
@@ -41,7 +41,7 @@ o modelo escreve:
 qualquer identificador que venha da conversa** (argumentos da ferramenta como
 "meu número é ..."). Os argumentos da ferramenta viajam só no corpo da
 chamada: eles não sobrescrevem, removem nem acrescentam cabeçalho, e os nomes
-`X-PJCRM-*` são reservados ao PJ CRM. A autenticação continua sendo a
+`X-PJCRM-*` são reservados ao Umbu CRM. A autenticação continua sendo a
 chave do cadastro (`Authorization: Bearer`).
 
 Se o contato não puder ser confirmado no banco naquele turno, o servidor fica

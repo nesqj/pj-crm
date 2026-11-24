@@ -1,6 +1,6 @@
 ---
 type: doctrine
-project: PJ CRM
+project: Umbu CRM
 ---
 
 # Audit log e retenção

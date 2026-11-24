@@ -18,7 +18,7 @@ estado_hooks="hooks de git do contribuidor NÃO armados (bash .agents/skills/pjc
 case "$hooks" in *pjcrm-contribuir*) estado_hooks="hooks de git do contribuidor armados" ;; esac
 
 cat <<TXT
-[PJ CRM] Este clone é de um contribuidor (não do mantenedor). Antes de codar ou commitar,
+[Umbu CRM] Este clone é de um contribuidor (não do mantenedor). Antes de codar ou commitar,
 carregue a skill pjcrm-contribuir: ela mede o que a triagem mede (branch atrasada, tripla de
 migration, marca do fork no diff, fragmento de release) e evita retrabalho. $estado_hooks.
 Guias para outras situações: pjcrm-instalar, pjcrm-cliente-novo, pjcrm-metricas, pjcrm-prompt.

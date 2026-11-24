@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# PJ CRM — instalador self-host para VPS (HostGator).
+# Umbu CRM — instalador self-host para VPS (HostGator).
 #
 # Idempotente: pode rodar de novo sem estragar nada. Dependências no host:
 # só docker, docker compose, git, openssl, curl. psql/bootstrap rodam via Docker.
@@ -755,7 +755,7 @@ decide_proxy() {  # decide_proxy <portas_ocupadas> <projeto_do_dono> <projeto_at
   # próprio kit ensina como caminho para corrigir uma resposta.
   #
   # Só que "mesma instalação" NÃO é o mesmo que "mesmo nome de projeto": o nome
-  # é o basename da pasta, e toda cópia do repo se chama PJ CRM. Duas
+  # é o basename da pasta, e toda cópia do repo se chama Umbu CRM. Duas
   # árvores irmãs (/root/pj-crm e /root/apagar7/pj-crm) colidem no
   # nome `pjcrm` e esta linha as declarava re-execução uma da outra —
   # exatamente o caso que a varredura de portas foi escrita para pegar. Medido
@@ -1087,7 +1087,7 @@ fi
 #
 # A varredura NÃO procura por "traefik": procura por QUEM PUBLICA as portas, e
 # só depois pergunta o que é. A versão anterior só reconhecia Traefik, então um
-# Caddy — inclusive o de outro PJ CRM instalado na mesma VPS — passava
+# Caddy — inclusive o de outro Umbu CRM instalado na mesma VPS — passava
 # despercebido e a instalação escolhia `caddy`, garantindo o choque de portas.
 # Medido numa VPS com produção rodando: exatamente esse erro, na fase 4.
 #
@@ -1115,7 +1115,7 @@ if [ -n "$portas_ocupadas" ]; then
     unset _resto
     # De qual cópia do repo saiu esse contêiner. É o que separa "sou eu rodando
     # de novo" de "é a instalação irmã que está no ar" quando as duas pastas se
-    # chamam PJ CRM e por isso compartilham o nome do projeto.
+    # chamam Umbu CRM e por isso compartilham o nome do projeto.
     dono_arvore="$(docker inspect "$dono_portas" --format '{{index .Config.Labels "com.docker.compose.project.working_dir"}}' 2>/dev/null || true)"
     dono_arvore="${dono_arvore%/}"
   fi
@@ -1205,9 +1205,9 @@ e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
     # à instalação que está no ar — foi assim que uma aula subiu por cima de uma
     # produção. Aqui o nome das DUAS pastas aparece.
     if [ -n "$dono_arvore" ] && [ "$dono_projeto" = "$proj_atual" ] && [ "$dono_arvore" != "$_minha_arvore" ]; then
-      c_red "$(t "✖ Já existe um PJ CRM NO AR nesta VPS, instalado em {1}." "$dono_arvore")"
+      c_red "$(t "✖ Já existe um Umbu CRM NO AR nesta VPS, instalado em {1}." "$dono_arvore")"
       printf '\n%s\n'   "$(t "  Esta pasta ({1}) é outra cópia do repo. As duas se chamam" "$_minha_arvore")"
-      printf '%s\n'     "$(t "  PJ CRM, então o Docker dá às duas o MESMO nome de projeto")"
+      printf '%s\n'     "$(t "  Umbu CRM, então o Docker dá às duas o MESMO nome de projeto")"
       printf '%s\n\n'   "$(t "  ('{1}') — e instalar aqui recriaria os contêineres daquela." "$proj_atual")"
       printf '%s\n'     "$(t "  Na prática: o CRM que está no ar passaria a rodar com o .env DESTA pasta")"
       printf '%s\n\n'   "$(t "  (outro banco, outras chaves), e as conexões de WhatsApp cairiam.")"
@@ -1216,7 +1216,7 @@ e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
       printf '%s\n'     "$(t "  Quer mesmo uma SEGUNDA instalação nesta VPS? Ela precisa de nome de")"
       printf '%s\n'     "$(t "  projeto e domínio próprios — ponha no .env desta pasta, antes de rodar:")"
       printf '%s\n\n'   "       COMPOSE_PROJECT_NAME=pjcrm-$(basename "${_minha_arvore}" | tr 'A-Z' 'a-z')-2"
-      die "$(t "Instalação interrompida para não derrubar o PJ CRM que está no ar em {1}." "$dono_arvore")"
+      die "$(t "Instalação interrompida para não derrubar o Umbu CRM que está no ar em {1}." "$dono_arvore")"
     fi
     # Concordância com o número de portas: "A porta 80 e 443 já está ocupada"
     # saiu na prova real e denuncia texto montado sem olhar o próprio dado.
@@ -1228,7 +1228,7 @@ e, se for mesmo um Traefik, ponha REVERSE_PROXY=traefik no .env e rode de novo."
     printf '\n%s\n'   "$(t "  O CRM precisa dessas duas portas para publicar o site com HTTPS. Subir um")"
     printf '%s\n\n'   "$(t "  segundo proxy nelas não funciona: o Docker recusa e a instalação para.")"
     printf '%s\n'     "$(t "  Como resolver, na ordem do mais provável:")"
-    printf '\n%s\n'   "$(t "  1. Já é outro PJ CRM neste servidor? Então use aquele — entre na")"
+    printf '\n%s\n'   "$(t "  1. Já é outro Umbu CRM neste servidor? Então use aquele — entre na")"
     printf '%s\n'     "$(t "     pasta dele e rode: bash hostgator-setup-kit/update.sh")"
     printf '\n%s\n'   "$(t "  2. Não usa mais o que está ocupando? Desligue e rode este instalador de novo:")"
     [ -n "$dono_portas" ] && printf '%s\n' "$(t "       docker stop {1}" "$dono_portas")"
@@ -1298,7 +1298,7 @@ fi
 # colar. Sem o token, nada muda: seguem as perguntas de sempre.
 if [ -z "${NEXT_PUBLIC_SUPABASE_URL:-}" ] && [ -n "${SUPABASE_ACCESS_TOKEN:-}" ]; then
   step "$(t "Criando o projeto Supabase automaticamente")"
-  _sb_out="$(bash "$KIT_DIR/supabase-provision.sh" "${APP_NAME:-PJ CRM}" "${SUPABASE_REGION:-sa-east-1}")" \
+  _sb_out="$(bash "$KIT_DIR/supabase-provision.sh" "${APP_NAME:-Umbu CRM}" "${SUPABASE_REGION:-sa-east-1}")" \
     || die "$(t "Não consegui criar o projeto Supabase. Crie no painel e rode de novo sem SUPABASE_ACCESS_TOKEN.")"
   # O script imprime `CHAVE='valor'` em stdout (o visual dele vai para stderr).
   # A leitura é por parse, não por `eval` — o porquê está em
@@ -1476,7 +1476,7 @@ FIELDS=(
   ${CAMPO_OPENAI_EXTRA:+"$CAMPO_OPENAI_EXTRA"}
   "OWNER_EMAIL|E-mail do primeiro admin (dono)||v_email||"
   "OWNER_PASSWORD|Senha do primeiro admin (mínimo 8 caracteres)||v_password|secret|"
-  "APP_NAME|Nome que aparece na interface (Enter para o padrão)|PJ CRM|||"
+  "APP_NAME|Nome que aparece na interface (Enter para o padrão)|Umbu CRM|||"
   # Idioma da instalação. Fica JUNTO do nome do produto de propósito: as duas
   # perguntas são "como o sistema se apresenta", e separá-las faria a segunda
   # parecer configuração técnica.

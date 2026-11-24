@@ -58,7 +58,7 @@ const FIXTURE = [
 describe("extrairRegua — os pares saem do globals.css, nunca de lista à mão", () => {
   it("acha os dois temas, a rampa do produto e os neutros", () => {
     expect(REGUA.rampaDoProduto).toHaveLength(11);
-    expect(REGUA.rampaDoProduto[6]).toBe("#0023fa");
+    expect(REGUA.rampaDoProduto[6]).toBe("#37771a");
     expect(REGUA.claro.neutros).toHaveLength(11);
     expect(REGUA.escuro.neutros[9]).toBe("#161510");
     expect(REGUA.claro.base.map((b) => b.chave)).toEqual([
@@ -119,9 +119,9 @@ describe("extrairRegua — os pares saem do globals.css, nunca de lista à mão"
     const razao = (papel: string, superficie: string) =>
       pares.find((p) => p.papel === papel && p.superficie === superficie)?.razao ?? 0;
 
-    expect(razao("--color-accent", "--color-bg")).toBeCloseTo(7.61, 2);
-    expect(razao(":focus-visible/outline", "--color-bg")).toBeCloseTo(4.75, 2);
-    expect(razao(":focus-visible/outline", "--color-surface-elevated")).toBeCloseTo(4.51, 2);
+    expect(razao("--color-accent", "--color-bg")).toBeCloseTo(5.23, 2);
+    expect(razao(":focus-visible/outline", "--color-bg")).toBeCloseTo(3.63, 2);
+    expect(razao(":focus-visible/outline", "--color-surface-elevated")).toBeCloseTo(3.44, 2);
   });
 
   it("a Sage inteira, como está no CSS, cabe nos pisos", () => {
@@ -306,7 +306,7 @@ describe("reconciliação — quem se move são as NOSSAS semânticas", () => {
   it("a Sage pura já nasce colidida e dispara a reconciliação (controle positivo)", () => {
     // Na Sage, `--color-success` do bloco escuro (`#82a077`) é praticamente o
     // accent-400 que ela deriva. Se o mecanismo não disparasse aqui, ele não
-    // dispararia em lugar nenhum. (O produto PJ CRM é azul; a Sage segue como semente
+    // dispararia em lugar nenhum. (O produto Umbu CRM é azul; a Sage segue como semente
     // de controle.)
 
     const sage = derivarMarca("#506d48", REGUA);
@@ -373,8 +373,10 @@ describe("reconciliação — quem se move são as NOSSAS semânticas", () => {
         }
       }
     }
-    // Guarda de vacuidade do run inteiro: 11 movimentos medidos nas 16 sementes.
-    expect(movimentosNoRun).toBe(11);
+    // Guarda de vacuidade do run inteiro: 23 movimentos medidos nas 16 sementes. Com o
+    // accent verde do Umbu CRM, mais sementes encostam no success (também verde) e o
+    // reconciliador as afasta — 23, e não os 11 da paleta azul.
+    expect(movimentosNoRun).toBe(23);
   });
 });
 
@@ -405,12 +407,12 @@ describe("marca acromática — o accent do produto permanece", () => {
         separacaoDoNeutro(regua, tema.grauDoAccent, tema.accent),
       ).toBeGreaterThanOrEqual(PISO_DE_SEPARACAO_DO_NEUTRO);
     }
-    // Os números exatos, fixados: 0,313 no claro (accent-600 × neutral-600) e 0,2629 no
-    // escuro (accent-400 × neutral-400), com o azul #0023fa do PJ CRM. Na Sage original o claro
+    // Os números exatos, fixados: 0,137 no claro (accent-600 × neutral-600) e 0,235 no
+    // escuro (accent-400 × neutral-400), com o verde #37771a do Umbu CRM. Na Sage original o claro
     // media 0,0681, abaixo do piso do briefing (0,08) — por isso aquele piso não
     // foi aceito sem medir.
-    expect(separacaoDoNeutro(REGUA.claro, marca.claro.grauDoAccent, marca.claro.accent)).toBeCloseTo(0.313, 3);
-    expect(separacaoDoNeutro(REGUA.escuro, marca.escuro.grauDoAccent, marca.escuro.accent)).toBeCloseTo(0.2629, 4);
+    expect(separacaoDoNeutro(REGUA.claro, marca.claro.grauDoAccent, marca.claro.accent)).toBeCloseTo(0.137, 3);
+    expect(separacaoDoNeutro(REGUA.escuro, marca.escuro.grauDoAccent, marca.escuro.accent)).toBeCloseTo(0.235, 3);
 
     // Controle negativo: um accent cinza reprovaria as duas guardas. Sem esta linha, os
     // pisos acima poderiam ser satisfeitos por qualquer coisa.

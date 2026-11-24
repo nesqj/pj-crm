@@ -1,6 +1,6 @@
 # Mapa de Jornadas & Testes E2E — Experiência do usuário em VPS fresca
 
-> Fonte da verdade do QA de produto do PJ CRM open-source. Cada caso aqui é
+> Fonte da verdade do QA de produto do Umbu CRM open-source. Cada caso aqui é
 > exercitado **pelo frontend real** (Playwright), com contas de teste reais e
 > recursos reais (banco fresco do `baseline.sql`, WAHA local, receiver de webhook
 > real). Curl/API só como diagnóstico, nunca como prova de UX.
@@ -1214,7 +1214,7 @@ GitHub dispara no horário é do GitHub.
 **Por que P0:** achado pelo dono do produto num número que é também o WhatsApp
 pessoal/comercial dele — a IA respondeu automaticamente para cliente atual, dono
 de incorporadora, contato pessoal, fornecedor e conversa antiga. O
-PJ CRM responde `allow by default` (publicou agente para a sessão → atende
+Umbu CRM responde `allow by default` (publicou agente para a sessão → atende
 todo inbound); num número compartilhado com gente isso é a IA assumindo conversa
 que não era dela.
 
@@ -1443,7 +1443,7 @@ simples, e um cético a achou lendo o catálogo:
 **Por que a porta NÃO subiu para o menu lateral:** o menu foi medido em 15 itens com folga 0 a
 1280×900, e `crm_b2b` sozinho acrescenta 3. Levei três saídas ao dono com o custo de cada uma e ele
 escolheu manter no hub e consertar o texto (**opção B**, registrada em
-`~/PJ CRMDecisoes/Decisão PRs - rafael/124 — …`). A opção de subir ao menu (ou subir só a primeira
+`~/Umbu CRMDecisoes/Decisão PRs - rafael/124 — …`). A opção de subir ao menu (ou subir só a primeira
 porta de cada módulo) segue disponível se a expectativa mudar.
 
 **O que a investigação mediu e NÃO consertou** — é decisão de produto, não
@@ -1964,7 +1964,7 @@ interna (rota própria, sem `?formato`) continua sem conversão.
   alguém passa a escutar, ou o trigger sai. Não inventei consumidor.
 - Tela de Conexões diz "1 número conectado" mesmo com o número **caído** (conta
   sessões, não conectados).
-- ~~O autenticador registra o nome fixo "PJ CRM", ignorando o `APP_NAME` que o
+- ~~O autenticador registra o nome fixo "Umbu CRM", ignorando o `APP_NAME` que o
   instalador vende como marca de toda a interface.~~ **RESOLVIDO em 2026-08-14** — virou o
   caso `M4` da jornada de marca própria (no fim deste arquivo). E a justificativa que estava
   aqui era **falsa em duas metades**: o problema não era "o nome fixo aparece no celular do
@@ -2374,7 +2374,7 @@ curl -s -o /dev/null -w '%{http_code}\n' https://<DOMAIN>/app
 
 | # | Caso | O que conferir | Como |
 |---|---|---|---|
-| `J10.1` | **Aba** — quem abre o domínio vê o nome do revendedor | O `<title>` contém `Vendas Turbo` e **não** contém `PJ CRM` | `curl -s https://<DOMAIN>/login \| grep -o '<title>[^<]*</title>'` |
+| `J10.1` | **Aba** — quem abre o domínio vê o nome do revendedor | O `<title>` contém `Vendas Turbo` e **não** contém `Umbu CRM` | `curl -s https://<DOMAIN>/login \| grep -o '<title>[^<]*</title>'` |
 | `J10.2` | **Ícone** — o favicon carrega **deslogado**, na cor do revendedor | `/icon` responde 200 e o SVG tem o accent DERIVADO (não a semente crua) | `curl -s -o /dev/null -w '%{http_code}\n' https://<DOMAIN>/icon` e abrir a aba no browser |
 | `J10.3` | **E-mail de acesso** — o "confirme sua conta" do GoTrue chega com a marca | Rodar `bash marca-emails.sh` e conferir na caixa real. **Sem `SUPABASE_ACCESS_TOKEN`, o script imprime o passo manual e a instalação segue** — esse ramo também é PASS, e é o caminho da maioria | caixa de entrada de verdade, não log |
 | `J10.4` | **Convite** — sem `RESEND_API_KEY`, a tela mostra o `accept_url` em vez de falhar calada | `/app/team/invite` → convidar → a tela exibe o link | pela tela |

@@ -194,16 +194,16 @@ jobs:
         include:
           - name: pjcrm
             dockerfile: Dockerfile
-            title: PJ CRM
+            title: Umbu CRM
           - name: pjcrm-worker
             dockerfile: Dockerfile.worker
-            title: PJ CRM worker
+            title: Umbu CRM worker
           - name: pjcrm-scheduler
             dockerfile: Dockerfile.scheduler
-            title: PJ CRM scheduler
+            title: Umbu CRM scheduler
           - name: pjcrm-voice-agent
             dockerfile: Dockerfile.voice-agent
-            title: PJ CRM voice agent
+            title: Umbu CRM voice agent
         name: [pjcrm, pjcrm-worker, pjcrm-scheduler, pjcrm-voice-agent]
         arch: [amd64, arm64]
 
@@ -527,7 +527,7 @@ jobs:
           docker run --rm \
             -v "$PWD/tests/fixtures/sample-text.pdf:/fixture.pdf:ro" \
             -v "$PWD/scripts/sonda-pdf-na-imagem.mjs:/sonda-pdf-na-imagem.mjs:ro" \
-            -e PDF_ESPERADO="PJ CRM RAG fixture" \
+            -e PDF_ESPERADO="Umbu CRM RAG fixture" \
             pjcrm-smoke:pr node /sonda-pdf-na-imagem.mjs
 
       - name: Encerrar

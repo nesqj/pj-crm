@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Atualiza o PJ CRM na VPS: código novo + banco + app — com BACKUP antes e
+# Atualiza o Umbu CRM na VPS: código novo + banco + app — com BACKUP antes e
 # CHECAGEM DE SAÚDE depois. Um comando só, pensado pra quem não é técnico:
 #
 #   bash hostgator-setup-kit/update.sh

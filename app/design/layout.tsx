@@ -4,7 +4,7 @@ import { VariantProvider } from "./lib/variant-context";
 import "./showcase.css";
 
 export const metadata: Metadata = {
-  title: "Design Showcase — PJ CRM",
+  title: "Design Showcase — Umbu CRM",
   description: "Painel navegável de design system. Soft-tech / calmo.",
   robots: { index: false, follow: false },
 };

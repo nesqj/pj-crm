@@ -9,7 +9,7 @@ FROM alpine:3.20
 
 LABEL org.opencontainers.image.source="https://github.com/nesqj/pj-crm" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.title="PJ CRM scheduler"
+      org.opencontainers.image.title="Umbu CRM scheduler"
 
 ENV TZ=UTC
 

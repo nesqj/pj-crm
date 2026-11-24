@@ -3922,7 +3922,7 @@ vi.mock("next/headers", () => ({ cookies: async () => ({ get: () => undefined })
 vi.mock("@/lib/branding/instalacao", () => ({ marcaDaInstalacao: async () => ({}) }));
 vi.mock("@/lib/branding/organizacao", () => ({
   resolverMarcaDaOrganizacao: () => ({
-    name: "PJ CRM", logoUrl: null, cor: "#000000",
+    name: "Umbu CRM", logoUrl: null, cor: "#000000",
     origens: { nome: "instalacao", logoUrl: "instalacao", cor: "instalacao" },
   }),
 }));

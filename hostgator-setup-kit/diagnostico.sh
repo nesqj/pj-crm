@@ -52,13 +52,13 @@ achar_projeto() {
 }
 
 PROJETO="$(achar_projeto)" || {
-  printf '%s✖ Não achei uma instalação do PJ CRM nesta máquina.%s\n' "$R" "$Z"
+  printf '%s✖ Não achei uma instalação do Umbu CRM nesta máquina.%s\n' "$R" "$Z"
   printf '  Rode este script de dentro da pasta do projeto (a que tem %s).\n' "$COMPOSE_FILE"
   exit 2
 }
 cd "$PROJETO" || exit 2
 
-printf '%s══ Diagnóstico do PJ CRM ══%s\n' "$B" "$Z"
+printf '%s══ Diagnóstico do Umbu CRM ══%s\n' "$B" "$Z"
 item "${D}pasta: $PROJETO${Z}"
 item "${D}data:  $(date -u '+%Y-%m-%d %H:%M UTC')${Z}"
 

@@ -34,7 +34,7 @@ projeto** e preenche as quatro sozinho (`hostgator-setup-kit/supabase-provision.
 | `SUPABASE_ACCESS_TOKEN` (token pessoal, **não fica salvo**) | projeto criado à mão (4 cópias); os e-mails de acesso saem no modelo em inglês do Supabase e o **Site URL fica `localhost:3000`** — "esqueci minha senha", confirmação de cadastro e aceite de convite chegam com link quebrado até alguém configurar Authentication › URL Configuration (`Site URL = https://DOMÍNIO`, `Redirect = https://DOMÍNIO/auth/confirm`). O instalador imprime essa pendência no fim; `hostgator-setup-kit/marca-emails.sh` resolve depois, com o token |
 | **chave do provedor escolhido** (`ANTHROPIC_API_KEY`, `OPENROUTER_API_KEY` ou `OPENAI_API_KEY`) | o agente **não responde** até alguém cadastrar a chave em **IA › Credenciais** — cifrada no banco, sem mexer no `.env` e sem reiniciar. A tela final da instalação lembra o caminho. Quem digita uma chave tem ela validada na hora (prefixo + chamada real ao provedor: uma chave sem crédito passa; "recusada" é 401) |
 | `OPENAI_API_KEY` extra (quando a IA não é OpenAI) | o agente **não ouve áudio** nem indexa/consulta a base de conhecimento até alguém cadastrar a chave da OpenAI em IA › Credenciais (não precisa mexer no `.env`) |
-| `APP_NAME` (padrão `PJ CRM`) | é a **semente** do nome; depois muda em Configurações › Marca |
+| `APP_NAME` (padrão `Umbu CRM`) | é a **semente** do nome; depois muda em Configurações › Marca |
 | `APP_LOCALE` (1 = Português, 2 = Español) | grava o idioma da organização |
 | `APP_ACCENT_HEX` (ex. `#7a5cd6`) | a cor do produto (verde) na tela e nos e-mails |
 | `SUPPORT_EMAIL` | a tela de "conta suspensa" fica sem endereço de contato |

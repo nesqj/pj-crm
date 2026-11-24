@@ -12,7 +12,7 @@ describe("resolveBranding", () => {
     expect(resolveBranding(undefined, undefined)).toEqual({
       name: DEFAULT_APP_NAME,
       logoUrl: null,
-      initial: "P",
+      initial: "U",
     });
   });
 
@@ -131,7 +131,7 @@ describe("nome do arquivo de códigos de recuperação", () => {
   it("deriva o prefixo da marca, sem acento e sem espaço", () => {
     expect(prefixoDoArquivo("Vendas Turbo")).toBe("vendas-turbo");
     expect(prefixoDoArquivo("Ótima Gestão")).toBe("otima-gestao");
-    expect(prefixoDoArquivo(DEFAULT_APP_NAME)).toBe("pj-crm");
+    expect(prefixoDoArquivo(DEFAULT_APP_NAME)).toBe("umbu-crm");
   });
 
   it("não devolve hífen pendurado nem repetido", () => {
@@ -153,7 +153,7 @@ describe("nome do arquivo de códigos de recuperação", () => {
  * A versão anterior deste gate ficava VERDE enquanto a marca vazava, por dois
  * furos independentes, e os dois só apareceram quando alguém foi olhar:
  *
- *  1. o padrão era `/PJ CRM/` — **case-sensitive**. Passavam
+ *  1. o padrão era `/Umbu CRM/` — **case-sensitive**. Passavam
  *     `support@deskcomm.com.br` (tela de conta suspensa), `suporte@pjcrm.app`
  *     (tela de cobrança) e `pjcrm-recovery-codes.txt` (o arquivo que o
  *     usuário baixa e guarda por anos). Endereço e nome de arquivo são
@@ -213,7 +213,7 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "PROTOCOLO",
     motivo:
       "`agent_name_hint` identifica o aplicativo auto-hospedado durante a autorização SIWC da OpenAI; não é o nome apresentado nas telas do CRM. O fluxo de login depende deste identificador de produto.",
-    marcas: ["pjcrm"],
+    marcas: ["umbucrm"],
   },
   "lib/webhooks/assinatura.ts": {
     categoria: "PROTOCOLO",
@@ -275,7 +275,7 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "PROTOCOLO",
     motivo:
       "User-Agent exigido pela Nuvemshop, que identifica a aplicação registrada na plataforma deles. Trocar pelo nome do revendedor descreveria uma aplicação que não existe lá",
-    marcas: ["pjcrm"],
+    marcas: ["umbucrm"],
   },
   "lib/agenda/google/evento.ts": {
     categoria: "PROTOCOLO",
@@ -338,7 +338,7 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     fase: 7,
     motivo:
       "template sem caminho de produção: sem rota em app/api/v1/cron/, sem linha no docker/scheduler/entrypoint.sh e, desde a limpeza do teto de orçamento (0159), sem chamador NENHUM — o único era workers/ai-budget-checker.cron.ts, que foi apagado por nunca ter tido agendador. Marcar isto não muda nada que um usuário veja, e a única 'prova' possível seria invocar a função à mão — o que prova a função, não o produto. Sai quando o alarme ganhar cron de verdade (ou quando o template for apagado junto)",
-    marcas: ["pjcrm"],
+    marcas: ["umbucrm"],
   },
 
   // ─── DEV — fixture de teste; não embarca. ───
@@ -350,14 +350,14 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
   },
   "lib/agent-engine/agent/draft-reply.test.ts": {
     categoria: "DEV",
-    motivo: "nome de agente numa fixture de teste ('Bot PJ CRM'); não sai da suíte",
-    marcas: ["pjcrm"],
+    motivo: "nome de agente numa fixture de teste ('Bot Umbu CRM'); não sai da suíte",
+    marcas: ["umbucrm"],
   },
   "lib/system/changelog.test.ts": {
     categoria: "DEV",
     motivo:
       "fixture que reproduz o CHANGELOG real, incluindo as URLs do repositório no GitHub. A marca aqui é o nome do repositório upstream, que o clone não renomeia",
-    marcas: ["pjcrm"],
+    marcas: ["umbucrm"],
   },
 
   // ─── PADRAO — a marca padrão precisa existir em algum lugar. ───
@@ -365,7 +365,7 @@ const MARCA_CONGELADA: Record<string, EntradaDeMarca> = {
     categoria: "PADRAO",
     motivo:
       "é a DEFINIÇÃO de DEFAULT_APP_NAME — o valor que aparece quando o operador não configurou marca nenhuma. Se esta linha sumir, some o padrão",
-    marcas: ["pjcrm"],
+    marcas: ["umbucrm"],
   },
   // `lib/video/jitsi.ts` ficou DE FORA por decisão do review do #2441: ele
   // prefixa a sala do Jitsi com `sala-`, neutro. O link é repassado no chat e
@@ -443,10 +443,10 @@ function linhasQueContam(fonte: string): string[] {
 function marcasNoTexto(fonte: string): string[] {
   const achadas: string[] = [];
   for (const linha of linhasQueContam(fonte)) {
-    for (const casada of linha.matchAll(/[\w@.-]*pj[ -]?crm[\w@.-]*/gi)) {
-      // Pontuação encostada (o ponto final de "no PJ CRM.") não faz parte
+    for (const casada of linha.matchAll(/[\w@.-]*(?:pj[ -]?crm|umbu(?:[ -]?crm)?)[\w@.-]*/gi)) {
+      // Pontuação encostada (o ponto final de "no Umbu CRM.") não faz parte
       // do identificador e faria a lista mudar por causa de uma vírgula.
-      achadas.push(casada[0].toLowerCase().replace(/pj[ -]?crm/g, "pjcrm").replace(/^[.-]+/, "").replace(/[.-]+$/, ""));
+      achadas.push(casada[0].toLowerCase().replace(/pj[ -]?crm/g, "pjcrm").replace(/umbu(?:[ -]?crm)?/g, "umbucrm").replace(/^[.-]+/, "").replace(/[.-]+$/, ""));
     }
   }
   return achadas.sort();
@@ -581,7 +581,7 @@ describe("catraca de marca hardcoded", () => {
   });
 
   it("pega a marca em qualquer caixa e dentro de identificador", () => {
-    // O furo nº 1 do gate antigo, agora com asserção: `/PJ CRM/` deixava passar
+    // O furo nº 1 do gate antigo, agora com asserção: `/Umbu CRM/` deixava passar
     // as três formas de baixo, que são as formas em que a marca de fato aparece.
     expect(marcasNoTexto(`a.download = "pjcrm-recovery-codes.txt";`)).toEqual([
       "pjcrm-recovery-codes.txt",
@@ -593,10 +593,10 @@ describe("catraca de marca hardcoded", () => {
   it("ignora comentário, mas não confunde `//` de URL com comentário", () => {
     // A regra de comentário é uma exceção, e exceção sem guarda vira buraco:
     // procurar `//` em qualquer posição da linha esconderia justamente a URL.
-    expect(marcasNoTexto(`  // fala do PJ CRM`)).toEqual([]);
-    expect(marcasNoTexto(` * fala do PJ CRM`)).toEqual([]);
+    expect(marcasNoTexto(`  // fala do Umbu CRM`)).toEqual([]);
+    expect(marcasNoTexto(` * fala do Umbu CRM`)).toEqual([]);
     expect(marcasNoTexto(`const u = "https://pjcrm.app/x";`)).toEqual(["pjcrm.app"]);
-    expect(marcasNoTexto(`fetch(url); // manda pro PJ CRM`)).toEqual(["pjcrm"]);
+    expect(marcasNoTexto(`fetch(url); // manda pro Umbu CRM`)).toEqual(["umbucrm"]);
   });
 
   it("nenhum arquivo fora da lista fixa a marca", () => {
@@ -681,7 +681,7 @@ describe("catraca de marca hardcoded", () => {
  * o código que embarca na imagem. Ela é cega para `supabase/templates/*.html` e
  * `supabase/config.toml`, e essa cegueira tinha consequência medida: dava para
  * zerar a lista de dívidas, ver a suíte inteira verde, e o cliente do
- * revendedor continuar recebendo "Confirme seu e-mail — PJ CRM" no
+ * revendedor continuar recebendo "Confirme seu e-mail — Umbu CRM" no
  * PRIMEIRO e-mail que ele abre na vida.
  *
  * Estes arquivos não são renderizados por nenhum TypeScript nosso: quem os
@@ -726,7 +726,7 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
       categoria: "DEV",
       motivo:
         "config do Supabase LOCAL (o `supabase start` de dev e do CI). NÃO embarca na imagem e NÃO alcança clone nenhum: um self-hoster usa um projeto na nuvem do Supabase, cuja config de auth vem do marca-emails.sh, ou um GoTrue próprio, que lê env. `project_id` ainda nomeia os contêineres locais (supabase_auth_pj-crm) e os assuntos são o que a suíte local envia",
-      marcas: ["pjcrm", "pjcrm", "pjcrm"],
+      marcas: ["pjcrm", "umbucrm", "umbucrm"],
     },
   };
 
@@ -752,22 +752,22 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
   });
 
   it("comentário de HTML não conta, e `-->` no meio da linha não engole o resto", () => {
-    expect(marcasNoTexto(semComentariosHtml("<!-- fala do PJ CRM -->"))).toEqual([]);
-    expect(marcasNoTexto(semComentariosHtml("<!--\n  PJ CRM\n  em várias linhas\n-->"))).toEqual([]);
+    expect(marcasNoTexto(semComentariosHtml("<!-- fala do Umbu CRM -->"))).toEqual([]);
+    expect(marcasNoTexto(semComentariosHtml("<!--\n  Umbu CRM\n  em várias linhas\n-->"))).toEqual([]);
     // O caso que a regra de `//` erraria: marca REAL depois do fecho.
-    expect(marcasNoTexto(semComentariosHtml("<!-- nota --> Sua conta no PJ CRM"))).toEqual([
-      "pjcrm",
+    expect(marcasNoTexto(semComentariosHtml("<!-- nota --> Sua conta no Umbu CRM"))).toEqual([
+      "umbucrm",
     ]);
     // E a marca fora de comentário nenhum continua contando.
-    expect(marcasNoTexto(semComentariosHtml("<p>conta no PJ CRM</p>"))).toEqual(["pjcrm"]);
+    expect(marcasNoTexto(semComentariosHtml("<p>conta no Umbu CRM</p>"))).toEqual(["umbucrm"]);
   });
 
   it("comentário de TOML não conta, mas `#` dentro de string não vira comentário", () => {
-    expect(marcasNoTexto(semComentariosToml("# Supabase CLI config — PJ CRM"))).toEqual([]);
-    expect(marcasNoTexto(semComentariosToml('cor = "#506d48"  # PJ CRM'))).toEqual([
-      "pjcrm",
+    expect(marcasNoTexto(semComentariosToml("# Supabase CLI config — Umbu CRM"))).toEqual([]);
+    expect(marcasNoTexto(semComentariosToml('cor = "#506d48"  # Umbu CRM'))).toEqual([
+      "umbucrm",
     ]);
-    expect(marcasNoTexto(semComentariosToml('subject = "Olá — PJ CRM"'))).toEqual(["pjcrm"]);
+    expect(marcasNoTexto(semComentariosToml('subject = "Olá — Umbu CRM"'))).toEqual(["umbucrm"]);
   });
 
   it("nenhum arquivo do GoTrue fixa a marca fora da lista", () => {
@@ -793,7 +793,7 @@ describe("catraca de marca no que o GoTrue renderiza", () => {
 
   it("os dois modelos de e-mail não têm marca nenhuma — é o estado que se defende", () => {
     // Explícito, e não só implícito na ausência de linha na allowlist: é ESTE
-    // caso que falha quando alguém reescreve "no PJ CRM" num template.
+    // caso que falha quando alguém reescreve "no Umbu CRM" num template.
     expect(encontradoAqui.has("supabase/templates/confirmation.html")).toBe(false);
     expect(encontradoAqui.has("supabase/templates/recovery.html")).toBe(false);
   });

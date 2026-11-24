@@ -236,7 +236,7 @@ eu esbarrei deixaria as irmãs quebradas com um álibi de "já foi tratado".
 em 390px o app é inutilizável — o sidebar é fixo em **240px** e não colapsa, sobrando
 ~150px de conteúdo, com campos de formulário de uma letra por linha. Vale para toda
 tela do produto, não só esta. Ponto de quebra medido: **768px é o menor tamanho usável**
-(estouro 0). Isto é decisão de produto (o PJ CRM é ferramenta de operação em
+(estouro 0). Isto é decisão de produto (o Umbu CRM é ferramenta de operação em
 desktop?) e mexe no shell de todos — **item para o Maestro**, não conserto de wave.
 
 Regressão dos dois fixes: `capacidades-do-agente` + `navegacao` = **14 passed** (o

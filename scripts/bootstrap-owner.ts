@@ -1,5 +1,5 @@
 /**
- * Bootstrap do 1º dono de uma instância self-host do PJ CRM.
+ * Bootstrap do 1º dono de uma instância self-host do Umbu CRM.
  *
  * O app NÃO tem tela de cadastro — este script cria, de forma idempotente:
  *   1. o usuário dono (auth) com e-mail confirmado

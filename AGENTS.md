@@ -261,7 +261,7 @@ função aparece várias vezes, e quem vale é a **última**. Pergunte ao banco 
 Contar no arquivo responde "o arquivo menciona", não "o banco faz".
 
 **Marca própria (white-label)** — o produto é revendido e o nome não é seu. **Nunca** escreva
-"PJ CRM"/"PJ CRM" em código que alcança o usuário: `tests/unit/branding.test.ts` varre
+"Umbu CRM"/"Umbu CRM" em código que alcança o usuário: `tests/unit/branding.test.ts` varre
 `app|components|lib|workers|hooks` e reprova (a allowlist só encolhe). A marca resolve do banco
 (`platform_branding`, `organizations.settings.branding`); `APP_NAME`/`APP_LOGO_URL`/`APP_ACCENT_HEX`
 no `.env` são semente e piso de rollback. Fora do DOM (e-mail, ícone, `issuer` do MFA) use

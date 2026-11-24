@@ -18,7 +18,7 @@
  * caminho que começa com `/app/pipelines/` (mesma origem, mesma tela); qualquer
  * outra coisa — `https://…`, `//outro-host`, `javascript:` — cai no quadro do
  * próprio negócio. Sem isso, a página do negócio vira trampolim de redirect
- * aberto: um endereço do PJ CRM apontando para fora tem outra cara.
+ * aberto: um endereço do Umbu CRM apontando para fora tem outra cara.
  *
  * `lead=` sai do `voltar` de propósito: voltar ao quadro com `?lead=` reabriria
  * o painel que a pessoa acabou de expandir.

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# quem-sou.sh — diz se quem está neste clone é o mantenedor do PJ CRM ou um
+# quem-sou.sh — diz se quem está neste clone é o mantenedor do Umbu CRM ou um
 # contribuidor, e POR QUÊ. A skill pjcrm-contribuir (e os hooks) usam a
 # primeira palavra da saída; o resto é para gente ler.
 #

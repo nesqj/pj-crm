@@ -1,7 +1,7 @@
 /**
  * QUAL MODELO DE DECISÃO RESPONDE — e por onde.
  *
- * O PJ CRM nasceu com o Jev fixo (`./origem`), porque o limiar de passagem
+ * O Umbu CRM nasceu com o Jev fixo (`./origem`), porque o limiar de passagem
  * para humano foi calibrado sobre ele. A issue #4710 abre a escolha: o OpenRouter
  * serve uma categoria inteira de modelos de decisão (`output_modalities:
  * ["decisions"]`), e uma instalação pode querer um modelo gratuito numa tarefa

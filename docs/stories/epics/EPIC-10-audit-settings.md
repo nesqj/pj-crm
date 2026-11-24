@@ -957,7 +957,7 @@ exposes:
 
 #### Contexto
 
-Placeholder explícito pra não deixar item quebrado na sidebar de settings. Mostra mensagem "Em breve" + benefícios do plano + link `mailto:contato@deskcomm.com.br?subject=Billing` ou link pro WhatsApp da PJ CRM. Nenhuma lógica de billing real.
+Placeholder explícito pra não deixar item quebrado na sidebar de settings. Mostra mensagem "Em breve" + benefícios do plano + link `mailto:contato@deskcomm.com.br?subject=Billing` ou link pro WhatsApp da Umbu CRM. Nenhuma lógica de billing real.
 
 #### Files to create
 
@@ -979,7 +979,7 @@ Placeholder explícito pra não deixar item quebrado na sidebar de settings. Mos
 Given user abre /app/settings/billing
 When page carrega
 Then mensagem "Em breve" visível
-And botão "Falar com a PJ CRM" abre mailto
+And botão "Falar com a Umbu CRM" abre mailto
 ```
 
 ```gherkin

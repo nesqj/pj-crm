@@ -1,6 +1,6 @@
 {
   "pjcrm/retorno-de-paciente": {
-    "publisher_label": "PJ CRM",
+    "publisher_label": "Umbu CRM",
     "repository": "https://github.com/nesqj/pj-crm",
     "tags": [
       "clinica",
@@ -10,7 +10,7 @@
     "published_at": "2026-09-18"
   },
   "pjcrm/carrinho-abandonado": {
-    "publisher_label": "PJ CRM",
+    "publisher_label": "Umbu CRM",
     "repository": "https://github.com/nesqj/pj-crm",
     "tags": [
       "ecommerce",
@@ -20,7 +20,7 @@
     "published_at": "2026-09-18"
   },
   "pjcrm/primeira-semana": {
-    "publisher_label": "PJ CRM",
+    "publisher_label": "Umbu CRM",
     "repository": "https://github.com/nesqj/pj-crm",
     "tags": [
       "equipe",

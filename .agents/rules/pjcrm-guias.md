@@ -1,6 +1,6 @@
 ---
 trigger: always_on
-description: Guias do assistente do PJ CRM — quando usar cada um
+description: Guias do assistente do Umbu CRM — quando usar cada um
 ---
 
 Este repositório embute guias (skills em `.agents/skills/`) para situações recorrentes. Quando o pedido

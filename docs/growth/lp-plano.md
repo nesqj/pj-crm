@@ -94,7 +94,7 @@ FOOTER
 Fino, sticky, fundo `#faf9f6` com `border-bottom` de 1px que só aparece após 40px de scroll.
 
 ```
-[■ PJ CRM]     Como funciona · Prova · Instalar · Preço      [GitHub ⭐] [Instalar na VPS]
+[■ Umbu CRM]     Como funciona · Prova · Instalar · Preço      [GitHub ⭐] [Instalar na VPS]
 ```
 
 - `[GitHub ⭐ 116]` — secundário, ghost, **com contador ao vivo**. Decisão do Rafael, contra minha recomendação inicial e com argumento melhor que o meu: 116 para um CRM brasileiro com 3 meses de vida lê como tração real, não como hobby — a régua de ~1k que a pesquisa usa é de projeto anglófono de infraestrutura, outro mercado. O número é buscado da API do GitHub e cacheado; nunca hardcoded (prova social escrita à mão apodrece e fica menor que a realidade).
@@ -107,7 +107,7 @@ Fino, sticky, fundo `#faf9f6` com `border-bottom` de 1px que só aparece após 4
 
 ### O conceito
 
-O nome do produto virando imagem. **PJ CRM = Desk + comm — o comercial de mesa.** O hero é uma mesa isométrica vista de cima, onde a operação comercial inteira é **uma superfície só**: a conversa, o funil, o agente, o follow-up — peças distintas ligadas por trilhas visíveis.
+O nome do produto virando imagem. **Umbu CRM = Desk + comm — o comercial de mesa.** O hero é uma mesa isométrica vista de cima, onde a operação comercial inteira é **uma superfície só**: a conversa, o funil, o agente, o follow-up — peças distintas ligadas por trilhas visíveis.
 
 Por que isso é a escolha certa e não outra: é a única imagem desta página que **nenhum concorrente pode usar**, porque ela nasce da etimologia do seu nome. Um CRM genérico pode mostrar um kanban. Nenhum pode mostrar "a mesa".
 
@@ -376,7 +376,7 @@ Sem tabela de planos — não temos planos. Um bloco só, honesto.
 
 Formato deliberado (é o que a pesquisa de GEO mediu como eficaz): **pergunta literal como H2 visível**, resposta direta nas duas primeiras frases, número verificável quando houver. Como HTML visível — não como JSON-LD escondido, que o Google descontinuou para FAQ.
 
-1. Quanto custa o PJ CRM?
+1. Quanto custa o Umbu CRM?
 2. Preciso saber programar para instalar?
 3. Qual VPS eu preciso?
 4. Funciona com WhatsApp comum?
@@ -395,11 +395,11 @@ A 9 é a mais importante e quase ninguém responde: *"Cada mensagem passa por se
 
 Reconstruído em HTML fluido (o original é 1680×600 fixo e quebra no celular), **mantendo os sinais visuais da HostGator** — laranja `#F67922`, navy `#073f60` — como um bloco de **parceiro claramente delimitado**. A ruptura de paleta vira intencional em vez de acidental: uma faixa de largura total, com respiro antes e depois, lida como "aqui começa outra coisa".
 
-Removidos: **OpenClaw** e **Hermes** — não têm relação com o PJ CRM e diluem a conversão.
+Removidos: **OpenClaw** e **Hermes** — não têm relação com o Umbu CRM e diluem a conversão.
 
 > **Eyebrow:** Parceiro oficial
 > **Título:** Soberania com IA é na HostGator
-> **Corpo:** Datacenter no Brasil: o CRM guarda os seus dados sem tirá-los do país. É onde o PJ CRM foi feito para rodar.
+> **Corpo:** Datacenter no Brasil: o CRM guarda os seus dados sem tirá-los do país. É onde o Umbu CRM foi feito para rodar.
 > **CTA:** Assinar a VPS com desconto da parceria →
 > **Microcopy:** link de parceria — assinar por ele apoia o projeto
 
@@ -418,7 +418,7 @@ Quatro colunas + barra inferior.
 | Preço | Arquitetura | YouTube | Segurança |
 | FAQ | Doutrina do sistema vivo | Instagram | Contribuir |
 
-Barra inferior: `PJ CRM · MIT · Feito no Brasil` · **`Página atualizada em [data]`** — visível, não só no schema: a pesquisa mediu que **75% das páginas citadas por IA foram atualizadas nos últimos 12 meses**, e a data de atualização discrimina melhor que a de publicação.
+Barra inferior: `Umbu CRM · MIT · Feito no Brasil` · **`Página atualizada em [data]`** — visível, não só no schema: a pesquisa mediu que **75% das páginas citadas por IA foram atualizadas nos últimos 12 meses**, e a data de atualização discrimina melhor que a de publicação.
 
 ---
 

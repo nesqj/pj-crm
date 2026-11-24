@@ -1,4 +1,4 @@
-# Contributing — PJ CRM
+# Contributing — Umbu CRM
 
 🇧🇷 Português · [🇺🇸 English](CONTRIBUTING.en.md)
 

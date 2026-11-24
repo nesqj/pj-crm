@@ -1,6 +1,6 @@
 # Instalando para um cliente (agência, consultor, revendedor)
 
-O PJ CRM é MIT e feito para ser revendido com a marca do cliente. O que muda quando quem
+O Umbu CRM é MIT e feito para ser revendido com a marca do cliente. O que muda quando quem
 instala não é quem vai usar:
 
 ## De quem é cada coisa

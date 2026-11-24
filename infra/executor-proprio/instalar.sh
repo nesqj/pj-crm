@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Instala o executor próprio do PJ CRM numa máquina Ubuntu 24.04 amd64
+# Instala o executor próprio do Umbu CRM numa máquina Ubuntu 24.04 amd64
 # DEDICADA a isso. Rode como root, de dentro de um clone do repositório:
 #
 #   sudo bash infra/executor-proprio/instalar.sh            # instala ou reinstala
@@ -67,7 +67,7 @@ mkdir -p "$CONF"
 chmod 0700 "$CONF"
 if [ ! -s "$CONF/token" ]; then
   echo
-  echo "Cole o token do GitHub (fine-grained, só o repositório PJ CRM,"
+  echo "Cole o token do GitHub (fine-grained, só o repositório Umbu CRM,"
   echo "permissão 'Administration: Read and write'). Ele não aparece na tela:"
   read -r -s token
   echo
@@ -107,7 +107,7 @@ cp "$DIR/Dockerfile" "$DIR/entrypoint.sh" "$DIR/so-o-que-e-nosso.sh" "$DESTINO/"
 
 cat > /etc/systemd/system/pjcrm-vaga@.service <<EOF
 [Unit]
-Description=PJ CRM — vaga %i do executor próprio
+Description=Umbu CRM — vaga %i do executor próprio
 After=docker.service sysbox.service network-online.target
 Requires=docker.service sysbox.service
 
@@ -122,7 +122,7 @@ EOF
 
 cat > /etc/systemd/system/pjcrm-executor-atualizar.service <<EOF
 [Unit]
-Description=PJ CRM — reconstrói a imagem do executor (runner novo + pacotes)
+Description=Umbu CRM — reconstrói a imagem do executor (runner novo + pacotes)
 
 [Service]
 Type=oneshot
@@ -131,7 +131,7 @@ EOF
 
 cat > /etc/systemd/system/pjcrm-executor-atualizar.timer <<EOF
 [Unit]
-Description=PJ CRM — atualização semanal do executor
+Description=Umbu CRM — atualização semanal do executor
 
 [Timer]
 OnCalendar=Sun 04:00

@@ -1,5 +1,5 @@
 /**
- * Códigos de erro canônicos da API PJ CRM.
+ * Códigos de erro canônicos da API Umbu CRM.
  *
  * Adicionar novo código:
  *  1. Adicionar à enum/constante abaixo

@@ -29,7 +29,7 @@ import { afterAll, describe, expect, it } from "vitest";
 const raiz = process.cwd();
 const sonda = join(raiz, "scripts", "sonda-pdf-na-imagem.mjs");
 const fixture = join(raiz, "tests", "fixtures", "sample-text.pdf");
-const TEXTO_DA_FIXTURE = "PJ CRM RAG fixture";
+const TEXTO_DA_FIXTURE = "Umbu CRM RAG fixture";
 
 const executar = promisify(execFile);
 

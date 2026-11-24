@@ -2,7 +2,7 @@
 -- ═══════════════════════════════════════════════════════════════════════════
 -- 9380 — Criar a pessoa sem convite: senha provisória no vínculo.
 --
--- Até aqui o PJ CRM só sabia CONVIDAR: quem administra digita o e-mail, o
+-- Até aqui o Umbu CRM só sabia CONVIDAR: quem administra digita o e-mail, o
 -- convite depende de SMTP e caixa postal real, e o convidado é que define a
 -- senha. Para boa parte das instalações isso não fecha — e não havia caminho
 -- nenhum para "cria a pessoa com esta senha".

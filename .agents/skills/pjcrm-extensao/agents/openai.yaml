@@ -1,5 +1,5 @@
 interface:
-  display_name: "Criar uma extensão do PJ CRM"
+  display_name: "Criar uma extensão do Umbu CRM"
   short_description: "Decide núcleo x extensão, ensina o contrato do pacote declarativo e leva ao envio revisado"
   default_prompt: "Use a skill pjcrm-extensao e me ajude a transformar minha ideia num pacote de extensão."
 policy:

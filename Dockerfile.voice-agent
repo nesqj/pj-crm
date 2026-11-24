@@ -6,7 +6,7 @@ WORKDIR /app
 
 LABEL org.opencontainers.image.source="https://github.com/nesqj/pj-crm" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.title="PJ CRM voice-agent"
+      org.opencontainers.image.title="Umbu CRM voice-agent"
 
 RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
 

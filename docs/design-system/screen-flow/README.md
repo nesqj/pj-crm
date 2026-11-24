@@ -1,5 +1,5 @@
 ---
-title: Screen Flow — Mapa de Jornadas e Telas do PJ CRM
+title: Screen Flow — Mapa de Jornadas e Telas do Umbu CRM
 parent: docs/design-system/00-overview.md
 version: 0.1
 status: em revisão

@@ -128,7 +128,7 @@ sudo chown pjcrm:pjcrm /opt/pjcrm-waha
 cd /opt/pjcrm-waha
 ```
 
-Copiar (via `scp` ou `git clone`) o `docker-compose.yml` do repo (raiz do PJ CRM). Ajustes obrigatórios pra prod:
+Copiar (via `scp` ou `git clone`) o `docker-compose.yml` do repo (raiz do Umbu CRM). Ajustes obrigatórios pra prod:
 
 ```yaml
 services:

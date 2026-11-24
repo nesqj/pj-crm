@@ -47,7 +47,7 @@ const svc = createClient(
   { auth: { persistSession: false } },
 );
 
-const SENHA = "PrimeiroAcesso!2026#PJ CRM";
+const SENHA = "PrimeiroAcesso!2026#Umbu CRM";
 
 /** O usuário do defeito: e-mail confirmado, nenhuma organização. */
 const emailOrfao = `orfao-${randomUUID().slice(0, 8)}@qa.local`;
