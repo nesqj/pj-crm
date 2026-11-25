@@ -100,6 +100,9 @@ s{\(\?:pjcrm\|deskcomm\)}{$p->($&)}ge;
 # o esperado continuar sendo o que o compose calcula dela.
 if ($ARGV =~ m{(?:^|/)(?:tests/shell/[^/]+\.test\.sh|hostgator-setup-kit/test-[^/]+\.sh)$}) {
   s{((?<![\w.-])[/\$~][\w.\$~/{}-]*/)DeskcommCRM(?![\w.-])}{ my ($t, $c) = ($&, $1); $c =~ m{(?:github\.com/[^/]*/|melgarafael/)$} ? $t : "${c}pjcrm" }ge;
+  # A cópia irmã do teste de instalação por cima: a pasta tem de dar o MESMO
+  # projeto do compose que a instalação no ar (pjcrm). "Umbu CRM" daria umbucrm.
+  s{(?<=montar_vps "\$TMP_IRMA" ")DeskcommCRM(?=")}{pjcrm}g;
 }
 s{(?<=ghcr\.io/)melgarafael/deskcommcrm|(?<=ghcr\.io/v2/)melgarafael/deskcommcrm|(?<=repository:)melgarafael/deskcommcrm}{nesqj/pjcrm}g;
 s{melgarafael/deskcommcrm}{nesqj/pj-crm}g;

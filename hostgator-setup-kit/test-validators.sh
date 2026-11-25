@@ -3009,7 +3009,7 @@ echo "integração: instalar de uma CÓPIA IRMÃ, com o CRM já no ar (2026-08-2
 # então o projeto colide e a versão anterior dizia "é a re-execução, siga".
 TMP_IRMA="$(mktemp -d)"
 (
-  montar_vps "$TMP_IRMA" "Umbu CRM" <<'STUB'
+  montar_vps "$TMP_IRMA" "pjcrm" <<'STUB'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >> "$DOCKER_LOG"
 case "$1" in
