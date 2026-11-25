@@ -8,6 +8,11 @@ Se você roda o Umbu CRM numa VPS, **leia a seção da versão para a qual está
 
 ## [Não lançado]
 
+### Mudou
+
+- O menu lateral do painel de administração da instalação (Admin) também fica
+  verde-escuro, como o menu do app.
+
 ## [2.1.1] — 2026-11-25
 
 Nova identidade visual: o produto passa a se chamar **Umbu CRM**, com o logo da fruta do

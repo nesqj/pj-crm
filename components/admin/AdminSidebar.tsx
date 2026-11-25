@@ -48,6 +48,8 @@ export function AdminSidebar({ userEmail, variant = "desktop", modulosLigados = 
 
   return (
     <aside
+      // Menu verde-escuro do Umbu CRM, o mesmo da barra do app (`app/globals.css`).
+      data-casca="menu-admin"
       className={cn(
         "flex flex-col border-r bg-card",
         isMobile ? "h-full w-full" : "hidden w-60 shrink-0 lg:flex",

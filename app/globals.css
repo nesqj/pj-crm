@@ -1622,11 +1622,16 @@
    (#0f2208) passa de 7:1 sobre ele. O verde-limão com texto branco do mockup
    ficaria em 2,4:1 — abaixo do piso de leitura —, por isso o texto escuro.
 
+   O menu do painel de administração da instalação (`components/admin/AdminSidebar.tsx`,
+   `data-casca="menu-admin"`) usa o mesmo verde. Ele tem nome próprio no atributo
+   porque os templates de Aparência são da EMPRESA e não pintam o painel da instalação.
+
    As cores aqui são literais, e não graus da rampa, de propósito: o menu é a
    identidade do Umbu, e a cor de marca que uma instalação configurar (Admin ›
    Marca) não pode tornar o item ativo ilegível.
    ───────────────────────────────────────────────────────────────────────── */
-[data-casca="menu"] {
+[data-casca="menu"],
+[data-casca="menu-admin"] {
   --color-surface: #0f3a22;
   --color-surface-elevated: #17482b;
   --color-text: #eef5ea;
@@ -1639,20 +1644,24 @@
   color: #eef5ea;
 }
 
-[data-casca="menu"] a[aria-current="page"] {
+[data-casca="menu"] a[aria-current="page"],
+[data-casca="menu-admin"] a[aria-current="page"] {
   background-color: #6bb64e;
   color: #0f2208;
 }
 
-[data-casca="menu"] a:not([aria-current="page"]):hover {
+[data-casca="menu"] a:not([aria-current="page"]):hover,
+[data-casca="menu-admin"] a:not([aria-current="page"]):hover {
   background-color: color-mix(in srgb, #eef5ea 9%, transparent);
   color: #eef5ea;
 }
 
 /* O logotipo do produto acompanha o menu escuro: o nome em claro. */
-[data-casca="menu"] [data-marca-parte="nome"] {
+[data-casca="menu"] [data-marca-parte="nome"],
+[data-casca="menu-admin"] [data-marca-parte="nome"] {
   fill: #eef5ea;
 }
-[data-casca="menu"] [data-marca-parte="sufixo"] {
+[data-casca="menu"] [data-marca-parte="sufixo"],
+[data-casca="menu-admin"] [data-marca-parte="sufixo"] {
   fill: #a6d930;
 }
