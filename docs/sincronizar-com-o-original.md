@@ -19,6 +19,11 @@ no original.
      `lib/branding/regua-do-produto.ts`
    - `app/globals.css` (a rampa verde de `--color-accent-*` e `--color-accent-soft`, e o bloco
      `[data-casca="menu"]` do menu verde-escuro, no fim do arquivo)
+   - os neutros esverdeados (fundo, cartões, bordas e textos dos dois temas) em
+     `app/globals.css`, `app/design/lib/tokens.ts`, `app/design/showcase.css`,
+     `lib/branding/barra-do-navegador.ts`, `lib/extensions/tema.ts`,
+     `lib/extensions/tema-da-plataforma.ts` e `components/inbox/ConversationListItem.tsx`,
+     e os testes que fixam esses valores
    - `docs/brand/README.md`, `docs/brand/icone.png`, `docs/brand/logo-claro.png` e
      `docs/brand/logo-escuro.png` (os SVG, o og-card e a imagem social de `docs/brand/`
      e as capturas de `evidence/marca/` do original são apagados)

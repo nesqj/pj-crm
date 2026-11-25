@@ -32,3 +32,6 @@ Capturas do app rodando com a marca padrão (nenhum logo ou nome próprio config
 | Menu lateral recolhido (só a fruta) | `evidence/identidade-umbu/4-menu-recolhido.png` |
 | Menu lateral no tema escuro | `evidence/identidade-umbu/5-menu-tema-escuro.png` |
 | Ícone do app, gerado pelo `ImageResponse` | `evidence/identidade-umbu/6-icone-do-app.png` |
+| Menu do painel de administração da instalação | `evidence/identidade-umbu/7-menu-do-painel-admin.png` |
+| Fundo e cartões esverdeados, tema claro | `evidence/identidade-umbu/8-fundo-claro-esverdeado.png` |
+| Fundo e cartões esverdeados, tema escuro | `evidence/identidade-umbu/9-fundo-escuro-esverdeado.png` |

@@ -49,7 +49,7 @@ const INSTALACAO = {
           palette: "mist",
           claro: {
             "--color-bg": "#f6f6f4",
-            "--color-border": "#e7e3da",
+            "--color-border": "#e0e6db",
             "--color-accent": "var(--color-accent-600)",
             "--color-accent-600": "#33475b",
           },

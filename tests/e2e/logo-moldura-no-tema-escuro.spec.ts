@@ -6,7 +6,7 @@
  * O PR #659 (@felipebnt) põe uma moldura clara por trás do logo ENVIADO por
  * quem hospeda quando o tema é escuro (`rounded-md dark:bg-white dark:px-…
  * dark:py-… dark:shadow-sm`). Sem ela, arte escura sobre `--color-surface`
- * escuro (`#1d1c17`) simplesmente some — sem erro, sem aviso, e sem nada na
+ * escuro (`#151e18`) simplesmente some — sem erro, sem aviso, e sem nada na
  * tela dizendo que sumiu.
  *
  * Já existe uma cerca para isso: `tests/unit/logo-nao-some-no-tema-escuro.ts`.
@@ -111,7 +111,7 @@ const creds = loadCreds();
 // Mesma construção de `marca-logo.spec.ts`, e pelo mesmo motivo: um base64
 // colado no meio da spec é um blob que ninguém consegue auditar. A COR importa
 // aqui — azul-marinho é a arte do relato original (o logo que sumia), e é
-// justamente o pior caso contra `#1d1c17`.
+// justamente o pior caso contra `#151e18`.
 
 function crc32(buf: Buffer): number {
   let c = ~0;
@@ -157,7 +157,7 @@ function pngSolido(lado: number, cor: [number, number, number], bordaTransparent
   ]);
 }
 
-/** Azul-marinho: a arte do relato — invisível contra `#1d1c17` sem a moldura. */
+/** Azul-marinho: a arte do relato — invisível contra `#151e18` sem a moldura. */
 const PNG_AZUL_MARINHO = pngSolido(64, [16, 24, 64]);
 
 // ── Medição ─────────────────────────────────────────────────────────────────
@@ -228,7 +228,7 @@ function canais(cor: string): { r: number; g: number; b: number; a: number } | n
  * "Fundo claro" medido, não adjetivado: opaco E com os três canais altos.
  *
  * O limiar é 200/255 porque a moldura do produto é `bg-white` puro (255) e o
- * `--color-surface` escuro é `#1d1c17` (29,28,23) — não há nada entre os dois
+ * `--color-surface` escuro é `#151e18` (29,28,23) — não há nada entre os dois
  * que este número precise arbitrar.
  */
 function fundoEClaro(cor: string): boolean {

@@ -60,7 +60,7 @@ describe("extrairRegua — os pares saem do globals.css, nunca de lista à mão"
     expect(REGUA.rampaDoProduto).toHaveLength(11);
     expect(REGUA.rampaDoProduto[6]).toBe("#37771a");
     expect(REGUA.claro.neutros).toHaveLength(11);
-    expect(REGUA.escuro.neutros[9]).toBe("#161510");
+    expect(REGUA.escuro.neutros[9]).toBe("#0f1612");
     expect(REGUA.claro.base.map((b) => b.chave)).toEqual([
       "--color-bg",
       "--color-surface",
@@ -119,9 +119,9 @@ describe("extrairRegua — os pares saem do globals.css, nunca de lista à mão"
     const razao = (papel: string, superficie: string) =>
       pares.find((p) => p.papel === papel && p.superficie === superficie)?.razao ?? 0;
 
-    expect(razao("--color-accent", "--color-bg")).toBeCloseTo(5.23, 2);
-    expect(razao(":focus-visible/outline", "--color-bg")).toBeCloseTo(3.63, 2);
-    expect(razao(":focus-visible/outline", "--color-surface-elevated")).toBeCloseTo(3.44, 2);
+    expect(razao("--color-accent", "--color-bg")).toBeCloseTo(5.19, 2);
+    expect(razao(":focus-visible/outline", "--color-bg")).toBeCloseTo(3.60, 2);
+    expect(razao(":focus-visible/outline", "--color-surface-elevated")).toBeCloseTo(3.40, 2);
   });
 
   it("a Sage inteira, como está no CSS, cabe nos pisos", () => {
@@ -407,17 +407,17 @@ describe("marca acromática — o accent do produto permanece", () => {
         separacaoDoNeutro(regua, tema.grauDoAccent, tema.accent),
       ).toBeGreaterThanOrEqual(PISO_DE_SEPARACAO_DO_NEUTRO);
     }
-    // Os números exatos, fixados: 0,137 no claro (accent-600 × neutral-600) e 0,235 no
-    // escuro (accent-400 × neutral-400), com o verde #37771a do Umbu CRM. Na Sage original o claro
+    // Os números exatos, fixados: 0,128 no claro (accent-600 × neutral-600) e 0,205 no
+    // escuro (accent-400 × neutral-400), com o verde #37771a e os neutros esverdeados do Umbu CRM. Na Sage original o claro
     // media 0,0681, abaixo do piso do briefing (0,08) — por isso aquele piso não
     // foi aceito sem medir.
-    expect(separacaoDoNeutro(REGUA.claro, marca.claro.grauDoAccent, marca.claro.accent)).toBeCloseTo(0.137, 3);
-    expect(separacaoDoNeutro(REGUA.escuro, marca.escuro.grauDoAccent, marca.escuro.accent)).toBeCloseTo(0.235, 3);
+    expect(separacaoDoNeutro(REGUA.claro, marca.claro.grauDoAccent, marca.claro.accent)).toBeCloseTo(0.128, 3);
+    expect(separacaoDoNeutro(REGUA.escuro, marca.escuro.grauDoAccent, marca.escuro.accent)).toBeCloseTo(0.205, 3);
 
     // Controle negativo: um accent cinza reprovaria as duas guardas. Sem esta linha, os
     // pisos acima poderiam ser satisfeitos por qualquer coisa.
-    expect(hexParaOklch("#5d594f").C).toBeLessThan(PISO_DE_CROMA);
-    expect(deltaEOklab("#5d594f", "#5d594f")).toBe(0);
+    expect(hexParaOklch("#545e55").C).toBeLessThan(PISO_DE_CROMA);
+    expect(deltaEOklab("#545e55", "#545e55")).toBe(0);
   });
 
   it("navy NÃO é acromática — o gatilho não decide no quarto decimal", () => {

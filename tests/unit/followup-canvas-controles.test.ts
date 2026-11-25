@@ -47,7 +47,7 @@ describe("controles do canvas de follow-up seguem o tema", () => {
 
   /**
    * A LINHA ENTRE DOIS PASSOS QUASE SUMIA NO TEMA CLARO. O cinza padrão da lib
-   * (`#b1b1b7`) dá 2,03:1 sobre o fundo `#faf9f6` — abaixo dos 3:1 que a WCAG
+   * (`#b1b1b7`) dá 2,03:1 sobre o fundo `#f7f9f4` — abaixo dos 3:1 que a WCAG
    * 1.4.11 pede para elemento gráfico essencial, e a linha É o desenho do fluxo.
    * O contraste está medido no comentário do CSS; aqui a rede é o token, que
    * troca sozinho com o tema (o único que passa nos dois é `text-muted`).
