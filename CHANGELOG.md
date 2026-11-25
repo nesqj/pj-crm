@@ -8,6 +8,13 @@ Se você roda o Umbu CRM numa VPS, **leia a seção da versão para a qual está
 
 ## [Não lançado]
 
+## [2.1.2] — 2026-11-25
+
+Completa a identidade visual do Umbu CRM: o menu do painel de administração fica
+verde-escuro e os fundos ganham tons esverdeados. Muda só a aparência; nenhuma tela,
+botão ou função mudou de lugar, e o banco não muda. Atualiza a partir da 2.1.1 pela tela
+de atualização.
+
 ### Mudou
 
 - O menu lateral do painel de administração da instalação (Admin) também fica
@@ -15,6 +22,8 @@ Se você roda o Umbu CRM numa VPS, **leia a seção da versão para a qual está
 - O fundo, os cartões e as bordas ganham um tom levemente esverdeado nos dois temas: um
   off-white verde no claro e um preto esverdeado no escuro, no lugar do bege e do preto
   amarronzado. O contraste de leitura dos textos continua acima do mínimo.
+- Os e-mails (convite, confirmação de conta, recuperação de senha e avisos da LGPD)
+  acompanham os mesmos tons.
 
 ## [2.1.1] — 2026-11-25
 
