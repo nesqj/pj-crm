@@ -8,6 +8,32 @@ Se você roda o Umbu CRM numa VPS, **leia a seção da versão para a qual está
 
 ## [Não lançado]
 
+## [2.1.1] — 2026-11-25
+
+Nova identidade visual: o produto passa a se chamar **Umbu CRM**, com o logo da fruta do
+umbu, cores verdes e o menu lateral verde-escuro. Muda só a aparência: nenhuma tela,
+botão ou função mudou de lugar, e o banco não muda. Atualiza a partir da 2.1.0 pela tela
+de atualização.
+
+### ⚠️ Requer atenção
+
+- **Troque o nome para "Umbu CRM" depois de atualizar.** O nome gravado na instalação
+  (o `APP_NAME` do `.env`, ou o que foi salvo em Admin › Marca) continua valendo, e o
+  logo novo só aparece quando o nome é exatamente "Umbu CRM" e não há logo próprio. Abra
+  Admin › Marca, troque o nome para **Umbu CRM** e salve. Quem usa nome e logo próprios
+  não precisa fazer nada.
+
+### Mudou
+
+- O nome visível passa de "PJ CRM" para "Umbu CRM" nas telas, nos e-mails e no
+  instalador. Os nomes técnicos (repositório `pj-crm`, imagens `ghcr.io/nesqj/pjcrm*`,
+  contêineres) continuam os mesmos.
+- Logo novo: a fruta do umbu com "UMBU CRM", no login, no menu lateral e no ícone da
+  aba e do app instalado no celular.
+- Cores verdes no lugar do azul nos botões e destaques.
+- O menu lateral é verde-escuro por padrão. Os modelos de Aparência de cada empresa
+  continuam valendo por cima.
+
 ## [2.1.0] — 2026-11-22
 
 Inclui as versões 1.105.0 a 1.123.0 do DeskcommCRM, o projeto de origem: o PJ CRM passa
