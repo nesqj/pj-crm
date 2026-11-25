@@ -8,7 +8,7 @@ WORKDIR /app
 # Procedência (doutrina de packaging, invariante 2).
 LABEL org.opencontainers.image.source="https://github.com/nesqj/pj-crm" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.title="PJ CRM worker"
+      org.opencontainers.image.title="Umbu CRM worker"
 
 # pnpm fixado na versão do lockfile do repo (pnpm 10 bloquearia build scripts).
 RUN corepack enable && corepack prepare pnpm@9.15.9 --activate

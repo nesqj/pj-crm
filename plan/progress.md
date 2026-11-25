@@ -1,4 +1,4 @@
-# Progress — gov-loop (PJ CRM · Governança de Atendimento)
+# Progress — gov-loop (Umbu CRM · Governança de Atendimento)
 
 > Diário de bordo append-only. Cada sessão do loop fecha com 3-5 linhas aqui:
 > o que fez, evidência observada (output real, não intenção), o que ficou.
@@ -144,7 +144,7 @@
 - INB-03 aberto (follow-ups: onboarding/whatsapp/session sem gate de role;
   nota pro bulk-assign ≥manager na G3-04).
 - Handoff: próximas sessões (G2-02+) delegadas ao terminal Arquiteto e Executor
-  (cooperação A2A retomada pelo dono); Maestro-PJ CRM vira watchdog.
+  (cooperação A2A retomada pelo dono); Maestro-Umbu CRM vira watchdog.
 
 ## 2026-07-16 — sessão 10 do loop (core) — G2-02
 

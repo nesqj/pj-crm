@@ -1,12 +1,12 @@
 ---
 name: pjcrm-operacao
-description: 'Guia de operação diária do PJ CRM para quem já tem o sistema instalado e precisa encontrar telas, entender fluxos, configurar recursos correntes e resolver dúvidas de uso sem mexer no código. Use quando alguém perguntar "onde fica", "como uso", "como configuro na tela", "o que este menu faz", "qual a ordem para operar", ou precisar de um mapa do produto entre Inbox, CRM, IA, Canais, Análise e Organização. Encaminha instalação, cliente novo, prompt, métricas e desenvolvimento para as skills específicas.'
+description: 'Guia de operação diária do Umbu CRM para quem já tem o sistema instalado e precisa encontrar telas, entender fluxos, configurar recursos correntes e resolver dúvidas de uso sem mexer no código. Use quando alguém perguntar "onde fica", "como uso", "como configuro na tela", "o que este menu faz", "qual a ordem para operar", ou precisar de um mapa do produto entre Inbox, CRM, IA, Canais, Análise e Organização. Encaminha instalação, cliente novo, prompt, métricas e desenvolvimento para as skills específicas.'
 metadata:
   publico: operador, gestor, implantador
   escopo: uso diário pela interface
 ---
 
-# Operar o PJ CRM no dia a dia
+# Operar o Umbu CRM no dia a dia
 
 Este guia é a porta de entrada para dúvidas de uso do produto depois que a instalação já está no ar.
 Ele evita responder pela memória: localiza a área correta, consulta a documentação atual e encaminha

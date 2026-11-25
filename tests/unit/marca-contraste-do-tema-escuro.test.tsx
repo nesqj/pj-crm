@@ -92,7 +92,7 @@ function renderizarFormulario(corPrincipal: string, corEscura: string | null) {
   render(
     <FormularioDaMarca
       gravada={{ ...FORM_GRAVADA, accent_hex: corPrincipal, accent_dark_hex: corEscura }}
-      nomeEmVigor="PJ CRM"
+      nomeEmVigor="Umbu CRM"
       logoEmVigor={null}
       logoDoAmbiente={null}
       origens={{ nome: "tela", logoUrl: "tela", cor: "tela" }}

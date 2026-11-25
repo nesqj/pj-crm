@@ -108,7 +108,7 @@ de um agente que rodou o cálculo — e está marcado de propósito.
 
 | Defeito | Evidência | Fase que conserta |
 |---|---|---|
-| **Gate de marca verde enquanto a marca vaza** — `/PJ CRM/` case-**sensitive** | `tests/unit/branding.test.ts:90`; passam `support@deskcomm.com.br` (`app/account-suspended/page.tsx:17`), `suporte@pjcrm.app` (`app/app/settings/billing/page.tsx:26`), `pjcrm-recovery-codes.txt` (`components/auth/RecoveryCodesPanel.tsx:34`) | 1 |
+| **Gate de marca verde enquanto a marca vaza** — `/Umbu CRM/` case-**sensitive** | `tests/unit/branding.test.ts:90`; passam `support@deskcomm.com.br` (`app/account-suspended/page.tsx:17`), `suporte@pjcrm.app` (`app/app/settings/billing/page.tsx:26`), `pjcrm-recovery-codes.txt` (`components/auth/RecoveryCodesPanel.tsx:34`) | 1 |
 | **Colisão de cor Δ=0,0° no tema escuro** — `--color-success` é a mesma string de `--color-accent-400` | `app/globals.css:167` e `:193`, ambos `#82a077` | 1 |
 | **Corrida no `settings` jsonb** — SELECT→spread→UPDATE sem `.select()`; `visibility_mode` mora no mesmo jsonb | quem ainda faz assim: `git grep -n "update({ settings" -- app lib workers` (o `updateTenant.ts`, citado aqui até o PR #1209, deixou de escrever `settings`) | 3 |
 | **`[data-theme="light"]` não existe** — `:root` casa só `<html>`, então tema claro não é escopável em subárvore | `grep -c 'data-theme="light"' app/globals.css` = 0 | 1 |
@@ -431,7 +431,7 @@ não remover da build. Grep sobre arquivo inexistente devolve vazio, indistingu�
 
 `lib/lgpd/pdf-renderer.tsx:277` imprime, no documento entregue ao **titular de dados**:
 
-> `PJ CRM · Relatório LGPD Art. 18 II · DPO: contato via canal oficial do controlador`
+> `Umbu CRM · Relatório LGPD Art. 18 II · DPO: contato via canal oficial do controlador`
 
 Dois defeitos. O primeiro é o vazamento de marca (ângulo 3 pega). O segundo ninguém tocou:
 **o sistema já sabe o DPO e não o imprime** — `lib/env.ts:134` tem `LGPD_DPO_EMAIL` e
@@ -475,7 +475,7 @@ da própria razão social, aí sim é campo novo, e a razão estará escrita aqu
 
 | Achado | Evidência |
 |---|---|
-| **Todo projeto Supabase do revendedor nasce chamado "PJ CRM"** | `install.sh:918` usa `${APP_NAME:-PJ CRM}`; `APP_NAME` só é coletado em `:1024` — **106 linhas depois** |
+| **Todo projeto Supabase do revendedor nasce chamado "Umbu CRM"** | `install.sh:918` usa `${APP_NAME:-Umbu CRM}`; `APP_NAME` só é coletado em `:1024` — **106 linhas depois** |
 | **O primeiro e-mail que o cliente do revendedor recebe diz o nome do nosso produto** | `supabase/templates/confirmation.html:4` e `recovery.html:4`; e **nenhum script sobe esses templates** — só `config.toml` (Supabase local) e um teste |
 | **A tela de dinheiro entrega nosso contato ao cliente do revendedor** | `lib/navigation/registry.ts:453` (porta de 1ª classe, "Billing") → `app/app/settings/billing/page.tsx:26` mostra `suporte@pjcrm.app` |
 

@@ -1,7 +1,8 @@
 import { ImageResponse } from "next/og";
 
 import { marcaEhADoProduto } from "@/lib/branding";
-import { CORES_DA_MARCA, SIMBOLO } from "@/lib/branding/desenho";
+import { SIMBOLO } from "@/lib/branding/desenho";
+import { partesDaFruta } from "@/lib/branding/fruta";
 import { letraDoIcone } from "@/lib/branding/icone";
 import { marcaDaSaida, NEUTROS_DE_SAIDA } from "@/lib/branding/saida";
 
@@ -42,8 +43,8 @@ import { marcaDaSaida, NEUTROS_DE_SAIDA } from "@/lib/branding/saida";
  * barra lateral e a fachada mostram, para a aba e a tela contarem a mesma
  * marca. O satori aceita `<svg>` inline (medido: 1.135 bytes de PNG válido com
  * o símbolo, em 2026-09-08), então continua sem rede e sem arquivo em `public/`.
- * Quem configurou um nome próprio segue com cor + inicial: o símbolo soletra
- * "D", e um "D" na aba de quem se chama "Acme" seria a nossa marca vazando.
+ * Quem configurou um nome próprio segue com cor + inicial: o símbolo é a
+ * fruta do umbu, e ela na aba de quem se chama "Acme" seria a nossa marca vazando.
  *
  * ─── `force-dynamic` não é zelo ─────────────────────────────────────────────
  *
@@ -79,7 +80,7 @@ export default async function Icon() {
   const marca = await marcaDaSaida(null);
 
   if (marcaEhADoProduto({ name: marca.nome, logoUrl: marca.logoUrl })) {
-    // 78% da aresta: o P ocupa ~95% do próprio viewBox, então sobra o mesmo
+    // 78% da aresta: a fruta ocupa ~94% do próprio viewBox, então sobra o mesmo
     // respiro que a letra tem no ramo de baixo.
     const lado = Math.round(size.width * 0.78);
     return new ImageResponse(
@@ -95,8 +96,7 @@ export default async function Icon() {
           }}
         >
           <svg viewBox={SIMBOLO.viewBox} width={lado} height={lado}>
-            <path d={SIMBOLO.d} fill={CORES_DA_MARCA.claro.corpo} />
-            <path d={SIMBOLO.destaque} fill={CORES_DA_MARCA.claro.destaque} />
+            {partesDaFruta("icone")}
           </svg>
         </div>
       ),

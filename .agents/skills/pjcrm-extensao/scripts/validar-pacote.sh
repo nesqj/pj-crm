@@ -22,7 +22,7 @@ pacote="$(cd "$(dirname "$pacote")" && pwd)/$(basename "$pacote")"
 
 raiz="$(git rev-parse --show-toplevel 2>/dev/null || true)"
 if [ -z "$raiz" ] || [ ! -f "$raiz/lib/extensions/manifest.ts" ]; then
-  echo "NÃO MEDIDO — rode de dentro de um clone do PJ CRM (com as dependências instaladas)." >&2
+  echo "NÃO MEDIDO — rode de dentro de um clone do Umbu CRM (com as dependências instaladas)." >&2
   echo "O schema do pacote mora em lib/extensions/manifest.ts; sem ele não há contra o que validar." >&2
   exit 2
 fi

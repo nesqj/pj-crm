@@ -1,4 +1,4 @@
-# Stack local de dependências externas para o PJ CRM.
+# Stack local de dependências externas para o Umbu CRM.
 #
 # Sobe apenas o WAHA (Plus / NOWEB) pra desenvolvimento. Postgres + Auth + Storage
 # vêm do Supabase Cloud (ou supabase local CLI separadamente, conforme o time preferir).

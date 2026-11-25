@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** O dono de uma instalação self-host atualiza o PJ CRM clicando num botão na própria tela, sem abrir terminal nem SSH.
+**Goal:** O dono de uma instalação self-host atualiza o Umbu CRM clicando num botão na própria tela, sem abrir terminal nem SSH.
 
 **Architecture:** O app roda em container sem acesso ao host, então ele não executa a atualização — ele **publica uma intenção** em duas tabelas de instância. Um agente no host (`agent.sh`, cron a cada 5 min, mesmo mecanismo do cron do `event-log-drain` que já existe) faz `POST` de heartbeat para o app, lê na resposta se alguém pediu atualização e, se sim, roda `bash update.sh --to <tag>` sob `flock`, reportando cada passo. O que atravessa a fronteira é um booleano, nunca um comando.
 
@@ -279,7 +279,7 @@ Se você usa número próprio no WhatsApp, reconecte depois de atualizar.
 
 ## [1.0.0] — 2026-07-27
 
-Primeira versão marcada do PJ CRM.
+Primeira versão marcada do Umbu CRM.
 `;
 
 describe("extractChangelogSection", () => {

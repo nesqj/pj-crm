@@ -1,28 +1,30 @@
-# Sincronizar o PJ CRM com o DeskcommCRM
+# Sincronizar o Umbu CRM com o DeskcommCRM
 
-O PJ CRM é o [DeskcommCRM](https://github.com/melgarafael/DeskcommCRM) com outra marca.
-A regra de cada sincronização: **a árvore do PJ CRM é a da tag do original, mais a marca
-PJ CRM, mais as correções próprias listadas abaixo — e nada além disso.** Tudo o que o
-PJ CRM tinha feito de diferente e que o original resolveu de outro jeito volta a ser como
+O Umbu CRM é o [DeskcommCRM](https://github.com/melgarafael/DeskcommCRM) com outra marca.
+A regra de cada sincronização: **a árvore do Umbu CRM é a da tag do original, mais a marca
+Umbu CRM, mais as correções próprias listadas abaixo — e nada além disso.** Tudo o que o
+Umbu CRM tinha feito de diferente e que o original resolveu de outro jeito volta a ser como
 no original.
 
-## O que é próprio do PJ CRM (e precisa sobreviver a cada sincronização)
+## O que é próprio do Umbu CRM (e precisa sobreviver a cada sincronização)
 
 1. **Trocas mecânicas de marca** — feitas por `scripts/marca-pjcrm.sh` (nomes,
    repositório, imagens `ghcr.io/nesqj/pjcrm{,-worker,-scheduler}`, contêineres,
-   caminhos com `deskcomm`, a cor `#506d48` → `#0023fa` nos arquivos simples, o
+   caminhos com `deskcomm`, a cor `#506d48` → `#37771a` nos arquivos simples, o
    `LICENSE` e os derivados: o selo das traduções e o `extensoes/catalogo.json`).
-2. **Arquivos de marca desenhados à mão** — o script não os gera; voltam do PJ CRM,
+2. **Arquivos de marca desenhados à mão** — o script não os gera; voltam do Umbu CRM,
    juntando o que o original tiver mudado neles:
-   - `lib/branding/desenho.ts`, `components/branding/MarcaDoProduto.tsx`,
-     `app/icon.tsx`, `lib/branding/icone-do-app.tsx`, `lib/branding/regua-do-produto.ts`
-   - `app/globals.css` (a rampa azul de `--color-accent-*` e `--color-accent-soft`)
+   - `lib/branding/desenho.ts`, `lib/branding/fruta.tsx` (só existe no Umbu CRM),
+     `components/branding/MarcaDoProduto.tsx`, `app/icon.tsx`, `lib/branding/icone-do-app.tsx`,
+     `lib/branding/regua-do-produto.ts`
+   - `app/globals.css` (a rampa verde de `--color-accent-*` e `--color-accent-soft`, e o bloco
+     `[data-casca="menu"]` do menu verde-escuro, no fim do arquivo)
    - `docs/brand/README.md`, `docs/brand/icone.png`, `docs/brand/logo-claro.png` e
      `docs/brand/logo-escuro.png` (os SVG, o og-card e a imagem social de `docs/brand/`
      e as capturas de `evidence/marca/` do original são apagados)
    - os testes de marca: `tests/unit/branding.test.ts`, `branding-contraste.test.ts`,
      `branding-rampa.test.ts`, `handoff-na-raiz-nao-volta.test.ts`,
-     `marca-do-produto-nao-se-edita-no-codigo.test.ts`
+     `marca-do-produto-nao-se-edita-no-codigo.test.ts`, `marca-do-produto.test.tsx`
 3. **Correções de segurança anti-SSRF** (commit `4f8f8a4`): redirecionamento da mídia do
    Zernio conferido salto a salto, com a credencial só no host original
    (`lib/channels/adapters/zernio.ts`), e IPv4-mapped em hexadecimal/por extenso em
@@ -34,11 +36,11 @@ no original.
    `update_sh_da` de `scripts/conferir-isolamento-do-kit.sh`). A tag v1.63.0 só existe no
    DeskcommCRM; com a cópia, o check obrigatório `invariants` não depende do repositório
    do original. O script de marca não mexe na cópia e a devolve se a sincronização a apagar.
-5. **Os README são do PJ CRM** (`README.md`, `README.en.md`, `README.es.md`, com a marca
-   `<!-- readme-pjcrm -->`): não acompanham o original. O script devolve a versão do PJ CRM
+5. **Os README são do Umbu CRM** (`README.md`, `README.en.md`, `README.es.md`, com a marca
+   `<!-- readme-pjcrm -->`): não acompanham o original. O script devolve a versão do Umbu CRM
    quando a sincronização traz a do original, e apaga o `.all-contributorsrc`, que só servia
    à tabela de contribuidores do README do original.
-6. **`CHANGELOG.md`**: as seções 2.x do PJ CRM no topo, acima do histórico 1.x do original.
+6. **`CHANGELOG.md`**: as seções 2.x do Umbu CRM no topo, acima do histórico 1.x do original.
 
 ## O banco
 
@@ -55,18 +57,18 @@ git diff -U0 --word-diff=porcelain refs/upstream/vNOVA HEAD -- '*.sql' | grep -E
 ## A versão é sua
 
 A sincronização traz arquivos, nunca número de versão. O original numera as versões dele
-(1.124.0, 1.125.0…), e essas seções entram no `CHANGELOG.md` abaixo das do PJ CRM, só como
-histórico. O número do PJ CRM é você quem escolhe: escreva a seção nova no topo do
+(1.124.0, 1.125.0…), e essas seções entram no `CHANGELOG.md` abaixo das do Umbu CRM, só como
+histórico. O número do Umbu CRM é você quem escolhe: escreva a seção nova no topo do
 `CHANGELOG.md` com o número que quiser (no formato `## [X.Y.Z] — AAAA-MM-DD`, que o painel
 de atualização lê) e, depois do merge, publique a Release `vX.Y.Z` no GitHub. Mesclar um PR
 não cria versão: o `release.yml` só corta versão por um PR de release aberto pelo robô
-dele, e o PJ CRM publica as Releases à mão.
+dele, e o Umbu CRM publica as Releases à mão.
 
 ## Passo a passo
 
 `vANTERIOR` é a tag do original da última sincronização (hoje `v1.123.0`) e `vNOVA` é a
 nova. A ideia: a diferença entre "o original da última vez, com a marca" e o `main` do
-PJ CRM é tudo o que é do PJ CRM. Ela é recalculada e reaplicada por cima do original novo.
+Umbu CRM é tudo o que é do Umbu CRM. Ela é recalculada e reaplicada por cima do original novo.
 
 ```bash
 git fetch https://github.com/melgarafael/DeskcommCRM.git \
@@ -97,7 +99,7 @@ bash scripts/marca-pjcrm.sh
 git add -A
 ```
 
-3. **O que é do PJ CRM, reaplicado por cima:**
+3. **O que é do Umbu CRM, reaplicado por cima:**
 
 ```bash
 git diff "$REF" HEAD -- . ':!scripts/marca-pjcrm.sh' ':!README*.md' \
@@ -111,9 +113,9 @@ Os arquivos excluídos do `git diff` são os que o script já cuidou no passo 2 
 logos, roteiro, cópia do update.sh antigo, marca antiga do original). Testado em 22/11/2026 refazendo a própria
 sincronização da 1.123.0: o resultado saiu idêntico ao `main`.
 
-Onde o original mexeu no mesmo trecho que o PJ CRM, o `git apply` deixa conflito para
+Onde o original mexeu no mesmo trecho que o Umbu CRM, o `git apply` deixa conflito para
 resolver à mão — no último sync foi só `components/branding/MarcaDoProduto.tsx`. O
-`CHANGELOG.md` também deve conflitar: mantenha as seções 2.x do PJ CRM acima das seções 1.x
+`CHANGELOG.md` também deve conflitar: mantenha as seções 2.x do Umbu CRM acima das seções 1.x
 novas do original. Se o
 original passou a trazer uma das correções do item 3, fique com a dele.
 
@@ -123,7 +125,7 @@ original passou a trazer uma das correções do item 3, fique com a dele.
 
 ```bash
 bash scripts/marca-pjcrm.sh --check          # "nada a trocar"
-git diff --stat refs/upstream/vNOVA HEAD     # só marca e o que é do PJ CRM
+git diff --stat refs/upstream/vNOVA HEAD     # só marca e o que é do Umbu CRM
 git grep -n -i deskcomm -- app components lib workers hooks   # só o que branding.test.ts aceita
 pnpm typecheck && pnpm test:unit && pnpm test:shell && pnpm test:db
 git commit                                   # fecha o merge: o original novo vira base comum

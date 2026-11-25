@@ -1,4 +1,4 @@
-# PJ CRM single-server atrás do Coolify, numa VPS HostGator: medição de 06–07/10/2026
+# Umbu CRM single-server atrás do Coolify, numa VPS HostGator: medição de 06–07/10/2026
 
 **Tipo: HISTÓRICA** (ver `evidence/README.md`). A VPS de teste será destruída: nada aqui
 pode ser regenerado. Uma medição nova vira pasta nova; esta não se sobrescreve.

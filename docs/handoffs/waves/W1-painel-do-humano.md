@@ -13,7 +13,7 @@ Leia **antes de tudo**, nesta ordem:
 2. `docs/doctrine/sistema-vivo.md` — a lei de arquitetura do repo.
 3. `HANDOFF-ia-360.md` — a linha de base medida e o que a Wave 0 já entregou.
 
-O resumo do porquê: o PJ CRM tem um agente de IA que sabe conversar mas não sabe operar, e o
+O resumo do porquê: o Umbu CRM tem um agente de IA que sabe conversar mas não sabe operar, e o
 humano que configura esse agente é dono de clínica, de loja, de imobiliária — não engenheiro. Hoje
 a tela de configuração mostra `crm_search_contacts` em fonte monoespaçada, agrupado por
 "Leitura / Escrita / Especiais", sem dizer o que a capacidade toca, o que ela pode estragar, nem

@@ -6,7 +6,7 @@ ajuda() {
   cat <<'AJUDA'
 instalar-guias.sh — deixa os guias do assistente (pjcrm-instalar, pjcrm-cliente-novo,
 pjcrm-metricas, pjcrm-prompt, pjcrm-contribuir, pjcrm-doutrina e pjcrm-curso) disponíveis
-em QUALQUER pasta, não só dentro de um clone do PJ CRM.
+em QUALQUER pasta, não só dentro de um clone do Umbu CRM.
 
 ── Por que existe ────────────────────────────────────────────────────────────
 
@@ -171,7 +171,7 @@ fi
 # ── A fonte dos guias ────────────────────────────────────────────────────────
 if [ -n "$fonte" ]; then
   origem="$(cd "$fonte" && pwd)/.agents/skills"
-  [ -d "$origem" ] || { echo "não achei $origem — --fonte deve ser a raiz de um clone do PJ CRM" >&2; exit 1; }
+  [ -d "$origem" ] || { echo "não achei $origem — --fonte deve ser a raiz de um clone do Umbu CRM" >&2; exit 1; }
   echo "fonte: $origem (seu clone)"
 else
   command -v git >/dev/null 2>&1 || { echo "precisa do git instalado" >&2; exit 1; }

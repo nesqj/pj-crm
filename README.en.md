@@ -1,14 +1,14 @@
-<!-- readme-pjcrm: este README é do PJ CRM; scripts/marca-pjcrm.sh o preserva na sincronização -->
+<!-- readme-pjcrm: este README é do Umbu CRM; scripts/marca-pjcrm.sh o preserva na sincronização -->
 <div align="center">
 
 [🇧🇷 Português](README.md) · 🇺🇸 English · [🇪🇸 Español](README.es.md)
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-escuro.png">
-  <img src="docs/brand/logo-claro.png" alt="PJ CRM" width="240">
+  <img src="docs/brand/logo-claro.png" alt="Umbu CRM" width="240">
 </picture>
 
-# PJ CRM
+# Umbu CRM
 
 **A sales CRM with AI agents for WhatsApp, open source, running on your own server.**
 
@@ -18,7 +18,7 @@
 
 ## How it works
 
-PJ CRM brings **WhatsApp**, the **sales pipeline** and **AI agents** that work alongside your
+Umbu CRM brings **WhatsApp**, the **sales pipeline** and **AI agents** that work alongside your
 team into a single screen:
 
 1. **The customer messages you on WhatsApp.** The number is connected by QR code or through

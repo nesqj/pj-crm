@@ -88,7 +88,7 @@ Consequência de projeto: o sistema precisa **conhecer o próprio prazo real** �
 
 ---
 
-# Aplicação de referência — PJ CRM
+# Aplicação de referência — Umbu CRM
 
 **Onde a doutrina do tempo já está materializada:**
 

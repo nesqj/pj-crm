@@ -19,7 +19,7 @@ related:
 
 # Spec 07 — Event Log + Workers + Crons (transversal)
 
-> Esta spec define o **bus interno** do PJ CRM: como módulos publicam eventos no banco, como workers consomem, quais crons rodam (no serviço `scheduler` do `docker-compose.prod.yml`, na infraestrutura de quem instala), como tratamos retries, dead-letter, idempotência e observabilidade. É **transversal** — todos os outros sub-PRDs (02–06) emitem ou consomem deste bus.
+> Esta spec define o **bus interno** do Umbu CRM: como módulos publicam eventos no banco, como workers consomem, quais crons rodam (no serviço `scheduler` do `docker-compose.prod.yml`, na infraestrutura de quem instala), como tratamos retries, dead-letter, idempotência e observabilidade. É **transversal** — todos os outros sub-PRDs (02–06) emitem ou consomem deste bus.
 
 ---
 

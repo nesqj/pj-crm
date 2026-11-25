@@ -10,7 +10,7 @@ que ninguém mediu.
 bash .agents/skills/pjcrm-extensao/scripts/validar-pacote.sh caminho/do/pacote.json
 ```
 
-Precisa de um clone do PJ CRM com as dependências instaladas. O script chama `parseManifest()`
+Precisa de um clone do Umbu CRM com as dependências instaladas. O script chama `parseManifest()`
 e `checkCompatibility()` **do host** — não uma cópia das regras —, e imprime, quando passa, a
 entrada de catálogo com `sha256` e `byte_length` já calculados. Sai 1 quando o pacote é recusado.
 

@@ -4,7 +4,7 @@ Todas as mudanças relevantes deste projeto são documentadas aqui.
 
 O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o versionamento segue [SemVer](https://semver.org/lang/pt-BR/).
 
-Se você roda o PJ CRM numa VPS, **leia a seção da versão para a qual está atualizando antes de rodar `bash update.sh`**. Mudanças que exigem ação manual aparecem sob **⚠️ Requer atenção**.
+Se você roda o Umbu CRM numa VPS, **leia a seção da versão para a qual está atualizando antes de rodar `bash update.sh`**. Mudanças que exigem ação manual aparecem sob **⚠️ Requer atenção**.
 
 ## [Não lançado]
 
@@ -1195,7 +1195,7 @@ de atualização, sem ação manual.
 
   Contribuição de @webtecnica (#4841, #4835).
 
-- **Efi Bank entra como provedor de cobrança, com boleto recorrente e link do próprio Efi** O PJ CRM já cobrava pela Stripe e pelo Asaas. Agora cobra também pelo **Efi Bank**: a tela
+- **Efi Bank entra como provedor de cobrança, com boleto recorrente e link do próprio Efi** O Umbu CRM já cobrava pela Stripe e pelo Asaas. Agora cobra também pelo **Efi Bank**: a tela
   de **Conexão** ganhou o provedor, e a credencial da aplicação (Client-Id e Client-Secret) é
   cadastrada e guardada cifrada como as dos outros dois.
 
@@ -6914,7 +6914,7 @@ de atualização, sem ação manual.
 
   Agora quem soma as etiquetas é o próprio banco: numa única instrução, a lista gravada recebe as etiquetas que faltavam e devolve o resultado, e a segunda execução recalcula sobre o que a primeira gravou em vez de sobrescrever com a foto antiga. A automação passa a anunciar exatamente o que ficou gravado — e só anuncia quando alguma etiqueta entrou de verdade. Nenhuma configuração nova, nenhum passo manual: instalações existentes recebem a correção na atualização.
 
-- **Agente criado pelo corpo legado nasce com o modelo do provedor da instalação** Ao criar um agente sem informar o modelo, o PJ CRM gravava `anthropic/claude-sonnet-5` — o padrão histórico do produto — mesmo numa instalação configurada em OpenAI, OpenRouter ou Google. O agente nascia com um modelo que o provedor configurado não executa, e o desencontro só aparecia no primeiro atendimento. A escolha agora sai de um ponto único de resolução, na ordem: o modelo informado, o padrão da instalação quando ele se sustenta, a compatibilidade histórica da própria Anthropic e, por fim, o catálogo do provedor efetivo; sem um par válido, a criação é recusada com um erro claro em vez de gravar um modelo que aquele provedor não executa. O provedor, o modelo, a finalidade e a origem da configuração passam a ficar registrados no log estruturado, sem chave nem conteúdo de conversa. Contribuição de @webtecnica (#2955).
+- **Agente criado pelo corpo legado nasce com o modelo do provedor da instalação** Ao criar um agente sem informar o modelo, o Umbu CRM gravava `anthropic/claude-sonnet-5` — o padrão histórico do produto — mesmo numa instalação configurada em OpenAI, OpenRouter ou Google. O agente nascia com um modelo que o provedor configurado não executa, e o desencontro só aparecia no primeiro atendimento. A escolha agora sai de um ponto único de resolução, na ordem: o modelo informado, o padrão da instalação quando ele se sustenta, a compatibilidade histórica da própria Anthropic e, por fim, o catálogo do provedor efetivo; sem um par válido, a criação é recusada com um erro claro em vez de gravar um modelo que aquele provedor não executa. O provedor, o modelo, a finalidade e a origem da configuração passam a ficar registrados no log estruturado, sem chave nem conteúdo de conversa. Contribuição de @webtecnica (#2955).
 
 - **Resposta cortada ou vazia da IA vira caso para o time, e silêncio deliberado não abre caso à toa** Quando a resposta do agente terminava cortada no limite de tamanho — ou o turno terminava sem mensagem nenhuma para o cliente — o cliente ficava sem resposta e o time nem ficava sabendo. Agora essas falhas viram um caso humano para o time retomar a conversa, mas só quando há sinal de falha: a resposta que veio cortada, ou a correção automática que o motor faz no turno mudo e que também veio cortada. Silêncio deliberado (a IA escolheu não responder, como o pedido de correção autoriza) continua sendo resposta, não defeito, e não abre caso. O caso abre somente nas organizações com casos humanos ligados na versão do agente, com o tipo "problema" e a explicação em português simples para o time ver o que travou e o que o cliente precisa. Crédito: @guptasp82-jpg (#2938).
 
@@ -8170,7 +8170,7 @@ de atualização, sem ação manual.
 
 - **Admin › Sistema mostra se as entregas do WhatsApp já chegam assinadas** Ao lado do interruptor **"Exigir assinatura nas entregas do canal"**, em **Admin › Sistema**, a tela passa a dizer se as últimas entregas do WhatsApp chegaram assinadas (sim ou não), com a data da última assinada e da última sem assinatura, olhando os últimos 7 dias. Quando a resposta é sim e o interruptor está desligado, ela sugere: _"Pode ligar: o WhatsApp já assina."_
 
-  O "sim" só aparece quando **nenhuma** entrega chegou sem assinatura desde a primeira assinada: se algum número chegou sem assinatura depois disso, a resposta é não e a tela não sugere ligar. Um número que não entregou nada nesse intervalo não entra na conta — com o WAHA do compose do PJ CRM todas as sessões assinam juntas, mas se você usa mais de um servidor de WhatsApp, confira cada número antes de ligar.
+  O "sim" só aparece quando **nenhuma** entrega chegou sem assinatura desde a primeira assinada: se algum número chegou sem assinatura depois disso, a resposta é não e a tela não sugere ligar. Um número que não entregou nada nesse intervalo não entra na conta — com o WAHA do compose do Umbu CRM todas as sessões assinam juntas, mas se você usa mais de um servidor de WhatsApp, confira cada número antes de ligar.
 
   **O padrão não muda:** o interruptor continua desligado, e nada é ligado sozinho. O conserto do nome da variável do segredo no compose saiu na v1.73.0, e com ele o WAHA do compose deve passar a assinar as entregas (ainda não medido numa VPS atualizada); a tela é justamente o jeito de conferir isso na sua instalação antes de ligar a exigência. Só quem administra a plataforma vê esta informação. Construído sobre o conserto de @paulolimajr77 (#2268).
 
@@ -8375,7 +8375,7 @@ de atualização, sem ação manual.
 
 - **O roteador volta a escolher qual agente atende cada mensagem** Em empresas que usam a OpenRouter, o roteador de agentes falhava a cada mensagem com o erro "claude-haiku-4-5 is not a valid model ID" e nenhuma escolha de agente acontecia — toda conversa caía no mesmo agente, ou em nenhum, como se os roteadores configurados não existissem. A mensagem nunca aparecia no painel de erro: era o aviso que a própria tela do classificador mostrava.
 
-  O modelo do classificador vinha gravado pelo próprio PJ CRM ao criar o roteador, com um nome que a OpenRouter não reconhece. Ninguém escolheu esse modelo, e a empresa podia ter configurado Claude como modelo de atendimento — o roteador é que insistia no dele. Agora o roteador nasce em "Automático": quem decide o modelo do classificador é o painel de provedores ou, na falta dele, o modelo de atendimento da empresa, e nenhuma escolha é sobrescrita por baixo dos panos.
+  O modelo do classificador vinha gravado pelo próprio Umbu CRM ao criar o roteador, com um nome que a OpenRouter não reconhece. Ninguém escolheu esse modelo, e a empresa podia ter configurado Claude como modelo de atendimento — o roteador é que insistia no dele. Agora o roteador nasce em "Automático": quem decide o modelo do classificador é o painel de provedores ou, na falta dele, o modelo de atendimento da empresa, e nenhuma escolha é sobrescrita por baixo dos panos.
 
   Quem já tinha um roteador com esse modelo gravado de fábrica, numa empresa que não usa a Anthropic diretamente, passa para "Automático" ao atualizar. Se quiser um classificador mais barato e rápido do que o modelo de atendimento, basta escolhê-lo na tela do roteador. Empresas que usam a Anthropic diretamente não mudam nada: lá esse modelo funciona, e o roteador continua com ele. Também não muda nada para quem escolheu o modelo do classificador na tela, inclusive o Claude Haiku 4.5 pela Requesty, nem para quem não usa roteador de agentes. Não é preciso fazer nada na instalação.
 
@@ -9163,7 +9163,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 ### Adicionado
 
-- **Instalação em VPS ARM64** O instalador agora atende VPS ARM64/aarch64, como Oracle Ampere A1, AWS Graviton e Hetzner CAX, inclusive no modo com Supabase na mesma VPS. As imagens do PJ CRM são construídas em máquina ARM nativa e publicadas na mesma tag das de amd64, e o WAHA usa a variante oficial NOWEB ARM64 (`devlikeapro/waha:noweb-arm-2026.7.2`). Nada é compilado na VPS. Quem já roda em ARM passa a atualizar pelas imagens publicadas, e o `update.sh` troca no `.env` o WAHA amd64 antigo pela variante ARM (um valor escolhido à mão fica intacto). Em amd64 nada muda.
+- **Instalação em VPS ARM64** O instalador agora atende VPS ARM64/aarch64, como Oracle Ampere A1, AWS Graviton e Hetzner CAX, inclusive no modo com Supabase na mesma VPS. As imagens do Umbu CRM são construídas em máquina ARM nativa e publicadas na mesma tag das de amd64, e o WAHA usa a variante oficial NOWEB ARM64 (`devlikeapro/waha:noweb-arm-2026.7.2`). Nada é compilado na VPS. Quem já roda em ARM passa a atualizar pelas imagens publicadas, e o `update.sh` troca no `.env` o WAHA amd64 antigo pela variante ARM (um valor escolhido à mão fica intacto). Em amd64 nada muda.
 
   Contribuição de @mauriciobera1990-droid (#1938).
 
@@ -10164,7 +10164,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @webtecnica (#1770, issue #533).
 
-- **Quem já tinha o PJ CRM rodando em ARM (VPS aarch64) volta a conseguir atualizar** Quem já tinha o PJ CRM instalado numa VPS ARM (Oracle Ampere, aarch64)
+- **Quem já tinha o Umbu CRM rodando em ARM (VPS aarch64) volta a conseguir atualizar** Quem já tinha o Umbu CRM instalado numa VPS ARM (Oracle Ampere, aarch64)
   volta a conseguir rodar `update.sh`. Desde a v1.35.0 a atualização era recusada
   logo na primeira linha, dizendo que só existe VPS x86_64, mesmo onde o CRM já
   estava funcionando. Agora, onde já existe instalação, a recusa vira um aviso e
@@ -10190,7 +10190,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @webtecnica (#1775).
 
-- **Instalar pela primeira vez numa VPS ARM volta a ser recusado, mesmo com o .env já preenchido** Se você começou a instalar o PJ CRM numa VPS ARM (Oracle Ampere,
+- **Instalar pela primeira vez numa VPS ARM volta a ser recusado, mesmo com o .env já preenchido** Se você começou a instalar o Umbu CRM numa VPS ARM (Oracle Ampere,
   aarch64) com o `.env` já preenchido — copiado de outra máquina, gerado por
   automação, ou deixado por uma instalação que parou no meio —, o `install.sh`
   não recusava como devia: confundia a pasta com uma instalação que já estava no
@@ -10198,7 +10198,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   recusa logo no começo e orienta a usar uma VPS x86_64/amd64.
 
   A instalação passa a ser reconhecida pelo que ela deixou de verdade: os
-  contêineres do PJ CRM (ou do seu Supabase) no Docker, parados ou
+  contêineres do Umbu CRM (ou do seu Supabase) no Docker, parados ou
   rodando, ou o arquivo `.pjcrm-instalado` que o próprio instalador grava
   quando termina. Quem já tem o CRM numa VPS ARM continua atualizando
   normalmente, com o aviso e o build local de sempre. Para quem instalou antes
@@ -11402,7 +11402,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Contribuição de @betoarts (recorte do #714, entrou pelo #1464).
 
-- **Um comando sobe o PJ CRM inteiro na sua própria máquina** Até aqui, rodar o PJ CRM fora de um servidor exigia montar tudo à mão: banco, autenticação, WhatsApp e fila, cada um com a sua configuração. O instalador da VPS não serve para isso, porque ele assume domínio próprio e proxy na frente.
+- **Um comando sobe o Umbu CRM inteiro na sua própria máquina** Até aqui, rodar o Umbu CRM fora de um servidor exigia montar tudo à mão: banco, autenticação, WhatsApp e fila, cada um com a sua configuração. O instalador da VPS não serve para isso, porque ele assume domínio próprio e proxy na frente.
 
   Agora existe um caminho local: `./ubuntu-local-installer.sh` prepara a máquina, sobe o banco com a estrutura oficial do produto, gera as chaves, levanta a aplicação, o worker, o WhatsApp e a fila, e cria o usuário administrador — imprimindo no fim o endereço e a senha. Depois disso, `pnpm local:up`, `local:status`, `local:logs` e `local:down` cuidam do dia a dia. O passo a passo está em `docs/SETUP.md`.
 
@@ -11757,7 +11757,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   O link da mídia também pode ficar salvo no modelo: marque "Salvar este link no modelo" e
   ele vem preenchido nos próximos envios. Crédito: @rafaelbatistazz.
 
-- **Conectar o Google funciona quando você abre a instalação por localhost** Quem instala o PJ CRM no próprio computador e abre o sistema por `http://localhost:3000` não conseguia terminar a conexão com o Google Agenda: o endereço de retorno oferecido era sempre o que ficou gravado na instalação (o IP da máquina na rede, por exemplo), e o Google compara esse endereço letra por letra. A conexão voltava para outro endereço e nunca se completava.
+- **Conectar o Google funciona quando você abre a instalação por localhost** Quem instala o Umbu CRM no próprio computador e abre o sistema por `http://localhost:3000` não conseguia terminar a conexão com o Google Agenda: o endereço de retorno oferecido era sempre o que ficou gravado na instalação (o IP da máquina na rede, por exemplo), e o Google compara esse endereço letra por letra. A conexão voltava para outro endereço e nunca se completava.
 
   Agora, **quando e só quando** o navegador abre o sistema por `localhost` (ou `127.0.0.1`), o endereço de retorno acompanha — e é o mesmo que a tela mostra para você colar no painel do Google. Qualquer outro endereço continua perdendo para o endereço oficial da instalação, então nada muda para quem roda em servidor com domínio próprio.
 
@@ -12911,7 +12911,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   Com a trava enxergando essas frases, o agente que promete olhar a agenda é obrigado a consultá-la no mesmo turno — e responde com os horários reais (ou explica o que impediu), em vez de deixar o cliente esperando. Conversa comum que só menciona o atendimento ("o atendimento de vocês é ótimo") continua passando normalmente.
 
-- **A guarda da release confere a identidade do PR de origem, e não o nome do autor do commit** O passo que decide se um push para a `main` corta tag de release conferia o NOME de autor do commit — campo de texto que quem commita escolhe, e que era um literal dentro do próprio `release.yml`. Agora ele pergunta à API do GitHub quem abriu o PR de origem daquele merge, e só corta a tag quando o PR foi aberto pelo bot do App da release ou quando o head do PR é um branch `release/*` do repositório de cima, que é o caminho por onde um corte legítimo passa. Um commit que se apresente com o nome do bot num PR de outra pessoa passa a ser recusado, e o passo da guarda fica vermelho em vez de criar a tag em silêncio. A contagem de fragmentos apagados também passou a pedir `--find-renames`, para que renomear um fragmento não seja lido como fragmento consumido. Nada muda na operação de quem já roda o PJ CRM numa VPS.
+- **A guarda da release confere a identidade do PR de origem, e não o nome do autor do commit** O passo que decide se um push para a `main` corta tag de release conferia o NOME de autor do commit — campo de texto que quem commita escolhe, e que era um literal dentro do próprio `release.yml`. Agora ele pergunta à API do GitHub quem abriu o PR de origem daquele merge, e só corta a tag quando o PR foi aberto pelo bot do App da release ou quando o head do PR é um branch `release/*` do repositório de cima, que é o caminho por onde um corte legítimo passa. Um commit que se apresente com o nome do bot num PR de outra pessoa passa a ser recusado, e o passo da guarda fica vermelho em vez de criar a tag em silêncio. A contagem de fragmentos apagados também passou a pedir `--find-renames`, para que renomear um fragmento não seja lido como fragmento consumido. Nada muda na operação de quem já roda o Umbu CRM numa VPS.
 
 - **Repetir a mesma criação pela API não cria o registro duas vezes** Quem integra com a API e manda o cabeçalho `Idempotency-Key` ao criar um modelo de mensagem (`POST /api/v1/message-templates`) tinha duas falhas. Repetir o mesmo pedido devolvia 409 `idempotency_conflict` em vez da resposta gravada, porque o resumo do pedido era gravado num formato que a comparação nunca reconhecia. E dois pedidos iguais chegando ao MESMO tempo criavam o modelo duas vezes. Agora a chave é reservada antes da criação: a repetição devolve a resposta original, e o pedido simultâneo recebe 409 `idempotency_in_progress`, que pode ser repetido em instantes. Se a criação falhar, a chave é liberada na hora e a nova tentativa executa normalmente.
 
@@ -13315,7 +13315,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **Instalador volta a pedir consentimento antes de ligar a telemetria** O template self-host não pré-define mais `SENTRY_DSN` vazio antes da primeira execução. Assim, o instalador volta a perguntar pelo envio de relatórios de erro; em modo `--yes`, mantém a telemetria desligada, e uma escolha anterior continua preservada nas reexecuções. Crédito: @joaopaulomirandamatias.
 
-- **O kit explica quando a VPS usa uma arquitetura sem imagem publicada** Instalação e atualização agora recusam ARM64/aarch64 antes de consultar ou baixar as imagens do PJ CRM, explicando que as imagens oficiais atuais são `linux/amd64` e orientando usar uma VPS x86_64/amd64. Crédito: @joaopaulomirandamatias.
+- **O kit explica quando a VPS usa uma arquitetura sem imagem publicada** Instalação e atualização agora recusam ARM64/aarch64 antes de consultar ou baixar as imagens do Umbu CRM, explicando que as imagens oficiais atuais são `linux/amd64` e orientando usar uma VPS x86_64/amd64. Crédito: @joaopaulomirandamatias.
 
 - **O funil passa a falar a moeda que a empresa escolheu, em vez de real sempre** Em Configurações › Organização dá para escolher a moeda da empresa, e o funil
   ignorava a escolha em dois pontos. O total no topo de cada coluna do quadro
@@ -13838,7 +13838,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
 - **O domínio de quem manda o PR não viaja mais dentro da imagem** Nada muda na sua VPS: nenhum endereço de terceiro foi encontrado no código que
   embarca hoje, e nada foi trocado em produção. O que muda é o portão do
-  repositório. A catraca que já barrava o nome antigo do produto — "PJ CRM"
+  repositório. A catraca que já barrava o nome antigo do produto — "Umbu CRM"
   escrito na tela de quem instalou com a marca dele — passou a barrar também
   domínio de terceiro: site pessoal, endereço de teste ou visão de alguém
   enterrado numa parte do código que vai para a imagem. Quando isso acontece, o PR
@@ -15305,7 +15305,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 ### Alterado
 
 - **A marca do produto ganha símbolo e logotipo** Instalação que não configurou marca própria passa a mostrar o logotipo do
-  PJ CRM no menu lateral, na tela de entrada e no ícone da aba do navegador —
+  Umbu CRM no menu lateral, na tela de entrada e no ícone da aba do navegador —
   no lugar do nome em texto e da letra "D" sobre a cor de destaque. Quem já
   definiu nome ou logo próprio em Marca não vê nenhuma diferença: a marca
   configurada continua valendo em todos esses lugares.
@@ -16446,7 +16446,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   **Se você já tinha instalado antes desta versão**, a próxima atualização mostra
   esse mesmo passo uma vez, com o seu domínio preenchido, e não repete depois.
 
-- **Sete alertas de segurança em bibliotecas de terceiros foram fechados** O GitHub apontava sete alertas de segurança em bibliotecas que o PJ CRM não
+- **Sete alertas de segurança em bibliotecas de terceiros foram fechados** O GitHub apontava sete alertas de segurança em bibliotecas que o Umbu CRM não
   usa diretamente — elas chegam junto com outras que ele usa. São quatro em
   `fast-uri` (confusão de endereço ao normalizar uma URL malformada), dois em `qs`
   (contorno do limite de tamanho de lista e travamento por entrada preparada) e um
@@ -16628,7 +16628,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
   O achado é de @prevprocesso-maker, que percebeu o furo instalando o sistema para
   um cliente.
 
-- **Instalar pelo canal padrão não mistura mais versões entre os serviços** O PJ CRM roda três serviços que saem do mesmo código — o aplicativo, o
+- **Instalar pelo canal padrão não mistura mais versões entre os serviços** O Umbu CRM roda três serviços que saem do mesmo código — o aplicativo, o
   trabalhador de fundo e o agendador. Quem instala pelo canal padrão espera os
   três na mesma versão.
 
@@ -17675,7 +17675,7 @@ Esta versão junta 106 mudanças. Cada item é curto para caber na tela de atual
 
   **Você não precisa fazer nada.** A opção de Push continua podendo ser ligada dos
   dois jeitos: mesmo sem as chaves, o aviso na bandeja do sistema já funciona
-  enquanto o PJ CRM está aberto numa aba.
+  enquanto o Umbu CRM está aberto numa aba.
 
 - **A Agenda passa a mostrar só a organização que está selecionada** Quem administra mais de uma empresa na mesma instalação via a Agenda somando as
   duas: os tipos de agendamento apareciam repetidos, e clicar em metade deles
@@ -18503,7 +18503,7 @@ novas têm valor padrão e o próprio `update.sh` as acrescenta.
 
 ## [1.2.1] — 2026-08-12
 
-**Versão de segurança. Se você roda o PJ CRM numa VPS, atualize.**
+**Versão de segurança. Se você roda o Umbu CRM numa VPS, atualize.**
 
 Um usuário da comunidade auditou o código e mandou um relatório. Parte do que ele apontou já
 tinha sido corrigida nas versões seguintes à que ele analisou — mas **seis** problemas estavam
@@ -18711,7 +18711,7 @@ Depois disso, nunca mais é preciso o terminal.
 
 ## [1.0.0] — 2026-07-27
 
-Primeira versão marcada do PJ CRM. O projeto vinha sendo desenvolvido publicamente desde abril de 2026 sem tags; esta release estabelece o ponto a partir do qual toda mudança passa a ser versionada e descrita — porque quem hospeda o próprio sistema precisa saber o que muda antes de atualizar.
+Primeira versão marcada do Umbu CRM. O projeto vinha sendo desenvolvido publicamente desde abril de 2026 sem tags; esta release estabelece o ponto a partir do qual toda mudança passa a ser versionada e descrita — porque quem hospeda o próprio sistema precisa saber o que muda antes de atualizar.
 
 ### Plataforma
 

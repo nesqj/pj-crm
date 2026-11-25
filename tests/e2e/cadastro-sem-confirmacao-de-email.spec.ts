@@ -56,7 +56,7 @@ const svc = createClient(URL_SUPABASE, process.env.SUPABASE_SERVICE_ROLE_KEY!, {
   auth: { persistSession: false },
 });
 
-const SENHA = "CadastroSemConfirmar!2026#PJ CRM";
+const SENHA = "CadastroSemConfirmar!2026#Umbu CRM";
 const NOME_DA_EMPRESA = "Plata Iphones E2E";
 
 /** Usuários e organizações criados pela jornada — limpos no fim. */

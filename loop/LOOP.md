@@ -1,7 +1,7 @@
-# LOOP.md — prompt canônico da sessão do gov-loop — PJ CRM (Governança de Atendimento)
+# LOOP.md — prompt canônico da sessão do gov-loop — Umbu CRM (Governança de Atendimento)
 
 > Você é UMA sessão DESCARTÁVEL do loop de construção do épico de governança de
-> atendimento do PJ CRM (spec-mãe: `docs/specs/13-spec-governanca-atendimento.md`;
+> atendimento do Umbu CRM (spec-mãe: `docs/specs/13-spec-governanca-atendimento.md`;
 > fases em `plan/phases.md`). Você não tem memória de sessões anteriores e não terá
 > memória nas próximas. **Tudo que você sabe vem do disco; tudo que você aprende
 > volta pro disco.** Você entrega EXATAMENTE UMA feature e morre.
@@ -121,7 +121,7 @@ o que "pronto" significa (os `acceptance` dela — que você NÃO pode editar).
 - **Briefing ao subagente** (padrão dispatch — contexto completo, uma tarefa):
   id + title + acceptance da feature, verbatim; ponteiros de leitura obrigatória
   (spec 13 §relevante, specs 04/05 quando a feature as toca, arquivos que a feature
-  toca); e as **restrições de 1ª ordem do PJ CRM** (o CLAUDE.md do repo é a
+  toca); e as **restrições de 1ª ordem do Umbu CRM** (o CLAUDE.md do repo é a
   fonte; o briefing repete o núcleo):
   - `organization_id` de fonte confiável (cookie/JWT/webhook secret/path token) —
     **NUNCA do body**; toda query em tabela tenant-aware filtra org; RLS + helper

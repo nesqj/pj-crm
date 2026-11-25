@@ -1612,7 +1612,7 @@ fi
 #     do produto, que é o mesmo piso de lib/branding/saida.ts.
 SUPABASE_ACCESS_TOKEN= APP_NAME='Marca Torta' APP_ACCENT_HEX='verde-limão' \
   bash ./marca-emails.sh --env /dev/null --render-em "$ME_TMP/torto" >/dev/null 2>&1
-if grep -q 'background: #0023fa; background: #0023fa' "$ME_TMP/torto/confirmation.html" 2>/dev/null; then
+if grep -q 'background: #37771a; background: #37771a' "$ME_TMP/torto/confirmation.html" 2>/dev/null; then
   printf '  ✓ APP_ACCENT_HEX inválido cai no accent do produto\n'
 else
   printf '  ✗ APP_ACCENT_HEX inválido virou CSS inválido: %s\n' \
@@ -1647,7 +1647,7 @@ fi
 
 echo "proxy reverso: quem está com as portas 80/443"
 # A versão anterior só sabia procurar Traefik. Qualquer outro proxy — inclusive o
-# Caddy de OUTRO PJ CRM na mesma VPS — caía no ramo "portas livres", e a
+# Caddy de OUTRO Umbu CRM na mesma VPS — caía no ramo "portas livres", e a
 # instalação seguia até a fase 4 para morrer com "Bind for 0.0.0.0:80 failed:
 # port is already allocated". Medido numa VPS com produção rodando.
 # dono_das_portas lê o que o `docker ps` imprime de verdade. Os casos com "->"
@@ -1665,7 +1665,7 @@ dono_ok "app em 8080->80 NÃO é ocupante (80 do host livre)" \
   '' 'phpmyadmin|web|phpmyadmin:latest|0.0.0.0:8080->80/tcp'
 dono_ok "proxy sem privilégio (80->8080) É ocupante" \
   'traefik|infra|traefik:v3' 'traefik|infra|traefik:v3|0.0.0.0:80->8080/tcp'
-dono_ok "Caddy de outro PJ CRM é encontrado" \
+dono_ok "Caddy de outro Umbu CRM é encontrado" \
   'outro-caddy-1|outro|caddy:2-alpine' 'outro-caddy-1|outro|caddy:2-alpine|0.0.0.0:80->80/tcp, 0.0.0.0:443->443/tcp'
 dono_ok "contêiner sem porta publicada é ignorado" \
   '' 'worker|app|meu/worker|'
@@ -1707,11 +1707,11 @@ dec_ok "portas livres → nosso Caddy"        caddy    ""        ""          "cr
 # PRÓPRIO Caddy. Tratar isso como intruso bloqueia a instalação que o kit manda
 # rodar de novo para corrigir uma resposta, e sem nem um comando acionável.
 dec_ok "re-execução: portas com esta mesma instalação" caddy "80 e 443" "crm" "crm" "caddy:2-alpine" "crm-caddy-1"
-dec_ok "Caddy de OUTRO PJ CRM → bloqueia" bloqueia "80 e 443" "outro"     "crm" "caddy:2-alpine" "outro-caddy-1"
-# O fixture acima nomeia "outro PJ CRM" mas usa projeto DIFERENTE ("outro" vs
+dec_ok "Caddy de OUTRO Umbu CRM → bloqueia" bloqueia "80 e 443" "outro"     "crm" "caddy:2-alpine" "outro-caddy-1"
+# O fixture acima nomeia "outro Umbu CRM" mas usa projeto DIFERENTE ("outro" vs
 # "crm") — e é justamente o nome do projeto que NÃO difere no caso real: o
 # projeto do compose é o basename da pasta, e toda cópia do repo se chama
-# PJ CRM. Medido numa VPS de produção em 2026-08-24: a instalação de uma
+# Umbu CRM. Medido numa VPS de produção em 2026-08-24: a instalação de uma
 # aula em /root/apagar7/pjcrm viu o Caddy da produção em
 # /root/pjcrm com o MESMO projeto `pjcrm`, concluiu "é a
 # re-execução" e subiu por cima — trocando o banco do CRM no ar sem um aviso.
@@ -3003,13 +3003,13 @@ echo "integração: instalar de uma CÓPIA IRMÃ, com o CRM já no ar (2026-08-2
 # regra (dentro de decide_proxy) ou o call site (deixar de passar a árvore). Um
 # teste só da função fica verde enquanto o produto instala por cima da produção.
 #
-# A VPS deste teste é a que aconteceu de verdade: um PJ CRM no ar em
+# A VPS deste teste é a que aconteceu de verdade: um Umbu CRM no ar em
 # /root/pjcrm (Caddy publicando 80/443, projeto `pjcrm`), e o
-# instalador rodando de OUTRA cópia — cuja pasta também se chama PJ CRM,
+# instalador rodando de OUTRA cópia — cuja pasta também se chama Umbu CRM,
 # então o projeto colide e a versão anterior dizia "é a re-execução, siga".
 TMP_IRMA="$(mktemp -d)"
 (
-  montar_vps "$TMP_IRMA" "PJ CRM" <<'STUB'
+  montar_vps "$TMP_IRMA" "pjcrm" <<'STUB'
 #!/usr/bin/env bash
 printf '%s\n' "$*" >> "$DOCKER_LOG"
 case "$1" in
@@ -3034,7 +3034,7 @@ STUB
 
   # 1. Recusa. O sintoma do defeito era instalar em silêncio; qualquer coisa que
   #    não seja parar aqui é o defeito de volta.
-  if ! grep -q 'Já existe um PJ CRM NO AR' <<<"$saida"; then
+  if ! grep -q 'Já existe um Umbu CRM NO AR' <<<"$saida"; then
     printf '  ✗ NÃO recusou a instalação por cima da que está no ar\n'
     printf '     últimas linhas: %s\n' "$(printf '%s' "$saida" | tail -3 | tr '\n' ' ')"; exit 1
   fi
@@ -3075,7 +3075,7 @@ STUB2
   chmod +x "$VPS_RAIZ/bin/docker-inner"
   saida="$(rodar install.sh --yes)"
   chegou_na_deteccao || exit 1
-  if grep -q 'Já existe um PJ CRM NO AR' <<<"$saida"; then
+  if grep -q 'Já existe um Umbu CRM NO AR' <<<"$saida"; then
     printf '  ✗ bloqueou a RE-EXECUÇÃO legítima (mesma árvore) — o kit manda rodar de novo\n'; exit 1
   fi
   printf '  ✓ e a re-execução de dentro da própria árvore continua passando\n'

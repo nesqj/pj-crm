@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-# PJ CRM — imagem de produção self-host (Next.js standalone).
+# Umbu CRM — imagem de produção self-host (Next.js standalone).
 # Build: docker build --build-arg NEXT_PUBLIC_SUPABASE_URL=... -t pjcrm-app .
 
 # ---- deps: instala dependências (layer cacheável) ----
@@ -113,7 +113,7 @@ WORKDIR /app
 # passa pelo metadata-action e sem isto sairia sem origem nenhuma.
 LABEL org.opencontainers.image.source="https://github.com/nesqj/pj-crm" \
       org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.title="PJ CRM"
+      org.opencontainers.image.title="Umbu CRM"
 
 # ⚠️ NADA de ARG de versão acima das camadas caras deste estágio. No BuildKit a
 # própria INSTRUÇÃO `ARG` entra na chave de cache das instruções seguintes —

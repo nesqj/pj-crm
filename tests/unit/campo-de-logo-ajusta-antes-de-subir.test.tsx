@@ -68,7 +68,7 @@ function renderizar() {
       logoDaCamada={{ url: null }}
       logoHerdado={null}
       origemDoHerdado="do sistema"
-      nomeEmVigor="PJ CRM"
+      nomeEmVigor="Umbu CRM"
     />,
   );
 }

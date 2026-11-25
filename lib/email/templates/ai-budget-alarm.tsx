@@ -43,7 +43,7 @@ export function buildBudgetAlarmEmail(opts: BudgetAlarmEmailOptions): {
   // O nome do produto continua AQUI, no arquivo que já é a dívida D1 da marca
   // (`tests/unit/branding.test.ts`) — não no dicionário, onde viraria ocorrência
   // nova de marca num arquivo novo. Tradução não é o lugar de resolver marca.
-  const subject = `${t("Alerta IA: orçamento atingiu {pct}", { pct: pctStr })} — PJ CRM`;
+  const subject = `${t("Alerta IA: orçamento atingiu {pct}", { pct: pctStr })} — Umbu CRM`;
   const orgLine = opts.orgName
     ? `<p style="margin:0 0 16px;font-size:14px;color:#57534e">${escapeHtml(t("Organização:"))} <strong>${escapeHtml(opts.orgName)}</strong></p>`
     : "";

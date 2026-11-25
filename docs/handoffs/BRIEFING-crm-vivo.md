@@ -24,7 +24,7 @@ Existem outros worktrees vivos (`.claude/worktrees/*`, `pj-crm-qa`, `pj-crm-main
 
 ## 1. A missão
 
-O PJ CRM existe para que **todo lead que entra vire uma venda feita ou um problema
+O Umbu CRM existe para que **todo lead que entra vire uma venda feita ou um problema
 resolvido** — nunca um card parado que ninguém viu.
 
 O sistema tem duas metades que funcionam e não se conhecem: uma **pensa** (harness:

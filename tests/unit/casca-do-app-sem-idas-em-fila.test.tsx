@@ -40,7 +40,7 @@ vi.mock("@/lib/auth/vinculo-revogado", () => ({ acessoFoiRevogado: async () => f
 vi.mock("@/lib/branding/instalacao", () => ({ marcaDaInstalacao: async () => ({}) }));
 vi.mock("@/lib/branding/organizacao", () => ({
   resolverMarcaDaOrganizacao: () => ({
-    name: "PJ CRM",
+    name: "Umbu CRM",
     logoUrl: null,
     cor: "#000000",
     origens: { nome: "instalacao", logoUrl: "instalacao", cor: "instalacao" },

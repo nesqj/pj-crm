@@ -54,7 +54,7 @@ export HOME="$TMP/home"; mkdir -p "$HOME"
 REAL_GIT="$(command -v git)"; export REAL_GIT
 REAL_LN="$(command -v ln)"; export REAL_LN
 
-# ── um "PJ CRM" mínimo: dois guias e uma skill que não é guia ────────────
+# ── um "Umbu CRM" mínimo: dois guias e uma skill que não é guia ────────────
 montar_repo() {  # montar_repo <pasta>
   local r="$1" n
   mkdir -p "$r"

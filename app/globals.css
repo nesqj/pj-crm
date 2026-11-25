@@ -25,7 +25,7 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ─────────────────────────────────────────────────────────────────────────
-   PJ CRM — Design System tokens (Sage palette · density Aerada)
+   Umbu CRM — Design System tokens (Sage palette · density Aerada)
    Source of truth: /app/design/lib/tokens.ts (PALETTES.sage)
    Light + dark drawn separately (NOT inverted).
    ───────────────────────────────────────────────────────────────────────── */
@@ -59,17 +59,17 @@
   --color-canal-telegram: #0088cc;
 
   /* Accent — Sage (11 stops) */
-  --color-accent-50: #f0f5ff;
-  --color-accent-100: #dce8ff;
-  --color-accent-200: #b6ceff;
-  --color-accent-300: #83abff;
-  --color-accent-400: #5287ff;
-  --color-accent-500: #2660ff;
-  --color-accent-600: #0023fa;
-  --color-accent-700: #0229c3;
-  --color-accent-800: #05299b;
-  --color-accent-900: #09287f;
-  --color-accent-950: #04164a;
+  --color-accent-50: #f0f8ee;
+  --color-accent-100: #deefd8;
+  --color-accent-200: #bcddb1;
+  --color-accent-300: #91c380;
+  --color-accent-400: #68ab4f;
+  --color-accent-500: #4a932b;
+  --color-accent-600: #37771a;
+  --color-accent-700: #2f5f1b;
+  --color-accent-800: #294d1b;
+  --color-accent-900: #25411a;
+  --color-accent-950: #11210b;
   --color-accent: var(--color-accent-600);
   --color-accent-fg: #ffffff;
   --color-accent-soft: var(--color-accent-100);
@@ -392,20 +392,20 @@
   --color-canal-telegram: #38bdf8;
 
   /* Accent stays same hex stops; default shifts up for dark contrast */
-  --color-accent-50: #f0f5ff;
-  --color-accent-100: #dce8ff;
-  --color-accent-200: #b6ceff;
-  --color-accent-300: #83abff;
-  --color-accent-400: #5287ff;
-  --color-accent-500: #2660ff;
-  --color-accent-600: #0023fa;
-  --color-accent-700: #0229c3;
-  --color-accent-800: #05299b;
-  --color-accent-900: #09287f;
-  --color-accent-950: #04164a;
+  --color-accent-50: #f0f8ee;
+  --color-accent-100: #deefd8;
+  --color-accent-200: #bcddb1;
+  --color-accent-300: #91c380;
+  --color-accent-400: #68ab4f;
+  --color-accent-500: #4a932b;
+  --color-accent-600: #37771a;
+  --color-accent-700: #2f5f1b;
+  --color-accent-800: #294d1b;
+  --color-accent-900: #25411a;
+  --color-accent-950: #11210b;
   --color-accent: var(--color-accent-400);
   --color-accent-fg: #161510;
-  --color-accent-soft: rgba(82, 135, 255, 0.16);
+  --color-accent-soft: rgba(104, 171, 79, 0.16);
   --color-accent-hover: var(--color-accent-300);
 
   /* Neutrals — greige (11 stops, dark) */
@@ -1602,4 +1602,57 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cc-ondas-ativa .cc-onda { animation: none; }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   Umbu CRM — menu lateral verde escuro, o padrão do produto.
+
+   Fica FORA de qualquer @layer e só com o seletor do atributo: vence os
+   utilitários do Tailwind (que moram em camada) e PERDE para os templates da
+   tela Aparência (`app/app/aparencia.css`), que usam
+   `body:has([data-marca-org][data-aparencia]) [data-casca="menu"]` — mais
+   específico. Empresa com template escolhido continua com o dela.
+
+   Troca só tokens dentro do menu: `bg-card` lê `--color-surface`,
+   `text-muted-foreground` lê `--color-text-muted`, e assim por diante (é o
+   `@theme inline` que mantém o `var()` literal no utilitário).
+
+   Contraste medido contra o fundo #0f3a22: texto 11,4:1, texto suave 7,2:1,
+   item ativo (#6bb64e) 5,1:1 contra o fundo, e o texto do item ativo
+   (#0f2208) passa de 7:1 sobre ele. O verde-limão com texto branco do mockup
+   ficaria em 2,4:1 — abaixo do piso de leitura —, por isso o texto escuro.
+
+   As cores aqui são literais, e não graus da rampa, de propósito: o menu é a
+   identidade do Umbu, e a cor de marca que uma instalação configurar (Admin ›
+   Marca) não pode tornar o item ativo ilegível.
+   ───────────────────────────────────────────────────────────────────────── */
+[data-casca="menu"] {
+  --color-surface: #0f3a22;
+  --color-surface-elevated: #17482b;
+  --color-text: #eef5ea;
+  --color-text-muted: #b4c8ae;
+  --color-text-subtle: #8fa98a;
+  --color-border: #24513a;
+  --color-border-strong: #2f6146;
+  background-color: #0f3a22;
+  border-right-color: #0f3a22;
+  color: #eef5ea;
+}
+
+[data-casca="menu"] a[aria-current="page"] {
+  background-color: #6bb64e;
+  color: #0f2208;
+}
+
+[data-casca="menu"] a:not([aria-current="page"]):hover {
+  background-color: color-mix(in srgb, #eef5ea 9%, transparent);
+  color: #eef5ea;
+}
+
+/* O logotipo do produto acompanha o menu escuro: o nome em claro. */
+[data-casca="menu"] [data-marca-parte="nome"] {
+  fill: #eef5ea;
+}
+[data-casca="menu"] [data-marca-parte="sufixo"] {
+  fill: #a6d930;
 }

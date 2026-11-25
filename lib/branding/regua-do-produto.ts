@@ -25,17 +25,17 @@ import type { Regua } from "./contraste";
 
 export const REGUA_DO_PRODUTO: Regua = {
   rampaDoProduto: [
-    "#f0f5ff",
-    "#dce8ff",
-    "#b6ceff",
-    "#83abff",
-    "#5287ff",
-    "#2660ff",
-    "#0023fa",
-    "#0229c3",
-    "#05299b",
-    "#09287f",
-    "#04164a",
+    "#f0f8ee",
+    "#deefd8",
+    "#bcddb1",
+    "#91c380",
+    "#68ab4f",
+    "#4a932b",
+    "#37771a",
+    "#2f5f1b",
+    "#294d1b",
+    "#25411a",
+    "#11210b",
   ],
   claro: {
     nome: "claro",
@@ -199,7 +199,7 @@ export const REGUA_DO_PRODUTO: Regua = {
         chave: "--color-accent-soft",
         fonte: {
           tipo: "literal",
-          hex: "#5287ff",
+          hex: "#68ab4f",
           alfa: 0.16,
         },
       },
@@ -319,4 +319,4 @@ export const REGUA_DO_PRODUTO: Regua = {
     },
     alfaDoSoft: 0.16,
   },
-} as const;
+};

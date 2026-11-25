@@ -55,7 +55,7 @@ try {
     // A âncora: qual ramo a fachada desenhou.
     const temImgEnviada = (await p.getByTestId("logo-da-fachada").count()) > 0;
     const temMarcaDoProduto =
-      (await p.getByRole("img", { name: "PJ CRM" }).count()) > 0 && !temImgEnviada;
+      (await p.getByRole("img", { name: "Umbu CRM" }).count()) > 0 && !temImgEnviada;
 
     let medida = null;
     if (temImgEnviada) {
@@ -82,7 +82,7 @@ try {
     } else if (temMarcaDoProduto) {
       // A marca do PRODUTO: a negação é sobre TODA a cadeia até o <body>, não só
       // o pai — uma moldura em qualquer avô pintaria igual na tela.
-      const alvo = p.getByRole("img", { name: "PJ CRM" }).first();
+      const alvo = p.getByRole("img", { name: "Umbu CRM" }).first();
       await alvo.waitFor({ state: "visible", timeout: 15000 });
       medida = await alvo.evaluate((el) => {
         const cadeia = [];

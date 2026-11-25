@@ -1,14 +1,14 @@
-<!-- readme-pjcrm: este README é do PJ CRM; scripts/marca-pjcrm.sh o preserva na sincronização -->
+<!-- readme-pjcrm: este README é do Umbu CRM; scripts/marca-pjcrm.sh o preserva na sincronização -->
 <div align="center">
 
 [🇧🇷 Português](README.md) · [🇺🇸 English](README.en.md) · 🇪🇸 Español
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/brand/logo-escuro.png">
-  <img src="docs/brand/logo-claro.png" alt="PJ CRM" width="240">
+  <img src="docs/brand/logo-claro.png" alt="Umbu CRM" width="240">
 </picture>
 
-# PJ CRM
+# Umbu CRM
 
 **CRM de ventas con agentes de IA para WhatsApp, de código abierto, en tu propio servidor.**
 
@@ -18,7 +18,7 @@
 
 ## Cómo funciona
 
-PJ CRM reúne en una sola pantalla **WhatsApp**, el **embudo de ventas** y **agentes de IA**
+Umbu CRM reúne en una sola pantalla **WhatsApp**, el **embudo de ventas** y **agentes de IA**
 que trabajan junto a tu equipo:
 
 1. **El cliente escribe por WhatsApp.** El número se conecta por código QR o por el canal

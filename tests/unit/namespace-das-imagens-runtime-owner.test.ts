@@ -73,7 +73,7 @@ describe("o namespace das imagens é ancorado fora do diff do PR", () => {
       donoDo(imgNs()).toLowerCase(),
       [
         `IMG_NS=${imgNs()} não pertence ao dono confiável deste workflow (${donoDoRunner}).`,
-        "Num PR para o PJ CRM upstream, não troque o namespace das imagens do projeto.",
+        "Num PR para o Umbu CRM upstream, não troque o namespace das imagens do projeto.",
         "Num fork que publica imagens próprias, rode o CI no fork e aponte IMG_NS para o dono desse fork.",
         "E num fork que NÃO publica imagens, rodando o CI dele mesmo: este vermelho não pede troca de IMG_NS — é o gate medindo um cenário que não é o seu.",
       ].join(" "),

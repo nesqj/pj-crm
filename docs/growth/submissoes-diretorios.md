@@ -57,7 +57,7 @@ Critérios: ser open source · ser alternativa a um software proprietário · at
 | Intercom | intercom.com |
 | Octadesk | octadesk.com |
 
-Nome da alternativa: `PJ CRM` · Repositório: `https://github.com/nesqj/pj-crm`
+Nome da alternativa: `Umbu CRM` · Repositório: `https://github.com/nesqj/pj-crm`
 
 ---
 
@@ -67,7 +67,7 @@ Nome da alternativa: `PJ CRM` · Repositório: `https://github.com/nesqj/pj-crm`
 
 Exige conta no site. Sem custo, sem trava de idade.
 
-- **Nome:** PJ CRM
+- **Nome:** Umbu CRM
 - **Categoria:** CRM / Customer Support
 - **Licença:** Open Source (MIT)
 - **Plataformas:** Self-Hosted, Web, Docker
@@ -111,7 +111,7 @@ Toda segunda: as 10 buscas-alvo, as menções novas e as listagens desatualizada
 
 **Buscas-alvo** (busca na web, 16/11; os resultados podem variar por região e conta):
 
-| Busca | O PJ CRM aparece? | Quem ocupa a vaga |
+| Busca | O Umbu CRM aparece? | Quem ocupa a vaga |
 |---|---|---|
 | CRM open source | não | SuiteCRM, EspoCRM, Odoo, Frappe, Krayin (listas da monday, Bitrix24, itsfoss, openalternative.co) |
 | CRM open source WhatsApp | não | Frappe CRM + app WhatsApp, Krayin, add-on do Odoo, wacrm, Chatwoot |
@@ -142,22 +142,22 @@ Leitura: o site não aparece em nenhuma das 10 buscas. Isso é coerente com o `n
 
 **Diretórios (frente 4)**
 
-- **Glama:** o repositório **não está indexado** (`glama.ai/mcp/servers/nesqj/pj-crm` → 404, em 16/11). Não há API pública de submissão: o botão "Add Server" exige login. Além disso, o servidor MCP do PJ CRM é a rota `app/api/mcp/route.ts` dentro do app, com autenticação Bearer de um tenant. Ele não sobe sozinho, sem Supabase, então a inspeção automática que dá o selo de score provavelmente não consegue listar as ferramentas. Antes de submeter, é preciso decidir se vale a pena (vai ao Plane).
+- **Glama:** o repositório **não está indexado** (`glama.ai/mcp/servers/nesqj/pj-crm` → 404, em 16/11). Não há API pública de submissão: o botão "Add Server" exige login. Além disso, o servidor MCP do Umbu CRM é a rota `app/api/mcp/route.ts` dentro do app, com autenticação Bearer de um tenant. Ele não sobe sozinho, sem Supabase, então a inspeção automática que dá o selo de score provavelmente não consegue listar as ferramentas. Antes de submeter, é preciso decidir se vale a pena (vai ao Plane).
 - **`punkpeye/awesome-mcp-servers`:** depende do Glama, e a lista aceita servidores "que você instala e roda". Nenhum PR nosso aberto ou fechado (busca por "pjcrm", 16/11). Fica para depois do Glama.
 
 **Textos de correção prontos**
 
 (A) everydev.ai, para o Rafael enviar:
 
-> Hi — the PJ CRM listing (everydev.ai/tools/pjcrm) shows v1.80.0 as the latest release. The current release is v1.113.0 (2026-11-15): https://github.com/nesqj/pj-crm/releases. Could you refresh it? Thanks — Rafael (maintainer)
+> Hi — the Umbu CRM listing (everydev.ai/tools/pjcrm) shows v1.80.0 as the latest release. The current release is v1.113.0 (2026-11-15): https://github.com/nesqj/pj-crm/releases. Could you refresh it? Thanks — Rafael (maintainer)
 
-(B) Issue em `youssefsiam38/pjcrm-railway`, título "Upstream PJ CRM pinned to v1.27.2; current release is v1.113.0":
+(B) Issue em `youssefsiam38/pjcrm-railway`, título "Upstream Umbu CRM pinned to v1.27.2; current release is v1.113.0":
 
-> Hi Youssef, thanks for packaging PJ CRM for Railway. `UPSTREAM.md` pins v1.27.2 (2026-09-15). Upstream is now at v1.113.0 (2026-11-15), and 463 database migration files were added since then, so a fresh deploy from this template starts 99 releases behind. Would you consider bumping the pin? `CHANGELOG.md` in the main repo lists what changed per release. Happy to answer questions about the upgrade path. — PJ CRM maintainers' bot (pjcrm-bot)
+> Hi Youssef, thanks for packaging Umbu CRM for Railway. `UPSTREAM.md` pins v1.27.2 (2026-09-15). Upstream is now at v1.113.0 (2026-11-15), and 463 database migration files were added since then, so a fresh deploy from this template starts 99 releases behind. Would you consider bumping the pin? `CHANGELOG.md` in the main repo lists what changed per release. Happy to answer questions about the upgrade path. — Umbu CRM maintainers' bot (pjcrm-bot)
 
 (C) zekaiwork.com, pelo formulário de contato, para o Rafael enviar:
 
-> Hi — the PJ CRM page (zekaiwork.com/free-open-source/pjcrm/) files it under E-commerce. It is a CRM / customer-support tool (WhatsApp sales with AI agents); e-commerce is only one optional integration. Star count is also stale (3,644; now ~5.4k). Could you move it to CRM? Thanks — Rafael (maintainer)
+> Hi — the Umbu CRM page (zekaiwork.com/free-open-source/pjcrm/) files it under E-commerce. It is a CRM / customer-support tool (WhatsApp sales with AI agents); e-commerce is only one optional integration. Star count is also stale (3,644; now ~5.4k). Could you move it to CRM? Thanks — Rafael (maintainer)
 
 ---
 

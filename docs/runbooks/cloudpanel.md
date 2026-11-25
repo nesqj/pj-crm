@@ -1,4 +1,4 @@
-# Runbook — PJ CRM em VPS com CloudPanel (Nginx)
+# Runbook — Umbu CRM em VPS com CloudPanel (Nginx)
 
 > Cenário: VPS com **CloudPanel** já instalado, com o Nginx dele ocupando as
 > portas 80 e 443. O instalador do CRM sobe um Caddy nessas mesmas portas, então
@@ -58,7 +58,7 @@ CRM que abre a tela de login e não deixa ninguém entrar.
 
 ```bash
 cd /var/www
-git clone https://github.com/nesqj/pj-crm.git PJ CRM
+git clone https://github.com/nesqj/pj-crm.git Umbu CRM
 cd /var/www/pj-crm
 cp .env.hostgator.example .env
 nano .env

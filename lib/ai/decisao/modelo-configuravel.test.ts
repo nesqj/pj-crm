@@ -1,7 +1,7 @@
 /**
  * O MODELO DO DECISOR É CONFIGURÁVEL — e o Jev continua sendo o padrão.
  *
- * A issue #4710 pede que o PJ CRM pare de aceitar só o Jev. O que estes casos
+ * A issue #4710 pede que o Umbu CRM pare de aceitar só o Jev. O que estes casos
  * protegem, na ordem em que um erro dói:
  *
  *  (a) quem nunca escolheu nada continua no Jev — nenhuma instalação muda de

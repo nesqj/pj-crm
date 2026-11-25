@@ -213,7 +213,7 @@ async function comOCliente<T>(
     : {};
   const transporte = new StreamableHTTPClientTransport(new URL(servidor.endpoint), {
     // Identidade do contato antes, autenticação por último: nada do executor troca a chave.
-    // ponytail: sem HMAC extra — a chave Bearer do cadastro já autentica o PJ CRM perante o servidor.
+    // ponytail: sem HMAC extra — a chave Bearer do cadastro já autentica o Umbu CRM perante o servidor.
     requestInit: { headers: { ...cabecalhos, ...autenticacao } },
     // O guard anti-SSRF entra POR AQUI (item 4): o SDK aceita `fetch` próprio e
     // é por ele que toda requisição deste transporte passa. Sem opção nenhuma o

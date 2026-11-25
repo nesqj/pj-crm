@@ -13,7 +13,7 @@
    "run_command → {\"CommandLine\":\"python3 -c '\\nimport urllib.request\\n\\nurl = \\\"https://raw.githubusercontent.com/nesqj/pj-crm/main/.agents/skills/deskc",
    "run_command → {\"CommandLine\":\"python3 -c '\\nimport urllib.request\\n\\nurl = \\\"https://raw.githubusercontent.com/nesqj/pj-crm/main/.agents/skills/deskc"
   ],
-  "inicio_da_resposta": "Criei um plano passo a passo no documento de implantação:\n👉 [plano_instalacao_pjcrm_hostgator.md](file:///Users/rafaelmelgaco/.gemini/antigravity-cli/brain/dea7dc1f-79dc-4dc5-be8f-35cc291c5147/plano_instalacao_pjcrm_hostgator.md)\n\nO PJ CRM possui um instalador automatizado oficial feito "
+  "inicio_da_resposta": "Criei um plano passo a passo no documento de implantação:\n👉 [plano_instalacao_pjcrm_hostgator.md](file:///Users/rafaelmelgaco/.gemini/antigravity-cli/brain/dea7dc1f-79dc-4dc5-be8f-35cc291c5147/plano_instalacao_pjcrm_hostgator.md)\n\nO Umbu CRM possui um instalador automatizado oficial feito "
  },
  {
   "fase": "depois (CLI do Antigravity, agy --print, modo plan, permissões auto-aprovadas)",
@@ -70,6 +70,6 @@
   "turnos": 1,
   "duracao_s": 81,
   "leituras_de_skill": [],
-  "inicio_da_resposta": "Criei o plano detalhado de contribuição no artifact [`plano_contribuicao_bug_inbox.md`](file:///Users/rafaelmelgaco/.gemini/antigravity-cli/brain/d2a6362d-06f0-46f2-bcd0-d34551c67747/plano_contribuicao_bug_inbox.md).\n\nNo **PJ CRM**, o fluxo correto para contribuir pela primeira vez segue regras"
+  "inicio_da_resposta": "Criei o plano detalhado de contribuição no artifact [`plano_contribuicao_bug_inbox.md`](file:///Users/rafaelmelgaco/.gemini/antigravity-cli/brain/d2a6362d-06f0-46f2-bcd0-d34551c67747/plano_contribuicao_bug_inbox.md).\n\nNo **Umbu CRM**, o fluxo correto para contribuir pela primeira vez segue regras"
  }
 ]

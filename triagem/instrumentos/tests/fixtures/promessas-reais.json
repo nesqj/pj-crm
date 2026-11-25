@@ -948,7 +948,7 @@
     "title": "Configuração da instalação tem tela, não .env (Liga/Desliga em /admin)"
    },
    {
-    "body": "## O problema, medido\n## O que já está decidido\n## Escopo proposto\n3. **Documento do contato.** O validador passa a vir do perfil. Regra adotada do #928, e ela é a parte boa daquele PR:\n   recorte do #928, porque o dono o listou entre o que entra já e porque é vazamento de hoje. O que pertence a esta\n## O que NÃO entra\n  pontos) é o **recorte do #928**, não esta issue.\n## Riscos\n  errada, ou o artigo errado, é pior do que não citar artigo nenhum. O #928 acertou a postura: cita nome e número da lei\n## Direções de teste\n## Contexto\nVeio do **PR #928** de @cabindaferreira, que usa o PJ CRM em Angola e adaptou a instalação dele. O PR trocava o\nverificador. O que era genérico do #928 já foi separado num recorte próprio, com a autoria dele.",
+    "body": "## O problema, medido\n## O que já está decidido\n## Escopo proposto\n3. **Documento do contato.** O validador passa a vir do perfil. Regra adotada do #928, e ela é a parte boa daquele PR:\n   recorte do #928, porque o dono o listou entre o que entra já e porque é vazamento de hoje. O que pertence a esta\n## O que NÃO entra\n  pontos) é o **recorte do #928**, não esta issue.\n## Riscos\n  errada, ou o artigo errado, é pior do que não citar artigo nenhum. O #928 acertou a postura: cita nome e número da lei\n## Direções de teste\n## Contexto\nVeio do **PR #928** de @cabindaferreira, que usa o Umbu CRM em Angola e adaptou a instalação dele. O PR trocava o\nverificador. O que era genérico do #928 já foi separado num recorte próprio, com a autoria dele.",
     "createdAt": "2026-09-16T23:25:49Z",
     "number": 1033,
     "state": "CLOSED",
@@ -995,7 +995,7 @@
    "id": 5704443318,
    "autor": "vercel[bot]",
    "quando": "2026-09-16T21:00:55Z",
-   "texto": "@webtecnica is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%2204f0daeb4a9677c7cc84188218d3a566e5bd2020%22%7D%2C%22id%22%3A%22QmTp1X3hPyCkwGn8evqy3mmerrb7csgr7XuWvpuryTgzMu%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1017%2C%22repo%22%3A%22PJ CRM%22%7D).\n\n",
+   "texto": "@webtecnica is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%2204f0daeb4a9677c7cc84188218d3a566e5bd2020%22%7D%2C%22id%22%3A%22QmTp1X3hPyCkwGn8evqy3mmerrb7csgr7XuWvpuryTgzMu%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1017%2C%22repo%22%3A%22Umbu CRM%22%7D).\n\n",
    "onde": "conversa"
   },
   {
@@ -1294,7 +1294,7 @@
    "id": 5708002269,
    "autor": "vercel[bot]",
    "quando": "2026-09-17T03:26:11Z",
-   "texto": "@webtecnica is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%22bb11d05840de53b322457b04fdbf3e9e5eb4dbce%22%7D%2C%22id%22%3A%22QmRTZEeLjHiAjrPzZ6b2gVcd2oashuS4ryM8DwnqtRh1dC%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1058%2C%22repo%22%3A%22PJ CRM%22%7D).\n\n",
+   "texto": "@webtecnica is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%22bb11d05840de53b322457b04fdbf3e9e5eb4dbce%22%7D%2C%22id%22%3A%22QmRTZEeLjHiAjrPzZ6b2gVcd2oashuS4ryM8DwnqtRh1dC%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1058%2C%22repo%22%3A%22Umbu CRM%22%7D).\n\n",
    "onde": "conversa"
   },
   {
@@ -1461,7 +1461,7 @@
    "id": 5716135509,
    "autor": "vercel[bot]",
    "quando": "2026-09-17T14:32:48Z",
-   "texto": "@webtecnica is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%2211c8636196025258321f479917fc545ffc47861e%22%7D%2C%22id%22%3A%22QmeDYUKe1XedFfSBudQKdK9ymyi5oLK9Ume1BLcguxYfuU%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1067%2C%22repo%22%3A%22PJ CRM%22%7D).\n\n",
+   "texto": "@webtecnica is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%2211c8636196025258321f479917fc545ffc47861e%22%7D%2C%22id%22%3A%22QmeDYUKe1XedFfSBudQKdK9ymyi5oLK9Ume1BLcguxYfuU%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1067%2C%22repo%22%3A%22Umbu CRM%22%7D).\n\n",
    "onde": "conversa"
   },
   {
@@ -1964,7 +1964,7 @@
    "id": 5639639134,
    "autor": "vercel[bot]",
    "quando": "2026-09-11T19:30:58Z",
-   "texto": "@betoarts is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%22838e093df1dfeae538260a9dbf83a4e2bc50f729%22%7D%2C%22id%22%3A%22QmWbquSa7apUCCBoir6LQyc3UoqNTznkobP8NXPizDoX2t%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A714%2C%22repo%22%3A%22PJ CRM%22%7D).\n\n",
+   "texto": "@betoarts is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%22838e093df1dfeae538260a9dbf83a4e2bc50f729%22%7D%2C%22id%22%3A%22QmWbquSa7apUCCBoir6LQyc3UoqNTznkobP8NXPizDoX2t%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A714%2C%22repo%22%3A%22Umbu CRM%22%7D).\n\n",
    "onde": "conversa"
   },
   {
@@ -2769,7 +2769,7 @@
    "id": 5686449214,
    "autor": "vercel[bot]",
    "quando": "2026-09-15T19:02:58Z",
-   "texto": "@cabindaferreira is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%228be94cd9ca40210bca270b68ffb56955d5df3cbe%22%7D%2C%22id%22%3A%22QmbD7LbyEBu13tR2PwHfTvTSs8oWmX2LZUXE3dBjBBYkcv%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A928%2C%22repo%22%3A%22PJ CRM%22%7D).\n\n",
+   "texto": "@cabindaferreira is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%228be94cd9ca40210bca270b68ffb56955d5df3cbe%22%7D%2C%22id%22%3A%22QmbD7LbyEBu13tR2PwHfTvTSs8oWmX2LZUXE3dBjBBYkcv%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A928%2C%22repo%22%3A%22Umbu CRM%22%7D).\n\n",
    "onde": "conversa"
   },
   {
@@ -2880,7 +2880,7 @@
    "id": 5705562435,
    "autor": "vercel[bot]",
    "quando": "2026-09-16T22:38:30Z",
-   "texto": "@nesqj is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%22d217af8f15920f682219da706ed05958bcdef33a%22%7D%2C%22id%22%3A%22QmbaaJMM73RvEvFWUhd4FieJzzGcGy5ZuUqe1tNis81SsJ%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1025%2C%22repo%22%3A%22PJ CRM%22%7D).\n\n",
+   "texto": "@nesqj is attempting to deploy a commit to the **rafael-maudibrasil's projects** Team on [Vercel](https://vercel.com).\n\nA member of the Team first needs to [authorize it](https://vercel.com/git/authorize?team=rafael-maudibrasil's%20projects&slug=rafael-maudibrasils-projects&teamId=team_CsA6wVAM2V1CcrKPsDo6VGHO&type=github&job=%7B%22headInfo%22%3A%7B%22sha%22%3A%22d217af8f15920f682219da706ed05958bcdef33a%22%7D%2C%22id%22%3A%22QmbaaJMM73RvEvFWUhd4FieJzzGcGy5ZuUqe1tNis81SsJ%22%2C%22org%22%3A%22nesqj%22%2C%22prId%22%3A1025%2C%22repo%22%3A%22Umbu CRM%22%7D).\n\n",
    "onde": "conversa"
   },
   {

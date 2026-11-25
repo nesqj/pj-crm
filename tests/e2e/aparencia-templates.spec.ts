@@ -87,9 +87,10 @@ test.describe("Configurações › Aparência", () => {
     ]) {
       expect(await marcador(page, nome), nome).toBeNull();
     }
-    // O menu de fábrica: superfície (`bg-card`) e fonte Atkinson.
+    // O menu de fábrica do Umbu CRM: verde-escuro `#0f3a22` (`[data-casca="menu"]`
+    // em `app/globals.css`) e fonte Atkinson. Os templates pintam por cima disso.
     const fundoDoMenu = await estiloDe(page, '[data-casca-lugar="lateral"]', "background-color");
-    expect(fundoDoMenu).toBe("rgb(255, 255, 255)");
+    expect(fundoDoMenu).toBe("rgb(15, 58, 34)");
     expect(await page.evaluate(() => getComputedStyle(document.body).fontFamily)).toMatch(/atkinson/i);
   });
 

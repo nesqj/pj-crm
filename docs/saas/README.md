@@ -1,6 +1,6 @@
-# O seu SaaS com o PJ CRM
+# O seu SaaS com o Umbu CRM
 
-Este é o caminho de quem quer **revender o PJ CRM como produto próprio**: uma instalação
+Este é o caminho de quem quer **revender o Umbu CRM como produto próprio**: uma instalação
 numa VPS sua, várias empresas-clientes dentro dela, cada uma pagando um plano, com a sua marca.
 A licença MIT permite hospedar para terceiros, revender e cobrar o que quiser, sem royalty.
 

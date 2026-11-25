@@ -1,4 +1,4 @@
-# ADR-0001 — Packaging e distribuição do PJ CRM
+# ADR-0001 — Packaging e distribuição do Umbu CRM
 
 - **Status:** aceito
 - **Data:** 2026-08-13
@@ -15,7 +15,7 @@
 
 ## Contexto
 
-O PJ CRM é distribuído como self-host: a monetização é a venda da VPS com o sistema
+O Umbu CRM é distribuído como self-host: a monetização é a venda da VPS com o sistema
 instalado, e a experiência de quem instala **é** o produto. Isso torna o artefato distribuído —
 imagem, compose, kit — parte do contrato, não detalhe de infraestrutura.
 
