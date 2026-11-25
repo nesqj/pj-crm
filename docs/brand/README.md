@@ -19,3 +19,16 @@ componente e na paleta coincidam.
 
 Os READMEs (pt, en, es) usam os PNGs diretamente, num `<picture>` que troca para a
 versão escura conforme o tema do GitHub.
+
+## Como a marca aparece no produto
+
+Capturas do app rodando com a marca padrão (nenhum logo ou nome próprio configurado):
+
+| Tela | Captura |
+|---|---|
+| Login, tema claro | `evidence/identidade-umbu/1-login-claro.png` |
+| Login, tema escuro | `evidence/identidade-umbu/2-login-escuro.png` |
+| Menu lateral aberto (verde-escuro de fábrica) | `evidence/identidade-umbu/3-menu-aberto.png` |
+| Menu lateral recolhido (só a fruta) | `evidence/identidade-umbu/4-menu-recolhido.png` |
+| Menu lateral no tema escuro | `evidence/identidade-umbu/5-menu-tema-escuro.png` |
+| Ícone do app, gerado pelo `ImageResponse` | `evidence/identidade-umbu/6-icone-do-app.png` |
