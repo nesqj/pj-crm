@@ -17,7 +17,7 @@ import {
  * que o escolheu: o marcador `[data-tema-extensao]` nasce em
  * `app/app/layout.tsx` e o CSS é escopado por `body:has([data-tema-extensao])`.
  * Login, `/admin` inteiro e organizações sem tema ficavam na paleta de fábrica
- * — medido numa 1.96.0: bordas `#e7e3da`, campos `#faf9f6`, texto em cinza
+ * — medido numa 1.96.0: bordas `#e0e6db`, campos `#f7f9f4`, texto em cinza
  * quente dentro do `/admin`.
  *
  * A correção tem duas metades, e as duas são medidas AQUI, no texto que sai:
@@ -45,7 +45,7 @@ const temaComAccent: TemaDeExtensao = {
   palette: "mist",
   claro: {
     "--color-bg": "#f6f6f4",
-    "--color-border": "#e7e3da",
+    "--color-border": "#e0e6db",
     "--color-text": "#1d1c19",
     "--color-accent": "var(--color-accent-600)",
     "--color-accent-600": "#33475b",
@@ -92,7 +92,7 @@ describe("tema da plataforma — o CSS sai no escopo da instalação", () => {
     expect(css).not.toContain("--color-accent");
     // As outras chaves continuam lá: o que se descarta é a COR, não o tema.
     expect(css).toContain("--color-bg: #f6f6f4");
-    expect(css).toContain("--color-border: #e7e3da");
+    expect(css).toContain("--color-border: #e0e6db");
     expect(css).toContain("--color-text: #1d1c19");
     expect(css).toContain("--color-bg: #11151c");
     expect(css).toContain("--color-border: #2a2f38");

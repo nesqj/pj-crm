@@ -198,7 +198,7 @@ describe("o token escolhido existe onde a extensão pode declará-lo", () => {
  * A barra da PÁGINA não é a barra de uma área interna: o navegador a pinta com
  * o `scrollbar-color` do `<html>`, e o `<html>` não herda do `<body>`. Medido
  * na prova de tela do #3800 (mist ativo): as áreas internas seguiam a borda do
- * tema e a barra da viewport ficava no `#e7e3da`/`#33312a` da paleta padrão,
+ * tema e a barra da viewport ficava no `#e0e6db`/`#2a3a2f` da paleta padrão,
  * porque o tema só era declarado em `body:has([data-tema-extensao])`.
  */
 describe("o tema da organização alcança o `<html>`, onde mora a barra da página", () => {
@@ -210,7 +210,7 @@ describe("o tema da organização alcança o `<html>`, onde mora a barra da pág
     document.documentElement.setAttribute("data-theme", tema);
     const padrao = document.createElement("style");
     padrao.textContent =
-      ':root { --color-border: #e7e3da; } [data-theme="dark"] { --color-border: #33312a; }';
+      ':root { --color-border: #e0e6db; } [data-theme="dark"] { --color-border: #2a3a2f; }';
     document.head.appendChild(padrao);
     if (!comMarcador) return;
     const { css } = cssDaExtensaoDeTema({
@@ -239,9 +239,9 @@ describe("o tema da organização alcança o `<html>`, onde mora a barra da pág
 
   it("sem o marcador, o `<html>` fica no padrão do produto (quem não escolheu não muda)", () => {
     montar("light", false);
-    expect(bordaDoHtml()).toBe("#e7e3da");
+    expect(bordaDoHtml()).toBe("#e0e6db");
     montar("dark", false);
-    expect(bordaDoHtml()).toBe("#33312a");
+    expect(bordaDoHtml()).toBe("#2a3a2f");
   });
 
   it("o `<body>` segue no escopo: é ele que dá a precedência sobre um tema do `<html>`", () => {

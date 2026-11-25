@@ -12,6 +12,9 @@ Se você roda o Umbu CRM numa VPS, **leia a seção da versão para a qual está
 
 - O menu lateral do painel de administração da instalação (Admin) também fica
   verde-escuro, como o menu do app.
+- O fundo, os cartões e as bordas ganham um tom levemente esverdeado nos dois temas: um
+  off-white verde no claro e um preto esverdeado no escuro, no lugar do bege e do preto
+  amarronzado. O contraste de leitura dos textos continua acima do mínimo.
 
 ## [2.1.1] — 2026-11-25
 

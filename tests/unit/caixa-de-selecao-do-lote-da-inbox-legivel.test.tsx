@@ -4,7 +4,7 @@
  * ─── O defeito, medido na tela ──────────────────────────────────────────────
  *
  * A borda da caixa DESMARCADA usava `border-input` — que resolve para
- * `--color-border` (`#e7e3da` no claro, `#33312a` no escuro). Contra o fundo da
+ * `--color-border` (`#e0e6db` no claro, `#2a3a2f` no escuro). Contra o fundo da
  * coluna da lista isso dá **1,28:1 no claro e 1,31:1 no escuro**: o contorno da
  * caixa praticamente some, e com ele some a única pista de que a linha pode ser
  * marcada. A WCAG 1.4.11 (Non-text Contrast) pede 3:1 para o limite de um

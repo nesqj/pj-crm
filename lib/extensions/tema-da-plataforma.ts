@@ -9,7 +9,7 @@
  * `app/app/layout.tsx` e o CSS é escopado por `body:has(...)`. Fora dali —
  * login, `/admin`, organizações sem tema — a paleta de fábrica fica intacta,
  * mesmo com a marca aplicada na tela Marca. Medido numa 1.96.0: bordas
- * `#e7e3da`, campos `#faf9f6` e texto em cinza quente dentro do `/admin`.
+ * `#e0e6db`, campos `#f7f9f4` e texto em cinza quente dentro do `/admin`.
  *
  * ── O que é gravado, e o que NÃO é ─────────────────────────────────────────
  *

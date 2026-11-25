@@ -32,19 +32,19 @@
 
 :root {
   /* Surfaces (light) */
-  --color-bg: #faf9f6;
+  --color-bg: #f7f9f4;
   --color-surface: #ffffff;
-  --color-surface-elevated: #f5f3ee;
+  --color-surface-elevated: #eff3eb;
   --color-overlay: rgba(28, 26, 22, 0.42);
 
   /* Text (light) */
-  --color-text: #1c1a16;
-  --color-text-muted: #5d594f;
-  --color-text-subtle: #7d786c;
+  --color-text: #18201a;
+  --color-text-muted: #545e55;
+  --color-text-subtle: #707a70;
 
   /* Borders (light) */
-  --color-border: #e7e3da;
-  --color-border-strong: #d2cdbf;
+  --color-border: #e0e6db;
+  --color-border-strong: #c8d2c3;
 
   /* ---- Identidade de canal (#4094) -------------------------------------
    * A cor da faixa/ícone que marca DE ONDE veio a mensagem (aviso da esquina
@@ -76,16 +76,16 @@
   --color-accent-hover: var(--color-accent-700);
 
   /* Neutrals — greige (11 stops, light) */
-  --color-neutral-50: #faf9f6;
+  --color-neutral-50: #f7f9f4;
   --color-neutral-100: #f3f1ec;
-  --color-neutral-200: #e7e3da;
-  --color-neutral-300: #d2cdbf;
+  --color-neutral-200: #e0e6db;
+  --color-neutral-300: #c8d2c3;
   --color-neutral-400: #a9a395;
-  --color-neutral-500: #7d786c;
-  --color-neutral-600: #5d594f;
+  --color-neutral-500: #707a70;
+  --color-neutral-600: #545e55;
   --color-neutral-700: #46433b;
   --color-neutral-800: #2e2c26;
-  --color-neutral-900: #1c1a16;
+  --color-neutral-900: #18201a;
   --color-neutral-950: #0e0d0a;
 
   /* States (light) */
@@ -275,15 +275,15 @@
    (lib/branding/css.ts), que só ganha consumidor com a tela de marca.
    ───────────────────────────────────────────────────────────────────────── */
 [data-theme="light"] {
-  --color-bg: #faf9f6;
+  --color-bg: #f7f9f4;
   --color-surface: #ffffff;
-  --color-surface-elevated: #f5f3ee;
+  --color-surface-elevated: #eff3eb;
   --color-overlay: rgba(28, 26, 22, 0.42);
-  --color-text: #1c1a16;
-  --color-text-muted: #5d594f;
-  --color-text-subtle: #7d786c;
-  --color-border: #e7e3da;
-  --color-border-strong: #d2cdbf;
+  --color-text: #18201a;
+  --color-text-muted: #545e55;
+  --color-text-subtle: #707a70;
+  --color-border: #e0e6db;
+  --color-border-strong: #c8d2c3;
 
   /* ---- Identidade de canal (#4094) -------------------------------------
    * A cor da faixa/ícone que marca DE ONDE veio a mensagem (aviso da esquina
@@ -300,16 +300,16 @@
   --color-accent-fg: #ffffff;
   --color-accent-soft: var(--color-accent-100);
   --color-accent-hover: var(--color-accent-700);
-  --color-neutral-50: #faf9f6;
+  --color-neutral-50: #f7f9f4;
   --color-neutral-100: #f3f1ec;
-  --color-neutral-200: #e7e3da;
-  --color-neutral-300: #d2cdbf;
+  --color-neutral-200: #e0e6db;
+  --color-neutral-300: #c8d2c3;
   --color-neutral-400: #a9a395;
-  --color-neutral-500: #7d786c;
-  --color-neutral-600: #5d594f;
+  --color-neutral-500: #707a70;
+  --color-neutral-600: #545e55;
   --color-neutral-700: #46433b;
   --color-neutral-800: #2e2c26;
-  --color-neutral-900: #1c1a16;
+  --color-neutral-900: #18201a;
   --color-neutral-950: #0e0d0a;
   --color-success: #5a8a5f;
   --color-success-bg: rgba(90, 138, 95, 0.12);
@@ -365,19 +365,19 @@
 
 [data-theme="dark"] {
   /* Surfaces (dark — drawn) */
-  --color-bg: #161510;
-  --color-surface: #1d1c17;
-  --color-surface-elevated: #272620;
+  --color-bg: #0f1612;
+  --color-surface: #151e18;
+  --color-surface-elevated: #1e2a22;
   --color-overlay: rgba(0, 0, 0, 0.55);
 
   /* Text (dark) */
-  --color-text: #f5f4ef;
-  --color-text-muted: #8e8b7f;
-  --color-text-subtle: #605e54;
+  --color-text: #f1f5ef;
+  --color-text-muted: #8a978b;
+  --color-text-subtle: #5d6a5f;
 
   /* Borders (dark) */
-  --color-border: #33312a;
-  --color-border-strong: #444239;
+  --color-border: #2a3a2f;
+  --color-border-strong: #3a4c3f;
 
   /* ---- Identidade de canal (#4094) -------------------------------------
    * A cor da faixa/ícone que marca DE ONDE veio a mensagem (aviso da esquina
@@ -404,21 +404,21 @@
   --color-accent-900: #25411a;
   --color-accent-950: #11210b;
   --color-accent: var(--color-accent-400);
-  --color-accent-fg: #161510;
+  --color-accent-fg: #0f1612;
   --color-accent-soft: rgba(104, 171, 79, 0.16);
   --color-accent-hover: var(--color-accent-300);
 
   /* Neutrals — greige (11 stops, dark) */
-  --color-neutral-50: #f5f4ef;
+  --color-neutral-50: #f1f5ef;
   --color-neutral-100: #e6e4dc;
   --color-neutral-200: #bbb8ac;
-  --color-neutral-300: #8e8b7f;
-  --color-neutral-400: #605e54;
-  --color-neutral-500: #444239;
-  --color-neutral-600: #33312a;
-  --color-neutral-700: #272620;
-  --color-neutral-800: #1d1c17;
-  --color-neutral-900: #161510;
+  --color-neutral-300: #8a978b;
+  --color-neutral-400: #5d6a5f;
+  --color-neutral-500: #3a4c3f;
+  --color-neutral-600: #2a3a2f;
+  --color-neutral-700: #1e2a22;
+  --color-neutral-800: #151e18;
+  --color-neutral-900: #0f1612;
   --color-neutral-950: #0c0b08;
 
   /* States (dark) */
@@ -462,7 +462,7 @@
   --input: var(--color-border);
   --ring: var(--color-accent-400);
   /* ---- Agenda · cor de pessoa (tema escuro) ----------------------------
-   * Mais claras e menos saturadas que as do claro: sobre `#161510` a versão
+   * Mais claras e menos saturadas que as do claro: sobre `#0f1612` a versão
    * escura de cada matiz sumiria. Mesma ordem, mesmos nomes.
    */
   --agenda-pessoa-1: #f89080;
@@ -895,8 +895,8 @@
      Pedir `--color-neutral-300`/`-600` parecia theme-aware (os neutros têm par
      por tema), mas eles NÃO entram na allowlist do tema de extensão
      (`CHAVES_DE_TOKEN_DO_TEMA`, lista fechada): com a paleta `mist` ativa a tela
-     inteira mudava e a barra ficava no greige da paleta padrão (#d2cdbf no
-     claro, #33312a no escuro). `--color-border` é declarado pelas cinco paletas
+     inteira mudava e a barra ficava no greige da paleta padrão (#c8d2c3 no
+     claro, #2a3a2f no escuro). `--color-border` é declarado pelas cinco paletas
      (`app/design/lib/tokens.ts`, `surfaces.border`) nos dois temas e é
      sobrescrito pelo bloco `body:has([data-tema-extensao])`. Como o token já
      troca com `[data-theme]`, o par claro/escuro sai de um `var()` só — não há
@@ -1474,7 +1474,7 @@
    tem de respeitar isso.
 
    As rampas são desenhadas separadamente, não invertidas — no claro a 500
-   (#7d786c) é mais ESCURA que a 400 (#a9a395), e no escuro a 500 (#444239)
+   (#707a70) é mais ESCURA que a 400 (#a9a395), e no escuro a 500 (#3a4c3f)
    também é. Contra fundo claro, mais escuro = mais contraste; contra fundo
    escuro, mais escuro = MENOS contraste. Usar a 500 nos dois temas daria uma
    faixa que realça no claro e APAGA no escuro, caindo abaixo do piso justamente

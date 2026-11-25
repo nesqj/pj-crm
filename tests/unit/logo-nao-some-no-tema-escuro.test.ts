@@ -6,7 +6,7 @@
  * Quando só o logo padrão foi configurado, o produto usa — `platform_branding.logo_url` /
  * `organizations.settings.branding` —, e não há segunda arte para o tema
  * escuro. A arte que o operador sobe é, quase sempre, pensada para fundo
- * claro. O `--color-surface` do tema escuro é `#1d1c17`: um logo azul-marinho
+ * claro. O `--color-surface` do tema escuro é `#151e18`: um logo azul-marinho
  * ou preto ali não tem contraste nenhum e simplesmente some, sem erro, sem
  * aviso e sem nada na tela dizendo que sumiu.
  *

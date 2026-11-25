@@ -67,7 +67,7 @@ describe("cor da barra do navegador", () => {
 
   it("o layout não redigita os hexes de fundo — a quarta cópia reprova aqui", () => {
     // O teste acima continuaria verde se alguém escrevesse
-    // `themeColor: [{ media: "…", color: "#faf9f6" }]` de volta no layout: o
+    // `themeColor: [{ media: "…", color: "#f7f9f4" }]` de volta no layout: o
     // valor seria o mesmo. O que fecha esse buraco é olhar o TEXTO do arquivo.
     const layout = fs.readFileSync(path.join(RAIZ, "app/layout.tsx"), "utf8");
     for (const tema of [REGUA_DO_PRODUTO.claro, REGUA_DO_PRODUTO.escuro]) {

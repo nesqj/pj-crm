@@ -601,8 +601,8 @@ describe("Tailwind 4 — alpha em cor de texto agora PINTA, então precisa passa
  *
  * Medido na `main` a9a99abc86, quando o funil da issue #3791 ganhou esta guarda:
  * `app/globals.css` declara, de superfície, exatamente DOIS tokens —
- * `--color-surface` (#ffffff/#1d1c17) e `--color-surface-elevated`
- * (#f5f3ee/#272620) — e o `@theme inline` faz ponte para esses dois e só para
+ * `--color-surface` (#ffffff/#151e18) e `--color-surface-elevated`
+ * (#eff3eb/#1e2a22) — e o `@theme inline` faz ponte para esses dois e só para
  * esses dois. A árvore usava TRÊS nomes: 89 chamadas de `bg-surface-elevated`
  * (pintavam), 6 de `bg-surface-muted` (o quadro do funil: coluna da etapa,
  * cabeçalho preso, esqueleto do quadro, aviso de funil arquivado e o hover de
